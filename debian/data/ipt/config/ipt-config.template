@@ -1,0 +1,120 @@
+grails.serverURL=http://collections.living-atlas.org
+serverName=http://collections.living-atlas.org
+grails.cors.enabled=true
+grails.resources.adhoc.patterns=['/images/*', '/data/*', '/img/*', '/theme/default/*', '/css/*', '/js/*', '/plugins/*' ]
+# CAS Config
+security.cas.casServerName=http://auth.living-atlas.org
+security.cas.uriFilterPattern=/admin.*,/admin/.*,/admin/.*/.*,/collection.*,/institution.*,/contact.*,/reports.*,/providerCode.*,/providerMap.*,/dataProvider.*,/dataResource.*,/dataHub.*,/manage/.*,/ws/ipt/scan/.*
+security.cas.authenticateOnlyIfLoggedInFilterPattern=/public/show.*
+security.cas.uriExclusionFilterPattern=/images.*,/css.*,/js.*
+security.cas.appServerName=http://collections.living-atlas.org
+security.cas.casServerUrlPrefix=http://auth.living-atlas.org/cas
+security.cas.casServerLoginUrl=http://auth.living-atlas.org/cas/login
+security.cas.casServerLogoutUrl=http://auth.living-atlas.org/cas/logout
+security.cas.loginUrl=http://auth.living-atlas.org/cas/login
+security.cas.logoutUrl=http://auth.living-atlas.org/cas/logout
+
+security.cas.contextPath=
+
+security.apikey.serviceUrl=https://auth.living-atlas.org/apikey/ws/check?apikey=
+security.apikey.checkEnabled=false
+
+# Default Locale
+defaultLocale=en
+
+# Enable / Disable CAS
+security.cas.bypass=false
+disableCAS=false
+
+# Data directories
+repository.location.images=/data/ala-collectory/data
+
+# Google API key
+google.apikey=
+
+# External API access
+api_key=to_be_added
+
+# Biocache integration
+biocacheUiURL=http://biocache.living-atlas.org
+biocacheServicesUrl=http://biocache.living-atlas.org/ws
+
+# Skinning
+ala.skin=ala
+skin.layout=generic
+skin.fluidLayout=
+chartsBgColour=#fffef7
+
+# DB config
+dataSource.username=_DBC_DBUSER_
+dataSource.password=_DBC_DBPASS_
+dataSource.url=jdbc:mysql://_DBC_DBSERVER_:3306/_DBC_DBNAME_?autoReconnect=true&connectTimeout=0&useUnicode=true&characterEncoding=UTF-8
+
+# Map config
+collectionsMap.centreMapLon=1.261
+collectionsMap.centreMapLat=16.942
+collectionsMap.defaultZoom=3
+
+# Project name
+projectNameShort=LA Wakanda
+projectName=Living Atlas Of Wakanda
+regionName=LA Wakanda
+
+# EML config
+eml.organizationName=Living Atlas Of Wakanda
+eml.deliveryPoint=Smith Street
+eml.city=Leipzig
+eml.administrativeArea=Spain
+eml.postalCode=S21 2SS
+eml.country=Spain
+
+# The name displayed top left of header
+skin.homeUrl = http://living-atlas.org
+skin.orgNameLong=Living Atlas Of Wakanda
+skin.orgNameShort=LA Wakanda
+skin.favicon=https://www.gbif.org/favicon.ico
+orgNameLong=Living Atlas Of Wakanda
+
+# Header and footer
+headerAndFooter.baseURL=https://www.ala.org.au/commonui-bs3-2019
+headerAndFooter.version=1
+
+ala.baseURL=http://living-atlas.org
+bie.baseURL=http://living-atlas.org/species
+bie.searchPath=/search
+
+# Disable UI components
+disableOverviewMap=true
+disableAlertLinks=true
+disableLoggerLinks=false
+
+# Feeds config
+rifcs.excludeBounds=false
+
+# Logger URL
+loggerURL=http://living-atlas.org/logger-service/service
+
+# External services
+alertUrl=
+speciesListToolUrl=http://living-atlas.org/specieslists
+
+# GBIF base URL for webservices
+gbifApiUrl=http://api.gbif.org/v1
+
+# GBIF Registration enables the Collectory to create and update organisations and datasets
+# This mode of operation is only expected to be used by National Nodes running the ALA as a publishing gateway to GBIF.
+# (i.e. where the ALA installation is not sourcing information from GBIF.org itself)
+gbifRegistrationEnabled=false
+gbifEndorsingNodeKey=
+gbifInstallationKey=
+gbifApiUser=
+gbifApiPassword=
+gbifExportUrlBase=
+useGbifDoi=false
+gbifRegistrationDryRun=true
+gbifLicenceMappingUrl=
+gbifOrphansPublisherID=
+
+# URL paths for archives
+resource.publicArchive.url.template = https://biocache.living-atlas.org/archives/gbif/@UID@/@UID@.zip
+resource.gbifExport.url.template = https://biocache.living-atlas.org/archives/gbif/@UID@/@UID@.zip

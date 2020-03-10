@@ -1,0 +1,37 @@
+ipt (2.4.0-6) unstable; urgency=medium
+
+  * Change proposed datadir.location to /var/lib/ipt
+
+ -- Vicente J. Ruiz Jurado <vjrj@ourproject.org>  Mon, 09 Mar 2020 19:33:46 +0100
+
+ipt (2.4.0-5) unstable; urgency=medium
+
+  * Trying to set datadir.location on new installations
+  * Commented ipt user creation/deletion so we can use in the future
+  if necessary
+
+ -- Vicente J. Ruiz Jurado <vjrj@ourproject.org>  Mon, 09 Mar 2020 10:05:46 +0100
+
+ipt (2.4.0-4) unstable; urgency=medium
+
+  * Fix war location
+
+ -- Vicente J. Ruiz Jurado <vjrj@ourproject.org>  Fri, 06 Mar 2020 14:24:57 +0300
+
+ipt (2.4.0-3) unstable; urgency=medium
+
+  * Fix context file (it was for tomcat7)
+
+ -- Vicente J. Ruiz Jurado <vjrj@ourproject.org>  Fri, 06 Mar 2020 12:58:22 +0300
+
+ipt (2.4.0-2) unstable; urgency=medium
+
+  * Update dependencies
+
+ -- Vicente J. Ruiz Jurado <vjrj@gbif.es>  Fri, 06 Mar 2020 12:29:33 +0300
+
+ipt (2.4.0-1) unstable; urgency=low
+
+  * Initial release
+
+ -- Vicente J. Ruiz Jurado <vjrj@gbif.es>  Fri, 06 Mar 2020 11:52:30 +0300

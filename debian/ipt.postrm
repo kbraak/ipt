@@ -1,0 +1,67 @@
+#!/bin/sh
+
+#######################################################
+#
+# Add here the commands to be excuted after the package
+# has been removed
+#
+
+if [ -f /usr/share/debconf/confmodule ]; then
+    . /usr/share/debconf/confmodule
+fi
+
+#DEBHELPER#
+
+# Example: del user and group for the service
+
+#
+# POSIX-compliant shell function
+# to check for the existence of a command
+# Return 0 if found
+#
+pathfind() {
+    OLDIFS="$IFS"
+    IFS=:
+    for p in $PATH; do
+        if [ -x "$p/$*" ]; then
+            IFS="$OLDIFS"
+            return 0
+        fi
+    done
+    IFS="$OLDIFS"
+    return 1
+}
+
+
+case "${1}" in
+    remove)
+        # If in the future we use the ipt as a service without using tomcat
+        # like using a jetty-runner, jetty-home or similar  we can create an
+        # ipt user/group that should be deleted on postrm
+
+        # _USERNAME=ipt
+        # _GROUPNAME="${_USERNAME}"
+
+        # pathfind deluser
+        # if [ $? = 0 ] ;
+        # then
+        #     deluser --quiet ${_USERNAME}
+        # fi
+
+        # pathfind delgroup
+        # if [ $? = 0 ] ;
+        # then
+        #     delgroup --quiet --only-if-empty ${_GROUPNAME} || true
+        # fi
+        ;;
+
+    purge);;upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
+        ;;
+
+    *)
+        echo "postrm called with unknown argument \`${1}'" >&2
+        exit 1
+        ;;
+esac
+
+echo ipt removed.

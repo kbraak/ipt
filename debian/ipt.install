@@ -1,0 +1,3 @@
+# https://www.debian.org/doc/manuals/maint-guide/dother.en.html#install
+target/ipt.war usr/share/ipt/
+debian/context/ipt.xml etc/tomcat8/Catalina/localhost/

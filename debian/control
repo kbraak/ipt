@@ -1,0 +1,24 @@
+Source: ipt
+Section: utils
+Priority: optional
+Maintainer: GBIF Development Team <helpdesk@gbif.org>
+Uploaders: GBIF Development Team <helpdesk@gbif.org>
+Build-Depends:
+ debhelper (>= 11)
+Standards-Version: 4.2.1
+Homepage: https://github.com/gbif/ipt
+Vcs-Browser: https://github.com/gbif/ipt
+Vcs-Git: https://github.com/gbif/ipt.git
+
+Package: ipt
+Architecture: all
+Depends: ${misc:Depends}, tomcat8
+Suggests: apache2 | nginx
+Description: The  Integrated Publishing Toolkit (IPT) application
+ This package contains the ipt package from GBIF.
+ .
+ The Integrated Publishing Toolkit (IPT) is a free, open source software tool
+ written in Java that is used to publish and share biodiversity datasets
+ through the GBIF network. The IPT can also be configured with a DataCite
+ account in order to assign DOIs to datasets transforming it into a data
+ repository.

@@ -1,0 +1,28 @@
+#!/usr/bin/make -f
+
+# https://www.debian.org/doc/manuals/maint-guide/dreq.en.html#rules
+# See also:
+#
+# man debhelper
+# man dh
+
+# Uncomment this to turn on verbose mode.
+# export DH_VERBOSE=1
+
+%:
+	dh $@
+
+build:
+#	install don't allow to rename files (like wars), so we copy here the file we want to install with the package
+# $(CURDIR) is the repo directory
+	cp $(CURDIR)/target/ipt-2.4.0.war $(CURDIR)/target/ipt.war
+
+override_dh_fixperms:
+	dh_fixperms
+#	If we need to set some special perms to a file
+#	chmod 4755 debian/foo/opt/ipt/foo.jar
+#	Also we use postinstall for this
+
+override_dh_install:
+	dh_install # calls default *.install and *.dirs installation
+#	man install

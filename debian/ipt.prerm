@@ -1,0 +1,20 @@
+#!/bin/sh
+
+#######################################################
+#
+# Add here the commands to be excuted before the package
+# has been removed
+#
+
+#Example stop tomcat and remove some log files
+#
+#/etc/init.d/tomcat stop
+#
+#rm -rf /opt/${appName}/logs/*
+#
+
+. /usr/share/debconf/confmodule
+
+#DEBHELPER#
+
+echo Removing ipt

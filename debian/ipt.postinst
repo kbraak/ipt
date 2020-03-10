@@ -1,0 +1,37 @@
+#!/bin/sh
+
+#######################################################
+#
+# Add here the commands to be excuted after the package
+# has been installed
+#
+
+#Example: create some symbolic links
+#
+#chown -R ${user}:${group} /opt/${appName}-${appVersion}
+#ln -s /opt/${appName}-${appVersion} /opt/${appName}
+
+set -e
+
+. /usr/share/debconf/confmodule
+
+#DEBHELPER#
+
+case "$1" in
+    configure)
+        db_version 2.0
+        db_get tomcat8/username && TOMCAT8_USER="$RET"
+        db_get tomcat8/groupname && TOMCAT8_GROUP="$RET"
+        if id -u $TOMCAT8_USER > /dev/null 2>&1; then
+            chown -Rh $TOMCAT8_USER:$TOMCAT8_GROUP /var/lib/ipt
+        fi
+    ;;
+esac
+
+echo ipt installed, it should be running on http://your-server-ip:8080/ipt
+
+DATADIR_LOCATION_CONF=/var/lib/tomcat8/webapps/ipt/WEB-INF/datadir.location
+if ! [ -f $DATADIR_LOCATION_CONF ] ; then
+    # ipt is not yet configured, suggest datadir location
+    echo You can use /var/lib/ipt as datadir.location
+fi
