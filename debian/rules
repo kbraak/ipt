@@ -9,13 +9,18 @@
 # Uncomment this to turn on verbose mode.
 # export DH_VERBOSE=1
 
+# $(CURDIR) is the repository directory
+
+M2_REPO = $(CURDIR)/debian/maven-repo-local
+CURVERSION = $(shell mvn -Dmaven.repo.local=$(M2_REPO) -q -Dexec.executable=echo -Dexec.args='$${project.version}' --non-recursive exec:exec)-r$(shell git rev-parse HEAD | cut -c1-7)
+
 %:
 	dh $@
 
 build:
+	mvn -Dmaven.repo.local=$(M2_REPO) -P prod install -DskipTests
 #	install don't allow to rename files (like wars), so we copy here the file we want to install with the package
-# $(CURDIR) is the repo directory
-	cp $(CURDIR)/target/ipt-2.4.0.war $(CURDIR)/target/ipt.war
+	cp $(CURDIR)/target/ipt-$(CURVERSION).war $(CURDIR)/target/ipt.war
 
 override_dh_fixperms:
 	dh_fixperms
@@ -26,3 +31,7 @@ override_dh_fixperms:
 override_dh_install:
 	dh_install # calls default *.install and *.dirs installation
 #	man install
+
+override_dh_auto_clean:
+	dh_auto_clean
+	rm -rf target

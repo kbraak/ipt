@@ -28,3 +28,4 @@ debian/*.buildinfo
 debian/*.substvars
 debian/files
 debian/ipt
+debian/maven-repo-local
