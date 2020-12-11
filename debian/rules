@@ -12,7 +12,7 @@
 # $(CURDIR) is the repository directory
 
 M2_REPO = $(CURDIR)/debian/maven-repo-local
-CURVERSION = $(shell mvn -Dmaven.repo.local=$(M2_REPO) -q -Dexec.executable=echo -Dexec.args='$${project.version}' --non-recursive exec:exec)-r$(shell git rev-parse HEAD | cut -c1-7)
+CURVERSION = $(shell grep -oPm2 "(?<=<version>)[^<]+" "pom.xml" | tail -1)
 
 %:
 	dh $@
@@ -21,13 +21,11 @@ override_dh_auto_build:
 ifeq ($(filter nobuildjar,$(DEB_BUILD_PROFILES)),)
 # This allows to skip the maven jar build (for instance, if its builded by another jenkins job)
 # for instance with debuild -us -uc -b --build-profiles=nobuildjar
-# Also we can -DskipITs tests	
 	mvn -Dmaven.repo.local=$(M2_REPO) -P prod install -DskipTests
 endif
 
 
 override_dh_auto_install:
-	
 #	install don't allow to rename files (like wars), so we copy here the file we want to install with the package
 	cp $(CURDIR)/target/ipt-$(CURVERSION).war $(CURDIR)/target/ipt.war
 
