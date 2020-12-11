@@ -13,6 +13,9 @@
 
 M2_REPO = $(CURDIR)/debian/maven-repo-local
 CURVERSION = $(shell grep -oPm2 "(?<=<version>)[^<]+" "pom.xml" | tail -1)
+# Previously:
+# CURVERSION = $(shell mvn -Dmaven.repo.local=$(M2_REPO) -q -Dexec.executable=echo -Dexec.args='$${project.version}' --non-recursive exec:exec)-r$(shell git rev-parse HEAD | cut -c1-7)
+# but we don't have the git revision in a debian build from sources without .git directory
 
 %:
 	dh $@
@@ -27,7 +30,7 @@ endif
 
 override_dh_auto_install:
 #	install don't allow to rename files (like wars), so we copy here the file we want to install with the package
-	cp $(CURDIR)/target/ipt-$(CURVERSION).war $(CURDIR)/target/ipt.war
+	cp $(CURDIR)/target/ipt-$(CURVERSION)-rnull.war $(CURDIR)/target/ipt.war
 
 override_dh_fixperms:
 	dh_fixperms
