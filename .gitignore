@@ -29,3 +29,4 @@ debian/*.substvars
 debian/files
 debian/ipt
 debian/maven-repo-local
+debian/debhelper-build-stamp
