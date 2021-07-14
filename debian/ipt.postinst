@@ -34,4 +34,22 @@ DATADIR_LOCATION_CONF=/var/lib/tomcat9/webapps/ipt/WEB-INF/datadir.location
 if ! [ -f $DATADIR_LOCATION_CONF ] ; then
     # ipt is not yet configured, suggest datadir location
     echo You can use /var/lib/ipt as datadir.location
+    echo "Tomcat is sandboxed by systemd and only has write access to some
+directories (see /usr/share/doc/tomcat9/README.Debian):
+
+To give access to your IPT data directory settings have to be overridden.
+
+This is done by creating an override.conf file in
+/etc/systemd/system/tomcat9.service.d/ containing:
+
+[Service]
+ReadWritePaths=/path/to/the/ipt-data-directory/
+
+The service has to be restarted afterward with:
+
+systemctl daemon-reload
+systemctl restart tomcat9
+
+"
+
 fi
