@@ -1,5 +1,5 @@
 <Context
-         docBase="/usr/share/ipt/ipt.war">
+  docBase="/usr/share/ipt/ipt.war">
   <!-- Enable symlinks for the jars linked from /usr/share/java -->
   <Resources allowLinking="true"/>
 </Context>
