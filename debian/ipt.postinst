@@ -20,17 +20,17 @@ set -e
 case "$1" in
     configure)
         db_version 2.0
-        db_get tomcat8/username && TOMCAT8_USER="$RET"
-        db_get tomcat8/groupname && TOMCAT8_GROUP="$RET"
-        if id -u $TOMCAT8_USER > /dev/null 2>&1; then
-            chown -Rh $TOMCAT8_USER:$TOMCAT8_GROUP /var/lib/ipt
+        db_get tomcat9/username && TOMCAT9_USER="$RET"
+        db_get tomcat9/groupname && TOMCAT9_GROUP="$RET"
+        if id -u $TOMCAT9_USER > /dev/null 2>&1; then
+            chown -Rh $TOMCAT9_USER:$TOMCAT9_GROUP /var/lib/ipt
         fi
     ;;
 esac
 
 echo ipt installed, it should be running on http://your-server-ip:8080/ipt
 
-DATADIR_LOCATION_CONF=/var/lib/tomcat8/webapps/ipt/WEB-INF/datadir.location
+DATADIR_LOCATION_CONF=/var/lib/tomcat9/webapps/ipt/WEB-INF/datadir.location
 if ! [ -f $DATADIR_LOCATION_CONF ] ; then
     # ipt is not yet configured, suggest datadir location
     echo You can use /var/lib/ipt as datadir.location

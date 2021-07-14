@@ -12,9 +12,9 @@ Vcs-Git: https://github.com/gbif/ipt.git
 
 Package: ipt
 Architecture: all
-Depends: ${misc:Depends}, tomcat8
+Depends: ${misc:Depends}, tomcat9
 Suggests: apache2 | nginx
-Description: The  Integrated Publishing Toolkit (IPT) application
+Description: The Integrated Publishing Toolkit (IPT) application
  This package contains the ipt package from GBIF.
  .
  The Integrated Publishing Toolkit (IPT) is a free, open source software tool
