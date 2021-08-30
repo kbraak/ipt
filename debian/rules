@@ -25,7 +25,7 @@ override_dh_auto_build:
 ifeq ($(filter nobuildjar,$(DEB_BUILD_PROFILES)),)
 # This allows to skip the maven jar build (for instance, if its builded by another jenkins job)
 # for instance with debuild -us -uc -b --build-profiles=nobuildjar
-	mvn -Dmaven.repo.local=$(M2_REPO) -P prod install -DskipTests -Dmaven.buildNumber.revisionOnScmFailure=$(BUILDDATE)
+	mvn -Dmaven.repo.local=$(M2_REPO) -P release install -DskipTests -Dmaven.buildNumber.revisionOnScmFailure=$(BUILDDATE)
 endif
 
 
