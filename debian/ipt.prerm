@@ -13,8 +13,20 @@
 #rm -rf /opt/${appName}/logs/*
 #
 
+set -e
+
 . /usr/share/debconf/confmodule
 
 #DEBHELPER#
+
+# Remove the Tomcat service configuration override
+TOMCAT_SERVICE_OVERRIDE="/etc/systemd/system/tomcat9.service.d/override.conf"
+if [ -f "$TOMCAT_SERVICE_OVERRIDE" ]; then
+    rm "$TOMCAT_SERVICE_OVERRIDE"
+
+    # Reload the systemd daemon configuration and restart the Tomcat service
+    systemctl daemon-reload
+    systemctl restart tomcat9
+fi
 
 echo Removing ipt

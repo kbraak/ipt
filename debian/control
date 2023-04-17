@@ -14,7 +14,7 @@ Package: ipt
 Architecture: all
 Depends: ${misc:Depends}, tomcat9
 Suggests: apache2 | nginx
-Description: The Integrated Publishing Toolkit (IPT) application
+Description: Integrated Publishing Toolkit (IPT) application
  This package contains the ipt package from GBIF.
  .
  The Integrated Publishing Toolkit (IPT) is a free, open source software tool

@@ -6,6 +6,8 @@
 # has been removed
 #
 
+set -e
+
 if [ -f /usr/share/debconf/confmodule ]; then
     . /usr/share/debconf/confmodule
 fi
@@ -55,7 +57,35 @@ case "${1}" in
         # fi
         ;;
 
-    purge);;upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
+    purge)
+
+        # Source debconf library
+        . /usr/share/debconf/confmodule
+
+        # Read the data directory from debconf
+        db_get ipt/data-dir
+        DATA_DIR="$RET"
+
+        # Remove the data directory only if it's not empty
+        if [ -d "$DATA_DIR" ] && [ -n "$(ls -A "$DATA_DIR")" ]; then
+              echo "Data directory is not empty. Skipping removal."
+        else
+            echo "Removing empty data directory."
+            # rm -r "$DATA_DIR"
+        fi
+
+        # Remove the configuration file
+        CONFIG_FILE="/var/lib/tomcat9/webapps/ipt/WEB-INF/datadir.location"
+        if [ -f "$CONFIG_FILE" ]; then
+              rm "$CONFIG_FILE"
+        fi
+
+        # Purge the debconf data
+        db_purge
+
+        ;;
+
+    upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
         ;;
 
     *)
@@ -64,4 +94,4 @@ case "${1}" in
         ;;
 esac
 
-echo ipt removed.
+exit 0

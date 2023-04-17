@@ -6,6 +6,8 @@
 # has been installed
 #
 
+set -e
+
 # Example: create user and group for the service
 
 # More documentation in:

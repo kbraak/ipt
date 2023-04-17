@@ -1,55 +1,55 @@
 #!/bin/sh
-
-#######################################################
-#
-# Add here the commands to be excuted after the package
-# has been installed
-#
-
-#Example: create some symbolic links
-#
-#chown -R ${user}:${group} /opt/${appName}-${appVersion}
-#ln -s /opt/${appName}-${appVersion} /opt/${appName}
+# postinst maintainer script for ipt
 
 set -e
 
+# Source debconf stuff
 . /usr/share/debconf/confmodule
 
 #DEBHELPER#
 
-case "$1" in
-    configure)
-        db_version 2.0
-        db_get tomcat9/username && TOMCAT9_USER="$RET"
-        db_get tomcat9/groupname && TOMCAT9_GROUP="$RET"
-        if id -u $TOMCAT9_USER > /dev/null 2>&1; then
-            chown -Rh $TOMCAT9_USER:$TOMCAT9_GROUP /var/lib/ipt
-        fi
-    ;;
-esac
+db_get ipt/data-dir
+DATA_DIR="$RET"
 
-echo ipt installed, it should be running on http://your-server-ip:8080/ipt
+db_get tomcat9/username && TOMCAT9_USER="$RET"
+db_get tomcat9/groupname && TOMCAT9_GROUP="$RET"
 
-DATADIR_LOCATION_CONF=/var/lib/tomcat9/webapps/ipt/WEB-INF/datadir.location
-if ! [ -f $DATADIR_LOCATION_CONF ] ; then
-    # ipt is not yet configured, suggest datadir location
-    echo You can use /var/lib/ipt as datadir.location
-    echo "Tomcat is sandboxed by systemd and only has write access to some
-directories (see /usr/share/doc/tomcat9/README.Debian):
+# Create the directory if it doesn't exist
+mkdir -p "$DATA_DIR"
+if id -u $TOMCAT9_USER > /dev/null 2>&1; then
+  chown -Rh $TOMCAT9_USER:$TOMCAT9_GROUP "$DATA_DIR"
+fi
 
-To give access to your IPT data directory settings have to be overridden.
+CONFIG_FILE="/var/lib/tomcat9/webapps/ipt/WEB-INF/datadir.location"
 
-This is done by creating an override.conf file in
-/etc/systemd/system/tomcat9.service.d/ containing:
+# Create or update the configuration file with the directory
+echo "$DATA_DIR" > "$CONFIG_FILE"
 
+# Set appropriate permissions for the configuration file
+chmod 644 "$CONFIG_FILE"
+chown $TOMCAT9_USER:$TOMCAT9_GROUP "$CONFIG_FILE"
+
+# Store the value in debconf
+db_set ipt/data-dir "$DATA_DIR"
+
+# Create the Tomcat service configuration file
+TOMCAT_SERVICE_OVERRIDE="/etc/systemd/system/tomcat9.service.d/override.conf"
+mkdir -p "$(dirname "$TOMCAT_SERVICE_OVERRIDE")"
+
+# Write the configuration to the 'override.conf' file
+cat << EOF > "$TOMCAT_SERVICE_OVERRIDE"
 [Service]
-ReadWritePaths=/path/to/the/ipt-data-directory/
+ReadWritePaths=$DATA_DIR
+EOF
 
-The service has to be restarted afterward with:
+# Set appropriate permissions for the configuration file
+chmod 644 "$TOMCAT_SERVICE_OVERRIDE"
 
+# Reload the systemd daemon configuration and restart the Tomcat service
 systemctl daemon-reload
 systemctl restart tomcat9
 
-"
+echo ipt installed, it should be running on http://your-server-ip:8080/ipt
+# Continue with the installation
+exit 0
 
-fi
