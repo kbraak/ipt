@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: GBIF Development Team <helpdesk@gbif.org>
 Uploaders: GBIF Development Team <helpdesk@gbif.org>
 Build-Depends:
- debhelper (>= 11), maven, git
+ debhelper (>= 11), maven, git, openjdk-8-jdk
 Standards-Version: 4.2.1
 Homepage: https://github.com/gbif/ipt
 Vcs-Browser: https://github.com/gbif/ipt
