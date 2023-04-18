@@ -1,33 +1,33 @@
 #!/bin/sh
-# postinst maintainer script for ipt
-
-set -e
+# https://www.debian.org/doc/manuals/dbconfig-common/ch-develguide.html
+#
+# config maintainer script for ipt
 
 # Source debconf stuff
 . /usr/share/debconf/confmodule
 
+set -e
+
 #DEBHELPER#
 
+# Get the previous value of data-dir
 db_get ipt/data-dir
 DATA_DIR="$RET"
 
 db_get tomcat9/username && TOMCAT9_USER="$RET"
 db_get tomcat9/groupname && TOMCAT9_GROUP="$RET"
 
+# Ask the user for the data directory using debconf
+db_input high ipt/data-dir || true
+db_go || true
+db_get ipt/data-dir
+DATA_DIR="$RET"
+
 # Create the directory if it doesn't exist
 mkdir -p "$DATA_DIR"
 if id -u $TOMCAT9_USER > /dev/null 2>&1; then
   chown -Rh $TOMCAT9_USER:$TOMCAT9_GROUP "$DATA_DIR"
 fi
-
-CONFIG_FILE="/var/lib/tomcat9/webapps/ipt/WEB-INF/datadir.location"
-
-# Create or update the configuration file with the directory
-echo "$DATA_DIR" > "$CONFIG_FILE"
-
-# Set appropriate permissions for the configuration file
-chmod 644 "$CONFIG_FILE"
-chown $TOMCAT9_USER:$TOMCAT9_GROUP "$CONFIG_FILE"
 
 # Store the value in debconf
 db_set ipt/data-dir "$DATA_DIR"
@@ -45,11 +45,40 @@ EOF
 # Set appropriate permissions for the configuration file
 chmod 644 "$TOMCAT_SERVICE_OVERRIDE"
 
+# Modify ipt.xml to include the IPT_DATA_DIR parameter
+IPT_XML="/etc/tomcat9/Catalina/localhost/ipt.xml"
+if [ -f "$IPT_XML" ]; then
+  sed -i "s|<Parameter name=\"IPT_DATA_DIR\" value=\".*\"/>|<Parameter name=\"IPT_DATA_DIR\" value=\"$DATA_DIR\"/>|g" "$IPT_XML"
+fi
+
 # Reload the systemd daemon configuration and restart the Tomcat service
 systemctl daemon-reload
 systemctl restart tomcat9
 
-echo ipt installed, it should be running on http://your-server-ip:8080/ipt
+# Wait for Tomcat to start up
+TOMCAT_STARTUP_TIMEOUT=60
+TOMCAT_START_TIME=$(date +%s)
+while [ "$(systemctl is-active tomcat9)" != "active" ]; do
+  sleep 1
+  if [ $(($(date +%s) - TOMCAT_START_TIME)) -gt $TOMCAT_STARTUP_TIMEOUT ]; then
+    echo "Error: Tomcat startup timed out after $TOMCAT_STARTUP_TIMEOUT seconds"
+    exit 1
+  fi
+done
+
+# Create or update the configuration file with the directory
+CONFIG_FILE="/var/lib/tomcat9/webapps/ipt/WEB-INF/datadir.location"
+
+if [ ! -f "$CONFIG_FILE" ]; then
+  # It does not exist yet, so create it a restart tomcat
+  echo "Configuring datadir in $CONFIG_FILE"
+  echo "$DATA_DIR" > "$CONFIG_FILE"
+  chmod 644 "$CONFIG_FILE"
+  chown $TOMCAT9_USER:$TOMCAT9_GROUP "$CONFIG_FILE"
+  echo "Restarting tomcat"
+  systemctl restart tomcat9
+fi
+
+
 # Continue with the installation
 exit 0
-

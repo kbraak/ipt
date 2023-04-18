@@ -29,4 +29,3 @@ if [ -f "$TOMCAT_SERVICE_OVERRIDE" ]; then
     systemctl restart tomcat9
 fi
 
-echo Removing ipt
