@@ -14,8 +14,8 @@ set -e
 db_get ipt/data-dir
 DATA_DIR="$RET"
 
-db_get tomcat9/username && TOMCAT9_USER="$RET"
-db_get tomcat9/groupname && TOMCAT9_GROUP="$RET"
+TOMCAT_USER="tomcat"
+TOMCAT_GROUP="tomcat"
 
 # Ask the user for the data directory using debconf
 db_input high ipt/data-dir || true
@@ -25,9 +25,14 @@ DATA_DIR="$RET"
 
 # Create the directory if it doesn't exist
 mkdir -p "$DATA_DIR"
-if id -u $TOMCAT9_USER > /dev/null 2>&1; then
-  chown -Rh $TOMCAT9_USER:$TOMCAT9_GROUP "$DATA_DIR"
+if id -u $TOMCAT_USER > /dev/null 2>&1; then
+  chown -Rh $TOMCAT_USER:$TOMCAT_GROUP "$DATA_DIR"
 fi
+
+IPT_XML="/etc/tomcat9/Catalina/localhost/ipt.xml"
+
+chown $TOMCAT_USER:$TOMCAT_GROUP /usr/share/ipt/ipt.war
+chown $TOMCAT_USER:$TOMCAT_GROUP "$IPT_XML"
 
 # Store the value in debconf
 db_set ipt/data-dir "$DATA_DIR"
@@ -46,7 +51,6 @@ EOF
 chmod 644 "$TOMCAT_SERVICE_OVERRIDE"
 
 # Modify ipt.xml to include the IPT_DATA_DIR parameter
-IPT_XML="/etc/tomcat9/Catalina/localhost/ipt.xml"
 if [ -f "$IPT_XML" ]; then
   sed -i "s|<Parameter name=\"IPT_DATA_DIR\" value=\".*\"/>|<Parameter name=\"IPT_DATA_DIR\" value=\"$DATA_DIR\"/>|g" "$IPT_XML"
 fi
@@ -74,11 +78,14 @@ if [ ! -f "$CONFIG_FILE" ]; then
   echo "Configuring datadir in $CONFIG_FILE"
   echo "$DATA_DIR" > "$CONFIG_FILE"
   chmod 644 "$CONFIG_FILE"
-  chown $TOMCAT9_USER:$TOMCAT9_GROUP "$CONFIG_FILE"
+  chown $TOMCAT_USER:$TOMCAT_GROUP "$CONFIG_FILE"
   echo "Restarting tomcat"
   systemctl restart tomcat9
+else
+  # Fix perms anyway
+  chmod 644 "$CONFIG_FILE"
+  chown $TOMCAT_USER:$TOMCAT_GROUP "$CONFIG_FILE"
 fi
-
 
 # Continue with the installation
 exit 0
