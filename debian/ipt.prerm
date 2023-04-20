@@ -26,6 +26,5 @@ if [ -f "$TOMCAT_SERVICE_OVERRIDE" ]; then
 
     # Reload the systemd daemon configuration and restart the Tomcat service
     systemctl daemon-reload
-    systemctl restart tomcat9
 fi
 
