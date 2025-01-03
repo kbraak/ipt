@@ -42,7 +42,7 @@
     <test.datadir>/tmp/test-datadir</test.datadir>
 
     <!-- GBIF dependencies -->
-    <dwc-api.version>1.49</dwc-api.version>
+    <dwc-api.version>2.0.0</dwc-api.version>
     <dwca-io.version>2.16</dwca-io.version>
     <gbif-api.version>1.16.18</gbif-api.version>
     <gbif-common.version>0.60</gbif-common.version>
