@@ -1,0 +1,335 @@
+{
+    "@context": [
+        "https://doi.org/10.5063/schema/codemeta-2.0",
+        "https://w3id.org/software-iodata",
+        "https://raw.githubusercontent.com/jantman/repostatus.org/master/badges/latest/ontology.jsonld",
+        "https://schema.org",
+        "https://w3id.org/software-types"
+    ],
+    "@type": "SoftwareSourceCode",
+    "author": [
+        {
+            "@type": "Person",
+            "email": "mblissett@gbif.org",
+            "familyName": "Blissett",
+            "givenName": "Matt"
+        },
+        {
+            "@type": "Person",
+            "email": "mpodolskiy@gbif.org",
+            "familyName": "Podolskiy",
+            "givenName": "Mikhail"
+        },
+        {
+            "@type": "Person",
+            "email": "trobertson@gbif.org",
+            "familyName": "Robertson",
+            "givenName": "Tim"
+        }
+    ],
+    "contIntegration": "https://builds.gbif.org/job/ipt/",
+    "description": "The GBIF Integrated Publishing Toolkit",
+    "email": "ipt@lists.gbif.org",
+    "issueTracker": "https://github.com/gbif/ipt/issues",
+    "name": "IPT",
+    "programmingLanguage": "Java",
+    "repository": [
+        "https://jitpack.io",
+        "https://repository.gbif.org/content/groups/gbif",
+        "https://repository.gbif.org/content/repositories/thirdparty"
+    ],
+    "runtimePlatform": "Java",
+    "softwareRequirements": [
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "at.favre.lib.bcrypt",
+            "name": "bcrypt"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "org.apache.commons.commons-collections4",
+            "name": "commons-collections4"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "commons-digester.commons-digester",
+            "name": "commons-digester"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "commons-io.commons-io",
+            "name": "commons-io"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "org.apache.commons.commons-lang3",
+            "name": "commons-lang3"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "org.apache.commons.commons-text",
+            "name": "commons-text"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "commons-validator.commons-validator",
+            "name": "commons-validator"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "io.frictionlessdata.datapackage-java",
+            "name": "datapackage-java"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "org.gbif.dwc-api",
+            "name": "dwc-api"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "org.gbif.dwca-io",
+            "name": "dwca-io"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "com.github.pjfanning.excel-streaming-reader",
+            "name": "excel-streaming-reader"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "org.freemarker.freemarker",
+            "name": "freemarker"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "org.gbif.gbif-api",
+            "name": "gbif-api"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "org.gbif.gbif-common",
+            "name": "gbif-common"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "org.gbif.gbif-doi",
+            "name": "gbif-doi"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "org.gbif.gbif-httputils",
+            "name": "gbif-httputils"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "org.gbif.gbif-metadata-profile-eml",
+            "name": "gbif-metadata-profile-eml"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "org.gbif.gbif-parsers",
+            "name": "gbif-parsers"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "com.google.code.gson.gson",
+            "name": "gson"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "com.google.guava.guava",
+            "name": "guava"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "com.google.inject.guice",
+            "name": "guice"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "com.google.inject.extensions.guice-assistedinject",
+            "name": "guice-assistedinject"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "com.google.inject.extensions.guice-servlet",
+            "name": "guice-servlet"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "com.google.inject.extensions.guice-struts2",
+            "name": "guice-struts2"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "org.hibernate.validator.hibernate-validator",
+            "name": "hibernate-validator"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "org.apache.httpcomponents.httpclient",
+            "name": "httpclient"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "org.apache.httpcomponents.httpcore",
+            "name": "httpcore"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "com.fasterxml.jackson.dataformat.jackson-dataformat-yaml",
+            "name": "jackson-dataformat-yaml"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "com.graphhopper.external.jackson-datatype-jts",
+            "name": "jackson-datatype-jts"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "org.glassfish.jakarta.el",
+            "name": "jakarta.el"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "javassist.javassist",
+            "name": "javassist"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "javax.el.javax.el-api",
+            "name": "javax.el-api"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "javax.servlet.javax.servlet-api",
+            "name": "javax.servlet-api"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "javax.xml.bind.jaxb-api",
+            "name": "jaxb-api"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "org.glassfish.jaxb.jaxb-runtime",
+            "name": "jaxb-runtime"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "com.sun.jersey.jersey-client",
+            "name": "jersey-client"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "com.sun.jersey.jersey-core",
+            "name": "jersey-core"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "com.google.code.findbugs.jsr305",
+            "name": "jsr305"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "net.sourceforge.jtds.jtds",
+            "name": "jtds"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "org.junit.jupiter.junit-jupiter-engine",
+            "name": "junit-jupiter-engine"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "org.junit.jupiter.junit-jupiter-params",
+            "name": "junit-jupiter-params"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "org.apache.logging.log4j.log4j-core",
+            "name": "log4j-core"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "org.apache.logging.log4j.log4j-slf4j-impl",
+            "name": "log4j-slf4j-impl"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "javax.mail.mail",
+            "name": "mail"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "org.mockito.mockito-core",
+            "name": "mockito-core"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "org.mockito.mockito-junit-jupiter",
+            "name": "mockito-junit-jupiter"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "com.microsoft.sqlserver.mssql-jdbc",
+            "name": "mssql-jdbc"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "mysql.mysql-connector-java",
+            "name": "mysql-connector-java"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "com.oracle.database.jdbc.ojdbc8",
+            "name": "ojdbc8"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "com.github.librepdf.openrtf",
+            "name": "openrtf"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "com.googlecode.owasp-java-html-sanitizer.owasp-java-html-sanitizer",
+            "name": "owasp-java-html-sanitizer"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "org.apache.poi.poi",
+            "name": "poi"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "org.apache.poi.poi-ooxml",
+            "name": "poi-ooxml"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "org.postgresql.postgresql",
+            "name": "postgresql"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "org.apache.struts.struts2-core",
+            "name": "struts2-core"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "org.apache.struts.struts2-json-plugin",
+            "name": "struts2-json-plugin"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "javax.validation.validation-api",
+            "name": "validation-api"
+        },
+        {
+            "@type": "SoftwareApplication",
+            "identifier": "com.thoughtworks.xstream.xstream",
+            "name": "xstream"
+        }
+    ],
+    "version": "3.0.2-SNAPSHOT"
+}
