@@ -1,0 +1,15 @@
+version: 2
+updates:
+  - package-ecosystem: "docker"
+    directory: "/package/docker"
+    schedule:
+      interval: "weekly"
+##      beside Docker dependencies it is also worth to check updates for GithubActions - this second block is optional to enable also. But at this moment, GA use no dependencies.
+#  - package-ecosystem: "github-actions"
+#    directory: "/"
+#    schedule:
+#      interval: "monthly"
+#    groups:
+#      GitHubActions-dependencies:
+#        patterns:
+#          - "*"
