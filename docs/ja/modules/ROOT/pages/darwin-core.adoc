@@ -1,0 +1,110 @@
+= ダーウインコア
+
+Darwin Coreは、link:http://www.tdwg.org/activities/darwincore/[TDWG]標準であり、広く知られるlink:http://dublincore.org/documents/dcmi-terms/[ダブリンコア・メタデータ・イニシアチブ用語]の理念に基づいています。 用語のライブラリとしてのDarwin Coreの基本原則は、用語の定義を、XMLやRDFなど、用語を共有するために使用する技術から区別しておくことです。
+
+== IPTとダーウィンコア
+IPTには、ダーウィンコア（DwC）用語に基づく生物多様性コアデータセットタイプが組み込まれています。データセットタイプはオカレンス、チェックリスト、メタデータの各レコードで、それぞれを記述するための決まった用語があります。
+
+== ダーウィンコアの歴史
+Darwin Coreが標準として批准されるまでは、主要な種のオカレンスデータを記述するために、特にDiGIRやXMLエンコーディングが利用されていました。 私たちが非常にシンプルなチェックリストのデータ交換フォーマットを探していたとき、またFlickrで種のタグ付けが盛んになったときに、ダブリンコアの伝統に則ったシンプルな生物多様性の用語が非常に有用であり、実際にすでに使われているダーウィンコア用語とよく重なることが明らかになったのです。
+
+== 用語解説
+すべてのダーウィンコア用語は、link:http://rs.tdwg.org/dwc/terms/index.htm[ダーウィンコア用語：クイックリファレンスガイド]で定義されています。
+
+1つのDwC用語は、IPTではプロパティとも呼ばれ、各レコードに一度だけ使用することができます。一般にそれはフリーテキストですが、定義ではしばしば特定のフォーマットやボキャブラリーを使用するよう推奨しています。例えば、`dwc:countryCode` にはISO 2文字の国コードが使用されています。
+
+== パターン
+=== ID用語
+DwCでは、識別子を表す多くの用語が用意されています。レコードを定義するために使用できるもの（オカレンスレコードの occurrenceID やタクソンレコードの taxonID など）もあれば、レコードの外部に保存される情報の識別子を指すもの（higherGeographyID など）もあります。たとえば、`namePublishedInID` は 学名が最初に確立された出版物の識別子 (おそらく DOI または他の解決可能な識別子) を参照するために使用されます。出現頻度データセット内で使用される `taxonID` は、チェックリストデータセットなど他の場所で定義された分類群へのポインタとして機能し、一方、タクソンレコード内の `taxonID` はそのレコードの識別子として機能することに注意してください。
+
+ほとんどのID用語は、`acceptedNameUsageID` や `acceptedNameUsage` のように、対応するフルテキスト用語を持っています。これらには2つの目的があります。
+
+. 識別子がない場合、他のレコード（この場合は受理された/有効な分類）を参照するために使用することができます。
+. 識別子が解決できない場合でも、人間が読めるコンテキストを提供します。
+
+そのため、可能ならその両方を提供することに意味があります。
+
+=== 非正規化ヒエラルキー
+地理や分類は、 `higherParentNameUsage(ID)`や`higherGeography(ID)`という用語によって、地名や分類の柔軟な階層構造として表現することが可能です。この_隣接リスト_に加え、最も人気のあるランクを各レコードの非正規化された階層として公開することができ、この情報は多くのレコードで効果的に繰り返されます。しかし、これは、データセット全体から切り離された各レコードに対して、迅速で短く、人間が読みやすい分類を提供するものです。
+
+* 分類学的な非正規化クラスです。`kingdom`、`phylum`、`class`、`order`、`family`、`genus`、`subgenus`になります
+* 地理的な非正規化クラス：`continent`、`waterBody`、`islandGroup`、`island`、`country` / `countryCode`、`stateProvince`、`county`、`municipality`となります。
+
+上記のフルテキストID用語と同様に、ID用語が非正規化された階層とは異なるものに解決される可能性があるため、データの整合性に問題が発生する可能性があります。この場合、IPTは、階層を解決するために、以下の用語の優先順位の推奨に従います。
+
+----
+ID用語 >> テキスト用語 >> 非正規化用語
+higherTaxonID >> higherTaxon >> kingdom,family,...
+----
+
+=== 逐語的な用語
+多くの用語には、それに対応する逐語的な用語があります。これは、標本ラベル、観察ノート・文献に記載されているような特定の属性を正確に逐語的に書き起こして公開することを可能にするためです。このように、'verbatimEventDate' は、収集日の正確な複製を公開するために使用され、'eventDate' は標準ISO日時表現でエンコードされます。
+
+== 一時データ
+すべてのDwC用語はオカレンス記録を記述するために使用することができます。少なくとも以下の用語は掲載することが推奨されます。「!!!」の付いた用語は、現在のGBIFの索引で認識されるため、存在しなければなりません。
+
+* http://rs.tdwg.org/dwc/terms/index.htm#basisOfRecord[basisOfRecord] !!!
+* http://rs.tdwg.org/dwc/terms/index.htm#occurrenceID[occurrenceID]
+* http://rs.tdwg.org/dwc/terms/index.htm#institutionCode[institutionCode] !!!
+* http://rs.tdwg.org/dwc/terms/index.htm#collectionCode[collectionCode] !!!
+* http://rs.tdwg.org/dwc/terms/index.htm#catalogNumber[catalogNumber] !!!
+* http://rs.tdwg.org/dwc/terms/index.htm#recordedBy[recordedBy]
+* http://rs.tdwg.org/dwc/terms/index.htm#eventDate[eventDate]
+* http://rs.tdwg.org/dwc/terms/index.htm#year[year]
+* http://rs.tdwg.org/dwc/terms/index.htm#typeStatus[typeStatus]
+* http://rs.tdwg.org/dwc/terms/index.htm#scientificName[scientificName] !!!
+* http://rs.tdwg.org/dwc/terms/index.htm#kingdom[kingdom]
+* http://rs.tdwg.org/dwc/terms/index.htm#family[family]
+* http://rs.tdwg.org/dwc/terms/index.htm#locality[locality]
+* http://rs.tdwg.org/dwc/terms/index.htm#decimalLongitude[decimalLongitude]
+* http://rs.tdwg.org/dwc/terms/index.htm#decimalLatitude[decimalLatitude]
+* http://rs.tdwg.org/dwc/terms/index.htm#coordinateUncertaintyInMeters[coordinateUncertaintyInMeters]
+
+=== 例
+
+----
+occurrenceID=96db9d09-596d-409c-8626-f4460078d0eb
+institutionCode=BGBM
+collectionCode=B
+basisOfRecord=preservedspecimen
+catalogNumber=1159
+eventDate=1999-08-06 00:00:00.0
+collector=Markus Döring
+continent=Asia
+country=TR
+stateProvince=Adana
+locality=Aladaglari, lower Narpiz Deresi, next to fountain, 2900m
+minimumElevationInMeters=2900
+decimalLatitude=37.82800
+decimalLongitude=35.13600
+geodeticDatum=WGS84
+identifiedBy=Markus Döring
+scientificName=Festuca anatolica subsp. anatolica
+kingdom=Plantae
+phylum=Magnoliophyta
+class=
+order=Cyperales
+family=Poaceae
+genus=Festuca
+specificEpithet=anatolica
+infraspecificEpithet=anatolica
+----
+
+== チェックリスト
+チェックリストは、すべてのダーウィンコア用語の分類学的サブセットに限定されています。
+
+xref:checklist-data.adoc[種のチェックリストの公開方法に関する推奨事項]を参照してください。
+
+== ダーウィンコア・アーカイブ
+ダーウィンコア・アーカイブ（DwC-A）は、GBIFネットワークにデータを公開するための新しい主な手段です。DwC-Aは_データセット全体_を含み、_シンプルなテキストファイル_に基づいており、_カスタムソフトウェア_を使ってIPTを使わずにとても簡単に作成することができます。
+
+=== ダーウィンコア拡張
+DwCが生物多様性のコアメタデータしかカバーしていないことを認識し、ダーウィンコアの拡張はすべてのコミュニティで共通のニーズであります。最も簡単な方法は、新しい名前空間に新しい用語を作成し、その用語で通常のdwcレコードを単純に拡張することです。
+
+1つの拡張子に対して複数のサブレコードが必要となることがよくあります。例えば、1つの種に対して多くの通称があったり、1つの標本に対して複数の画像があったりする場合です。このような豊かな関連性のある記録を共有するために、*スタースキーム*が使われています。一つのコアレコードに対して、異なる拡張機能（例：画像と同定）を持つ拡張レコードをいくつでも作成することが可能です。
+
+=== アーカイブ形式
+
+ダーウィンコア・アーカイブ形式は、dwcレコードと拡張子を比較的簡単なテキストベースの形式で公開する手段を提供します。ダーウィンコア・アーカイブは、テキストファイルのセットを共通のパッケージにバンドルし、1つのアーカイブファイルにzip圧縮したものです。フォーマットは link:http://rs.tdwg.org/dwc/terms/guides/text/index.htm[ダーウィンコアテキストガイドライン]に従います。典型的なパッケージは以下の図に示されており、link:http://code.google.com/p/gbif-ecat/wiki/DwCArchive[ここ]で詳しく説明されているコンポーネントで構成されています。
+
+image::figures/dwca.png[]

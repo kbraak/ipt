@@ -1,0 +1,53 @@
+= 選單：首頁
+
+This page allows users to view a list of public resources, if any, and to look at the detailed metadata of any resource on the list.
+
+image::ipt2/home/IPTHome.png[]
+
+== Public Resources Table
+If there are any public resources, they will appear in a table having the following columns:
+
+* **Logo** - the resource logo (configurable in Additional Metadata page of the resource metadata)
+* **Name** - the title of the resource as given in the Title entry of the resource metadata. The Name appears as a link, which will open the resource's homepage (see below).
+* **Organization** - the organization under which the resource has been registered, if any. If the resource is not registered, the value in the Organization column will be "No organization". Review the information under the "Organizations" heading in the "Administration Menu" section for more information about registering organizations and registering a resource under an organization.
+* **Type** - the type of the resource as given in the Type drop down on the xref:manage-resources.adoc#basic-metadata[Basic Metadata] page of the resource metadata
+* **Subtype** - the subtype of the resource as given in the Subtype drop down on the xref:manage-resources.adoc#basic-metadata[Basic Metadata] page of the resource metadata
+* **Records** - the number of rows of data in the core data file of the last published Darwin Core Archive for the resource. For resources having data in one or more extension files, the number links to the Data Records page on the resource homepage showing a breakdown of record counts by extension.
+* **Last modified** - either the date the resource was created or the date on which the data or metadata were last modified, whichever is more recent.
+* **Last publication** - the date the resource was last published.
+* **Next publication** - the date the resource will be published next.
+
+== RSS feed
+The IPT supports syndication via RSS for those who wish to monitor when new resource versions get published, and how resources change over time. In fact each time a new resource version is broadcast, it will include a summary of what changed since the last version (assuming the publisher entered a change summary, otherwise it defaults to the resource description). The RSS feed is accessible by clicking on the link provided below the list of public hosted resources. The RSS feed can be read in any standard RSS client.
+
+== Registered resource inventory
+The IPT provides a simple JSON inventory of all registered resources. This feature isn't shown on the user interface. To view simply append `/inventory/dataset` to the IPT public URL, e.g. https://ipt.gbif.org/inventory/dataset. GBIF uses this inventory to monitor whether it is properly indexing resources by comparing the target and indexed record counts.
+
+== Resource homepage
+The resource homepage is aimed at external users of a resource. The homepage lists all the metadata about a selected version of a resource, provides links to download the version's data/metadata, and displays the resource's version history.
+
+To view the resource homepage, user can click on the name link in the list of resources on the Home page. Another way to get to the resource's homepage is using its DOI: when a resource is assigned a DOI via the IPT, it always resolves to its homepage.
+
+Please note only a user having the Admin role or one of the Manager roles can edit a resource's metadata. To learn more, please refer to the information under the "Edit an existing resource" heading in the "Manage Resources Menu" section.
+
+image::ipt2/home/IPTHomeMetadataOverview.png[]
+
+=== Version history
+The version history table lists all published versions of the resource, enabling users to track changes to the resource over time and download previous versions' data/metadata. Please note, the IPT's Archival Mode must be turned on in order for old versions of DwC-A to be stored (see the xref:administration.adoc#configure-ipt-settings[Configure IPT Settings] section). Only versions that are publicly accessible can be viewed by external users, whereas admins and resource managers can see all versions. For explanations of the table columns, refer to the information below.
+
+image::ipt2/home/IPTVersionHistoryTable.png[]
+
+Following are explanations of the table columns:
+
+* **Version** - the published version's version number, which uses the major_version.minor_version format. The version of the resource homepage currently being viewed is clearly indicated. To open a specific version's homepage, click on the version number. **Note**: A major version change compared to the last published version indicates that a scientifically significant change has taken place.
+* **Published on** - the date the published version was released.
+* **Records** - the number of records the published version contains.
+* **Change summary** - a summary of what has changed since the last published version.
+* **DOI handle** - the DOI handle assigned to the published version. **Note**: If the DOI is different from the DOI of the last published version, this indicates that a scientifically significant change has been done to the resource.
+* **Last modified by** - the IPT user that last modified the published version.
+
+=== Deletion of a version
+
+Resource managers and administrators can delete old published versions of a dataset.
+
+First use the version history table to find and open the version to be deleted, then click *Delete version* at the top of the page. The latest published version of a resource cannot be deleted.

@@ -1,0 +1,82 @@
+= サンプリングイベントデータ
+
+== Introduction
+
+Sampling-event data provides detailed information about species occurrences in specific locations and times, along with the sampling methods used. These datasets follow standardized protocols, allowing researchers to assess species abundance, community composition, and compare data across different times and places. Examples include vegetation transects, bird censuses, monitoring data, and environmental DNA samples. Unlike opportunistic observations, sampling-event data is quantitative and calibrated, making it useful for detecting changes and trends in populations. By including details of the sampling effort and protocol, researchers can even infer species absence and better understand biodiversity patterns. These datasets include the same basic descriptive information included under xref:resource-metadata.adoc[Resource metadata] and the same standard elements as in xref:occurrence-data.adoc[Occurrence Data].
+
+== サンプリングイベントデータに変換する方法
+
+image::ipt2/flow-sed.png[]
+
+最終的には、ダーウィン・コア（DwC）の用語名を列名とした2つのテーブルにデータを変換する必要があります。1つはサンプリングイベントのテーブル、もう1つは各サンプリングイベントに由来する（関連する）種のオカレンスのテーブルです。
+
+このlink:https://ipt.gbif.org/manual/ja/ipt/latest/sampling-event-data#%E3%83%86%E3%83%B3%E3%83%97%E3%83%AC%E3%83%BC%E3%83%88[Excelテンプレート]にデータを入力してみてください。このテンプレートには、サンプリングイベント用と関連する種のオカレンス用の2シートが含まれています。
+
+Alternatively, if your data is stored in a xref:database-connection.adoc[supported database], you can write two SQL tables (views) using DwC column names: one for sampling events and another for associated species occurrences.
+
+Each sampling event record should include all xref:occurrence-data.adoc#required-dwc-fields[required DwC fields] and as many xref:occurrence-data.adoc#recommended-dwc-fields[recommended DwC fields] as possible. You can augment your table with extra DwC columns, but only DwC terms from this {latest-dwc-event}[list].
+
+Similarly, each species occurrence record should include all xref:occurrence-data.adoc#required-dwc-fields[required DwC fields] and as many xref:occurrence-data.adoc#recommended-dwc-fields[recommended DwC fields] as possible. You can augment your table with extra DwC columns, but only DwC terms from this {latest-dwc-occurrence}[list]. Some DwC terms will be redundant meaning they are added to both sampling event and species occurrence records. As a general rule, try not to add redundant terms with the same values. It is fine if they have different values though, for example, if you wanted to define a location of an event and then define more specific locations for individual occurrences. Otherwise, when the location of individual occurrences isn't supplied, its location gets inherited from the event.
+
+さらに詳しいガイダンスとして、ガイドxref:best-practices-sampling-event-data.adoc[サンプリングイベントデータ公開におけるベストプラクティス]を参照し、link:https://ipt.gbif.org/manual/ja/ipt/latest/sampling-event-data#templates[サンプルデータを入力したテンプレート]やlink:https://ipt.gbif.org/manual/ja/ipt/latest/sampling-event-data#exemplar-datasets[サンプルデータセットのリスト]を見ることができます。
+
+=== テンプレート
+
+link:{attachmentsdir}/downloads/event_ipt_template_v2.xlsx[image:ipt2/excel-template2.png[Excelテンプレート]] link:{attachmentsdir}/downloads/event_ipt_template_v2_example_data.xlsx[image:ipt2/excel-template-data2.png[Excelテンプレート（サンプルデータ付き）]]
+
+入力し、IPTにアップロードします。
+
+=== DwCの必須項目
+
+* https://dwc.tdwg.org/terms/#dwc:eventID[eventID] - 関連するオカレンスデータにも必要です（両方を関連付けるため）。
+* https://dwc.tdwg.org/terms/#dwc:eventDate[eventDate]
+* https://dwc.tdwg.org/terms/#dwc:samplingProtocol[samplingProtocol]
+
+=== DwCの推奨フィールド
+
+* https://dwc.tdwg.org/terms/#dwc:sampleSizeValue[sampleSizeValue] & https://dwc.tdwg.org/terms/#dwc:sampleSizeUnit[sampleSizeUnit]
+* https://dwc.tdwg.org/terms/#dwc:parentEventID[parentEventID] - イベントがイベントシリーズの一部である場合に使用されます。
+* https://dwc.tdwg.org/terms/#dwc:samplingEffort[samplingEffort] - サンプリングイベントの精度の証拠を提供する。
+* https://dwc.tdwg.org/terms/#dwc:locationID[locationID] - サンプリングされるプロット/トランセクトが一意の識別子を持っている場合。
+* https://dwc.tdwg.org/terms/#dwc:decimalLatitude[decimalLatitude] & https://dwc.tdwg.org/terms/#dwc:decimalLongitude[decimalLongitude] & https://dwc.tdwg.org/terms/#dwc:geodeticDatum[geodeticDatum] - 地点情報を与えるため
+* https://dwc.tdwg.org/terms/#dwc:footprintWKT[footprintWKT] & https://dwc.tdwg.org/terms/#dwc:footprintSRS[footprintSRS] - 特定の地点の位置を提供する。
+* https://dwc.tdwg.org/terms/#dwc:countryCode[countryCode]
+* https://dwc.tdwg.org/terms/#dwc:occurrenceStatus[occurrenceStatus] - 存在/不在データを記録するための関連するオカレンスデータのみ。
+
+=== サンプルデータセット
+
+* http://cloud.gbif.org/eubon/resource?r=butterflies-monitoring-scheme-il[Israeli Butterfly Monitoring Scheme (BMS-IL)]
+* http://cloud.gbif.org/eubon/resource?r=lvd[Dutch Vegetation Database (LVD)]
+* http://gbif.vm.ntnu.no/ipt/resource?r=lepidurus-arcticus-survey_northeast-greenland_2013[Lepidurus arcticus survey Northeast Greenland 2013]
+* http://danbif.au.dk/ipt/resource?r=rooftop[Insects from light trap (1992–2009), rooftop Zoological Museum, Copenhagen]
+
+=== よくある質問
+
+==== Q. あるサンプリングイベントが時系列の一部であることを示すにはどうしたらよいですか？
+
+*A.* 同じ場所でのサンプリングイベントは、すべて同じlink:https://dwc.tdwg.org/terms/#dwc:locationID[locationID]を共有する必要があります。
+
+==== Q. parentEventIDを使用して、イベントの階層（再帰的データ型）を公開するにはどうすればよいですか？
+
+*A.* The classic example is sub-sampling of a larger plot. To group all (child) sub-sampling events under the (parent) sampling event, the parentEventID of all sub-sampling events must be set to the eventID of the (parent) sampling event. To be valid, all parentEventIDs must reference eventIDs of records defined in the same dataset. Otherwise, the parentEventID must be a globally unique identifier (e.g. DOI, HTTP URI, etc) that resolves to an event record described elsewhere. Ideally, all (child) sub-sampling events share the same date and location as the (parent) event it references.
+
+==== Q. 不在データはどのように公開するのですか？
+
+*A.* *ステップ1*：サンプリングの時間や場所で観察できたはずなのに観察されなかった種について、以下のフィールドを設定して種オカレンス記録を追加することで、種の不在を明示します。
+
+必須
+
+* https://dwc.tdwg.org/terms/#dwc:occurrenceStatus[occurrenceStatus]=link:{latest-occurrence-status}[absent]
+
+オプション（どちらか一方または両方を提供します）
+
+* https://dwc.tdwg.org/terms/#dwc:individualCount[individualCount]="0"
+* https://dwc.tdwg.org/terms/#dwc:organismQuantity[organismQuantity] and https://dwc.tdwg.org/terms/#dwc:organismQuantityType[organismQuantityType] pair: "0", "individuals"
+
+あるいは、サンプリングで派生する種のオカレンスがなかったとしても、サンプリングイベントの記録を含めます。これにより、種の不在を推論することができます。このlink:https://gbif.vm.ntnu.no/ipt/resource?r=lepidurus-arcticus-survey_northeast-greenland_2013[ノルウェーのサンプリングイベントデータセット]の例では、これがどのように見えるかを示しています。
+
+*Step 2*: Define the taxonomic scope of all sampling events included in the dataset, it is recommended to publish a timestamped checklist together with the sampling event dataset, which represents the species composition that could be observed at the time and place of sampling given the sampling protocol (and/or the taxonomic coverage of the study and the expertise of the personnel carrying out identification). This would allow for accurate presence/absence data to be recorded. In addition to the normal (expected) species composition, the checklist could include invasive (unexpected) species. For taxonomic and biogeographical/ecological reasons, however, this checklist would exist solely within the context of the sampling event dataset.
+
+Instructions on how to create a checklist can be found xref:checklist-data.adoc[here]. Detailed metadata should be included with the checklist describing a) the people who performed the identifications and their taxonomic expertise and b) how it was decided that these species were detectable & identifiable at the time and place of sampling.
+
+チェックリストをサンプリングイベントのデータセットにリンクさせるには、xref:manage-resources.adoc#external-links[外部リンク]セクションでデータセットのメタデータにチェックリストを追加します。

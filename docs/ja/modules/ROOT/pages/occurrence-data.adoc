@@ -1,0 +1,73 @@
+= オカレンスデータ
+
+== Introduction
+通常、ある種が特定の場所で、特定の日に発生したという証拠を提示する資料。これらのデータセットは、種の歴史的または現在の分布のマッピングに貢献するため、ほとんどのチェックリストデータを拡張するものです。データは細かい地図作成に必要な座標と座標精度を含んでいるのが理想的ですが、このようなデータセットには一般的な地域情報（国の識別子に限定されることもある）しかないことがほとんどです。またこれらのデータセットには同じ種の複数の個体が別々に記録されていることが多々あり、自然史コレクションの標本データベース、市民科学の観察、種の地図帳プロジェクトのデータなどが例に挙げられます。もし十分な情報が元のデータセットに存在するのであれば（あるいはデータセット内のすべてのオカレンスに一貫して当てはめられるのであれば）、これらのデータセットは xref:sampling-event-data.adoc[サンプリングイベントデータ] として提示することが推奨されています。これらのデータセットには、xref:resource-metadata.adoc[リソースメタデータ]に含まれるのと同じ基本的な記述情報が含まれます。
+
+== データをオカレンスデータに変換する方法
+
+image::ipt2/flow-od.png[]
+
+最終的には、ダーウィンコア（DwC）の用語名を列名として使用したテーブル構造にデータを変換する必要があります。
+
+すべての<<必須DwCフィールド,必須DwCフィールド>>と<<推奨DwCフィールド,推奨DwCフィールド>>を含む<<テンプレート,Excelテンプレート>>にデータを入れてみてください。
+
+または、データがxref:database-connection.adoc[対応データベース]に保存されている場合は、DwCの列名を使ってSQLテーブル（ビュー）を書くことができます。<<必須DwCフィールド,必須DwCフィールド>>をすべて含み、<<推奨DwCフィールド,推奨DwCフィールド>>をできるだけ多く追加するように注意してください。
+
+さらなるガイダンスとして、<<Exemplar datasets,サンプルデータセット>>を見ることもできます。
+
+DwCカラムを追加してテーブルを拡張することもできますが、利用できるのはlink:{latest-dwc-occurrence}[リスト]にあるDwC用語のみです。
+
+=== テンプレート
+
+link:{attachmentsdir}/downloads/occurrence_ipt_template_v2.xlsx[image:ipt2/excel-template2.png[Excelテンプレート]] link:{attachmentsdir}/downloads/occurrence_ipt_template_v2_example_data.xlsx[image:ipt2/excel-template-data2.png[Excelテンプレート（サンプルデータ含）]]
+
+それを入力し、IPTにアップロードしてください。できるだけ多くのlink:http://rs.tdwg.org/dwc/terms/[DwC用語]を追加してみてください。
+
+=== DwCの必須項目
+
+* https://dwc.tdwg.org/terms/#dwc:occurrenceID[occurrenceID]
+* https://dwc.tdwg.org/terms/#dwc:basisOfRecord[basisOfRecord]
+* https://dwc.tdwg.org/terms/#dwc:scientificName[scientificName]
+* https://dwc.tdwg.org/terms/#dwc:eventDate[eventDate]
+
+=== DwCの推奨フィールド
+
+* https://dwc.tdwg.org/terms/#dwc:taxonRank[taxonRank] - scientificNameを裏付けるため
+* https://dwc.tdwg.org/terms/#dwc:kingdom[kingdom] - and other higher taxonomy if possible
+* https://dwc.tdwg.org/terms/#dwc:decimalLatitude[decimalLatitude] & https://dwc.tdwg.org/terms/#dwc:decimalLongitude[decimalLongitude] & https://dwc.tdwg.org/terms/#dwc:geodeticDatum[geodeticDatum] - 地点情報を与えるため
+* https://dwc.tdwg.org/terms/#dwc:countryCode[countryCode]
+* https://dwc.tdwg.org/terms/#dwc:individualCount[individualCount] / https://dwc.tdwg.org/terms/#dwc:organismQuantity[organismQuantity] & https://dwc.tdwg.org/terms/#dwc:organismQuantityType[organismQuantityType] - 種のオカレンス量を記録するため
+
+=== サンプルデータセット
+
+* https://ipt.vertnet.org/archive.do?r=cumv_amph[CUMV Amphibian Collection (Arctos)] (also registered on GBIF here: https://doi.org/10.15468/emivh3)
+
+=== よくある質問
+
+==== Q. 種が存在しないことを示すにはどうすればいいですか？
+
+*A.* link:https://dwc.tdwg.org/terms/#dwc:occurrenceStatus[occurrenceStatus]=link:{latest-occurrence-status}["absent"]に設定してください。さらに、link:https://dwc.tdwg.org/terms/#dwc:individualCount[individualCount]とlink:https://dwc.tdwg.org/terms/#dwc:organismQuantity[organismQuantity]は0としてください。
+
+==== Q. センシティブな種のオカレンスデータを一般化するにはどうすればいいですか？
+
+*A.* センシティブな種のデータをどのように一般化するか（例えば、データの解像度を制限するなど）は、種のセンシティブさのカテゴリーによります。逆効果のリスクが低い場合、センシティブな種データを制限なしに公表することは依然として適切です。センシティブな種のオカレンスデータを保護することは、公開者の責任であることに留意してください。ガイドとしては、このlink:https://www.gbif.org/resource/80512[ベストプラクティスガイド]を参照してください。また、link:http://science.sciencemag.org/content/356/6340/800[Science誌の最近の論文]を参照することもできます。この論文では、センシティブな種のデータを公開することによるリスクを評価するために使用できる簡略化した評価スキームを紹介しています。
+
+データを一般化する際は分析に必要なデータの価値を下げないようにし、ダーウィンコア用語 link:https://dwc.tdwg.org/terms/#dwc:informationWithheld[informationWithheld] を使用して、元の記録がなぜ、どのように変更されたかをユーザーに知らせる必要があります。
+
+link:http://www.gbif.org/resource/80512[ベストプラクティスガイド]に示されているように、一般化されるセンシティブな種のチェックリストも公表する必要があります。またそれぞれの種に対し、以下の事項を説明する必要があります。
+
+* リスト掲載の根拠
+* センシティブな種の地理的範囲
+* センシティブのカテゴリー
+* センシティブかどうか見直しを行う日付
+
+これにより、他のデータ管理者に、これらの種が特定の地域で潜在的にセンシティブであるとみなされ、分析結果などを公表する際にセンシティブな状態を考慮する必要があることを伝えることができます。
+
+===== 地点の位置を一般化するための便利な計算式
+
+次の式は、緯度・経度の点を5000m単位で隠蔽します。注：pointXとpointYは「長さ（m）」で指定し、TRUNCは小数点以下を切り捨てて整数にします。
+
+----
+pointX = TRUNC(pointX / 5000) * 5000
+pointY = TRUNC(pointY / 5000) * 5000
+----

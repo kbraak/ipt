@@ -1,0 +1,479 @@
+= Buenas prácticas para la publicación de listados taxonómicos
+
+Versión 2.1
+
+image::figures/cover_art_stilt.png[]
+
+== Control del documento
+
+|===
+| Version | Descripción            | Fecha de lanzamiento| Autor(es)
+
+| 1.0     | Versión de lanzamiento        | 1° Abril 2011    | David Remsen
+
+| https://links.gbif.org/checklist_best_practices[1.11] | Cambios editoriales menores | 28 de abril 2011   | David Remsen
+
+| https://github.com/gbif/ipt/wiki/BestPracticesChecklists[2.0] | Transferido a wiki, cambios importantes | 30 de marzo 2017   | Kyle Braak
+
+| xref:best-practices-checklists.adoc[2.1] | Transferido a AsciiDoctor | 24 de mayo 2021 | Matthew Blissett
+|===
+
+== Citación sugerida
+
+// The date uses the last change, ignoring formatting etc.
+> GBIF (2017) Buenas prácticas en la publicación de listados taxonómicos, versión 2.1. Copenhague: Secretaría de GBIF. https://ipt.gbif.org/manual/en/ipt/{page-version}/best-practices-checklists
+
+_Imagen de portada: Gregory Basco, Tero Real, Himantopus mexicanus_
+
+== Introducción
+
+Esta guía proporciona detalles sobre cómo utilizar el formato Darwin Core Archive (DwC-A) como medio para compartir información de listados taxonómicos de una manera estándar. Se centra en componentes específicos del formato Darwin Core Archive y en algunas de las extensiones de apoyo al core de datos taxonómicos, y proporciona recomendaciones sobre cómo utilizar mejor estos componentes para maximizar el valor de los datos compartidos. Esta guía no proporciona una visión general detallada del formato Darwin Core Archive, en su lugar, por favor, consulte la xref:darwin-core.adoc[Guía práctica de los Archivos Darwin Core].
+
+El formato DwC-A y el perfil específico aquí descrito representan un formato de intercambio de datos reconocido y ratificado internacionalmente para compartir datos taxonómicos. Todas las normas de intercambio de datos deben encontrar un equilibrio entre el alcance y la capacidad técnica, por un lado, y la aceptación y el uso social, por el otro. Las soluciones simples sacrifican la cobertura y la complejidad en favor de la facilidad de uso. Los formatos altamente complejos ofrecen soluciones más completas para representar cualquier tipo de datos, pero a costa de la simplicidad, y requieren software de apoyo y conocimientos técnicos. El formato Darwin Core Archive representa una posición intermedia entre los dos extremos de este espectro. Se centra en los elementos clave de los listados taxonómicos y permite vincular un conjunto enriquecido de tipos de datos a esta estructura central. Los datos contenidos en un archivo pueden ser fácilmente comprendidos y utilizados por muchos biólogos y gestores de datos familiarizados con archivos de texto estructurados básicos. Al proporcionar un estándar internacional que es relativamente fácil de producir y consumir, y que soporta muchos de los elementos clave que componen un recurso de datos taxonómicos, GBIF espera proporcionar a los creadores y gestores de listados taxonómicos un enfoque estandarizado para compartir sus datos y promover enfoques comunes para la posterior referenciación y reconocimiento de su trabajo. Un formato estándar también aumenta la relevancia y la utilidad.
+
+== Alcance
+
+Los términos "listado de especies" y "catálogo" taxonómico pueden referirse a una gama superpuesta de recursos taxonómicos. Todos estos productos contienen conjuntos de nombres científicos que se refieren implícita o explícitamente a taxa. El conjunto de nombres incluidos en dicha lista puede estar restringido por grupo taxonómico, región geográfica o por un tema, como especies invasoras, o alguna combinación de los tres. Por orden de mayor detalle, se incluyen los siguientes tipos de recursosfootnote:[Estas categorías y descripciones se derivan directamente de “Hyam . R., Standardisation of Data Exchange in the Pan-European Species-directories Infrastructure (PESI) Deliverable D 4.1”].
+
+. *Listados de nombres*:  listas sencillas de nombres de especies sin indicación explícita de su estatus taxonómico, pero que generalmente se supone que consisten en nombres aceptados de taxa. Estas listas suelen tener por objeto identificar un conjunto de taxa incluidos en algún contexto regional o temático.
+. *Listados nomenclaturales (Nomencladores)*: listas de nombres que incluyen los taxones nominales, es decir, el registro de usos publicado de nombres científicos que representan actos de nomenclatura regidos por los respectivos Códigos de nomenclatura. La mayoría de estos actos son "descripciones originales" de nuevos nombres científicos, pero otros actas pueden incluir enmiendas, lectotipificaciones y otros actos regidos por los Códigos. La sinonimia no se incluye en estas listas como concepto taxonómico, sino sólo como combinación recién establecida (para los botánicos) vinculada a un basónimo, proporcionando así un sinónimo nomenclatural.
+. *Listado taxonómico*: estas listas complementan las listas nomenclaturales añadiendo una opinión taxonómica en forma de información explícita sobre el estado taxonómico y la inclusión de nombres colocados en sinonimia. Las listas taxonómicas simples de esta categoría no proporcionan detalles de circunscripción específicos sobre la base de la sinonimia. Los taxa se organizan a menudo en clasificaciones. El término "*catálogo taxonómico*" también puede usarse para referirse a instancias de este, y las restantes categorías, particularmente si el recurso incluye detalles verificados de publicación y estado taxonómico.
+. *Listados taxonómicos anotados*: esta categoría complementa los listados taxonómicos al agregar otros tipos de datos (anotaciones) al listado taxonómico central y sinonimizado, como nombres comunes, estado de amenaza, distribución e información descriptiva básica. Cuando los tipos de anotaciones proporcionan suficiente detalle para definir o circunscribir de forma eficaz un taxón, como descripciones e ilustraciones de diagnóstico detalladas, datos moleculares, especímenes, etc., entonces el listado anotado puede pertenecer a una de las dos categorías definidas a continuación.
+. *Listados de flora o fauna*: suelen ser libros que ofrecen descripciones detalladas de las especies de una región determinada. Los detalles pueden incluir muchos de los tipos de datos incluidos en los listados anotados, pero incluyen tipos de datos específicos, como descripciones e ilustraciones detalladas, referencias de especímenes y otros detalles que definen explícitamente (circunscriben) el taxón dentro del ámbito de la región, que no es necesariamente global.
+. *Monografías*: las monografías son recuentos detallados de especies que suelen publicarse como libros para un grupo de taxones concreto a escala mundial. Contienen detalles de nomenclatura y sinonimia y de circunscripción del taxón, que incluyen descripciones textuales e ilustraciones, detalles de los especímenes examinados e incluidos en la definición, y una bibliografía de la literatura examinada.
+
+El formato Darwin Core Archive con las <<extensiones de la lista de control GBIF>> permite el intercambio de elementos de datos clave dentro de todos estos tipos de datos de listados taxonómicos. El grado específico de cobertura depende en gran medida de cada recurso. En este documento utilizaremos el término "listado taxonómico" en el sentido amplio como término general para referirnos a cualquiera o a todas las categorías de recursos descritas anteriormente. Los tipos de categorías específicas se utilizarán cuando se deba hacer referencia a un recurso en particular.
+
+=== Formato del Archivo Darwin Core
+
+Archivo Darwin Core (DwC-A) es un estándar de datos informáticos que hace uso de los términos Darwin Core para producir un conjunto de datos único y autocontenido para los datos de las listas de control. La recopilación de archivos en un único archivo forma un conjunto de datos autocontenido, que puede proporcionarse como un único archivo comprimido (Zip o Gzip). Un conjunto de datos se compone de un documento de metadatos descriptivo y un conjunto de uno o más archivos de datos. Para obtener más información sobre DwC-A, consulte xref:darwin-core.adoc[Guía práctica de los Archivos Darwin Core].
+
+==== Metadatos de listados taxonómicos
+
+Es necesario documentar la procedencia y el alcance de los conjuntos de datos para publicar los datos de listados taxonómicos a través de la red GBIF. La documentación del conjunto de datos se denomina "metadatos del recurso" y permite a los usuarios evaluar la aptitud para el uso de un conjunto de datos. Los metadatos pueden describir el alcance y la función prevista del listado, las metodologías y los recursos utilizados para su recopilación, y las personas y organizaciones involucradas en su creación y gestión. Los metadatos se comparten en un Archivo Darwin Core como un documento XML. GBIF proporciona un perfil de metadatos para listados taxonómicos de especies basado en el lenguaje de metadatos ecológicos. Existe una guía práctica describe todas las opciones para describir un listado taxonómico de especies utilizando este formato. Consulte xref:gbif-metadata-profile.adoc[].
+
+==== Checklist Data
+
+El formato Archivo Darwin Core proporciona el marco estructural para la publicación de listados taxonómicos. Los Archivos Darwin Core consisten en una serie de uno o más archivos de texto, en formato estándar delimitados por comas o por tabulaciones. Los archivos están organizados lógicamente en forma de estrella con un *archivo central*, que contiene los elementos básicos del listado taxonómico (listado de especies, clasificación, sinonimia) rodeado por una serie de "*extensiones*", que describen tipos de datos relacionados (como los nombres comunes). Los enlaces entre los registros core y los de extensión se realizan mediante un elemento de datos de identificación del taxón (*taxonID*). De este modo, pueden existir muchos registros de extensión para cada registro core de taxón. Este "esquema en estrella" proporciona un modelo de datos relacional sencillo que admite muchos tipos de anotaciones que son comunes en los listados taxonómicos.
+
+.Darwin Core Archive data files in 'star schema'
+image::figures/dwc-a_checklist.png[]
+
+==== Recomendaciones sobre el formato de los archivos de datos
+
+Para facilitar la comprensión, puede que utilicemos los términos *campo* en esta guía para referirnos al conjunto de términos Darwin Core en el perfil de publicación taxonómico al que se asignarán los datos de un usuario. Por ejemplo, nos referiremos al uso del campo *dwc:scientificName* cuando nos refiramos al término Darwin Core, *scientificName*.
+
+* Se recomienda utilizar tabulaciones o valores separados por comas (CSV) en lugar de delimitadores de campo personalizados y comillas.
+* Sea cuidadoso y consistente con el uso de las comillas.
+* Codifique los archivos de texto como UTF-8
+* Make sure you replace all line breaks in a data field, i.e. `\r` `\n` or `\r\n` with either simple spaces or use 2 characters like `$$` to replace `\r` to escape the line break if the intention is to preserve them. Another option is to replace line breaks with the HTML `<br>` tag.
+* Codifique los valores nulos como cadenas vacías, es decir, sin caracteres entre 2 delimitadores o `\N` o` \NULL`, ¡pero ninguna otra secuencia de texto!
+
+== Compartir nombres científicos
+
+Darwin Core admite más de una forma de compartir un nombre científico. Esto incluye las siguientes opciones:
+
+=== A. Concatenado en el campo scientificName
+
+|===
+| scientificName
+
+| Gerardia paupercula var. borealis (Pennell) Deam
+|===
+
+El campo *dwc:scientificName* almacena el nombre científico completo de un taxón, incluida la autoría. Este campo siempre debe llenarse con datos, incluso si los nombres se dividen en partes componentes (como en C. a continuación). Las bases de datos que no proporcionan una separación clara entre la parte del nombre y la parte de la autoría del nombre deben usar este campo para toda la cadena de nombres concatenados. Esto puede ser necesario para fórmulas híbridas, nombres *sensu stricto*, autónimos y otros binomios no triviales. Este campo se utiliza generalmente en combinación con el campo *dwc:taxonRank* para almacenar las partes del nombre científico de un listado taxonómico completo que incluye los taxones superiores.
+
+=== B. Separando las partes de nombre y autoría
+
+|===
+| scientificName                | scientificNameAuthorship
+
+| Gerardia paupercula var. borealis | (Pennell) Deam
+|===
+
+Algunas bases de datos separan el nombre científico en una parte de nombre y otra parte de autoría. En este caso, deben usarse los campos *dwc:scientificName* y *dwc:scientificNameAuthorship*.
+
+=== C. Separando en partes de nombre
+
+|===
+| Genus | specificEpithet | taxonRank | infraspecificEpithet | scientificNameAuthorship
+
+| Gerardia  | paupercula          | var.          | borealis                 | (Pennell) Deam
+|===
+
+Darwin Core proporciona una serie de términos que permiten separar los nombres científicos en sus partes componentes. Algunas bases de datos almacenan listas de especies en estos componentes analizados. En este caso, compartir datos en este formulario puede ser una opción. Sin embargo, si es así, se recomienda que se componga un nombre adicional y completo a partir de las partes, y se comparta en el campo *dwc:scientificName* (como en la sección A anterior). Tenga en cuenta que en la tabla anterior, el término Darwin Core *dwc:subgenus* no se muestra pero representa un componente de nombre adicional.
+
+=== Marcadores infragenéricos
+
+Si es posible, proporcione un marcador de rango infragenérico como parte del nombre científico para evitar confusiones con el autor original / basónimo. Por ejemplo “*Ageratina subgen. Apoda* R.M.King & H.Rob" es preferible a "*Ageratina (Apoda)* R.M.King & H.Rob". ya que el posterior *Apoda* podría interpretarse como un subgénero o como el autor del basónimo.
+
+== Publicar clasificaciones
+
+Darwin Core ofrece dos opciones básicas para publicar clasificaciones o jerarquías taxonómicas: normalizadas y desnormalizadas. Estas dos opciones representan los principales medios por los que se gestionan la mayoría de las clasificaciones en las bases de datos.
+
+=== Clasificaciones normalizadas (padre/hijo)
+
+La forma recomendada de compartir una clasificación es en formato normalizado. Esto también se puede denominar en una base de datos como una "relación padre-hijo" o una "lista de adyacencia". En una jerarquía taxonómica normalizada, cada taxón está representado por una única fila. Esto incluye tanto las especies como todos los taxa superiores de la clasificación. Cada fila tiene al menos los siguientes elementos de datos de componentes.
+
+* El *dwc:taxonID* se refiere al taxón actual. *Puede utilizar los identificadores que tenga*.
+* El *dwc:scientificName* del taxón actual. Ejemplo: "*Panthera tigris*"
+* El *dwc:taxonRank * del taxón de referencia. Ejemplo: "*especie*"
+* Una referencia al identificador del taxón padre inmediato almacenado en el *dwc:parentNameUsageID*. En el siguiente ejemplo el padre del registro 7, "*Panthera tigris* (Linnaeus)", es el registro 6, el género "*Panthera*".
+
+A continuación se muestra un ejemplo de clasificación para una sola especie, el tigre, "*Panthera tigris*". Tenga en cuenta que el miembro más alto de una jerarquía no tiene padre, por lo que el identificador del padre debe estar vacío. Tenga en cuenta que *dwc:scientificName* proporciona un campo común para almacenar el nombre en este caso, pero que el conjunto completo de opciones para los nombres se describe más arriba en "Compartir nombres científicos".
+
+|===
+| taxonID | taxonRank | scientificName         | parentNameUsageID
+
+| 1           | Reino       | Animalia                   |
+| 2           | Filo        | Chordata                   | 1
+| 3           | Clase         | Mammalia                   | 2
+| 4           | Orden         | Carnivora                  | 3
+| 5           | Familia        | Felidae                    | 4
+| 6           | Género         | Panthera                   | 5
+| 7           | Especie       | Panthera tigris (Linnaeus) | 6
+|===
+
+==== Ventajas
+
+* *Eficiencia*: una clasificación normalizada almacena una única referencia para cada taxón en la jerarquía.
+* *Integridad referencial*: cada componente del taxón tiene un identificador distinto que hace referencia explícita a su padre inmediato. Es fácil verificar que la jerarquía taxonómica esté completa y debidamente constituida.
+* *Extensibilidad*: todos los taxa se caracterizan por tener identificadores de taxones distintos. Esto permite que los taxa superiores estén mejor documentados mediante el uso de extensiones, de la misma manera que los registros de especies.
+
+==== Desventajas
+
+* *Conveniencia*: una clasificación normalizada no proporciona una vista intuitiva de la jerarquía de clasificación cuando se ve en forma tabular sin procesar. Muchos biólogos gestionan las clasificaciones en un formato *desnormalizado* menos eficiente, pero visualmente más intuitivo, que se describe a continuación. La transformación de una clasificación desnormalizada a la forma normalizada es difícil de realizar manualmente.
+
+NOTE: Un *dwc:parentNameUsageID* debe apuntar a un registro existente en el conjunto de datos. No es válido señalar identificadores de taxón superiores que no existen como registros.
+
+=== Clasificaciones desnormalizadas
+
+Este formato es familiar para cualquiera que maneje información de especies en hojas de cálculo. En una clasificación desnormalizada, cada fila de la tabla de datos se refiere a uno de los taxa terminales, como una especie, y un conjunto completo de taxa parentales se representa como un conjunto de columnas, una para cada taxón parental.
+
+Este formato no es el método recomendado para compartir datos taxonómicos utilizando Archivo Darwin Core, pero es compatible con GBIF pues es de uso común en muchos listados de especies. Si este es el método por el que se van a compartir los datos, es muy recomendable que
+
+. Cada columna de taxón superior este completamente poblada. Evite los espacios en blanco como en el ejemplo de Plantae a continuación.
+. Asegure la integridad taxonómica del listado. Por ejemplo, asegúrese de que dos especies de un género común compartan la misma familia. Asegúrese de que, si se incluyen sinónimos en filas separadas, su clasificación coincide con la del taxón aceptado.
+
+|===
+| taxonID | kingdom | phylum | class | order | family | scientificName
+
+| 1001        | Animalia    | Chordata   | Mammalia  | Carnivora   | Felidae    | Panthera tigris
+| 1002        | Animalia    | Chordata   | Mammalia  | Carnivora   | Felidae    | Panthera leo
+| 1003        | Animalia    | Arthropoda | Insecta   | Hymenoptera | Apidae     | Apis mellifera
+| 1004        | Plantae     | --         | --        | --          | Poales     | Poa annularis
+|===
+
+=== Ventajas
+
+* *Legibilidad*: la principal ventaja de este formato es que es fácil de leer y la jerarquía taxonómica se puede evaluar simplemente al leer las columnas.
+* *Conveniente*: las aplicaciones de hojas de cálculo y muchas bases de datos relacionales facilitan la implementación de esta estructura para almacenar datos jerárquicos.
+
+=== Desventajas
+
+* *Mayor probabilidad de pérdida de integridad referencial: los taxones más altos se repiten en este formato, lo que puede aumentar la probabilidad de que dos taxones idénticos se escriban de manera diferente. Otros riesgos similares son posibles con este formato. Por ejemplo, es posible que dos instancias del mismo taxón (por ejemplo, "Felidae") se asignen a dos padres diferentes, lo que da como resultado un conflicto de integridad jerárquica.
+* *Falta de detalles para taxones superiores*: este formato trata a los taxa superiores como propiedades de una especie, no como registros de taxa separados en sí mismos. Por lo tanto, este formato no permite que las propiedades de taxa superiores se compartan ni en el archivo principal ni en ninguna extensión. 
+
+=== Otras recomendaciones relacionadas con clasificaciones
+
+* Intente incluir un Reino y una referencia de código de nomenclatura para todos los registros, incluso para los listados taxonómicos básicos.
+* Intente incluir Reino, Filo y Familia como una clasificación mínima para las clasificaciones desnormalizadas.
+* Si un término es el mismo en todo el conjunto de datos, considere usar un mapeo estático del término y el valor. Consulte la Guía práctica de Archivos Darwin Core en xref:dwca-guide.adoc[] para obtener detalles sobre el mapeo de valores globales.
+
+== Formatos de clasificación no recomendados para publicación
+
+Los siguientes ejemplos ilustran configuraciones de datos que pueden ajustarse al perfil *pero que GBIF no recomienda ni admite* (es decir, los algoritmos de GBIF no gestionarían estos casos correctamente)
+
+[.upperroman]
+. Este ejemplo identifica el taxón de referencia como la última columna que contiene los valores del taxón.
++
+|===
+| taxonID | kingdom | phylum | class | order | family | scientificName
+
+| 997         | Animalia    |            |           |           |            |
+| 998         | Animalia    | Chordata   |           |           |            |
+| 999         | Animalia    | Chordata   | Mammalia  |           |            |
+| 1000        | Animalia    | Chordata   | Mammalia  | Carnivora |            |
+| 1001        | Animalia    | Chordata   | Mammalia  | Carnivora | Felidae    |
+| 1002        | Animalia    | Chordata   | Mammalia  | Carnivora | Felidae    | Panthera tigris
+| 1003        | Animalia    | Chordata   | Mammalia  | Carnivora | Felidae    | Panthera tigris
+|===
+
+. Este ejemplo intenta es similar al anterior, pero intenta reducir los errores de integridad registrando sólo una vez los nombres de los taxa superiores
++
+|===
+| taxonID | kingdom | phylum | class | order | family | scientificName
+
+| 997         | Animalia    |            |           |           |            |
+| 998         |             | Chordata   |           |           |            |
+| 999         |             |            | Mammalia  |           |            |
+| 1000        |             |            |           | Carnivora |            |
+| 1001        |             |            |           |           | Felidae    |
+| 1002        |             |            |           |           |            | Panthera tigris
+| 1003        |             |            |           |           |            | Panthera leo
+|===
+
+Por favor evite publicar datos en estas configuraciones.
+
+== Publicación de sinonimias
+
+El Archivo Darwin Core apoya la publicación de sinónimos en listados taxonómicos de especies. Un sinónimo se publica como un registro separado en el archivo de datos principal. Un sinónimo hace referencia al registro de taxón aceptado mediante el uso del campo *dwc:acceptNameUsageID*. Este campo contiene el *dwc:taxonID* que representa el registro de taxón aceptado. En el ejemplo simplificado a continuación, el primer registro representa el nombre aceptado para un taxón y los registros 2 y 3 son sinónimos.
+
+|===
+| taxonID | scientificName | acceptedNameID | taxonomicStatus | nomenclaturalStatus
+
+| 1           | Coeligena helianthea (Lesson 1838)                | 1                  | aceptado            |
+| 2           | Ornismya helianthea Lesson 1838                   | 1                  | Sinónimo homotípico   |
+| 3           | Helianthea helianthea (Lesson 1838) J. Gould 1848 | 1                  | Sinónimo homotípico   |
+| 4           | Helianthea typica Bonaparte 1850                  | 1                  | Sinónimo heterotípico | nomen dubium
+| 5           | Helianthea porphyrogaster Mulsant 1876            | 1                  | Sinónimo heterotípico | nomen dubium
+| 6           | Coeligena helianthea tamai Berlioz & Phelps 1953  | 1                  | Sinónimo heterotípico | nomen dubium
+|===
+
+Se recomienda que un registro de sinónimo contenga un *dwc:taxonID* distinto. No debe utilizar el mismo *dwc:taxonID* que el registro de taxón aceptado. La representación más sencilla de la sinonimia es la del ejemplo anterior, donde los sinónimos se enumeran como registros distintos y "apuntan" al registro de taxón aceptado utilizando el *dwc:acceptedNameUsageID*. Esta sinonimia simple apoya la publicación de listas de chequeo taxonómicas básicas con detalles de sinonimia limitados a los elementos básicos de la clase de taxón. El campo *dwc:taxonomicStatus* afirma el estado del registro. Un vocabulario recomendado para este campo está disponible {latest-taxonomic-status}[available]. Pueden incluirse detalles nomenclaturales adicionales que también apoyen la justificación de la sinonimia utilizando el campo *dwc:nomenclaturalStatus* y {latest-nomenclatural-status}[vocabulario de apoyo].
+
+La sinonimia detallada se puede respaldar asegurando que se incluya un *dwc:taxonID* único en cada registro de sinónimos y utilizando las extensiones disponibles para respaldar el intercambio de anotaciones de listados taxonómicos. Esto admite la vinculación de uno o más registros bibliográficos, registros de muestras y otros tipos de datos admitidos por las <<Extensión de listados de GBIF>>, a un solo registro de sinónimo en el archivo de datos principal. Si no se proporciona un *dwc:taxonID* para un registro de sinónimo, no se pueden usar extensiones ya que se basan en *dwc:taxonID* para proporcionar el enlace al registro de taxón en el archivo principal. Un ejemplo simplificado a continuación muestra el uso de dos archivos (expresados como tablas) para proporcionar una bibliografía para un sinónimo usando la extensión Referencias. El *dwc:taxonID* compartido se resalta en el ejemplo.
+
+Archivo de datos *Taxon.txt*
+
+|===
+| taxonID | scientificName | acceptedNameUsageID | taxonomicStatus
+
+| 1           | Coeligena helianthea  | 1                       | aceptado
+| 2           | Ornismya helianthea   | 1                       | sinónimo
+| 3           | Helianthea helianthea | 1                       | sinónimo
+|===
+
+Archivo de datos *References.txt*
+
+|===
+| taxonID | Cita bibliográfica
+
+| 2           | Schmidt, O. 1870. Grundzüge einer Spongien-Fauna des atlantischen Gebietes. (Wilhelm Engelmann: Leipzig): iii-iv, 1-88, pls I-VI.
+| 2           | Laubenfels, M.W. De 1942. Porifera from Greenland and Baffinland collected by Capt. Robert A. Bartlett. Journal of the Washington Academy of Sciences 32(9): 263-269.
+|===
+
+*Otras sinonimias, que hacer y que no hacer*
+
+* Un *dwc:parentNameUsageID* debe apuntar a un registro existente en el conjunto de datos. No es válido apuntar a identificadores de taxón superiores que no existen como registros.
+* No confunda el *dwc:higherTaxonID* utilizado para describir una clasificación con el *dwc:acceptedNameUsageID* utilizado para describir el estado taxonómico de un registro.
+* No “concatene” sinónimos. Un sinónimo solo debe apuntar a registros de taxón aceptados a través de *dwc:acceptNameUsageID*. Nunca deben apuntar a otro sinónimo.
+
+=== Sinonimia nomenclatural
+
+La *Sinonimia nomenclatural* está soportada en el archivo de datos core mediante el uso del campo *dwc:originalNameUsageID*. Este campo se remite a la fila que representa la referencia taxonómica original del nombre. . Se recomienda que este registro proporcione una cita bibliográfica en el campo *dwc:namePublishedIn*, el cual hace referencia a la publicación en la que se estableció originalmente el nombre.
+
+|===
+| taxonID | scientificName | originalNameID | namePublishedIn
+
+| 1           | Tetrao afer Müller 1778             | 1                  | J. Syst. Nat 7:31
+| 2           | Pternistes afer (Müller 1778)       | 1                  |
+| 3           | Francolinus afer afer (Müller 1778) | 1                  |
+|===
+
+Los sinónimos nomenclaturales y taxonómicos pueden designarse en el mismo registro de taxón.
+
+NOTE: Un *dwc:originalNameUsageID* debe apuntar a un registro existente en el conjunto de datos. No es válido apuntar a taxa aceptados que no existen como registros.
+
+=== Sinonimia pro-parte
+
+A veces, el mismo nombre puede ser sinónimo de más de un taxón aceptado o puede ser tanto un nombre de taxón aceptado como un sinónimo. Estos son causados por divisiones y cambios de circunscripción donde, por ejemplo, una serie de tipos puede dividirse entre múltiples taxones. La práctica recomendada para compartir sinónimos pro-parte se muestra en el ejemplo. En este ejemplo, *Vireo solitarius* es un nombre de taxón aceptado y también se incluye en la sinonimia de *Vireo cassinii* y *Vireo plumbeus*. En el caso de los sinónimos, se representan como un solo registro con la referencia de taxón aceptada concatenada en el campo *dwc:acceptNameUsageID* y separados por un carácter de barra vertical ("|").
+
+|===
+| taxonID | scientificName | acceptedNameUsageID | taxonomicStatus
+
+| 1           | Vireo solitarius   | 1                       | aceptado
+| 2           | Vireo cassinii     | 2                       | aceptado
+| 3           | Vireo plumbeus     | 3                       | aceptado
+| 4           | Vireo solitarius   | 2&#124;3                     | pro-parte
+|===
+
+NOTE: Los usuarios del IPT deben definir el delimitador de valores múltiples para cada archivo de origen en el IPT. Consulte la xref:manage-resources.adoc#canjunto-de-datos[sección de Conjuntos de datos] del Manual del usuario deñ IPT para obtener orientación adicional.
+
+== Citación y atribución
+
+Los listados taxonómicos a menudo representan importantes esfuerzos intelectuales y financieros por parte de las personas y organizaciones que los compilan. Algunos listados taxonómicos pueden derivarse de, o hacer referencia a, otros listados taxonómicos fuente para crear nuevas vistas temáticas, regionales o taxonómicas distintas de la misma autoridad fuente. Por lo tanto, la atribución y visibilidad adecuadas de estas fuentes es, por tanto, una gran prioridad.
+
+El formato DwC-A proporciona una variedad de opciones y recomendaciones para proporcionar citas y atribuciones adecuadas. Este rango se extiende desde la información global de citas y atribuciones que forman parte de los metadatos del recurso, hasta los elementos de datos a nivel de registro. Estas opciones respaldan la provisión de múltiples niveles de atribución.
+
+=== Citación y atribución de metadatos
+
+El perfil de metadatos de GBIF admite elementos de datos a nivel de recursos que contribuyen a la citación y atribución, y permiten una descripción detallada del alcance y la procedencia de un listado taxonómico. Una lista de referencia completa de todos los elementos de metadatos está más allá del alcance de este documento y existe documentación xref:gbif-metadata-profile.adoc[diponible] al respecto, pero los elementos específicos relacionados con la citación y atribución incluyen:
+
+* *Derechos de propiedad intelectual*: el perfil de metadatos contiene una declaración de gestión de derechos para el recurso o una referencia a un servicio que proporciona dicha información, como una licencia Creative Commons. También incluye un elemento que describe el uso previsto y el propósito del conjunto de datos.
+* *Individuos y organizaciones*: el perfil de metadatos permite la descripción de todos y cada uno de los individuos, instituciones u organizaciones que pueden estar asociados a un conjunto de datos. A estos agentes se les pueden asignar diferentes roles en relación con el conjunto de datos y se puede incluir una URL a cada recurso. Esta sección proporciona un método para describir y vincular a individuos y organizaciones que han contribuido a un listado taxonómico.
+* *URL de la fuente*: enlaces a la página de inicio de la fuente
+* *Información del proyecto*: si el listado taxonómico está vinculado a un proyecto en particular (p. ej., "El Catálogo de la Vida"), hay un conjunto de campos para describir el proyecto en detalle.
+* *Referenciación*: este elemento permite al editor del listado taxonómico especificar exactamente cómo se deben citar los datos del listado taxonómico cuando se utilicen. Ejemplo *“Appeltans W, Bouchet P, Boxshall GA, Fauchald K, Gordon DP, Hoeksema BW, Poore GCB, van Soest RWM, Stöhr S, Walter TC, Costello MJ. (eds) (2011). World Register of Marine Species. Accessed at http://www.marinespecies.org on 2011-02-22.”*
+* *Referencias bibliogtáficas*: se puede describir e incluir una bibliografía completa de fuentes en el documento de metadatos.
+
+=== Citación y atribución a nivel de datos
+
+La información de atribución y citación registrada en el documento de metadatos es común a todos los registros de datos de un conjunto de datos. En algunos casos, se necesita una mayor precisión, incluso en los registros individuales. En estos casos, hay términos a nivel de registro que se recomienda utilizar para especificar la información de citación y atribución.
+
+* *dwc:nameAccordingTo*: Este término puede usarse para identificar al individuo o cita que sirve como referencia taxonómica autorizada para el registro. (Ejemplo “Erpenbeck, D .; Van Soest, RWM 2002. Familia Halichondriidae Gray, 1867. Pp. 787-816. En Hooper, JNA & Van Soest, RWM (ed.) Systema Porifera. Una guía para la clasificación de esponjas.")
+* *dwc:nameAccordingToID*: Un identificador único que retorna la referencia nameAccordingTo como se describe arriba. Podría ser una URL, por ejemplo.
+* *dwc:datasetName*: si el registro se deriva de un conjunto de datos externo, este conjunto de datos se puede citar como una cadena de texto. (Ejemplo, "Registro mundial de especies marinas, citado el 12 de abril de 2011")
+* *dwc:datasetID*: un identificador que se refiere a un conjunto de datos, preferiblemente resoluble.
+* *dc:source*: enlace a la página web de la fuente
+
+==== Caso de Uso 1 - Listado taxonómico compuestos por múltiples conjuntos de datos que contribuyen (por ejemplo, Catálogo de la Vida, PESI, WoRMS)
+
+Un conjunto de datos taxonómicos puede ser una combinación de múltiples fuentes contribuyentes, cada una de las cuales debe reconocerse además del recurso colectivo en sí. Hay muchos ejemplos de esto. Quizás el mayor esfuerzo colectivo de este tipo es el listado taxonómico anual del Catálogo de la vida (Catalogue of Life), que tiene como objetivo proporcionar una lista completa de todas las especies vivientes del mundo. El listado taxonómico en sí está compuesto por conjuntos de datos individuales que representan los principales grupos taxonómicos. Cada uno de estos recursos, a su vez, puede estar compuesto por contribuciones de una subred de especialistas.
+
+Otros ejemplos incluyen la Lista pan-europea de especies, que se compone de varios conjuntos de datos contribuyentes que incluyen Fauna Europaea, el Registro Europeo de Especies Marinas, Euro+Med PlantBase y otros. El Registro Mundial de Especies Marinas (WoRMS) representa otra red de este tipo.
+
+La práctica recomendada para documentar eficazmente la procedencia de este tipo de recursos se puede resumir de la siguiente manera.
+
+. Se crea un único documento de metadatos para representar el recurso colectivo (p. ej., el Catálogo de la vida, el Registro mundial de especies marinas, etc.). Este documento de metadatos proporciona la cita, los agentes, los derechos y otros elementos identificados anteriormente. El nombre de archivo de este documento se hace referencia al archivo descriptivo del Archivo Darwin Core, meta.xml. Esto vincula el documento a todo el conjunto de datos DwC-A. La buena práctica recomendada es que este archivo utilice el perfil de metadatos GBIF y se denomine EML.xml. En este caso, el XML del descriptor de metadatos se vería así:
++
+----
+<archive xmlns="http://rs.tdwg.org/dwc/text/" metadata="eml.xml">
+----
+
+. Se pueden crear documentos de metadatos adicionales para cada uno de los conjuntos de datos componentes e incluirlos en el archivo. Esto permite que cada conjunto de datos de subcomponentes de forma tan completa como el conjunto de datos "padre", con su propia cita recomendada, personas contribuyentes, etc. Como estos conjuntos de datos no documentan toda la colección, no se hace referencia a ellos en el archivo descriptor meta.xml. En su lugar, se hace referencia a ellos desde registros de datos descriptivo a través del término *dwc:datasetID*. Si los documentos de metadatos están incluidos en el archivo en sí, *dwc:datasetID* es igual al nombre de archivo del documento. Alternativamente, podría hacer referencia a una URL o algún otro identificador único y que sea resoluble para la información. Un enfoque menos recomendado pero alternativo sería agregar una URL a una página web simple que describa el conjunto de datos en lugar de un documento de metadatos estructurado.
+. Para citar individuos a nivel de registro, proporcionando un tercer nivel de cita, se recomienda utilizar el campo *dwc:nameAccordingTo*. Más arriba se proporcionan términos adicionales a nivel de registro.
+
+=== Caso de Uso 2 - Listados taxonómicos derivados de una o más fuentes de autoridad
+
+En este caso de uso, un listado taxonómico de especies se compila para un propósito específico, pero su estructura taxonómica básica deriva de uno o más listados taxonómicos externos que sirven como *archivos de autoridad*. La nueva compilación puede incluir anotaciones adicionales al registro de origen básico que se aplican al enfoque de los nuevos listados. Un ejemplo podría ser listados taxonómicos de especies nacionales europeos derivados de una base de datos como Fauna europaea o el Catálogo de la vida, que, en principio, proporcionan la lista completa de un país como un subconjunto de su propia cobertura. Una lista nacional puede agregar detalles regionales adicionales, como un estado de amenaza nacional o alguna otra propiedad de interés, lo que da como resultado un nuevo conjunto de datos derivado. En este caso, es importante poder proporcionar atribuciones y vínculos a nivel de registro del conjunto de datos de origen. Los medios recomendados para hacer esto son los siguientes.
+
+. Se crea un único documento de metadatos para representar el nuevo recurso derivado (por ejemplo, Listado taxonómico nacional de los países bajos). Los conjuntos de datos a los que se hace referencia se pueden citar en este documento de metadatos.
+.. Completamente descritas como organizaciones con un rol de colaborador y enlaces al sitio web de origen.
+.. Citado en la sección bibliográfica con la cita representada según lo recomendado por el conjunto de datos referenciado.
+.  En los archivos de datos, se pueden realizar atribuciones y vínculos adicionales a nivel de registro. Esto incluye:
+.. Hacer referencia al conjunto de datos por nombre en *dwc:datasetName*
+.. Hacer referencia al conjunto de datos por ID (como la URL) en *dwc:datasetID* y vincularlo a la página de inicio del conjunto de datos
+.. Proporcionar un enlace a la página de la especie correspondiente en el sitio web del conjunto de datos al que se hace referencia utilizando *dc:source*
+...  Si dc:source está reservado para apuntar a la URL de la base de datos derivada, aún se puede agregar un enlace a la base de datos de origen utilizando la extensión de Identificadores alternativos.
+.. Si el conjunto de datos de origen proporciona identificadores únicos a nivel mundial para los taxones a los que se hace referencia en la lista, se pueden utilizar como *taxonID* en el conjunto de datos derivado. Esto asegura un enlace explícito al taxón de origen y es muy recomendable si está disponible.
+.. Utilice *dwc:nameAccordingTo* o *dwc:nameAccordingToID* para hacer referencia a la definición de taxón en el registro de origen correspondiente como una cita o una URL.
+
+== Compartiendo nombres comunes
+
+Se permite compartir los datos de los nombres comunes asociados a los taxa en los listados taxonómicos. Los nombres comunes se comparten como un archivo separado y relacionado utilizando la extensión {latest-vernacularname}[Extensión de nombres comunes]. La extensión admite un rico conjunto de propiedades para describir los usos de los nombres comunes que incluyen calificadores regionales y morfológicos.
+
+image::figures/myristica_fragrans.png[]
+
+Los nombres comunes se referencian a través de una extensión, por lo tanto, deben estar vinculados a un taxón con nombre en el archivo de datos principal. Se recomienda además que un registro de nombres comunes proporcione una referencia lingüística que identifique la lengua representada por el uso del nombre común. La mejor práctica es utilizar el http://rs.gbif.org/vocabulary/iso/639-1.xml[Códigos de idiomas ISO 693] para compartir información sobre el idioma. Los nombres comunes también pueden tener distintos usos regionales y esto se puede especificar mediante un elemento dwc:locality o, en un nivel menos preciso, utilizando un término dwc:country. Se recomienda que los nombres de países utilicen los http://rs.gbif.org/vocabulary/iso/3166-1_alpha2.xml[Códigos de países ISO 6133].
+
+== Compartiendo descripciones de especies
+
+Se puede compartir la información descriptiva relacionada con un taxón. Los datos descriptivos se comparten como un archivo separado y relacionado utilizando la {latest-description}[Extensión descripción del taxón]. Los datos descriptivos pueden asignarse a distintos tipos de descripción y, como los datos se publican en una extensión, pueden vincularse múltiples registros descriptivos a un solo taxón, lo que permite un conjunto relativamente rico de datos por taxón. Se recomienda utilizar el {latest-description-type}[vocabulario de tipos de descripción] para describir la información descriptiva.
+
+=== Descripciones de múltiples líneas
+
+La información descriptiva debe limitarse a bloques de texto de un solo párrafo. Se deben evitar los párrafos múltiples que contengan saltos de línea, o gestionarse cuidadosamente, para mantener la integridad del archivo de texto resultante como Archivo Darwin Core. LLos campos de datos multilínea presentados como archivos de texto requieren que los delimitadores de registro, que suelen ser caracteres de salto de línea, sean distintos de los saltos de línea utilizados dentro de un campo multilínea. El mejor método para admitir varias líneas en un mismo campo es reemplazar los caracteres de ruptura por un carácter de no ruptura o por un conjunto de caracteres que el usuario pueda sustituir por las rupturas adecuadas cuando se analicen y utilicen los datos. Una opción es utilizar la etiqueta de ruptura HTML `<br>`.
+
+== Compartiendo distribuciones de especies
+
+Se pueden compartir datos de distribución. Los datos de distribución se comparten como un archivo separado y relacionado, utilizando la {latest-species-distribution}[Extensión de distribución de especies]. Esto permite publicar múltiples registros de distribución por taxón. La extensión de distribución no sólo se utiliza para designar las descripciones de distribución nacional o regional, sino que también permite calificar la distribución referenciada con respecto al estado de amenaza del taxón, si es introducido, nativo, etc., y otras propiedades que podrían estar vinculadas a un área específica definida.
+
+La buena práctica recomendada para especificar un área distinta es a través de un identificador de área conocido o que sea resoluble y que se publique mediante el elemento dwc:localityID.
+
+Si se utiliza el elemento dwc:country, se recomienda utilizar los http://rs.gbif.org/vocabulary/iso/3166-1_alpha2.xml[códigos de países ISO 6133].
+
+== Compartir referencias
+
+Se pueden compartir citas bibliográficas. Los datos bibliográficos se comparten como un archivo relacionado separado utilizando la {latest-references}[extensión de referencias]. La extensión Referencias se recomienda y está diseñada para su uso en el intercambio de información sobre sinonimia en monografías y listados taxonómicos anotados. Admite compartir una cita analizada y, por lo tanto, proporciona un formato de cita más detallado que algunos de los elementos de datos de almacenamiento de citas en el archivo de datos principal, como dwc:namePublishedIn. Esta extensión admite la calificación taxonómica y nomenclatural de una referencia a través de la propiedad *dc:type*, que, cuando se usa con {latest-reference-type}[el vocabulario del tipo de referencia], se puede usar para distinguir un conjunto de referencias relacionadas con un taxón.
+
+Tenga en cuenta que las extensiones deben vincularse a los taxones en el archivo de datos principal proporcionando el "taxonID" en el campo "taxonID". Consulte la <<checklist-data,structure of Darwin Core Archives>> arriba.
+
+== Compartir información de tipos
+
+Se puede compartir información sobre tipos y especímenes. Estos datos se comparten como un archivo relacionado independiente utilizando la {latest-typesandspecimen}[extensión de tipos y muestras]. Permite compartir información básica sobre especímenes tipo, especies y géneros tipo.
+
+== Compartir enlaces e identificadores
+
+Es posible compartir y describir varios enlaces a recursos externos relacionados utilizando {latest-identifier}[Extensión de identificador alternativo]. Esta extensión permite a los editores de datos incorporar enlaces a la base de datos o al documento de origen a través de identificadores resolubles. Se pueden proporcionar múltiples identificadores, quizás vinculando tanto a una página web como a una respuesta de servicio web más legible por máquina, para un solo taxón. Se recomienda que se incluya un formato para cada registro para permitir al usuario saber cómo interpretar la información de respuesta si un identificador es resoluble. Esto generalmente se hace incluyendo el *tipo de medio* (o *tipo MIME*) en este campo. Una lista completa de tipos de medios está https://www.iana.org/assignments/media-types/media-types.xhtml[disponible aquí] .
+
+=== Creando un enlace dinámico a páginas de especies
+
+A menudo, un enlace a una base de datos de origen sigue un formato común, que difiere solo en el número de identificación o el nombre de taxón utilizado en la URL. Esto puede resultar en un archivo de extensión excesivamente detallado. El formato del Archivo Darwin Core admite una forma más eficiente de definir una plantilla de URL, que solo debe definirse una vez y permite que se incruste una variable en la plantilla, lo que eliminando la necesidad de repetir un conjunto de URLs para cada taxón en el archivo de datos. Esto se hace a través del componente de metarchivo XML del Archivo Darwin Core. No usa la extensión Referencias. Esto requiere editar el metarchivo XML, lo que requiere cierto grado de familiaridad con XML. GBIF xref:gbif-metadata-profile.adoc[proporciona una guía completa del metarchivo Darwin Core].
+
+El metarchivo permite la creación de variables en el metarchivo que pueden hacer referencia a una página web o una llamada de servicio web. Esta variable puede estar incrustada en la URL e incluir un identificador de taxón o el nombre de taxón como uno de los parámetros en la URL. Se puede hacer referencia a cualquier columna de los datos publicados encerrando el número de índice entre llaves “{}”. También se puede hacer referencia al identificador de taxón en el archivo de datos centrales a través de la variable "\{id}". Los siguientes ejemplos ilustran estas funciones:
+
+. El Sistema de información taxonómico integrado (ITIS) utiliza números de serie taxonómicos (TSN) para proporcionar enlaces a las páginas de taxones en su sitio web.
++
+--
+http://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value=174375
+
+Si un archivo de datos core se publica utilizando el sistema ITIS TSN, se puede componer y vincular un enlace al término "identificador" en el estándar de datos básicos utilizando la siguiente sintaxis.
+
+----
+<field default="http://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value={id}" term="http://purl.org/dc/terms/identifier"/>
+----
+
+donde el valor numérico original se reemplaza por la variable `\{id}`. Este valor se derivaría del ID del core.
+--
+
+. El Listado taxonómico anual 2010 del Catálogo de vida proporciona identificadores similares. También admite búsquedas basadas en nombres que también se pueden codificar como URL. Por ejemplo,
++
+--
+----
+http://www.catalogueoflife.org/annual-checklist/2010/search/all/key/Struthio+camelus/match/1
+----
+incrusta el nombre científico "Struthio camelus" en una URL. Las combinaciones de nombres científicos completos se pueden publicar en el archivo de datos principales utilizando el término Darwin Core "scientificName". Si asumimos que este término representa la duodécima columna en nuestro archivo de datos central, podríamos usar la sintaxis
+
+----
+<field default="http://www.catalogueoflife.org/annual-checklist/2010/search/all/key/{12}/match/1" term="http://purl.org/dc/terms/identifier"/>
+----
+
+donde `\{12}` representa el valor de la duodécima columna que se sustituirá en la URL.
+--
+
+== Extensiones de listados taxonómicos de GBIF
+
+El archivo core de datos en un listado taxonómico contiene registros de taxón. El conjunto de términos que se pueden utilizar para describir un registro de taxón está definido por la Extensión Taxon (Core).
+
+Cada registro de taxón se puede complementar con uno o más registros en un archivo de extensión. El conjunto de términos que se pueden utilizar para describir cada registro de extensión está definido por su Extensión particular.
+
+A continuación se muestra la lista completa de extensiones que se pueden utilizar para proporcionar información adicional sobre un registro de taxón:
+
+=== Extensión de Taxón (Core)
+
+Última versión publicada: {latest-dwc-taxon}[{date-dwc-taxon}]
+
+Utilice este conjunto de términos para proporcionar la información fundamental para un listado taxonómico de especies, incluida la clasificación, la sinonimia y otros elementos clave. Cada fila de esta lista representa un nombre de taxón, ya sea un nombre aceptado o un sinónimo. Los términos de esta clase admiten diferentes métodos para representar información de clasificación. Las clasificaciones se pueden compartir "estilo hoja de cálculo" con columnas para Reino, Filo, Clase, etc. o se pueden compartir "estilo base de datos" con cada fila de taxón que posee un campo que contiene el ID de su padre inmediato. Tenga en cuenta que las tablas contienen la lista completa de términos aceptables. El requisito mínimo para compartir un listado taxonómico es simplemente una lista de especies, aunque se recomienda una identificación adjunta. Utilice esta lista de términos para identificar los términos que mejor coincidan con los datos que se compartirán. No se deje intimidar por los nombres de los términos. Lea la descripción para localizar los términos relevantes.
+
+=== Extensión de Nombres comunes
+
+Última versión publicada: {latest-vernacularname}[{date-vernacularname}]
+
+Esta extensión proporciona los medios para compartir información relacionada con nombres comunes vinculados a taxones en el archivo de datos central. Se pueden vincular varios nombres comunes al mismo taxón a través del taxonID.
+
+=== Extensión de Referencias
+
+Última versión publicada: {latest-references}[{date-references}]
+
+Utilice esta extensión para describir una o más referencias bibliográficas relacionadas con un taxón en el archivo core de datos. Utilice el campo de tipo para calificar las referencias. Esta extensión permite el intercambio de listados taxonómicos de sinónimos referenciados.
+
+=== Extensión de Distribución de especies
+
+Última versión publicada: {latest-species-distribution}[{date-species-distribution}]
+
+Utilice esta extensión para compartir información sobre una o más referencias de distribución para un taxón. Uno o más registros de localidad pueden estar vinculados al mismo taxón. Por ejemplo, se pueden enumerar varias localidades, regiones o países. Utilice esta extensión para describir el estado de amenaza de un taxón, los cambios de distribución estacionales y otras propiedades vinculadas a un taxón en una región en particular.
+
+=== Extensión de Descripción de especies
+
+Última versión publicada: {latest-description}[{date-description}]
+
+Utilice esta extensión para proporcionar texto descriptivo de un taxón. Por lo general, se presenta en forma de un solo párrafo por registro, como se almacenaría normalmente en una base de datos. Las descripciones se pueden calificar por un tipo para indicar, por ejemplo, que la descripción está relacionada, por ejemplo, con la conservación de la morfología, reproducción, etc. Varias descripciones equivalen a múltiples registros en un archivo de descripciones.
+
+=== Identificadores alternativos
+
+Última versión publicada: {latest-identifier}[{date-identifier}]
+
+Utilice esta extensión si tiene más de un identificador o enlace a información sobre el taxón. Una base de datos de origen puede, por ejemplo, proporcionar acceso a los registros de datos de origen a través de una página web, un servicio web y un identificador que se puede resolver como LSID, DOI u otros medios.
+
+=== Extensión de Tipos y especímenes
+
+Última versión publicada: {latest-typesandspecimen}[{date-typesandspecimen}]
+
+Utilice esta extensión para compartir datos relacionados con uno o más especímenes o referencias de tipo vinculadas al taxón principal
+
+=== Extensión de Relación de recursos
+
+Última versión publicada: {latest-resource-relation}[{date-resource-relation}]
+
+Esta extensión se utiliza para describir una o más relaciones que el taxón principal tiene con otros taxones, ya sea en la lista de origen o incluidos en el registro. Esta extensión podría usarse, por ejemplo, para proporcionar una lista de especies de plantas (un registro por especie) polinizadas por una especie de abeja incluida en la lista de especies principales.

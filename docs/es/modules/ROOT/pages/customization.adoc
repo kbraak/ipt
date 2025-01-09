@@ -1,0 +1,25 @@
+= Cómo diseñar su IPT
+
+Para una personalización sencilla en las versiones 2.6 o superior, utilice xref:administration.adoc[Administración UI].
+
+[WARNING]
+====
+La personalización usando `custom.css` no funciona en la versión 2.5.0, vea https://github.com/gbif/ipt/issues/1634[este asunto].
+
+Se pueden realizar personalizaciones básicas editando `$tomcat/webapps/ipt/styles/main.css`.
+====
+
+IMPORTANT: Diseñar un IPT requiere la implementación utilizando un contenedor de servlets como Tomcat. Una implementación de paquetes de Linux o Docker sólo se puede diseñar anulando el archivo `custom.css` en un proxy de reenvío.
+
+== Introducción
+
+La siguiente guía explica cómo personalizar el IPT y cómo conservar su personalización al actualizar la versión de su IPT.
+
+En resumen, la personalización se puede lograr aplicando anulaciones de CSS.
+
+. Aplique las anulaciones de CSS que desee en `custom.css` (elija un esquema de color diferente, por ejemplo). Puede encontrar este archivo dentro de la carpeta WAR implementada, por ejemplo `$tomcat/webapps/ipt/styles`. El https://github.com/gbif/ipt/blob/master/src/main/webapp/styles/custom.css[custom.css] original viene precargado con un conjunto de ejemplos de anulaciones de CSS para cambiar los colores utilizados en botones, enlaces, etc.
+. Una vez finalizado, haga una copia de seguridad del archivo `custom.css` en algún lugar seguro para poder agregarlo una vez más después de cada actualización de IPT, que desafortunadamente sobre escribirá el archivo `custom.css` cada vez.
+
+Eche un vistazo a la captura de pantalla para ver el efecto de cambiar el CSS predeterminado.
+
+image::ipt2/customization/IPTCustomizedStyle.png[]

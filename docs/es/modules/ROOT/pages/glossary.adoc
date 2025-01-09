@@ -1,0 +1,25 @@
+= Glosario
+* *Recurso de listados taxonómicos*: un recurso que contiene información sobre uno o más tipos de listas relacionadas con taxa.
+* *Tipos de Core*: una categoría de propiedades predeterminadas de los conjuntos de datos (Taxón, Registros biológicos y Eventos) usados como la base de un recurso. Las extensiones adicionales pueden estar relacionadas a estos Tipos de Core cuando se mapean los datos en el IPT.
+* *Archivo CSV*: un archivo de texto que contiene datos en el formato de Valores separados por comas.
+* *Directorio de datos*: la ruta (ubicación) completa (en vez de la relativa) en la estructura del archivo donde están ubicados los datos asociados a la instancia IPT.
+* *Darwin Core*: un estándar que consiste de términos y clases de términos usados para compartir datos sobre biodiversidad.
+* *Archivo Darwin Core*: un único archivo comprimido para un conjunto de datos que consta de uno o más archivos de texto de datos, un archivo XML (meta.xml) que describe el contenido de los archivos de texto y cómo se relacionan entre sí y un archivo XML (eml.xml) que contiene los metadatos en EML sobre el conjunto de datos.
+* *EML*: el Ecological Markup Language es una descripción basada en XML que se utiliza para codificar metadatos de un conjunto de datos.
+* *Extensión*: en este manual de usuario, una extensión es un conjunto de términos correspondientes a una categoría de datos específica. Una extensión debe considerarse como una ampliación de las capacidades del IPT más que como una extensión de cualquier estándar en particular.
+* *Registro de GBIF*: un registro que administra los nodos, organizaciones, recursos e instalaciones del IPT registradas en GBIF, haciéndolos detectables e interoperables.
+* *Metadatos*: en este manual de usuario, los metadatos se refieren a la información acerca de un conjunto de datos en lugar de los datos primarios en el conjunto de datos.
+* *Recurso de metadatos*: un recurso que contiene información sobre un conjunto de datos, pero sin tener el conjunto de datos primario. Un recurso de metadatos podría ofrecer información sobre una colecta que aún no ha sido digitalizada, por ejemplo.
+* *Recurso de registros biológicos*: un recurso que contiene información sobre Registros biológicos como se definen en el estándar Darwin Core.
+* *Privado*: estado de un recurso en el que solo el creador, administradores invitados y los administradores del IPT pueden verlo.
+* *Público*: el estado de un recurso al que todo el mundo tiene acceso.
+* *Publicación*: una versión de un recurso que ha sido producido a través del IPT.
+* *Registrado*: el estado de un recurso público a través de una instancia IPT que cualquiera puede encontrar a través de el Registro de GBIF.
+* *Recurso*: en este manual de usuario, un recurso se refiere a un conjunto de datos y sus respectivos metadatos.
+* *Editores de recursos*: los usuarios de IPT que tienen un rol que les permite crear, modificar, y eliminar recursos.
+* *RowType*: la categoría de información representada en una extensión. El RowType es generalmente la URI de la Clase que mejor se ajusta a la información contenida en la extensión.
+* *RSS*: el acrónimo para Really Simple Syndication, un tipo de formato de suscripción para realizar un seguimiento de los cambios en un sitio web.
+* *Recurso de evento de muestreo*: un recurso donde la base del mismo son eventos de muestreo como se encuentran definidos en el estándar Darwin Core.
+* *Nombre corto*: un nombre corto y único que se utiliza para la identificación de los recursos dentro del IPT y los servicios que acceden al IPT.
+* *Conjunto de datos*: en este manual de usuario, los conjuntos de datos hacen referencia a los datos  relacionados a los tipos de core y a sus extensiones dentro del recurso, estos pueden consistir en archivos de texto o bases de datos.
+* *Visibilidad*: un término que describe cómo se puede ver un recurso (privado, público, o registrado).

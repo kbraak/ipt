@@ -1,0 +1,269 @@
+= 資料品質檢核表
+
+Use this checklist to help review biodiversity datasets. Note it is particularly suited for checking occurrence and sampling event datasets.
+
+The checklist will help ensure that the data is complete, meaning it contains valid answers to the five Ws:
+
+* <<What event happened?>>
+* <<Who acted in the event?>>
+* <<When did the event take place?>>
+* <<Where did the event take place?>>
+* <<Why did the event happen?>>
+
+Examples of events include a species observation, a physical specimen being collected, or a biological sampling event.
+
+Additionally, the checklist ensures that the <<Dataset Metadata>> also contains answers to the five Ws in order to facilitate reuse of the data.
+
+== Instructions
+
+If the dataset has been registered with GBIF, give yourself a running start by reviewing the dataset's 'Stats' page. Here you can find the set of issues that GBIF discovered while interpreting the dataset:
+
+image::ipt2/InterpretationIssues2.png[]
+
+Next, read the dataset metadata to get a better understanding about the data.
+
+Next, load the data into https://openrefine.org/[OpenRefine]. This will allow https://docs.openrefine.org/manual/facets[faceted browsing] to get the big picture of the data.
+
+There are various ways each of the five Ws can be answered. Each 'check' relates to one or more Darwin Core fields. Therefore try to perform as many checks as possible based on the Darwin Core fields present in the dataset.
+
+Compile a list of all checks that fail and report them back to the data publisher, referring to each check by its 'Check-ID'. This will make providing feedback a less time consuming and verbose process.
+
+== Quality checks
+
+=== What event happened?
+
+==== What type of event was it?
+
+|===
+| Check-ID | Fields | Requirements
+
+| *what 1* | `occurrenceID`, `basisOfRecord`, `eventID`  | The species observation event uniquely identified by `occurrenceID` and having `basisOfRecord` equal to `HumanObservation` or `MachineObservation` indicating whether the observation was performed by a machine or by one or more people. If this observation was derived from a sampling event, it must have the `eventID` of the sampling event filled in.
+| *what 2* | `occurrenceID`, `basisOfRecord`, `catalogNumber`, `collectionCode`, `eventID`  | The specimen preservation event uniquely identified by `occurrenceID` and having `basisOfRecord` equal to `PreservedSpecimen`, `FossilSpecimen` or `LivingSpecimen` indicating its specific type. Ideally a specimen is deposited in a collection and therefore can be assigned both a `catalogNumber` and `collectionCode`.  If this specimen was derived from a sampling event, it must have the `eventID` of the sampling event filled in.
+| *what 3* | `occurrenceID`, `basisOfRecord`, `materialSampleID`, `catalogNumber`, `collectionCode`, `eventID`  | The physical result of a sampling event uniquely identified by both `occurrenceID` and having `basisOfRecord` equal to `MaterialSample`. If the sample was preserved (vs destructively processed) as a specimen and deposited in a collection it will ideally be assigned both a `catalogNumber` and `collectionCode`. The `eventID` of the sampling event must be filled in.
+| *what 4* | `eventID`, `fieldNumber`, `parentEventID`   | The actual sampling event uniquely identified by `eventID`. The `eventID` should be a GUID, otherwise it should reuse the `fieldNumber`. The `parentEventID` indicates the event is a sub-sampling event. To be valid, all `parentEventIDs` must reference `eventIDs` of records defined in the same dataset. Otherwise, the `parentEventID` must be a globally unique identifier (e.g. DOI, HTTP, URI, etc) that resolves to an event record described elsewhere. Ideally all sub-sampling events share the same data and location as the parent event.
+|===
+
+==== If it was a species occurrence related event - how many species were there?
+
+|===
+| Check-ID | Fields | Requirements
+
+| *what 5* | `individualCount`, `organismQuantity`, `organismQuantityType`, `occurrenceStatus` | The species abundance must be filled in using `individualCount` and the pair `organismQuantity` & `organismQuantityType`. For relative abundance use the pair `organismQuantity` & `organismQuantityType` with values for `organismQuantityType` coming from the {latest-quantity-type}[GBIF Quantity Type Vocabulary]. Zero abundance (absence of the species) must be coupled with `occurrenceStatus` set to "absence" per the {latest-occurrence-status}[GBIF Occurrence Status Vocabulary].
+|===
+
+==== If it was a species occurrence related event - what species was it?
+
+|===
+| Check-ID | Fields | Requirements
+
+| *what 6* | `scientificName`, `taxonRank`, `kingdom`, `phylum`, `class`, `order`, `family`, `genus`, `subgenus` | The full scientific name with authorship and date information if known must be entered in `scientificName`. To prevent ambiguity, the `taxonRank` of the scientific name should be supplied as per the {latest-rank}[GBIF Taxonomic Rank Vocabulary]. Also to prevent ambiguity, as much higher taxonomy as possible should be filled in: `kingdom`, `phylum`, `class`, `order`, `family`, `genus`.
+| *what 7* | `taxonID`, `nameAccordingTo`, `nameAccordingToID` | The identifier for the Taxon assigned to the subject. If the Taxon is defined according to a well known source, it is recommended filling in `nameAccordingTo` with the name of the source and `nameAccordingToID` with the identifier for the Taxon assigned as per the source (same as `taxonID`).
+|===
+
+==== Case 1: Species observation from a camera trap
+
+|===
+| Field | Value | Constraint
+
+| `occurrenceID` | "HAMAARAG:T0_L_049:6199" | Must be a GUID or an identifier that is near globally unique. Integer identifiers are not allowed.
+| `basisOfRecord` | "MachineObservation" | Must match {latest-basis-of-record}[Darwin Core Type Vocabulary]
+| `individualCount` | 1 | Must be an integer, 0 or greater
+| `organismQuantity` | 1 | Must pair with `organismQuantityType`
+| `organismQuantityType` | "individuals" | Must match {latest-quantity-type}[GBIF Quantity Type Vocabulary]
+| `occurrenceStatus` | "present" | Must match {latest-occurrence-status}[GBIF Occurrence Status Vocabulary]
+| `scientificName` | "Canis aureus Linnaeus, 1758" | Must be the full scientific name, with authorship and date information if known.
+| `taxonRank` | "species" | Must match {latest-rank}[GBIF Taxon Rank Vocabulary]
+| `kingdom` | "Animalia" | Must be the full scientific name of the kingdom in which the taxon is classified.
+| `phylum` | "Chordata" | Must be the full scientific name of the phylum or division in which the taxon is classified.
+| `class` | "Mammalia" | Must be the full scientific name of the class in which the taxon is classified.
+| `order` | "Carnivora" | Must be the full scientific name of the order in which the taxon is classified.
+| `family` | "Canidae" | Must be the full scientific name of the family in which the taxon is classified.
+| `genus` | "Canis Linnaeus, 1758" | Must be the full scientific name of the genus in which the taxon is classified.
+| `taxonID` | http://www.gbif.org/species/5219219 | Must be a GUID or an identifier related to the source
+| `nameAccordingTo` | "GBIF Backbone Taxonomy, May 2016" | Must be reference including date
+| `nameAccordingToID` | "http://www.gbif.org/dataset/d7dddbf4-2cf0-4f39-9b2a-bb099caae36c" | Must be a GUID or an identifier for the source
+|===
+
+=== Who acted in the event?
+
+|===
+| Check-ID | Fields | Requirements
+
+| *who 1* | `recordedBy` | The full names of each person acting in the event (e.g. collecting, observing, etc) should be entered in `recordedBy` using the vertical bar as a separator. Note there is a separate field for capturing the person(s) making the identification (see below).
+| *who 2* | `institutionCode`, `ownerInstitutionCode` | A name or acronym of the institution acting in the event may be entered in `institutionCode` and `ownerInstitutionCode`. These can be different hence `institutionCode` can have physical custody of a specimen and `ownerInstitutionCode` can have legal ownership of the specimen.
+| *who 3* | `identifiedBy` | The full names of each person, group, or organization responsible for assigning the Taxon to the subject should be entered in `identifiedBy` using the vertical bar as a separator.
+|===
+
+==== Case 1: Two different people collecting and identifying a specimen
+
+|===
+| Field | Value | Constraint
+
+| `recordedBy` | "Ole Karsholt" | Must be one or more persons' names
+| `institutionCode` | "ZMUC" | Must be an acronym or name of an institution
+| `ownerInstitutionCode` | "ZMUC" | Must be an acronym or name of an institution
+| `identifiedBy` | "Jan Pedersen" | Must be names of one or more persons, groups or organizations
+|===
+
+=== When did the event take place?
+
+|===
+| Check-ID | Fields | Requirements
+
+| *when 1* | `eventDate` | The date, date-time, date range, or date-time range during which the Event occurred should be entered in `eventDate` in https://en.wikipedia.org/wiki/ISO_8601[ISO 8601] format. Partial dates can be provided if they have at least a year and month, e.g. "2007-03".
+| *when 2* | `verbatimEventDate` | If the original value has to be converted into https://en.wikipedia.org/wiki/ISO_8601[ISO 8601] `verbatimEventDate` should be filled in with the original value.
+| *when 3* | `eventTime`, `year`, `month`, `day`, `startDayOfYear` | Although it appears redundant, it is recommended trying to fill in `year`, `month`, `day`, `eventTime` and `startDayOfYear` for single dates/date-times. If the start date resolution is specific to the day fill in `startDayOfYear`.
+| *when 4* | `eventTime`, `year`, `month`, `day`, `startDayOfYear`, `endDayOfYear` | Although it appears redundant, it is recommended trying to fill in `eventTime`, `year`, `month`, `day`, `startDayOfYear` and `endDayOfYear` for date ranges as completely as possible. If there is a date range spanning days, `day` is left blank. If there is a date range spanning months, `month` is left blank. If there is a date range spanning years, `year` is left blank. If the start date resolution is specific to the day fill in `startDayOfYear`. If the end date resolution is specific to the day fill in `endDayOfYear`.
+| *when 5* | `eventRemarks` | If no `eventDate` can be filled in, an explanation should be provided in `eventRemarks`
+|===
+
+==== Case 1: Single date
+
+|===
+| Field | Value | Constraint
+
+| `eventDate` | 2007-03-20 | Must be in https://en.wikipedia.org/wiki/ISO_8601[ISO 8601] format
+| `year` | 2007 | Must be four-digit year
+| `month` | 3 | Must be between 1-12
+| `day` | 20 | Must be between 1-31
+| `startDayOfYear` | 79 | Must be between 1-366
+| `verbatimEventDate` | "Mar 20, 07" | Original date or date description
+|===
+
+==== Case 2: Date-time range spanning days
+
+|===
+| Field | Value
+
+| `eventDate` | 2007-03-20T00:00:00Z/2007-03-27T06:00:00Z
+| `eventTime` | 00:00:00Z/06:00:00Z
+| `year` | 2007
+| `month` | 3
+| `day` |
+| `startDayOfYear` | 79
+| `endDayOfYear` | 86
+| `verbatimEventDate` | "The third week in March 07, for 6 hours starting at midnight."
+|===
+
+==== Case 3: Partial date
+
+|===
+| Field | Value
+
+| `eventDate` | 2007-03
+| `year` | 2007
+| `month` | 3
+| `day` |
+| `eventRemarks` | "Exact collection day was never recorded"
+|===
+
+==== Case 4: Missing date
+
+|===
+| Field | Value
+
+| `eventRemarks` | "Event date was not found in legacy data"
+|===
+
+=== Where did the event take place?
+
+|===
+| Check-ID | Fields | Requirements
+
+| *where 1* | `decimalLatitude`, `decimalLongitude`, `geodeticDatum` | The point location coordinates should be entered in decimal degrees in `decimalLatitude` and `decimalLongitude`. The spatial reference system upon which the coordinates are based must be entered in `geodeticDatum` using the EPSG code if known, e.g. "EPSG:4326". Otherwise use a controlled vocabulary for the name or code of the `geodeticDatum` if known, e.g. "WGS84". If none of these is known, use the value "unknown".
+| *where 2* |`footprintWKT`, `footprintSRS` | To provide a specific shape location enter a well-Known Text (WKT) representation of the shape in `footprintWKT`. The corresponding spatial reference system upon which the shape is based must be entered in `footprintSRS` using the EPSG code, e.g. "EPSG:4326".
+| *where 3* |`coordinateUncertaintyInMeters`, `dataGeneralizations` | `coordinateUncertaintyInMeters` should express the uncertainty in meters of the GPS reading. For large uncertainties (more than 1000 meters) check `dataGeneralizations` to see if the location was generalized on purpose, e.g. to protect sensitive species.
+| *where 4* |`verbatimCoordinates`, `verbatimLatitude`, `verbatimLongitude`, `verbatimCoordinateSystem`, `verbatimSRS` | If the original point location coordinates had to be converted from another coordinate system such as 'degrees minutes seconds' `verbatimCoordinates`, `verbatimLatitude`, `verbatimLongitude`, `verbatimCoordinateSystem`, `verbatimSRS` should be filled in with the original coordinates of the Location.
+| *where 5* | `dataGeneralizations` | If actions were taken to make the point location less specific than in its original form or the coordinateUncertaintyInMeters is very high, an explanation should be provided in `dataGeneralizations`.
+| *where 6* |`informationWitheld` | If the point location should exist, but has not been entered, an explanation should be provided in `informationWitheld`.
+| *where 7* | `georeferenceRemarks` | If the point location does not exist, or the point location is calculated from the cent er of a grid cell (versus from GPS reading) an explanation should be provided in `georeferenceRemarks`.
+| *where 8* | `continent`, `waterBody`, `islandGroup`, `island`, `country`, `countryCode`, `stateProvince`, `county`, `municipality`, `locality`, `locationRemarks` | As much supplementary information as possible about the location should also be provided. If no `country` and `countryCode` can be provided then an explanation as to why should be entered in `locationRemarks`
+|===
+
+==== Case 1: Point location converted from degrees minutes seconds to decimal degrees
+
+|===
+| Field | Value | Constraint
+
+| `decimalLatitude` | 42.4566 | Must be between -90 and 90, inclusive
+| `decimalLongitude` | -76.45442 | Must be between -180 and 180, inclusive
+| `geodeticDatum` | "EPSG:4326" | Ideally an http://spatialreference.org/ref/epsg/wgs-84/[EPSG code] or from a controlled vocabulary otherwise "unknown"
+| `coordinateUncertaintyInMeters` | 500 | Zero is NOT a valid value
+| `verbatimCoordinates` | 42° 27' 23.76", -76° 27' 15.91" |
+| `verbatimLatitude` | 42° 27' 23.76" |
+| `verbatimLongitude` | -76° 27' 15.91" |
+| `verbatimCoordinateSystem` | "degrees minutes seconds" |
+| `continent` | "North America" | Must be preferred English name according to http://www.getty.edu/research/tools/vocabularies/tgn/[Getty Thesaurus of Geographic Names]
+| `country` | "United States" | Must be preferred English name according to http://www.getty.edu/research/tools/vocabularies/tgn/[Getty Thesaurus of Geographic Names]
+| `countryCode` | "US" | Must be https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2[ISO 3166-1-alpha-2 country code]
+| `stateProvince` | "New York" |
+| `county` | "Tomkins County" |
+| `locality` | "Ithaca, Forest Home, CU Rifle Range" | Must be a specific description of the place
+|===
+
+==== Case 2: Point location that was generalized
+
+|===
+| Field | Value
+
+| `decimalLatitude` | 42.44
+| `decimalLongitude` | -76.33
+| `geodeticDatum` | "EPSG:4326"
+| `coordinateUncertaintyInMeters` | 5000
+| `dataGeneralizations` | "Point location obscured by a factor of 5000m"
+|===
+
+==== Case 3: Point location exists but not provided
+
+|===
+| Field | Value
+
+| `informationWitheld` | "Point location hidden to protect sensitive species. Available upon request."
+|===
+
+==== Case 4: Point location does not exist
+
+|===
+| Field | Value
+
+| `dataGeneralizations` | "Point location was not found in legacy data"
+|===
+
+=== Why did the event happen?
+
+|===
+| Check-ID | Fields | Requirements
+
+| *why 1* | `samplingProtocol`, `sampleSizeValue`, `sampleSizeUnit`, `samplingEffort`, `eventRemarks` | The name of the method or sampling protocol used to create the event should be entered in `samplingProtocol`. A URL referencing the description is preferred over lengthy method descriptions. A sampling protocol must define its area, duration, etc using the pair `sampleSizeValue` & `sampleSizeUnit`, with values for `sampleSizeUnit` coming from the {latest-unit-of-measurement}[Unit of Measurement Vocabulary]. More generic descriptions of the effort or duration of the sampling event can be entered in `samplingEffort`. If information about the area or duration is missing, `eventRemarks` must provide an explanation why.
+|===
+
+==== Case 1: Because of a butterfly monitoring scheme
+
+|===
+| Field | Value | Constraint
+
+| `samplingProtocol` | "Pollard walks" | Must be a short name or URL referencing a method or sampling protocol
+| `sampleSizeValue` | 250 | Must pair with `sampleSizeUnit`
+| `sampleSizeUnit` | "square_metre" | Must match {latest-unit-of-measurement}[Unit of Measurement Vocabulary]
+| `samplingEffort` | "Average of 30 Minutes walk along transect" | Can be a free-text description
+| `eventRemarks` | "No occurrences of Lepidoptera recorded for entire transect" | Can be a free-text description
+|===
+
+== Dataset Metadata
+
+The dataset metadata should contain enough information to facilitate reuse of the data while preventing misinterpretation. Publishers should also provide evidence of the rigour that went into producing the data while acknowledging its various contributors and funders. Ultimately this may lead to new sources of collaboration and funding.
+
+|===
+| Field | Requirements | Examples
+
+| `Title` | is a concise name that describes the contents of the dataset and that distinguishes it from others| _"Reef Life Survey: Global reef fish dataset"_, _"Insects from light trap (1992–2009), rooftop Zoological Museum, Copenhagen"_
+| `Description` | is a short paragraph (abstract) describing the content of the dataset. | _"This dataset contains records of bony fishes and elasmobranchs collected by Reef Life Survey (RLS) divers along 50 m transects on shallow rocky and coral reefs, worldwide. Abundance information is available for all records found within quantitative survey limits (50 x 5 m swathes during a single swim either side of the transect line, each distinguished as a Block), and out-of-survey records are identified as presence-only (Method 0)."_
+| `Publishing Organization` | the organization responsible for publishing (producing, releasing, holding) this resource. | _"Reef Life Survey"_
+| `License` | must be one of ﻿three machine-readable options (CC0 1.0, CC-BY 4.0 or CC-BY-NC 4.0), which provide a standardized way to define appropriate uses of the dataset. | _"This work is licensed under a http://creativecommons.org/licenses/by/4.0/legalcode[Creative Commons Attribution (CC-BY) 4.0 License]."_
+| `Creator(s)` | the people and organizations who created the dataset, in priority order. Use of a personnel identifier such as an ORCID or ResearcherID is highly recommended. | _"John Smith, jsmith@gbif.org, http://orcid.org/0000-0002-1825-0097"_
+| `Metadata Provider(s)` | the people and organizations who wrote the dataset metadata, in priority order. Use of a personnel identifier such as an ORCID or ResearcherID is highly recommended. | _"John Smith, jsmith@gbif.org, http://orcid.org/0000-0002-1825-0097"_
+| `Contact(s)` | the people and organizations who should be contacted for more information about the resource or to whom putative problems with the dataset should be addressed. Use of a personnel identifier such as an ORCID or ResearcherID is highly recommended. | _"John Smith, jsmith@gbif.org, http://orcid.org/0000-0002-1825-0097"_
+| `Project Identifier` | is a GUID or other identifier that is near globally unique. _Note this is required for BID projects._ | _"BID-AF2015-0134-REG"_
+| `Sampling Methods` | information about the sampling methodology used in creating the dataset, similar to the methods section of a journal article. _Note this is required for sampling event datasets._ | _See https://cloud.gbif.org/griis/resource?r=global#methods[here]_
+| `Citation` | how the dataset should be cited. Use of the xref:citation.adoc[IPT Citation Format] (based on DataCite's preferred citation format and that satisfies the https://www.force11.org/datacitation[Joint Declaration of Data Citation Principles]) is highly recommended. | _"Edgar G J, Stuart-Smith R D (2014): Reef Life Survey: Global reef fish dataset. v2.0. Reef Life Survey. Dataset/Sampling event. http://doi.org/10.15468/qjgwba"_
+|===

@@ -1,0 +1,110 @@
+= Darwin Core
+
+Darwin Core es un estándar http://www.tdwg.org/activities/darwincore/[TDWG], el cual se basa en las ideas del popular http://dublincore.org/documents/dcmi-terms/[Dublin Core Metadata Initiative]. Un principio fundamental del Darwin Core como una biblioteca de términos es mantener la definición de los términos diferenciada de la tecnología usada para compartirla, p. ej., XML o RDF.
+
+== IPT y Darwin Core
+El IPT tiene integrados los principales tipos de datos de biodiversidad, que se basan en los términos del Darwin Core (DwC). Los tipos de datos son registros biológicos"Occurrence", listados taxonómicos "Checklist" y metadatos "Metadata", cada uno de los cuales tiene un conjunto fijo de términos para describirlo.
+
+== Historia del Darwin Core
+Hasta la ratificación de Darwin Core como estándar, se usaba para describir datos primarios de registros biológicos, en concreto a través de DiGIR y la codificación XML. Cuando estuvimos buscando un formato sencillo de intercambio de datos de listados taxonómicos, y con el aumento de las menciones de especies en Flickr, se hizo evidente que unos términos sencillos para la biodiversidad en la tradición de Dublin Core serían muy útiles, y de hecho se solapan en gran medida con los términos Darwin Core que ya se utilizaban.
+
+== Términos
+Todos los términos Darwin Core son definidos en http://rs.tdwg.org/dwc/terms/index.htm[Guía de referencia rápida de los términos Darwin Core]
+
+Un único término DwC, en el IPT llamado a menudo propiedad, puede ser usado una vez para cada registro. Habitualmente es de texto libre pero la definición recomienda a menudo ciertos formatos o vocabularios a utilizar, p. ej., los códigos ISO de 2 letras para países en el término `dwc:countryCode`.
+
+== Patrones
+=== Elementos ID
+DwC proporciona muchos de los términos para identificadores. Algunos pueden ser utilizados para definir un registro (como occurrenceID para un registro biológico; taxonID para un registro de un taxón), mientras otros (como higherGeographyID) se refieren a un identificador para la información recogida fuera del registro. Por ejemplo, `namePublishedInID` se utiliza para referirse a un identificador (puede que un DOI u otro identificador resoluble) para la publicación en la que se estableció originalmente un scientificName. Tenga en cuenta que `taxonID` utilizado en un conjunto de datos de registros biológicos funcionaría como un indicador para un taxón definido en algún otro lugar, tal como un conjunto de datos de un listado taxonómico, mientras que `taxonID` en un registro de taxón actuaría como el identificador de ese registro.
+
+La mayoría de términos tienen un término de texto completo correspondiente, p. ej., `acceptedNameUsageID` y `acceptedNameUsage`. Éstos tienen dos propósitos:
+
+. En ausencia de un identificador pueden utilizarse para referirse a otro registro, en este caso el taxón aceptado/válido.
+. Proporcionan un contexto legible que persiste incluso si el identificador no puede ser resuelto
+
+Por lo tanto, tiene sentido proporcionar ambos si es posible.
+
+=== Jerarquías desnormalizadas
+La geografía y la taxonomía se pueden expresar como una jerarquía flexible de lugares o taxones a través de los términos `higherParentNameUsage(ID)` y `higherGeography(ID)`. Además de esta _lista adyacente_, las clasificaciones más populares se pueden publicar como una jerarquía desnormalizada para cada registro, repitiendo de manera efectiva esta información a través de muchos registros. Pero proporciona una clasificación corta, rápida y legible para cada registro aislado del conjunto de datos completo.
+
+* Clasificación taxonómica desnormalizada: `kingdom`, `phylum`, `class`, `order`, `family`, `genus`, `subgenus`
+* Clasificación geográfica desnormalizada: `continent`, `waterBody`, `islandGroup`, `island`, `country` / `countryCode`, `stateProvince`, `county`, `municipality`
+
+Al igual que con los términos ID de texto completo de arriba, éste introduce la posibilidad de _problemas de integridad de datos_ ya que el término ID podría resultar en algo diferente a la jerarquía desnormalizada. En este caso, el IPT sigue la recomendación del siguiente orden de términos para resolver la jerarquía:
+
+----
+Elemento ID >> elemento en texto >> elemento desnormalizado
+higherTaxonID >> higherTaxon >> kingdom,family,...
+----
+
+=== Términos originales
+Algunos términos poseen un término original correspondiente. Esto permite incluir la publicación de la transcripción original exacta de ciertos atributos tal y como se encontraron en la etiqueta del espécimen, la observación de la libreta de campo o la bibliografía. De esta forma el `verbatimEventDate` puede ser utilizado para publicar la transcripción exacta de la fecha de colecta, mientras `eventDate` puede ser codificado en una representación estándar ISO de tiempo y fecha.
+
+== Datos primarios
+Todos los términos DwC se pueden usar para describir registros de presencias de especies. Se recomienda publicar al menos los siguientes términos. Los términos marcados con !!! tienen que estar presentes para ser reconocidos por la indexación actual de GBIF:
+
+* http://rs.tdwg.org/dwc/terms/index.htm#basisOfRecord[basisOfRecord] !!!
+* http://rs.tdwg.org/dwc/terms/index.htm#occurrenceID[occurrenceID]
+* http://rs.tdwg.org/dwc/terms/index.htm#institutionCode[institutionCode] !!!
+* http://rs.tdwg.org/dwc/terms/index.htm#collectionCode[collectionCode] !!!
+* http://rs.tdwg.org/dwc/terms/index.htm#catalogNumber[catalogNumber] !!!
+* http://rs.tdwg.org/dwc/terms/index.htm#recordedBy[recordedBy]
+* http://rs.tdwg.org/dwc/terms/index.htm#eventDate[eventDate]
+* http://rs.tdwg.org/dwc/terms/index.htm#year[year]
+* http://rs.tdwg.org/dwc/terms/index.htm#typeStatus[typeStatus]
+* http://rs.tdwg.org/dwc/terms/index.htm#scientificName[scientificName] !!!
+* http://rs.tdwg.org/dwc/terms/index.htm#kingdom[kingdom]
+* http://rs.tdwg.org/dwc/terms/index.htm#family[family]
+* http://rs.tdwg.org/dwc/terms/index.htm#locality[locality]
+* http://rs.tdwg.org/dwc/terms/index.htm#decimalLongitude[decimalLongitude]
+* http://rs.tdwg.org/dwc/terms/index.htm#decimalLatitude[decimalLatitude]
+* http://rs.tdwg.org/dwc/terms/index.htm#coordinateUncertaintyInMeters[coordinateUncertaintyInMeters]
+
+=== Ejemplo
+
+----
+occurrenceID=96db9d09-596d-409c-8626-f4460078d0eb
+institutionCode=BGBM
+collectionCode=B
+basisOfRecord=preservedspecimen
+catalogNumber=1159
+eventDate=1999-08-06 00:00:00.0
+collector=Markus Döring
+continent=Asia
+country=TR
+stateProvince=Adana
+locality=Aladaglari, lower Narpiz Deresi, next to fountain, 2900m
+minimumElevationInMeters=2900
+decimalLatitude=37.82800
+decimalLongitude=35.13600
+geodeticDatum=WGS84
+identifiedBy=Markus Döring
+scientificName=Festuca anatolica subsp. anatolica
+kingdom=Plantae
+phylum=Magnoliophyta
+class=
+order=Cyperales
+family=Poaceae
+genus=Festuca
+specificEpithet=anatolica
+infraspecificEpithet=anatolica
+----
+
+== Listas de chequeo
+Las listas de chequeo se limitan al ± subconjunto taxonómico de todos los términos Darwin Core.
+
+Ver las xref:checklist-data.adoc[recomendaciones sobre cómo publicar listas de chequeo].
+
+== El Archivo Darwin Core
+Los Archivos Darwin Core (DwC-A) son los nuevos medios primarios de publicación de datos en la red de GBIF. Contienen un _conjunto de datos completo_ están basado en _archivos de texto simple_ y pueden ser creados da manera bastante sencilla sin el IPT usando _programas personalizados_.
+
+=== Extensiones Darwin Core
+Reconociendo que DwC solo cubre los metadatos básicos de la biodiversidad, las extensiones a ese Darwin Core son una necesidad común para todas las comunidades. La forma más sencilla de hacerlas es crear nuevos elementos en un nuevo espacio de nombres y simplemente ampliar un registro dwc normal con estos elementos.
+
+A menudo, es deseable que haya múltiples _sub-registros_ para una extensión, como por ejemplo muchos nombres comunes para una especie o múltiples imágenes para un espécimen. Para compartir estos registros relacionados más enriquecidos se usa el esquema en estrella, por lo que una extensión consiste en múltiples registros, cada uno vinculado a un registro del core dwc. Cualquier número de registros de extensiones, potencialmente de diferentes extensiones (ej.: imágenes e identificaciones), para un único registro core es posible.
+
+=== El formato del Archivo
+
+El Archivo Darwin Core proporciona un medio para publicar registros dwc más extensiones en un formato basado en texto relativamente sencillo. Un Archivo Darwin Core consta de un conjunto de archivos de texto que son empaquetados y comprimidos en un único archivo. El formato sigue la http://rs.tdwg.org/dwc/terms/guides/text/index.htm[guía de textos Darwin Core]. Un paquete típico se ilustra en el diagrama de abajo y consta de los componentes descritos en detalle http://code.google.com/p/gbif-ecat/wiki/DwCArchive[aquí].
+
+image::figures/dwca.png[]

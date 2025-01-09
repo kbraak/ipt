@@ -1,0 +1,11 @@
+= LinuxにTomcatをインストールする
+
+Tomcatは通常、ディストリビューションパッケージを使用してインストールします。
+
+例えば、CentOSやRed Hatの場合、``yum install tomcat``です。
+
+DebianやUbuntuの場合は、``apt install tomcat9``です。
+
+`systemctl enable tomcat` などで，Tomcatが自動的に起動するように設定することができます。
+
+ほとんどのLinuxユーザーはこれ以上のアドバイスを必要としないようですが、もしそうでなければ、xref:resources.adoc#ipt-mailing-list[メーリングリスト]までご質問ください。

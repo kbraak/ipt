@@ -1,0 +1,257 @@
+= ダーウィンコア・アーカイブ – ハウツーガイド
+
+Version 2.2
+
+image::figures/cover_art_cicindelinae.png[]
+
+== 文書管理
+
+|===
+| バージョン | 概要                  | 公開日          | 編集者
+
+| http://links.gbif.org/gbif_dwc-a_how_to_guide_en_v1[1.0]    | コンテンツの見直しと追加 | April 2011     | David Remsen, Markus Döring
+| 2.0     | wikiへの転送、大幅な変更 | 9 May 2017      | Kyle Braak
+| https://github.com/gbif/ipt/wiki/DwCAHowToGuide[2.1]     | マイナー編集、リンク更新等  | 8 February 2021 | Matthew Blissett
+| xref:dwca-guide.adoc[2.2]     | AsciiDocへの変換  | 25 May 2021 | Matthew Blissett
+|===
+
+== 推奨される引用
+
+// The date uses the last change, ignoring formatting etc.
+> GBIF (2021) Darwin Core Archives – How-to Guide, version 2.2. Copenhagen: GBIF Secretariat. https://ipt.gbif.org/manual/ja/ipt/{page-version}/dwca-guide
+
+_カバーアート製作: Kim Wismann, Cicindelinae_
+
+== ダーウィンコア・アーカイブ（DwC-A）とは？
+
+ダーウィンコア・アーカイブ（DwC-A）は生物多様性情報学のデータ規格で、ダーウィンコアの用語を用いて、種レベル（分類）、種オカレンスデータ、サンプリングイベントデータを共有するための、単一の自己完結したデータセットを作成します。アーカイブは、標準的なカンマまたはタブ区切り形式のテキストファイルのセットで、ファイルがどのように構成されているかを他の人に知らせるための簡単な記述ファイル（*meta.xml*と呼ばれます）となっています。このフォーマットは、link:https://dwc.tdwg.org/text/[ダーウィンコア テキストガイドライン]で定義されています。*これは、GBIFネットワークでデータを公開する際に推奨される形式です。*
+
+アーカイブの根本的な考え方は、データファイルが星のように論理的に配置され、1つのコアデータファイルが、任意の数の「拡張」データファイルによって囲まれていることです。コアファイルと拡張ファイルには、1行に1つのデータレコードが含まれています。それぞれの拡張レコード（または「拡張ファイル行」）はコアファイルのレコードを指し、このように、1つのコアレコードに対して多くの拡張レコードが存在することができます。これは「スタースキーマ」と呼ばれることもあります。
+
+image::figures/dwc-a_event.png["Darwin Core Archiveの構成要素"]
+
+データセット全体をDwC-Asとして共有することで、データセット全体のデータ転送をシンプルかつ効率的に行うことができます。(link:http://digir.sourceforge.net/[DiGIR]やlink:http://tdwg.github.io/tapir/docs/tdwg_tapir_specification_2010-05-05.html[TAPIR]などの以前のシステムでは、1つのデータセット内の全データを取得するためにGBIFシステムに何千回ものリクエストをする必要があり、データの取りこぼしのリスクがありました)。
+
+DwC-Aの作成では、コアレコードには安定した識別子を使用する必要がありますが、エクステンションには必要ありません。したがって、どのような種類の共有データであっても、ある種のローカルなレコード識別子を持つことが必要です。オリジナル・データとともに、長期にわたって安定で、レコードが削除された後も再利用されない識別子を維持することは、優れた取り組みです。可能であれば、ローカルな識別子の代わりにグローバルにユニークな識別子(GUID)を指定してください。GUIDの詳細については、link:http://links.gbif.org/persistent_identifiers_guide_en_v1.pdf[永続的な識別子のビギナーズガイド]を参照してください。この識別子はDwC-Asでは「コアID」と呼ばれ、対応する特定のダーウィンコア用語は公開されるデータ型に依存します。
+
+=== DwC-Aの構成要素
+
+DwC-Aは、公開データの範囲により、1つのデータファイルで構成される場合と、複数のファイルで構成される場合があります。アーカイブに含まれる可能性のある具体的なファイルの種類は以下の通りです。
+
+. http://rs.tdwg.org/dwc/terms/[ダーウィンコア用語]の標準セットからなる*必須のコアデータファイル*。データファイルは*フィールド付きテキスト*としてフォーマットされ、データレコードはテキストの行として表現され、データ要素（列）はタブやカンマなどの標準デリミタで区切られています（一般にCSVまたはlink:https://ja.wikipedia.org/wiki/Comma-separated_values[カンマ区切り値ファイル]と呼ばれます）。データファイルの最初の行は、任意でデータを含むか、「ヘッダー行」を表すことができます。一般に、ヘッダー行が含まれる場合、そのヘッダー行には、後続のデータ行で表されるダーウィンコア用語の名称が含まれます。
+  GBIFは現在、コアデータファイルの基礎として、以下の3つの生物多様性データタイプをサポートしています。
++
+--
+. *オカレンスデータ* - 自然界での発生やコレクション、データセット（標本、観察記録など）の証拠に関連する情報のカテゴリです。このタイプのコアファイルは、標本や観察記録など、分類群の特定のインスタンスに関する情報を共有するために使用されます。必要なコアIDは*dwc:occurrenceID*で表されます。オカレンス用語の決定的なリストは、link:{latest-dwc-occurrence}[オカレンス(コア)拡張機能]で見ることができます。
+. *チェックリストデータ* - 分類群または種などの分類群概念に関連する情報のカテゴリです。このタイプのコアファイルは、注釈付き種チェックリスト、分類学的なカタログ、および分類群に関するその他の情報を共有するために使用されます。必要なコアIDは*dwc:taxonID*で表されます。コア・タクソン用語の決定的なリストは、link:{latest-dwc-taxon}[タクソン（コア）の拡張]で見ることができます。
+. *サンプリングイベントデータ* - サンプリングイベントに関連する情報のカテゴリです。このタイプのコアファイルは、生態学的調査に関する情報を共有するために使用されます。この調査は、単発の調査や、個体群の変化や傾向を検出するための、ふつう定量的で校正される、特定のプロトコルに従ったモニタリングプログラムとなります。必要なコアIDは*dwc:eventID*で表されます。コアイベントの用語の決定的なリストは、link:{latest-dwc-event}[イベント（コア）拡張]で見つけることができます。
+
+image::figures/core_data_file.png["コアデータファイルは単純です", tabular, text file]
+--
+
+. *オプションの「拡張」ファイル*は、コアデータ型（オカレンスまたはタクソン）に関連する、追加的な記述されたデータクラスの交換をサポートします。拡張レコードは、コアデータファイルのレコードを指します。拡張は分類群または出現群にのみ適用され、その両方に適用されることもあります。例えば、Vernacular Names拡張（下図参照）は分類階級の拡張ですが、Images拡張は両方で使用することができます。拡張子は、GBIFとの協議および開発プロセスを経て、GBIF拡張子リポジトリに作成および追加することができます。サポートされる拡張子の一覧は、link:https://rs.gbif.org/extensions.html[GBIF拡張子リポジトリ]に掲載されています。
++
+image::figures/extension_data_file.png["拡張は共通のタクソンIDでコアファイルにリンクされます"]
+
+. 記述子*メタファイル*は、アーカイブ内のファイルがどのように構成されているかを記述するものです。アーカイブ内のファイルを記述し、各データ列を対応する標準的なダーウィンコアまたは拡張用語にマッピングします。メタファイルは、比較的単純なXMLファイル形式です。GBIFはこのファイルを作成するためのオンラインツールを提供していますが、フォーマットは十分シンプルなので、多くのデータ管理者が手動で生成することができます。これらのオプションは、このドキュメントの公開オプション節で説明されています。
++
+--
+NOTE: メタファイルは、アーカイブに拡張ファイルが含まれている場合、または単一のコアデータファイルがデータの最初の（ヘッダー）行で非標準の列名を使用している場合に*必要*です。このメタファイルに関する完全なリファレンスガイドがlink:xref:gbif-metadata-profile.adoc[こちらから利用できます]。
+
+image::figures/meta_file.png["メタファイルには、コアファイルと拡張ファイルのファイル名とフィールドが記述されています"]
+--
+
+. データセットには文書化が必要です。DwC-Aでは、データセットの説明（要旨）、著者、出版、文書化の責任者、書誌・引用情報、収集方法など、データセット自体に関する情報を提供する*リソースメタデータ文書*を含めることによって、これを実現することができます。GBIFは現在、link:{eml-location}/index.html[生態学的メタデータ言語]に基づくメタデータプロファイルをサポートしていますが、他のメタデータ規格も存在し、サポートされる可能性があります。GBIFメタデータプロファイルのXMLスキーマの記述は、link:http://rs.gbif.org/schema/eml-gbif-profile/[GBIFスキーマリポジトリ]で見ることができます。
++
+--
+image::figures/metadata_file.png["データセット全体を記述するメタデータ文書"]
+
+ファイル群全体（コアデータ、拡張子、メタファイル、リソースメタデータ）は、1つのアーカイブファイルに圧縮する必要があります。サポートされている圧縮形式は、link:https://ja.wikipedia.org/wiki/ZIP_(%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%83%95%E3%82%A9%E3%83%BC%E3%83%9E%E3%83%83%E3%83%88)[ZIP]とlink:https://ja.wikipedia.org/wiki/Tar#:~:text=tar%EF%BC%88%E3%82%BF%E3%83%BC%E3%80%81tape%20archives%EF%BC%89,%E3%81%A8%E5%91%BC%E3%81%B6%E3%81%93%E3%81%A8%E3%82%82%E3%81%82%E3%82%8B%E3%80%82[TAR.GZ/TGZ]です。
+
+image::figures/zipped_archive.png["テキストファイルは1つのアーカイブに圧縮されます"]
+
+この圧縮された1つのファイルがDwC-Aファイルです！
+--
+
+== DwC-A データパブリッシングソリューション
+
+DwC-Aを生成するためには、さまざまなオプションがあります。
+
+独自のアーカイブを作成するために最も適切な手段を選択するために、以下の質問を検討してください。
+
+. データはデジタル化（CSVやTab形式へのデータ変換が容易にできることが前提です）されていますか？
+. データはリレーショナルデータベースに格納されていますか？
+. 何種類のデータセット（ダーウィンコア・アーカイブ）を公開する予定ですか？
+
+<<_IPTを用いたDwC-Aの公開,IPTを用いたDwC-Aの公開>>は以下のような場合に最適です。
+
+* データがすでにデジタル化されている場合。
+* データがリレーショナルデータベースに登録されている、もしくは登録されていない場合。
+* 複数のアーカイブを作成・管理する必要がある場合。
+* GBIFメタデータプロファイルを使用してデータセットを文書化したい場合。
+
+<<_GBIF表計算用テンプレートを用いたDwC-Aの公開,GBIF表計算用テンプレートを用いたDwC-Aの公開>>は以下のような場合に最適です。
+
+* データがまだデジタル化されていない場合。
+* すでにスプレッドシートを使ってデータを管理している場合。
+* 限られた数のデータセットを作成・管理するための簡単な解決策が必要な場合。
+* データの取り込みと書式設定に特別な指示が必要な場合。
+
+<<_手動でのDwC-Aの公開,手動でのDwC-Aの公開>>は以下のような場合に最適です。
+
+* データがすでにデジタル化されている場合。
+* データがリレーショナルデータベースに格納されている場合。
+* 少数のアーカイブを作成・管理するだけでよく、アーカイブ生成プロセスを自動化・スクリプト化する技術力がある場合。
+
+この3つのオプションについて、より詳しく説明します。
+
+=== IPTを用いたDwC-Aの公開
+
+*想定：データはすでにCSV/タブテキストファイルとして、またはサポートされているリレーショナルデータベース管理システム（MySQL、PostgreSQL、Microsoft SQL Server、Oracle、Sybase）のいずれかに保存されていること。理想的には、ダーウィンコアの用語を列名としてすでに使用していることですが、これは必須ではありません。*
+
+xref:index.adoc[統合パブリッシングツールキット（IPT）]は、DwC-Aを発行するためのGBIFの主なツールです。
+
+IPTを使い始める最も簡単な方法は、https://www.gbif.org/data-hosting-centres[信頼できるデータホスティングセンター]に無料のアカウントを申請することです。これにより、独自のサーバでIPTをセットアップし、維持する手間をかけずに、GBIF.org を介してデータセットの管理および公開が可能となります。
+
+また、IPTのインスタンスを自分でセットアップする場合は、xref:getting-started.adoc[はじめに]を利用してください。
+
+IPTは、リソースメタデータ、オカレンスデータ、チェックリストデータ、およびサンプリングイベント・データを公開するために使用することができます。xref:how-to-publish.adoc[GBIF.orgを通じて生物多様性データを公開する方法]というガイドには、その方法が簡単に説明されています。
+
+IPTは公開時にDwC-Aを出力し、GBIFネットワークへの自動登録に対応しています。詳しくは、xref:manage-resources.adoc#visibility[IPTユーザーマニュアル]をご覧ください。
+
+=== GBIF表計算用テンプレートを用いたDwC-Aの公開
+
+*想定：出版されるオカレンスデータ、単純分類データ、またはサンプリングイベントデータがまだデジタル形式で取得されていない、またはデータセットを説明するメタデータ文書を作成するための簡単な方策が必要な場合。*
+
+GBIFは、オカレンスデータ、チェックリストデータ、およびサンプリングイベントデータを取得するためのテンプレートとして機能する、事前設定済みのMicrosoft Excelスプレッドシートファイルのセットを提供します。
+
+. xref:checklist-data.adoc#templates[チェックリストデータ テンプレート]：基本的な種のチェックリストに適しています。
+. xref:occurrence-data.adoc#templates[オカレンスデータ テンプレート]：オカレンスデータ（標本、観察）に適しています。
+. xref:sampling-event-data.adoc#templates[サンプリングイベント・データ テンプレート]：サンプリングイベント・データに適しています。
+//.  Resource metadata template: suitable for composing a metadata document - pending but imminent
+
+各テンプレートでは、ワークシートにインラインでヘルプや説明が表示されます。
+
+To publish the data as a DwC-A, upload the templates to the IPT. Use the IPT's built-in metadata editor to enter dataset metadata. The guide xref:how-to-publish.adoc[How to publish biodiversity data through GBIF.org] provides a simple set of instructions how to do so. If you require an account on an IPT, it is highly recommended that you request an account on a https://www.gbif.org/data-hosting-centres[trusted data hosting centre^] located in your country or community.
+
+=== 手動でのDwC-Aの公開
+
+*想定：データはCSV/タブテキストファイル、またはサポートされているリレーショナルデータベース管理システム（MySQL、PostgreSQL、Microsoft SQL Server、Oracle、Sybase）のいずれかに既に格納されています。公開者は IPT インスタンスをホストすることを望んでいませんが、Web サーバーへのアクセスは可能です。*
+
+DwC-Aは、専用ソフトをインストールすることなく作成することができます。この説明書は、公開するデータセットに精通し、データ管理システムでの作業に慣れているデータ管理者を対象としています。
+
+以下は、手動でDwC-Archiveを作成する方法です。
+
+. 既にデータがCSV/タブテキストファイルで保存されている場合を除き、パブリッシャーはソースからテキストファイルを準備する必要があります。データがデータベースに格納されている場合、ソースデータベースからアウトファイルに区切りテキストを出力します。ほとんどのデータベース管理システムはこのプロセスをサポートしています。このガイドの付録、以下の「MySQLデータベースからテキストファイルにデータを出力する」のセクションで例が示されています。メタファイルはテキストファイルの列をダーウィンコア用語にマップするので、結果のテキストファイルの列ヘッダーとしてダーウィンコア用語を使用する必要はありませんが、エラーを減らすのに役立つ場合があります。一般的に、拡張子に結びついたデータを出力する意図がある場合、単一のコアデータファイルと各拡張子のための単一のファイルを作成することを推奨します。
+.  メタファイルを作成します。ファイルの生成方法は3種類あります。
+.. XMLエディタを使用し、メタファイルのサンプルを参考に手動で作成します。メタファイル形式の完全な説明は、link:http://rs.tdwg.org/dwc/terms/guides/text/index.htm[ダーウィンコア テキストガイド]に記載されています。
+.. {blank}
++
+--
+[.float-right]
+image::figures/dwc-a_assistant.png[]
+
+オンラインアプリケーションのlink:http://tools.gbif.org/dwca-assistant/[ダーウィンコア・アーカイブ アシスタント]を使用して作成します。公開するデータのフィールドを選択し、ファイルに関するいくつかの詳細を提供して、結果のXMLを保存するだけです。これは、公開するフィールドのセットが後で変更されない限り、一度だけ行う必要があります。
+
+WARNING: GBIFはこれ以降このツールをサポートしません。また、イベントコアのサポートは終了しています。公開者は、dwc:taxonID をタクソンコアに、dwc:occurrenceID をオカレンスコアに手動で追加し、それらが明示的に含まれるようにする必要があります。
+--
+
+. データリソースを記述したメタデータファイル（eml.xml）を作成します。xref:gbif-metadata-profile.adoc[GBIF拡張メタデータプロファイル：ハウツーガイド]に詳しい説明があります。メタデータファイルを含めることがベストプラクティスであり、IPTに内蔵されたメタデータエディタを使用することが最も簡単な方法です。
+. データファイル、メタファイル（meta.xml）、メタデータファイル（eml.xml）が同じディレクトリまたはフォルダーにあることを確認します。サポートされている圧縮形式を使用して、フォルダを圧縮すると、DwC-Aファイルが作成されます。
+
+NOTE: IPTで作成したメタデータをRTF文書として出力し、Zookeys、PhytoKeys、BioRisksに「データペーパー」原稿として提出することができます。これらのジャーナルへの「データペーパー」投稿については、それぞれの雑誌での著者向けの規定を参照してください。
+
+== DwC-Asのバリデーション
+
+GBIFは、以下のチェックを行うオンラインlink:https://www.gbif.org/tools/data-validator[DwCアーカイブ バリデーター]を提供しています。
+
+* メタファイル(meta.xml)は有効なXMLであり、link:http://rs.tdwg.org/dwc/terms/guides/text/[ダーウィンコア・テキストガイドライン]いｎ準拠しています。
+* コンテンツが、GBIFネットワーク内に登録されている既知の拡張機能と用語に準拠していること。注：GBIFは、拡張機能を追跡する本番レジストリと開発レジストリを実行します。バリデーターは実動レジストリーを使用します。
+* リソース記述ファイル（eml.xml）が有効なXMLであり、GBIFメタデータプロファイルスキーマおよび公式EMLスキーマに準拠していること。
+* 参照整合性 - 拡張ファイル内のマップされたID用語が既存のコアレコードを参照していること。
+* すべてのコアIDが一意であること。
+* データに逐語的なnull値が見つからないこと。たとえば、NULL や \N など。
+* 分類と位置情報が、一般的なGBIF解釈プロセスに適していること（例：座標が指定された国内に存在する）。
+
+バリデーターを利用するには：
+
+. ValidatorのWebページにあるフォームを使用してDwC-Aをアップロードする。
+. 確認する、承認する
+. レスポンスを確認し、バリデーションエラーに対処する。
+. ファイルが正常に検証されるまで、このプロセスを繰り返す。
+. Contact the GBIF Help Desk if you get stuck (helpdesk@gbif.org).
+
+== GBIFへのDwC-Asの登録
+
+GBIFレジストリにリソースのエントリを作成し、リソースの発見とアクセスを可能にする必要があります。各新規登録は、GBIF参加ノード管理者によって正式に承認された発行機関と関連付けられなければなりません。これは、GBIF参加ノード管理者委員会が求める簡単な品質管理ステップです。
+
+幸いなことにIPTとGBIFのAPIはデータセットの自動登録に対応していますが、DwC-Asを手動で公開する場合は、以下の情報を記載したメールを helpdesk@gbif.org に送信して登録を行ってください。
+
+. データセット名
+. データセットの説明（メタデータファイルからコピー）
+. 公開機関名（GBIFに登録されているもの）
+. その機関との関係
+. データセットURL（圧縮されたDwC-Aの一般公開アドレス）
+
+確認メールと、レジストリに登録されたリソースのURLが届けば完了です。
+
+Advanced users can request permission to register datasets in bulk, by integrating the GBIF API into their existing systems. A https://github.com/gbif/registry/tree/master/registry-examples/src/test/scripts[basic example] is provided as a Linux (Bash) shell script; contact the Help Desk for more information.
+
+== 付録：データの準備
+
+=== 必須用語と推奨用語
+
+ガイド xref:how-to-publish.adoc[GBIF.orgで生物多様性データを公開する方法]では、データの種類ごとに必要な用語と推奨される用語が示されています。
+
+. チェックリストデータ：xref:checklist-data.adoc#required-dwc-fields[必須用語] / xref:checklist-data.adoc#recommended-dwc-fields[推奨用語]
+. オカレンスデータ：xref:occurrence-data.adoc#required-dwc-fields[必須用語] / xref:occurrence-data.adoc#recommended-dwc-fields[推奨用語]
+. サンプリングイベントデータ：xref:sampling-event-data.adoc#required-dwc-fields[必須用語] / xref:sampling-event-data.adoc#recommended-dwc-fields[推奨用語]
+. リソースメタデータ：xref:resource-metadata.adoc#required-dwc-fields[必須用語] / xref:resource-metadata.adoc#recommended-dwc-fields[推奨用語]
+
+=== 文字エンコード
+
+テキスト（データ）ファイルは、UTF-8でエンコードすることをお勧めします。
+
+ファイルの文字コード変換には、Linux・Mac・Windows用の以下のツールを使用することができます。
+
+* https://ja.wikipedia.org/wiki/Iconv
+* http://www.gnu.org/software/libiconv/
+* http://gnuwin32.sourceforge.net/packages/libiconv.htm
+
+例）link:https://linux.die.net/man/1/iconv[*iconv*]を使ってWindows-1252からUTF-8への文字エンコードの変換を行います。
+
+[source, shell]
+----
+iconv -f CP1252 -t utf-8 example.txt > exampleUTF8.txt
+----
+
+=== データベースからのデータ
+
+SQLコマンドを使えば、データベースから区切りテキストファイルを簡単に作成することができます。MySQLの場合、`SELECT INTO outfile` コマンドを使用します。結果のファイルのエンコーディングは、使用するサーバ変数と照合順序に依存し、操作を行う前に変更する必要があるかもしれません。MySQLはデフォルトでNULL値を `\N` としてエクスポートすることに注意してください。これを避けるには、次の例に示すようにIFNULL()関数を使用します。
+
+[source, sql]
+----
+SELECT
+  IFNULL(id, ''), IFNULL(scientific_name, ''), IFNULL(count,'')
+  INTO outfile '/tmp/dwc.txt'
+  FIELDS TERMINATED BY ','
+  OPTIONALLY ENCLOSED BY '"'
+  LINES TERMINATED BY '\n'
+  FROM dwc;
+----
+
+その他に、SQLクエリ/ファンクションを使ったデータ生成のおすすめを以下に挙げます。
+
+* 必要に応じて文字列を連結または分割し、オートニムに注意して完全な学名文字列を作成してください。
+* link:https://ja.wikipedia.org/wiki/ISO_8601[ISO 日付・時刻表記形式]に準拠した日付のフォーマットです (1990-02-03、あるいは日が不明な場合は1990-02、月も不明な場合は1990、範囲を指定するときは1990-02-03/1990-02-28を与えてください)。
+* ネイティブSQLの日付型をパースして年/月/日を作成します
+* UNIONを使用して、2つ以上のテーブル（例：受け入れられる分類群と、シノニムまたは標本や観察）を結合します。
+
+=== DwC-A 例
+
+xref:how-to-publish.adoc[GBIF.orgを通じて生物多様性データを公開する方法]では、データの種類ごとに DwC-As の例を示しています。
+
+. チェックリストデータ：xref:checklist-data.adoc#exemplar-datasets[サンプルデータセット]
+. オカレンスデータ：xref:occurrence-data.adoc#exemplar-datasets[サンプルデータセット]
+. サンプリングイベントデータ：xref:sampling-event-data.adoc#exemplar-datasets[サンプルデータセット]
+. リソースメタデータ：xref:resource-metadata.adoc#exemplar-datasets[サンプルデータセット]

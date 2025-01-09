@@ -1,0 +1,65 @@
+= Supported Databases
+
+This section provides information about the source database types supported by the IPT
+
+== Supported default databases
+
+The IPT can use database connections to import data from tables or views. Currently the following databases are supported out of the box:
+
+* Microsoft SQL Server
+* MySQL
+* Oracle
+* PostgreSQL
+* Sybase
+
+== Adding new JDBC drivers
+
+若您的 IPT 安裝在如 Tomcat 的 servlet 容器中，您可將 JDBC 驅動程式加到 IPT 中。這樣您可支援不同的資料庫，或者變更既有資料庫類型的連線設定。
+
+下列步驟假設您透過 exploded 方式部署 IPT，亦即在應用程式伺服器的 webapps 資料夾中有一個 ipt （或您的任何命名）資料夾。此 IPT 必須先停止以便加入驅動程式。 
+
+=== Add JDBC driver JAR to classpath
+
+First get hold of the JAR file of the driver you want to add, for example download the SQLite jar here: https://bitbucket.org/xerial/sqlite-jdbc/downloads
+
+您得將此 JAR 檔案複製到 webapp 的 classpath 中。最簡單的方式是複製到 ipt/WEB-INF/lib 目錄下。
+
+=== Modify jdbc.properties
+
+In order for the IPT to understand which drivers are available and how to construct the JDBC URL for it, we maintain a simple properties file with all the information. Open `ipt/WEB-INF/classes/jdbc.properties` and inspect the existing entries, for example for PostgreSQL:
+
+----
+# PostgreSQL driver
+pgsql.title=PostgreSQL
+pgsql.driver=org.postgresql.Driver
+pgsql.url=jdbc:postgresql://{host}/{database}
+pgsql.limitType=LIMIT
+----
+
+There are 4 properties that you need to add for each driver. All 4 have to start with the same prefix that you can freely choose without any further meaning:
+
+* `title`: The title to be displayed in the IPT for this driver
+* `driver`: 連線時使用的 Java 驅動程式類別。
+* `url`: 建立建線 URL 的範本。URL 字串中有兩個從設定中取得的變數：`\{host}` 和 `\{database}`。 
+* `limitType`: How to limit the amount of data returned. Possible values are `LIMIT`, `TOP`, `ROWNUM`. This is driver specific.
+
+在上面 PostgreSQL 的範例中，參考link:https://jdbc.postgresql.org/documentation/head/connect.html[PostgreSQL 驅動程式文件]，下面的變更將產生加密的連線：
+
+----
+pgsql.url=jdbc:postgresql://{host}/{database}?sslmode=require
+----
+
+下列範例為 SQLite 驅動程式。這將連結至一檔案，故 URL 範本中不需 `\{host}`。
+
+----
+# SQLite driver
+# uses files only, so {host} is ignored
+# database example on Windows: C:/work/mydatabase.db
+# database example on Linux: /home/leo/work/mydatabase.db
+sqlite.title=SQLite
+sqlite.driver=org.sqlite.JDBC
+sqlite.url=jdbc:sqlite:{database}
+sqlite.limitType=LIMIT
+----
+
+Now you can restart the IPT and use the new driver for mapping SQLite data sources.

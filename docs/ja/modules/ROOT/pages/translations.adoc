@@ -1,0 +1,121 @@
+= 翻訳方法
+
+IPTのユーザーインターフェースとユーザーマニュアルの両方が国際化の恩恵を受けています。国際化はコミュニティの努力であり、誰でも参加することができます。
+
+翻訳は、link:https://crowdin.com/project/gbif-ipt[Crowdin]というオンライン翻訳ツールを使っています。参加するには、link:https://crowdin.com/project/gbif-ipt[Crowdin]にログインし、翻訳したい言語を選択して、「参加」ボタンをクリックします。翻訳担当者が依頼を受け、翻訳チームに追加します。その後、翻訳を開始することができます。Crowdinは直感的な操作で簡単に利用することができます。Crowdinの使い方は、link:https://support.crowdin.com5/crowdin-intro/[Crowdin はじめに]を参照してください。
+
+Crowdin IPTプロジェクトでは、`Glossary`というファイルはユーザーインターフェースにもユーザーマニュアルにも含まれませんが、翻訳された用語の整合性をチェックするために使用されます。その他のファイルは、ユーザーインターフェースかユーザーマニュアルのどちらかに属しています。
+
+== ユーザーインターフェースの翻訳
+
+Translations for the user interface are contained in the file `ApplicationResources_en.properties`. You are welcome to ask mailto:helpdesk@gbif.org[the Help Desk] for an account on https://ipt.gbif-uat.org/[GBIF's development IPT], where new translations will be applied.
+
+image::ipt2/v22/Crowdin-Join.png[]
+
+=== 現在利用できる言語
+
+* フランス語
+* 日本語
+* ポルトガル語
+* ロシア語
+* スペイン語
+* 中国語（繁体字）
+* ペルシャ語（未完成）
+
+ユーザーインターフェースを他の言語に翻訳したい場合は、helpdesk@gbif.org までご連絡ください。
+
+== ユーザーマニュアルの翻訳
+
+ユーザーマニュアルの翻訳は、Crowdinフォルダの`docs/translations`にあります。ユーザーマニュアルはlink:https://docs.asciidoctor.org/asciidoc/latest/[Asciidoctor]で書かれており、翻訳にはいくつかの構文が必要です- たとえば、`+++*太字*, _イタリック_ or `等幅` テキスト+++`です。
+
+特に、相互参照（ページ間やページ内のセクションへのリンク）が翻訳版で機能するように配慮する必要があります。
+
+TIP: Crowdinを使って追加された新しい翻訳は、15～60分後くらいにlink:https://ipt.gbif-uat.org/manual/[このマニュアルのUAT版]に表示されるはずです。
+
+=== プレーンハイパーリンク
+
+これらを翻訳する場合、内容が同等であれば、翻訳版のページにリンクすることが適切です。以下のように翻訳してください。
+
+[source, asciidoctor]
+----
+https://www.gbif.org/the-gbif-network[GBIF's diverse Participants]
+
+https://www.gbif.org/ja/the-gbif-network[GBIFの様々な参加者]
+----
+
+リンクのテキスト（`[角括弧]`の間）が翻訳されていることに注意してください。
+
+=== 同一ページ内相互参照
+
+これらはページ内の場所へのリンクであり、通常は相互参照構文で作成されます。`\<<目的の見出し>>`、および表示されるテキストがリンクが指す見出しと同じでない場合は`\<<目的の見出し,表示文書>>`の形式で作成される場合があります。
+
+したがって、相互参照の翻訳は次のようになります。
+
+[source, asciidoctor]
+----
+click on the button labelled "Add" to open the <<Data Source selection page>>.
+
+clic en el botón "Agregar" para abrir la <<Página de selección del Conjunto de Datos>>.
+----
+
+=== 異なるページの相互参照
+
+さまざまなページへの最も簡単なリンクは、リンクされたページの上部にあります。これらの形式は`\xref:filename.adoc [表示テキスト]`です。表示テキストのみを翻訳する必要があり、ファイル名は変更されません。
+
+[source, asciidoc]
+----
+refer to the xref:doi-workflow.adoc[DOI Workflows] page
+
+consulte la página de xref:doi-workflow.adoc[flujo de trabajo de los DOIs].
+----
+
+より複雑なのは、別のページ内の特定のセクションへのリンクです。これらは、各見出しで自動的に生成されるリンクターゲットを使用する必要があります。見出しテキストのスペースはハイフン（`-`）に置き換えられ、結果は小文字に変換されます。Webブラウザでは、URLバーの`#`の後に表示されるか、コンテンツメニューに表示されるか、見出しの横に[§]記号が表示されます。
+
+次に、相互参照は `xref:filename.adoc#link-target[表示テキスト]`として記述されます。たとえば、`\xref:manage-resources.adoc#resource-managers[リソース管理者について読む]` は \xref:manage-resources.adoc#resource-managers[リソース管理者について読む] のように表示されます。
+
+英語の見出し`Source Data`には、リンクターゲット`source-data`があります。見出しのスペイン語訳である`Conjunto de datos`には、ターゲット`conjunto-de-datos`があります。
+
+[source, asciidoc]
+----
+Files can be uploaded … when xref:manage-resources.adoc#source-data[adding new source data files].
+
+La carga de archivos al se puede … cuando se xref:manage-resources.adoc#conjunto-de-datos[agregan nuevos archivos de conjuntos de datos].
+----
+
+=== 画像とダウンロード
+
+一部のスクリーンショット画像は翻訳でき、その他（英語のテキストなし）はすべての言語で同じにすることができます。デフォルトでは、すべての言語で同じ画像が使用されます。別の画像をlink:https://github.com/gbif/ipt[GitHub]にアップロードする必要があります。`en`をターゲット言語に変更した場合を除いて、同じファイル名とパスでイメージを作成します。
+
+たとえば、ホームメニューページに表示されるデフォルト（英語）の画像は、GitHubの link:https://github.com/gbif/ipt/blob/master/docs/en/modules/ROOT/assets/images/ipt2/home/IPTHome.png[`docs/en/modules/ROOT/assets/images/ipt2/home/IPTHome.png`]に保存され、スペイン語の翻訳は https://github.com/gbif/ipt/blob/master/docs/es/modules/ROOT/assets/images/ipt2/home/IPTHome.png[`docs/es/modules/ROOT/assets/images/ipt2/home/IPTHome.png`]にあります。
+
+この画像をマニュアルに含めるための構文である `image::ipt2/home/IPTHome.png[]` は、翻訳を必要としません。
+
+=== Japanese, Chinese and Korean
+
+These languages do not use spaces between words, so some abbreviated syntax used in the English text will not work.
+
+* Plain hyperlinks must be prefixed with `link:`. The short form without `link:` only works if there is a space before the `https:` or `http:`.
++
+[source, asciidoc]
+----
+Be sure to sign up to the https://lists.gbif.org/mailman/listinfo/ipt/[IPT Mailing List], which serves as a support group for IPT users.
+
+IPTユーザーのサポートグループであるlink:https://lists.gbif.org/mailman/listinfo/ipt/[IPTメーリングリスト]に必ずご登録ください。
+----
+
+* *Bold*, _italic_ and `monospace` text formatted with single `*`, `_` and `+++`+++` characters only works if there are spaces outside those characters.  Where there are no spaces, the characters must be doubled:
++
+[source, asciidoc]
+----
+Double click the executable to start installation wizard. *Do* fill information to specify *the connector port, Tomcat administrator login credentials* without changing the Roles. If you forget to provide the credential information, you’ll have to edit the `conf/tomcat-users.xml` file from the Tomcat configuration directory, then restart Tomcat to flush the privileges. (Note that when testing this scenario, the default suggested *connector port* settings worked).
+
+実行ファイルをダブルクリックすると、インストールウィザードが起動します。ロールを変更せずに、コネクタポート、**Tomcat管理者ログイン情報**を**入力**します。資格情報を記入し忘れた場合は、Tomcatの設定ディレクトリから``conf/tomcat-users.xml``ファイルを編集し、Tomcatを再起動して、権限をフラッシュする必要があります。(このシナリオをテストしたとき、デフォルトで提案された**コネクタ・ポート**設定が機能したことに注意してください）。
+----
+
+=== 言語
+
+* Spanish (complete)
+* Japanese (complete)
+* 中国語（繫体字）
+
+ユーザーマニュアルを別の言語に翻訳したい場合は、helpdesk@gbif.orgにメールしてください。また、翻訳されていないセクションは英語で表示されるため、マニュアのル全体を翻訳する必要はありません。。

@@ -1,0 +1,25 @@
+= IPTのスタイリング方法
+
+バージョン2.6以降で簡単なカスタマイズを行う場合は、xref:administration.adoc[UI管理]をご利用ください。
+
+[WARNING]
+====
+`custom.css`を使用したカスタマイズはバージョン2.5.0では動作しませんので、link:https://github.com/gbif/ipt/issues/1634[こちら]を参照してください。
+
+基本的なカスタマイズは、`$tomcat/webapps/ipt/styles/main.css`を編集することで行うことができます。
+====
+
+IMPORTANT: IPTのスタイリングには、Tomcatのようなサーブレットコンテナを使用したデプロイが必要です。LinuxパッケージやDockerからのデプロイでは、フォワードプロキシで`custom.css`ファイルをオーバーライドすることでしか、スタイルを変更することができません。
+
+== Introduction
+
+IPTのカスタマイズ方法と、IPTのバージョンアップ時にカスタマイズを保持する方法を説明します。
+
+簡単に言えば、CSSオーバーライドを適用することでカスタマイズが可能になります。
+
+. `custom.css`で希望のCSS オーバーライドを適用（例えば異なるカラースキームを選択）します。このファイルは、デプロイされたWARフォルダ（例：`$tomcat/webapps/ipt/styles`）の中にあります。オリジナルのlink:https://github.com/gbif/ipt/blob/master/src/main/webapp/styles/custom.css[custom.css]には、ボタンやリンクなどで使用する色を変更するためのCSSオーバーライドの例があらかじめ用意されています。
+. 完了後、`custom.css`ファイルを安全な場所にバックアップしてください。`custom.css`ファイルはIPTのアップグレードのたびに上書きされてしまうので、再度追加することができます。
+
+デフォルトのCSSを変更した場合の効果を、スクリーンショットでご覧ください。
+
+image::ipt2/customization/IPTCustomizedStyle.png[]

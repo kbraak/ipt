@@ -1,0 +1,361 @@
+= GBIFメタデータプロファイル - ハウツーガイド
+
+バージョン 2.1.
+
+image::figures/cover_art_adiatum.png[]
+
+== 文書管理
+
+|===
+| バージョン | 説明                  | リリース日 | 作成者
+
+| http://links.gbif.org/gbif_metadata_profile_how-to_en_v1[1.0]     | 関連文書の整合性チェック、製品サイトへのリンクの更新、現在の機能を反映したテキストと画像の更新 | 2011年3月1日     | KB, BK, MR
+| https://github.com/gbif/ipt/wiki/GMPHowToGuide[2.0]     | wikiに移行、大幅な編集  | 2017年6月19日      | Kyle Braak
+| xref:gbif-metadata-profile.adoc[2.1]     | AsciiDoctorドキュメントに移行 | 2021年5月25日      | Matthew Blissett
+|===
+
+== 推奨される引用
+
+// The date uses the last change, ignoring formatting etc.
+> GBIF (2011). GBIF Metadata Profile – How-to Guide, (contributed by Ó Tuama, Éamonn, Braak, K. Remsen, D.), Copenhagen: GBIF Secretariat ISBN: 87-92020-24-0, accessible online at: https://ipt.gbif.org/manual/en/ipt/{page-version}/gbif-metadata-profile
+
+_カバーアート：John Giez, Maidenhair fern sporophyte, Adiatum sp._
+
+== Introduction
+
+GBIFネットワークを通じてデータを公開するためには、データセットの出所と範囲を文書化することが必要です。データセットの文書化は「リソースメタデータ」と呼ばれ、利用者がデータセットの利用適性を評価できるようにします。
+
+GBIFメタデータプロファイル（GMP）に準拠したメタデータ文書を作成するには、さまざまな方法があります。このハウツーガイドでは、GBIF Integrated Publishing Toolkit（IPT）のメタデータエディタ、GBIFリソースメタデータテンプレート（保留）の使用、またはメタデータドキュメントの手動生成など、最も一般的な方法を説明します。また、本ガイドは、GBIFメタデータプロファイル自体のリファレンスガイドとしても機能します。
+
+データセットを説明するメタデータもダーウィンコア・アーカイブ（DwC-A）を使って公開されている場合、メタデータファイルは、それが説明するデータ（ダーウィンコア用語に基づく）と一緒に束ねられたDwC-Aファイルに含まれることになります。完全なDwC-Aを作成するためのヘルプは、xref:dwca-guide.adoc[ダーウィンコア・アーカイブ - ハウツーガイドを参照してください。
+
+メタデータ文書が作成され、検証されると、公開の準備が整います。
+
+記述されたデータリソースが完全に文書化され、GBIFレジストリに登録されることが、メタデータを公開する最終的な目的です。そうすることで、データリソースはグローバルに発見できるようになります。
+
+== メタデータ・パブリッシング・ソリューション
+
+IPTを使用してサンプリングイベントデータ、オカレンスデータ、チェックリストデータを公開する場合、メタデータ作成機能が組み込まれており、これを使用してGMPに準拠したメタデータドキュメントを添付して作成することが可能です。特に複数のメタデータ文書を作成・管理する必要がある場合は、データを公開していなくてもこのツールでメタデータを作成すると便利です。一方、数個のメタデータ文書しか必要としない場合は、サンプル文書を修正するなどして手動で生成するのが最も簡単かもしれません。それぞれの方法について以下で説明します。
+
+=== IPTによるメタデータの公開
+
+The IPT contains a built-in metadata editor that allows you to easily fill in resource metadata, validate it, and produce an EML file that is always valid XML. Users are recommended to reuse an https://www.gbif.org/data-hosting-centres[IPT data hosting centre^] instead of installing and maintaining their own installation.
+
+IPTには計12種類のメタデータフォームがあり、メタデータの入力を論理的に整理しています。
+
+1.  基本のメタデータ
+2.  地理的範囲
+3.  生物分類学的範囲
+4.  時間的範囲
+5.  その他のキーワード
+6.  アソーシエート
+7.  プロジェクトデータ
+8.  収集方法
+9.  引用論文
+10. コレクションデータ
+11. 物理データ
+12. 追加のメタデータ
+
+xref:manage-resources.adoc#metadata[IPTユーザーマニュアル]では、各フォームとそのフィールドについて詳しく説明しています。フォームには、ユーザーが要素の意味を理解するためのヘルプダイアログが用意されています（図1）。
+
+."Personnel Identifier"という用語のヘルプダイアログのイメージ
+image::figures/ipt_help_dialog.png[]
+
+適切なデータが入力されていることを確認するため、フィールドは検証され、記入を補助する情報メッセージがユーザーに返されます（図2）。
+
+.Eメールフィールドに正しくないEメールアドレスが記入された場合に表示されるフィールド検証メッセージのイメージ
+image::figures/ipt_field_validation.png[]
+
+参考までに、GBIFメタデータプロファイルの各要素の説明と、その例を以下に示します。
+
+IPTはメタデータ文書を公開し、GBIFメタデータプロファイルに照らして検証されるようにするので、ユーザーは検証を気にする必要はありません。
+
+メタデータが変更されたら、ユーザーはドキュメントを更新し、リソース管理ページの「公開」ボタンをクリックするだけで、新しいバージョンのドキュメント（リソース）を公開することができます（図3）。
+
+.IPTのリソース管理ページの「公開済みバージョン」セクションのイメージ
+image::figures/ipt_published_versions.png[]
+
+リソース管理者は、いつでもインターネット上でリソースを公開し、その後GBIFに登録することで、グローバルに発見できるようにすることを選択することができます。
+
+=== GBIFメタデータテンプレートを用いたメタデータの公開
+
+GBIFメタデータテンプレートは、原稿のテンプレートと同様に、リソースのメタデータを簡単に記入するためのものです。メタデータ作成者は、テンプレートにデータを入力した後、メタデータエディタを介してIPTにデータを入力する必要があります。必須項目はすべてはっきり表示されます。IPTのメタデータエディタは、すべての必須フィールドが入力されていること、および国名フィールドなど統制語彙を使用するフィールドが正しく入力されていることを確認します。また、IPTは生成されたメタデータドキュメントが有効なXMLであることを確認し、GBIFメタデータプロファイルに照らして検証を行います。最終的には、この2段階のプロセス（1. メタデータテンプレート → 2. IPTメタデータエディタ）を用いて、有効なリソースメタデータ・ドキュメントを生成することができます。
+
+フィールドの意味について疑問がある場合は、このガイドを参照して、対応する要素の説明とその例を調べてみてください。
+
+=== メタデータを手動で公開する
+
+GBIFメタデータプロファイルの最新バージョン（*1.1*）に準拠した独自のEML XMLファイルを作成したい非IPTユーザー向けの簡単な手順です。以下のリストを参照し、正しく完成させてください。
+
+==== 手順
+
+1. `<eml:eml>`ルート要素には、GBIFメタデータプロファイル バージョン1.1向けのスキーマロケーションを使用します。<eml:eml ... xsi:schemaLocation="eml://ecoinformatics.org/eml-2.1.1 \http://rs.gbif.org/schema/eml-gbif-profile/1.1/eml.xsd" ...>
+2.  `<eml:eml>`ルート要素内に`packageId`属性を設定します。`packageId`は、そのドキュメントで固定されているグローバルにユニークなIDである必要があります。文書が変更されるたびに、新しい`packageId`が割り当てられなければなりません。例えば、最初のバージョンのドキュメントには`packageId='619a4b95-1a82-4006-be6a-7dbe3c9b33c5/eml-1.xml'、2番目には`packageId='619a4b95-1a82-4006-be6a-7dbe3c9b33c5/eml-2.xml'のように指定します。
+3. スキーマで指定されたすべての必須メタデータ要素と、必要な追加メタデータ要素を記入します。GBIFメタデータプロファイルの旧バージョンを使用している既存のEMLファイルを更新する場合、本バージョンの新機能のリストについては、以下のセクションを参照してください。
+4. EMLファイルが有効な XMLであることを確認します。<<Validation of metadata,このセクション>>を参照してください。
+
+== メタデータのバリデーション
+
+XMLメタデータ文書は、XML文書として、またGMLスキーマに対する検証として有効であることが不可欠です。XMLメタデータ文書がこれを満たす方法として、link:https://www.oxygenxml.com/[Oxygen XML Editor]は優れたツールで、バリデーターを内蔵しており、有用です。またJavaプログラマーは、例えばGBIFレジストリ-メタデータ・プロジェクトのlink:https://github.com/gbif/registry/blob/master/registry-metadata/src/main/java/org/gbif/registry/metadata/EmlValidator.java[EmlValidator.java]を使用して、これを行うこともできます。
+
+== GMPのバージョン1.1では、1.0.2から何が変わったのでしょうか？
+
+1. *機械可読ライセンスへの対応。*機械可読ライセンスを提供する方法については、xref:license.adoc[こちら]をご覧ください。
+2. 複数のcontacts、creators、metadataProvider、project personnelに対応。
+3. あらゆる代理人のuserIdsをサポート（例：ORCID）
+4. データセットに変更が加えられた頻度に関する情報提供のサポート。
+5. プロジェクト識別子の提供（例：同じプロジェクトの下で作られたデータセットを関連付ける）に対応。
+6. 説明文は、1つの段落にまとめるのではなく、別々の段落に分けることができます。
+7. 複数のコレクションに関する情報提供に対応。
+
+== 付録
+
+=== GBIFメタデータプロファイルの背景
+
+メタデータは文字通り「データに関するデータ」であり、データ管理システムにとって不可欠な要素です。GBIFの文脈では、リソースはデータセットであり、関連するデータの集まりとして緩やかに定義され、その粒度はデータカストディアンによって決定されます。メタデータは、いくつかの完全性のレベルで存在します。一般に、メタデータはデータのエンドユーザーに対して以下のことを可能にするものでなければなりません。
+
+1. データの存在を識別・確認でき、
+2. データへのアクセス方法、取得方法を知ることができて、
+3. 使用目的への適合性を理解し、そして
+4. データの転送（コピーの取得）方法を知ることができる。
+
+GBIFメタデータプロファイル（GMP）は、GBIFlink:http://www.gbif.org[データポータル]におけるデータセットレベルのリソースの記述方法を標準化するために開発されました。このプロファイルは、link:http://marinemetadata.org/references/iso19139[ISO 19139メタデータプロファイル]など、他の一般的なメタデータ形式に変換することができます。
+
+GMPでは、識別に必要な最小限の必須要素を定めていますが、メタデータができるだけ記述的で完全なものとなるように、できるだけ多くの要素を使用することが推奨されます。
+
+== メタデータの要素
+
+GBIFメタデータプロファイルは、主にlink:{eml-location}/index.html[Ecological Metadata Language (EML)]をベースにしています。GBIFプロファイルは、EMLのサブセットを利用し、EML仕様では対応できない追加要件を含むように拡張しています。以下の表は、プロファイルの要素の簡単な説明と、関連する場合、詳細なEMLの説明へのリンクを提供します。要素は次のように分類されます。
+
+* データセット（リソース）
+* プロジェクト
+* 人物・機関
+* キーワードセット（一般的なキーワード）
+* 範囲
+** 生物分類学的範囲
+** 地理的範囲
+** 時間的範囲
+* Methods
+* 知的財産権
+* 追加メタデータ + 関連するNCD（Natural Collections Descriptions Data）
+
+=== データセット（リソース）
+
+データセットフィールドは、1つのデータセット（リソース）に関する要素を持ちます。
+
+|===
+| 用語名 | 説明
+
+| {eml-location}/eml-resource.html#alternateIdentifier[alternateIdentifier] | これはEML文書のUUID（Universally Unique Identifier）であり、データセットのUUIDではありません。この用語はオプションです。異なる識別子のリストを供給することができます。例：619a4b95-1a82-4006-be6a-7dbe3c9b33c5
+
+| {eml-location}/eml-resource.html#title[title] | リソースを他の似たリソースと区別するのに十分なテキストでの説明。特にタイトルを複数の言語で表現しようとする場合、複数のタイトルを提供することができます（English/enでない場合、言語を示すために「xml:lang」属性を使用します）。例： Vernal pool amphibian density data, Isla Vista, 1990-1996.
+
+| {eml-location}/eml-resource.html#creator[creator] | リソース作成者は、リソース自体の作成に責任を持つ個人または組織です。詳しくは「人と組織」の項を参照してください。
+
+| {eml-location}/eml-resource.html#metadataProvider[metadataProvider] | metadataProviderは、リソースのドキュメントを提供する責任を負う人または組織です。詳細は「人と組織」の項を参照してください。
+
+| {eml-location}/eml-resource.html#associatedParty[associatedParty] | associatedPartyは、リソースに関連する他の個人または組織です。これらの関係者は、リソースの作成または維持において様々な役割を担うことがあり、これらの役割は「role」要素で示す必要があります。詳細は「人と組織」の項を参照してください。
+
+| {eml-location}/eml-resource.html#contact[contact] | 連絡先フィールドには、このデータセットの連絡先情報が含まれています。これは、データセットの使用や解釈について質問がある場合に連絡する個人または機関です。詳しくは「人と組織」の項を参照してください。
+
+| {eml-location}/eml-resource.html#pubDate[pubDate] | リソースが公開された日付です。CCYY（4桁の年）、またはCCYY-MM-DD（完全な年、月、日）の形式で表現する必要があります。月と日はオプションであることに注意してください。フォーマットはISO 8601に準拠する必要があります。例：2010-09-20
+
+| {eml-location}/eml-resource.html#language[language] | リソース（メタデータではない）の記述に用いられている言語。これはよく知られた言語名でもよいし、より正確にISO言語コードを用いて記述しても構いません。GBIFはISO言語コード（https://api.gbif.org/v1/enumeration/language）を使用することを推奨しています。例：English
+
+| {eml-location}/eml-resource.html#additionalInfo[additionalInfo] | リソース管理者がデータセットに含めることを希望する、省略・指示・その他の注意事項に関する情報。基本的には、他のリソースメタデータのフィールドで特徴付けられないあらゆる情報です。
+
+| {eml-location}/eml-resource.html#url[url] | オンラインで公開されているリソースのURLです。
+
+| {eml-location}/eml-resource.html#abstract[abstract] | ドキュメント化されているリソースの簡単な概要。オンラインで利用可能なリソースのURLです。
+|===
+
+=== プロジェクト
+
+プロジェクトフィールドは、このデータセットが収集されたプロジェクトに関する情報を含みます。プロジェクト担当者、資金、調査地域、プロジェクト設計、関連プロジェクトなどの情報が含まれます。
+
+|===
+| Term | Definition
+
+| {eml-location}/eml-project.html#title[title]  | 研究プロジェクトの説明的なタイトル。例：Species diversity in Tennessee riparian habitats
+
+| {eml-location}/eml-project.html#personnel[personnel] | 人事欄は、連絡先やプロジェクトでの役割など、研究プロジェクトに関わる人々を記録するために使用されます。
+
+| {eml-location}/eml-project.html#funding[funding] | 資金提供欄は、プロジェクトの資金源に関する情報を提供するために使用されます。例えば、助成金および契約番号、資金提供者の名前と住所など。
+
+| {eml-location}/eml-project.html#studyAreaDescription[studyAreaDescription] | studyAreaDescription フィールドは、研究プロジェクトに関連する物理的な領域を記録します。調査地の地理的、時間的、分類学的な範囲や、気候、地質、土壌、撹乱など関心のある領域（テーマ）についての記述を含めることができます。
+
+| {eml-location}/eml-project.html#designDescription[designDescription] | designDescriptionフィールドには、研究デザインに関する一般的なテキスト記述が含まれます。目標、動機、理論、仮説、戦略、統計設計、実際の作業に関する詳細な説明を含むことができます。また、文献の引用も研究デザインの記述に使用されることがあります。
+|===
+
+=== 人物・機関
+
+人または組織のいずれかを表すことができるいくつかのフィールドがあります。以下は、人または組織を表すために使用されるさまざまなフィールドのリストです。
+
+|===
+| 用語 | 定義
+
+| {eml-location}/eml-party.html#givenName[givenName] | individualNameフィールドのサブフィールド。givenNameフィールドは、リソースに関連する個人のファーストネームで、（必要に応じて）アルファベット表記を意図していない、その他の名前に使用することができます。例：Jonny
+
+| {eml-location}/eml-party.html#surName[surName] | individualNameフィールドのサブフィールド。surnameフィールドは、リソースに関連する個人の姓に使用されます。これはふつう個人の姓で、例えば、文献の引用時に言及される名前です。例：Carson
+
+| {eml-location}/eml-party.html#organizationName[organizationName] | リソースに関連する組織のフルネーム。このフィールドは、記述されるリソースに関連する機関または組織全体を記述することを意図しています。例：National Center for Ecological Analysis and Synthesis
+
+| {eml-location}/eml-party.html#positionName[positionName]| このフィールドは、特定の人物や完全な組織名の代わりに使用されることを意図しています。その役割を担う人物が頻繁に変わるのであれば、一貫性を保つために役職名を使用するのがよいでしょう。このフィールドは、'organizationName'および'individualName'と共に使用され、1つの論理的なオリジネーターを構成することに注意してください。このため、individualNameが「Joe Smith」だけのオリジネーターは、nameが「Joe Smith」でorganizationNameが「NSF」のオリジネーターと同じではありません。また、positionNameは、その地位の個人のみがデータパッケージのオリジネーターとみなされる場合を除き、individualNameと組み合わせて使用されるべきではありません。positionNameがorganizationNameと共に使用される場合、organizationNameにおいて、そのpositionNameに就いているすべての人がデータパッケージのオリジネーターであることを意味します。例：HAST herbarium data manager
+
+| {eml-location}/eml-party.html#electronicMailAddress[electronicMailAddress] | Eメールアドレスは、その団体のEメールアドレスである。インターネットSMTPメールアドレスを想定しており、ユーザー名の後に@記号、その後にメールサーバーのドメイン名アドレスで構成される必要があります。例：jcuadra@gbif.org
+
+| {eml-location}/eml-party.html#deliveryPoint[deliveryPoint] | addressフィールドのサブフィールドで、リソースの責任者の実際の住所または電子アドレスを記述します。配送先フィールドは、郵便通信のための物理的な住所に使用されます。例：GBIF Secretariat, Universitetsparken 15
+
+| {eml-location}/eml-party.html#role[role] | このフィールドで、当事者がリソースに関して果たした役割を記述します。例：技術者、査読者、研究責任者等
+
+| {eml-location}/eml-party.html#phone[phone] | 電話番号欄には、責任者の電話番号（音声電話、FAX）についての情報を記述します。例：+4530102040
+
+| {eml-location}/eml-party.html#postalCode[postalCode] | リソースの責任者の実際の住所または電子アドレスを記述する、アドレスフィールドのサブフィールド。郵便番号は米国のZIPコードに相当し、国際的な住所へのルーティングに使用される番号です。 例：52000.
+
+| {eml-location}/eml-party.html#city[city] | リソースの責任者の実際の住所または電子アドレスを記述する、アドレスフィールドのサブフィールド。cityフィールドは、特定のリソースに関連する連絡先の都市名として使用される。例：San Diego
+
+| {eml-location}/eml-party.html#administrativeArea[administrativeArea] | リソースの責任者の実際の住所または電子アドレスを記述する、アドレスフィールドのサブフィールド。行政区域フィールドは、米国では「state」、カナダでは「Province」に相当します。このフィールドは、多くの種類の国際的な行政区域に対応することを意図しています。例：Colorado
+
+| {eml-location}/eml-party.html#country[country] | リソースの責任者の実際の住所または電子アドレスを記述する、アドレスフィールドのサブフィールド。国名フィールドは、連絡先の国名に使用されます。国名は、ほとんどの場合、ISO 3166の国名コードリストに由来しています。例：Japan
+
+| {eml-location}/eml-party.html#onlineUrl[onlineUrl] | 関連するオンライン情報（通常はWebサイト）へのリンクです。当事者が組織を代表している場合、これはウェブサイトまたはその組織に関する他のオンライン情報のURLです。当事者が個人の場合は、個人のウェブサイトや、当事者に関するその他の関連するオンライン情報である場合があります。例：https://www.example.edu/botany
+|===
+
+=== KeywordSet（一般的なキーワード）
+
+keywordSetフィールドはkeywordとkeywordThesaurus要素のラッパーであり、両方とも同時に必要です。
+
+|===
+| 用語         | 定義
+
+| {eml-location}/eml-resource.html#keyword[keyword] | リソースを簡潔に説明する、またはリソースに関連するキーワード・キーフレーズ。各キーワードフィールドは、1つのキーワードのみを含むべきです（つまり、キーワードは、カンマや他の区切り文字で分離してはなりません）。例：biodiversity
+
+| {eml-location}/eml-resource.html#keywordThesaurus[keywordThesaurus]| キーワードの元となった公式キーワードシソーラスの名前。これはkeyword要素とともにkeywordSetを構成するために必要なので、公式シソーラス名が存在しない場合はこの要素を削除せずに、"N/A"などのプレースホルダ値を保持しておいてください。例：IRIS keyword thesaurus
+|===
+
+=== 範囲
+
+リソースのカバー範囲を、*空間的*な範囲、*時間的*な範囲、*分類学的*な範囲の観点から記述しています。
+
+=== 生物分類学的範囲
+
+リソースに関する分類学的情報のためのコンテナ。1つまたは複数の分類体系の種名（または上位のランク）のリストが含まれます。分類は入れ子にせず、1つずつ順番に並べることに注意してください。
+
+|===
+| 用語                 | 定義
+
+| {eml-location}/eml-coverage.html#generalTaxonomicCoverage[generalTaxonomicCoverage] | 分類学的範囲は、リソースに関する分類学的情報のためのコンテナです。これには、1つまたは複数の分類体系からの種名（または上位のランク）のリストが含まれます。データセットまたはコレクションで扱われる分類群の範囲についての説明。コンマで区切られた単純な分類群のリストを使用します。例：「すべての維管束植物は科または種まで同定され、コケと地衣類はコケまたは地衣類として同定された。」
+
+| {eml-location}/eml-coverage.html#taxonomicClassification[taxonomicClassification] | データセットまたはコレクションで扱われる分類群の範囲に関する情報。
+
+| {eml-location}/eml-coverage.html#taxonRankName[taxonRankName]| Taxon rank値が提供される分類階級の名前。例：phylum、class、genus、species
+
+| {eml-location}/eml-coverage.html#taxonRankValue[taxonRankValue] | 記載される分類群の分類階級を表す名称。例：Acerは属のランク値、rubrumは種のランク値の例で、合わせて赤カエデの通称を示します。Kingdomから始めて、可能な限り詳細なレベルまでランクを含めることが推奨されます。
+
+| {eml-location}/eml-coverage.html#commonName[commonName]              | 該当する一般名；これらの一般名は、適切であれば生物群の一般的な説明でも構いません。例：無脊椎動物、水鳥
+|===
+
+=== 地理的範囲
+
+リソースに関する空間情報を格納するコンテナで、全体のカバー範囲を示す境界ボックス（緯度経度）を設定できるほか、任意のポリゴンを除外して記述することも可能です。
+
+|===
+| 用語                | 定義
+
+| {eml-location}/eml-coverage.html#geographicDescription[geographicDescription] | データセットの地理的な領域に関する短いテキスト記述。テキスト記述は、データセットの範囲が"boundingCoordinates"でうまく記述できない場合に、地理的な設定を提供するために特に重要です。例："Manistee River watershed", "extent of 7 1/2 minute quads including any property belonging to Yellowstone National Park"など。
+
+| {eml-location}/eml-coverage.html#westBoundingCoordinate[westBoundingCoordinate]| バウンディングボックスのWマージンを記述する、boundingCoordinatesフィールドのサブフィールドです。記述されているバウンディングボックスの最西端の経度（10進数）を示します。例：-18.25, +25, 45.24755.
+
+| {eml-location}/eml-coverage.html#eastBoundingCoordinate[eastBoundingCoordinate]| バウンディングボックスのEマージンを記述する、boundingCoordinatesフィールドのサブフィールドです。記述されているバウンディングボックスの最東端の経度（10進法）を示します。例：-18.25, +25, 45.24755.
+
+| {eml-location}/eml-coverage.html#northBoundingCoordinate[northBoundingCoordinate] | バウンディングボックスのNマージンを記述する、boundingCoordinatesフィールドのサブフィールドです。記述されているバウンディングボックスの最北端の緯度（10進法）を示します。例：-18.25, +25, 65.24755.
+
+| {eml-location}/eml-coverage.html#northBoundingCoordinate[southBoundingCoordinate] | バウンディングボックスのSマージンを記述する、boundingCoordinatesフィールドのサブフィールドです。記述されているバウンディングボックスの最南端の緯度（10進法）を示します。例：-118.25, +25, 84.24755.
+|===
+
+=== 時間的範囲
+
+このコンテナでは、範囲を単一時点、複数時点、または日付の範囲にすることができます。
+
+|===
+| 用語       | 定義
+
+| {eml-location}/eml-coverage.html#beginDate[beginDate] | rangeOfDatesフィールドのサブフィールドです。これは、複数の日付範囲を記録するためにendDateフィールドと複数回使用することができる、ある期間の開始を意味する単一のタイムスタンプです。カレンダー日付フィールドは、年、月、日を与え、日付を表現するために使用されます。書式はISO 8601に準拠したものでなければなりません。EMLで推奨される書式はYYYY-MM-DDで、Yは4桁の年、Mは2桁の月コード（01〜12、1月＝01）、Dは2桁の月日（01〜31）です。このフィールドは、日付の年の部分のみを入力する場合にも使用できます。例：2010-09-20
+
+| {eml-location}/eml-coverage.html#endDate[endDate]| rangeOfDatesフィールドのサブフィールドです。これは、複数の日付範囲を記録するためにbeginDateフィールドと複数回使用することができる、ある期間の終了を意味する単一のタイムスタンプです。カレンダー日付フィールドは、年、月、日を与え、日付を表現するために使用されます。書式は、国際標準化機構の規格8601に準拠したものでなければなりません。EMLで推奨される書式はYYYY-MM-DDで、Yは4桁の年、Mは2桁の月コード（01〜12、1月は01）、Dは2桁の月日（01〜31）です。このフィールドは、日付の年の部分のみを入力する場合にも使用できます。例：2010-09-20
+
+| {eml-location}/eml-coverage.html#singleDateTime[singleDateTime] | SingleDateTimeフィールドは、イベントの単一の日時を記述するためのものです。
+|===
+
+=== Methods
+
+このフィールドは、リソースの収集に使用された科学的方法を記録します。ツール、機器の校正、ソフトウェアなどの項目に関する情報も含まれます。
+
+|===
+| 用語            | 定義
+
+| {eml-location}/eml-methods.html#methodStep[methodStep] | methodStepフィールドは、データオブジェクトを生成するために行われた一連の手順を記録する要素のセットを繰り返し使用できます。これには、手順のテキスト記述、関連文献、ソフトウェア、計測器、ソースデータ、および実施された品質管理措置が含まれます。
+| {eml-location}/eml-methods.html#qualityControl[qualityControl] | qualityControlフィールドには、関連するメソッドステップから得られるデータの品質を管理、または評価するために取られた措置を記述することができます。
+
+| {eml-location}/eml-methods.html#sampling[sampling]  | 調査の地理的、時間的、分類学的範囲を含むサンプリング手順の説明です。
+
+| {eml-location}/eml-methods.html#studyExtent[studyExtent] | サンプリングフィールドのサブフィールドです。coverageフィールドは、特定のサンプリングエリア、サンプリング頻度（時間的境界、出現頻度）、およびサンプリングされた生物群（分類学的範囲）をテキストで記述することができます。フィールドstudyExtentは、特定のサンプリングエリアとサンプリング頻度（時間的境界、出現頻度）の両方を表します。geographic studyExtentは通常、"studyAreaDescription"に記載されたより広い範囲の代用（代表的な地域）である。
+
+| {eml-location}/eml-methods.html#samplingDescription[samplingDescription] | サンプリングフィールドのサブフィールドです。samplingDescriptionフィールドは、研究プロジェクトで使用されたサンプリング手順について、テキストベース・人間可読な説明を記入できます。この要素の内容は、ジャーナル論文のメソッドセクションに見られるサンプリング手順の記述と同様です。
+|===
+
+=== 知的財産権
+
+リソースの権利管理に関する声明文、またはそのような情報を提供するサービスへのリファレンスが含まれています。
+
+|===
+| 用語          | 定義
+
+| {eml-location}/eml-dataset.html#purpose[purpose] | このデータセットの目的についての説明。
+
+| {eml-location}/eml-resource.html#intellectualRights[intellectualRights] | リソースの権利管理に関する記述、またはその情報を提供するサービスのリファレンス。権利情報には、知的財産権（IPR）、著作権、各種財産権などが含まれます。データセットの場合、この権利には使用に関する要件、帰属に関する要件、または所有者が課したいその他の要件が含まれる場合があります。例：© 2001 Regents of the University of California Santa Barbara. Free for use by all individuals provided that the owners are acknowledged in any use or publication.
+|===
+
+=== 追加メタデータ + 関連するlink:http://www.tdwg.org/activities/ncd/[Natural Collections Description Data (NCD)]
+
+追加メタデータ +
+関連ナチュラルコレクション記述データ（NCD）追加メタデータフィールドは、記述されるリソースに関連する他のあらゆるメタデータを格納するコンテナです。このフィールドにより、EMLはXMLベースのあらゆるメタデータをこの要素に含めることができ、拡張性があります。GMPでは、ISO
+19139に準拠するために必要な要素と、NCD（ナチュラルコレクション記述）要素のサブセット を提供します。
+
+|===
+| 用語                 | 定義
+
+| dateStamp | メタデータ文書が作成または変更された日付と時刻。例：2002-10-23T18:13:51.235+01:00
+
+| metadataLanguage | メタデータ文書（メタデータで記述されるリソースとは異なる）が記述されている言語。ISO 639-2/Tの3文字の言語コードとISO 3166-1の3文字の国コードで構成される。例：en_GB
+
+| hierarchyLevel | メタデータが適用されるデータセットレベル。デフォルトは"dataset"になっています。例：dataset
+
+| {eml-location}/eml-literature.html#citation[citation] |作品自体の引用です。See {eml-location}/eml-literature.html#citation[eml]
+
+| bibliography | データセットに関連した、または使用された文献のリスト（下記参照）。
+
+| physical |  データオブジェクトの内部・外部の特性や分布を記述させるすべての要素のコンテナ要素（例：dataObject、dataFormat、distribution）。繰り返すことができます。
+
+| resourceLogoUrl | リソースに関連するロゴのURL。例：http://www.gbif.org/logo.jpg
+
+| parentCollectionIdentifier | コレクションフィールドのサブフィールドです（オプション）。このサブコレクションの親コレクションに与えられる識別子で、コレクションとサブコレクションの階層を構築することができます。
+
+| collectionName | コレクションフィールドのサブフィールドです（オプション）。ローカル言語でのコレクションの正式名称です。
+
+| collectionIdentifier | コレクションフィールドのサブフィールドです（オプション）。コレクションのURI（LSIDまたはURL）です。RDFでは、コレクションリソースのURIとして使用されます。
+
+| formationPeriod | コレクションが収集された期間についてのテキスト記述。例："Victorian", or "1922 - 1932", or "c. 1750".
+
+| livingTimePeriod | 生物試料が生きていた期間（古生物学的コレクションの場合）。
+
+| specimenPreservationMethod | 非生物コレクションの物理的な劣化を防ぐために使用されたプロセスまたは技法を示すピックリストキーワード。Specimen Preservation Method Type Term語彙からのインスタンスが含まれることが期待されます。例：formaldehyde
+
+| jgtiCuratorialUnit
+a| 定量的な記述子（検体数、サンプル数、バッチ数）。実際の定量化は、以下の方法でカバーできます。
+
+. 実際の定量化は、コレクション内の「JGI-units」の正確な数と不確かさの尺度（±x）でカバーできます； 
+. 数値の範囲（x～x）で、最大値が省略された場合、最小値が正確な数を表します。
+  
+議論の結果、定量化は、まだデジタル化されていない標本だけでなく、すべての標本を包含する必要があるとの結論に達しました。これは、あまり頻繁に数を更新する必要がないようにするためです。非公開データ（デジタル化されていない、またはアクセスできない）の数は、JGTI-dataとは対照的に、GBIFの数から計算することができます。
+|===

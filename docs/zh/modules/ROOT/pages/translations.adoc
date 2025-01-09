@@ -1,0 +1,121 @@
+= How to Translate
+
+The IPT user interface and user manual both benefit from internationalization. Internationalization is a community effort, and everyone is welcome to join.
+
+Translation uses an online translation tool called https://crowdin.com/project/gbif-ipt[Crowdin]. To join, login to https://crowdin.com/project/gbif-ipt[Crowdin], select the language you would like to translate, and click the "Join" button. A translation manager will handle your request, and add you to the translation team. You may then start translating. Most people find Crowdin easy and intuitive to use. For help using Crowdin, you can always refer to their https://support.crowdin.com5/crowdin-intro/[Crowdin Introduction].
+
+In the Crowdin IPT project, the file `Glossary` is not part of either the user interface or the user manual, but is used to check the consistence of translated terms. Other files belong either to the user interface, or the user manual.
+
+== Translating the User Interface
+
+Translations for the user interface are contained in the file `ApplicationResources_en.properties`. You are welcome to ask mailto:helpdesk@gbif.org[the Help Desk] for an account on https://ipt.gbif-uat.org/[GBIF's development IPT], where new translations will be applied.
+
+image::ipt2/v22/Crowdin-Join.png[]
+
+=== Current languages
+
+* 法文
+* 日文
+* 葡萄牙文
+* 俄文
+* 西班牙文
+* 繁體中文
+* Persian (incomplete)
+
+If you want to translate the user interface into another language, please email helpdesk@gbif.org.
+
+== 翻譯使用手冊
+
+Translations for the user manual are in the Crowdin folder `docs/translations`. The user manual is written in https://docs.asciidoctor.org/asciidoc/latest/[Asciidoctor], and some syntax is necessary in the translations – for example, `+++*bold*, _italic_ or `monospaced` text+++`.
+
+Particular care is needed to ensure cross-references (links between pages and/or sections within pages) work in the translated versions.
+
+TIP: New translations added using Crowdin should appear in the https://ipt.gbif-uat.org/manual/[UAT version of this manual] around 15-60 minutes later. You can use this to check your translations appear as you wanted.
+
+=== Plain hyperlinks
+
+When translating these, it's appropriate to link to a translated version of the page if the content is equivalent. Translate as follows:
+
+[source, asciidoctor]
+----
+https://www.gbif.org/the-gbif-network[GBIF's diverse Participants]
+
+https://www.gbif.org/es/the-gbif-network[los diversos Aliados de GBIF]
+----
+
+Note the text of the link (between `[square brackets]`) has been translated.
+
+=== Same-page crossreferences
+
+These are links to locations within a page, and are usually made with the crossreference syntax: `\<<Target Heading Text>>`, and sometimes the form `\<<Target Heading Text,display text>>` when the text shown should not be the same as the heading to which the link points.
+
+Therefore, a crossreference translation is like this:
+
+[source, asciidoctor]
+----
+click on the button labelled "Add" to open the <<Data Source selection page>>.
+
+clic en el botón "Agregar" para abrir la <<Página de selección del Conjunto de Datos>>.
+----
+
+=== Different-page crossreferences
+
+The simplest links to different pages are to the top of the linked page. These have the form `\xref:filename.adoc[display text]`. Only the display text should be translated, the file name does not change:
+
+[source, asciidoc]
+----
+refer to the xref:doi-workflow.adoc[DOI Workflows] page
+
+consulte la página de xref:doi-workflow.adoc[flujo de trabajo de los DOIs].
+----
+
+More complicated are links to a specific section within another page. These must use the link target, which is generated automatically on each heading: spaces in the heading text are replaced with hyphens (`-`) and the result is converted to lower case. In a web browser, they are shown in the URL bar following a `#`, in the "Contents" menu, or with the "§" symbol next to a heading.
+
+The crossreference is then written as `\xref:filename.adoc#link-target[display text]`, for example `\xref:manage-resources.adoc#resource-managers[read about resource managers]` shows as xref:manage-resources.adoc#resource-managers[read about resource managers].
+
+An English heading `Source Data` has the link target `source-data`. The Spanish translation of the heading, `Conjunto de datos`, has the target `conjunto-de-datos`.
+
+[source, asciidoc]
+----
+Files can be uploaded … when xref:manage-resources.adoc#source-data[adding new source data files].
+
+La carga de archivos al se puede … cuando se xref:manage-resources.adoc#conjunto-de-datos[agregan nuevos archivos de conjuntos de datos].
+----
+
+=== Images and downloads
+
+Some screenshot images can be translated, and others (without any English text) can be the same across all languages. The default is for the same image to be used in all languages. A different image must be uploaded in https://github.com/gbif/ipt[GitHub]. Create an image with the same filename and path, except with `en` changed to the target language.
+
+For example, the default (English) image shown on the xref:home.adoc[home menu page] is stored in GitHub at https://github.com/gbif/ipt/blob/master/docs/en/modules/ROOT/assets/images/ipt2/home/IPTHome.png[`docs/en/modules/ROOT/assets/images/ipt2/home/IPTHome.png`], and its Spanish translation is at https://github.com/gbif/ipt/blob/master/docs/es/modules/ROOT/assets/images/ipt2/home/IPTHome.png[`docs/es/modules/ROOT/assets/images/ipt2/home/IPTHome.png`].
+
+The syntax to include this image in the manual, `image::ipt2/home/IPTHome.png[]`, does not require translation.
+
+=== Japanese, Chinese and Korean
+
+These languages do not use spaces between words, so some abbreviated syntax used in the English text will not work.
+
+* Plain hyperlinks must be prefixed with `link:`. The short form without `link:` only works if there is a space before the `https:` or `http:`.
++
+[source, asciidoc]
+----
+Be sure to sign up to the https://lists.gbif.org/mailman/listinfo/ipt/[IPT Mailing List], which serves as a support group for IPT users.
+
+IPTユーザーのサポートグループであるlink:https://lists.gbif.org/mailman/listinfo/ipt/[IPTメーリングリスト]に必ずご登録ください。
+----
+
+* *Bold*, _italic_ and `monospace` text formatted with single `*`, `_` and `+++`+++` characters only works if there are spaces outside those characters.  Where there are no spaces, the characters must be doubled:
++
+[source, asciidoc]
+----
+Double click the executable to start installation wizard. *Do* fill information to specify *the connector port, Tomcat administrator login credentials* without changing the Roles. If you forget to provide the credential information, you’ll have to edit the `conf/tomcat-users.xml` file from the Tomcat configuration directory, then restart Tomcat to flush the privileges. (Note that when testing this scenario, the default suggested *connector port* settings worked).
+
+実行ファイルをダブルクリックすると、インストールウィザードが起動します。ロールを変更せずに、コネクタポート、**Tomcat管理者ログイン情報**を**入力**します。資格情報を記入し忘れた場合は、Tomcatの設定ディレクトリから``conf/tomcat-users.xml``ファイルを編集し、Tomcatを再起動して、権限をフラッシュする必要があります。(このシナリオをテストしたとき、デフォルトで提案された**コネクタ・ポート**設定が機能したことに注意してください）。
+----
+
+=== 語言
+
+* Spanish (complete)
+* Japanese (complete)
+* 繁體中文（已開始）
+
+If you want to translate the user manual into another language, please email helpdesk@gbif.org. It is not necessary to translate the entire manual – untranslated sections will be shown in English.

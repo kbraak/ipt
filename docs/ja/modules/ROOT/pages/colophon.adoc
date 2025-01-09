@@ -1,0 +1,45 @@
+= 奥付
+
+== 引用文献
+
+// If English
+ifeval::["{language}" == "en"]
+This user manual adapts and builds upon the previous IPT User Manuals (Réveillon 2009, Wieczorek & Braak 2016). The recommended citation for this user manual is as follows:
+endif::[]
+// Else
+ifeval::["{language}" != "en"]
+この link:https://ipt.gbif.org/manual/ja/[IPTユーザーマニュアル] は、これまでのIPTユーザーマニュアル（Réveillon 2009、Wieczorek & Braak 2016）を調整し、構築しています。このユーザーマニュアルの推奨される引用方法は以下の通りです。
+// Endif
+endif::[]
+
+// English user manual citation
+[quote]
+Wieczorek J, Blissett M, Braak K & Podolskiy M ({localyear}) The GBIF Integrated Publishing Toolkit User Manual, version {page-component-version}. Copenhagen: GBIF Secretariat. https://ipt.gbif.org/manual/en/ipt/{page-component-version}/
+
+// If not English
+ifeval::["{language}" != "en"]
+このユーザーマニュアルの日本語訳は国立科学博物館によって作成されました。この訳の推奨される引用形式は以下の通りです。
+
+// Translated user manual citation
+[quote]
+Wieczorek J, Blissett M, Braak K & Podolskiy M ({localyear}) The GBIF Integrated Publishing Toolkit User Manual, version {page-component-version}. (TRANSLATORS_CREDIT_YOURSELVES, Trans.) Copenhagen: GBIF Secretariat. https://ipt.gbif.org/manual/{language}/ipt/{page-component-version}/
+// Endif
+endif::[]
+
+== 著作権表示
+
+GBIF統合出版ツールキットおよび本ユーザーマニュアルの著作権は、© 2016-{localyear} 生物多様性グローバル情報ファシリティ事務局に帰属します。
+
+== ライセンス
+
+GBIF統合パブリッシングツールキットは、Apache License Version 2.0 のもとで公開されているオープンソースソフトウェアです。本使用許諾のコピーは、http://www.apache.org/licenses/LICENSE-2.0 で入手できます。法律によって要求される場合、または書面で合意される場合を除き、本ソフトウェアは本使用許諾下で「現状のまま」配布され、明示または黙示を問わず、いかなる場合において何ら保証するものではありません。本使用許諾下での権利と制限を規定する具体的な文言については、本使用許諾を参照してください。
+
+This user manual is released under the Creative Commons Attribution 4.0 International Licence. You may obtain a copy of this licence at https://creativecommons.org/licenses/by/4.0/.
+
+== リファレンス
+
+// GitHub and Google Code versions
+Wieczorek J & Braak K (2016) The GBIF Integrated Publishing Toolkit User Manual, version 2.3.6. Copenhagen: GBIF Secretariat. https://github.com/gbif/ipt/wiki/IPTUserManualv23.wiki
+
+// https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/gbif-providertoolkit/GBIF_IPT_User_Manual_1.0.pdf
+Réveillon A (2009) The GBIF Integrated Publishing Toolkit User Manual, version 1.0. Copenhagen: GBIF Secretariat. https://links.gbif.org/ipt_manual_1.0

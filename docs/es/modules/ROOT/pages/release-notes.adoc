@@ -1,0 +1,77 @@
+= Notas de la versión
+
+*Versiones del IPT: pass:[3.0.*]*
+
+== Instrucciones de actualización
+
+WARNING: Asegúrese de *hacer una copia de seguridad del directorio de datos del IPT antes de realizar una actualización*. Según https://www.gbif.org/data-hosting-centres#_criteria-for-data-hosting-centres [criterios para centros de alojamiento de datos], se recomienda ejecutar copias de seguridad programadas del directorio de datos del IPT en general.
+
+Verifique que su sistema cumple con los xref:requirements.adoc[requisitos de instalación] para esta versión. Asegúrese que su sistema operativo y cualquier otro software instalado (como Java, Tomcat y Apache HTTPD) están actualizados con los parches de seguridad.
+
+El método de actualización depende del xref:installation.adoc#installation-method[método de instalación] original.
+
+=== Actualizaciones utilizando paquetes Linux
+
+Los usuarios de paquetes Linux en Red Hat, CentOS, Debian, Ubuntu, etc. pueden realizar la actualización utilizando el gestor de paquetes del sistema.
+
+[source, shell]
+----
+# Red Hat, CentOS etc:
+yum update ipt
+# Debian, Ubuntu etc:
+apt install ipt
+----
+
+Estos comandos se pueden usar para probar una versión anterior en Red Hat/CentOS:
+
+[source, shell]
+----
+# Asegurarse de que la configuración del repositorio GBIF está actualizada:
+yum-config-manager --add-repo https://packages.gbif.org/gbif.repo
+
+# Instalar la última versión testada:
+yum install --enablerepo=gbif-testing ipt
+
+# Regresar a una versión anterior estable:
+yum downgrade ipt-2.7.5
+
+# Mostrar todas las versiones disponibles, testadas y estables:
+yum --showduplicates list --enablerepo=gbif-testing ipt
+----
+
+// #TODO:# Debian instructions, once the 2.5.0-RC1 pre-release package is prepared.
+
+=== Actualizaciones utilizando un contenedor de servlet
+
+TIP: Al actualizar a la versión 2.5.0 o posterior, siga el xref:installation.adoc#tomcat[paso 2] de las instrucciones de instalación para establecer una ubicación de directorio de datos. Ya no tendrá que reconfigurar el directorio de datos cada vez que actualice el IPT.
+
+Una actualización se puede ejecutar en 4 pasos:
+
+. Realice una copia de seguridad del directorio de datos existente y de cualquier xref:customization.adoc[estilo personalizado] (imágenes, hojas de estilo, etc.) antes de actualizar su IPT.
+. Sin apagar Tomcat, sustituya el archivo .war anterior por la última edición, pero mantenga el mismo nombre (por ejemplo, `ipt.war`).
++
+NOTE: Si reemplaza el archivo .war mientras Tomcat está apagado, asegúrese de eliminar el directorio expandido asociado antes de reiniciar Tomcat, para que el archivo WAR actualizado aparezca expandido de nuevo cuando inicie Tomcat.
+
+. (Si el directorio de datos no está configurado con Tomcat). Abra inmediatamente el IPT en un buscador web y reutilice el directorio de datos existente en la página de opciones del IPT inicial
+. Para asegurarse de que la actualización funcione, intente iniciar sesión busque el número de la nueva versión en el pie de página. (_Reinicie Tomcat si aún aparece la versión anterior._)
+. Vuelva a aplicar su estilo personalizado (si aplica)
+
+=== Actualizaciones utilizando Docker
+
+Vea las instrucciones de xref:installation.adoc#installation-using-docker[instalación utilizando Docker]. En general, la etiqueta `latest` apuntará a la versión actual estable.
+
+== Instrucciones para después de la actualización
+
+Tras la actualización, puede aparecer un mensaje de advertencia indicando que algunos recursos no se han podido cargar. Esto sucede cuando a un recurso antiguo le faltan los metadatos necesarios después de que no se ha vuelto a publicar luego mucho tiempo. Los gestores de recursos pueden solucionar este problema volviendo a publicar los recursos afectados.
+
+Adicionalmente, el administrador del IPT debería actualizar todos los ficheros centrales y extensiones a sus últimas versiones. Esto permitirá a los publicadores aprovechar los nuevos términos y vocabularios incluidos en las últimas versiones.
+
+== Cambios importantes en esta versión
+
+La lista completa de características nuevas está documentada en la xref:releases.adoc[página de la versión]. Por favor, preste especial atención a estos puntos después de actualizar:
+
+* IPT 3.0.0 requiere Tomcat 8 o 9. Tomcat 7 ya no es compatible.
+
+== Cuando todo lo demás falla
+
+Explore las xref:faq.adoc[preguntas frecuentes], que continúan siendo actualizadas con buenas preguntas o pregunte en la https://lists.gbif.org/mailman/listinfo/ipt/[lista de mailing del IPT].

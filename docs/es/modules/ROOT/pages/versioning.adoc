@@ -1,0 +1,22 @@
+= Política del control de versiones del conjunto de datos
+
+El IPT rastrea de manera cuidadosa los cambios de las versiones principales y secundarias de un conjunto de datos, de modo que cada versión publicada pueda identificarse sin ambigüedades y los usuarios puedan ver fácilmente cuándo sucedieron cambios significativos en el conjunto de datos. La relación entre las versiones es visible en la tabla de la historia de las versiones (en su página de inicio) y también se documenta en los metadatos DOI.
+
+La política del control de versiones que utiliza el IPT se describe a continuación. Es importante mencionar que la política del control de versiones del IPT se basa en las http://schema.datacite.org/[Recomendaciones de DataCite], las cuales se basan en el trabajo de http://wiki.esipfed.org/index.php/Interagency_Data_Stewardship/Citations/provider_guidelines#Note_on_Versioning_and_Locators[Earth Science Information Partners (ESIP)].
+
+== Política del control de versiones
+
+* Las versiones principales y secundarias son usadas para realizar un seguimiento de los cambios de un conjunto de datos a través del tiempo.
+* El número de versión utiliza la sintaxis versión_principal.versión_secundaria.
+* Se asigna una nueva versión principal al conjunto de datos (a) la primera vez que este es publicado o (b) después de que el conjunto de datos se ha vuelto a publicar con uno o más cambios científicamente significativos. El publicador debe decidir qué constituye un cambio científicamente significativo (consulte la definición a continuación para obtener ayuda). 
+* Un cambio científicamente significativo (a) generalmente afecta a la mayoría de los registros del conjunto de datos y (b) puede cambiar el resultado de un análisis científico al utilizar el conjunto de datos.
+* Una nueva versión principal lleva a la creación de un nuevo DOI, mientras que una nueva versión secundaria no.
+* Una nueva versión secundaria se asigna al conjunto de datos cada vez que es publicado y no es adecuado asignarle una nueva versión principal.
+* Para los conjuntos de datos que se actualizan continuamente (p. ej., conjuntos de datos de series de tiempo), se asigna una nueva versión secundaria cada vez que se vuelve a publicar, siempre que las adiciones continuas no cambien los registros preexistentes de una manera científicamente significativa. Esta decisión debe tomarla el publicador.
+* Idealmente, un resumen detallado acerca de qué cambió desde la última publicación debería ser ingresado por el publicador antes de que alguna nueva versión principal o secundaria del conjunto de datos sea publicada.
+* Cada versión principal y secundaria de un conjunto de datos tiene su propia página de IPT, permitiendo que la versión archivada del conjunto de datos (DwC-A, EML) esté disponible para su libre descarga. Por supuesto, solo las páginas de las versiones disponibles públicamente serán de libre acceso en internet.
+* Las páginas del IPT incluirán un registro de metadatos completo que describa los conjuntos de datos y proporcionan acceso directo a los datos o a la información respecto de cómo acceder a ellos.
+* La página de destino de la anterior versión principal apunta (tiene un enlace) a la nueva versión, con una explicación de el estado de la versión anterior.
+* Los conjuntos de datos eliminados tienen una página de inicio en el IPT que explica que el conjunto de datos ha sido eliminado. Si el IPT ha asignado un DOI al conjunto de datos eliminado, todas sus versiones se archivan; de lo contrario, se elimina permanentemente.
+* Los metadatos con DOI deben ser tan valiosos como sea posible incluyendo, si es posible, (a) identificadores alternos del conjunto de datos, (b) relaciones con otras versiones, (c) relaciones con artículos que citan al conjunto de datos, (c) ORCID donde los contactos son mencionados, etc.
+* La cita del conjunto de datos, siempre incluye el número de versión, reemplazando la necesidad de usar una fecha y hora de acceso para citar conjuntos de datos de series temporales, por ejemplo.

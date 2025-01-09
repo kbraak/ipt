@@ -1,0 +1,61 @@
+
+name: ipt
+title: Integrated Publishing Toolkit
+version: "3.0"
+display_version: "3.0"
+start_page: ROOT:index.adoc
+nav:
+  - modules/ROOT/nav.adoc
+asciidoc:
+  attributes:
+    idprefix: '@'
+    idseparator: '-@'
+    threedots: '┇'
+    threelines: '☰'
+    doiicon: '🏛️'
+    viewicon: image:ipt2/controls/Control-ViewIcon.png[]
+    # EML — if this disappears (again), a version can be retrieved from https://eml.ecoinformatics.org/#older-versions-deprecated
+    eml-location: https://sbclter.msi.ucsb.edu/external/InformationManagement/EML_211_schema/docs/eml-2.1.1
+    # Cores
+    latest-dwc-occurrence:   https://rs.gbif.org/core/dwc_occurrence_2024-02-23.xml
+    date-dwc-occurrence:     "2024-02-23"
+    latest-dwc-taxon:        https://rs.gbif.org/core/dwc_taxon_2024-02-19.xml
+    date-dwc-taxon:          "2024-02-19"
+    latest-dwc-event:        https://rs.gbif.org/core/dwc_event_2024-02-19.xml
+    date-dwc-event:          "2024-02-19"
+    # Extensions
+    latest-resource-relation:    https://rs.gbif.org/extension/dwc/resource_relation_2022-02-02.xml
+    date-resource-relation:      "2022-02-02"
+    latest-description:          https://rs.gbif.org/terms/1.0/Description
+    date-description:            "2015-02-13"
+    latest-species-distribution: https://rs.gbif.org/terms/1.0/Distribution
+    date-species-distribution:   "2022-02-02"
+    latest-identifier:           https://rs.gbif.org/terms/1.0/Identifier
+    date-identifier:             "2015-02-13"
+    latest-references:           https://rs.gbif.org/terms/1.0/Reference
+    date-references:             "2015-02-13"
+    latest-typesandspecimen:     https://rs.gbif.org/terms/1.0/TypesAndSpecimen
+    date-typesandspecimen:       "2015-02-13"
+    latest-vernacularname:       https://rs.gbif.org/terms/1.0/VernacularName
+    date-vernacularname:         "2015-02-13"
+    # Vocabularies
+    latest-basis-of-record:      https://rs.gbif.org/vocabulary/dwc/basis_of_record_2024-02-19.xml
+    date-basis-of-record:        "2024-02-19"
+    latest-description-type:     https://rs.gbif.org/vocabulary/gbif/descriptionType
+    date-description-type:       "2015-02-13"
+    latest-nomenclatural-status: https://rs.gbif.org/vocabulary/gbif/nomenclatural_status
+    date-nomenclatural-status:   "2019-02-08"
+    latest-occurrence-status:    https://rs.gbif.org/vocabulary/gbif/occurrence_status/
+    date-occurrence-status:      "2020-07-15"
+    latest-preservation-method:  https://rs.gbif.org/vocabulary/gbif/preservation_method
+    date-preservation-method:    "2015-02-13"
+    latest-quantity-type:        https://rs.gbif.org/vocabulary/gbif/quantityType
+    date-quantity-type:          "2023-02-28"
+    latest-rank:                 https://rs.gbif.org/vocabulary/gbif/rank
+    date-rank:                   "2015-04-24"
+    latest-reference-type:       https://rs.gbif.org/vocabulary/gbif/referenceType
+    date-reference-type:         "2015-02-13"
+    latest-taxonomic-status:     https://rs.gbif.org/vocabulary/gbif/taxonomicStatus/
+    date-taxonomic-status:       "2022-02-22"
+    latest-unit-of-measurement:  https://rs.gbif.org/vocabulary/gbif/unitOfMeasurement
+    date-unit-of-measurement:    "2015-07-10"

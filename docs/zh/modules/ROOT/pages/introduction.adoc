@@ -1,0 +1,9 @@
+= 如何使用此使用手冊
+
+This manual has three main components: an introduction with background information, a number of step-by-step tutorials and a complete reference guide including a "getting started" section and sections describing in detail the different elements of the tool.
+
+All users are encouraged to review this introductory part and then refer to the different specific sections depending on their role(s) regarding the IPT installation. The IPT (and this manual) differentiates three type of users:
+
+* *Administrators*: in charge of installing and configuring the IPT. They can make changes to all aspects of an instance of the IPT. Administrators should refer to the xref:getting-started.adoc[Getting Started] and xref:administration.adoc[Administration Menu] sections of the reference guide.
+* *Resource Managers*: they are able to create, edit, remove and manage resources (data sets and metadata). Depending on the settings they may or may not have registration rights to publish resources through the GBIF Network. Resource managers should refer to the different xref:how-to-publish.adoc[tutorials] depending on the type of data that they need to deal with (xref:resource-metadata.adoc[metadata], xref:occurrence-data.adoc[occurrences], special data types through extensions, etc.). The xref:manage-resources.adoc[Manage Resources Menu] section will also be very helpful for resource managers.
+* *Basic users*: They can only browse the resources published in an IPT installation. For basic users the IPT works as a simple web application so no further explanation is included in this manual.

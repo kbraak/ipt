@@ -1,0 +1,56 @@
+= データの用意
+
+== 考慮すべきこと
+* 存在しない場合はローカル識別子を作成します。
+* 作成者を含む完全なdwc:scientificNameを作成します。
+* 座標（10進数）と精度を作成します。
+
+== データベースソース
+
+* 関数を使用するようにSQLビューを設定します（IPT SQLソース定義でも実行できます）
+** 連結、文字列の分割：例）完全な学名を作成します（対義語に注意）
+** 日付をISOとしてフォーマットします
+** ネイティブSQLの日付型を解析して年/月/日を作成します
+* UNIONを使用して、2つ以上のテーブル（例：受け入れられる分類群と、シノニムまたは標本や観察）を結合します。
+* 固定値を選択します（IPTマッピングでこれを行うことをお勧めします）。
+
+== テキストファイルのソース
+* UTF-8に変換します。
+* 標準のCSV（つまり、デリメタ = `,`、引用符 = `"`）またはタブファイルを使用します。
+* 改行を置き換えたことを確認します。つまり、`\r` `\n` または `\r\n`を単純なスペースに置き換えるか、2文字 `\r` を使用して、改行を保持する場合は改行をエスケープします。
+* nullを空のフィールドとしてエンコードします。つまり、 `\N` や `\NULL` ではなく、2つの区切り文字の間に文字を入れないでください。
+
+=== ユーティリティ：文字エンコードコンバータ - iconv
+
+LinuxおよびWindows用のファイルの文字エンコードを変換するためのシンプルなツールです。
+
+* http://ja.wikipedia.org/wiki/Iconv
+* http://www.gnu.org/software/libiconv/
+* http://gnuwin32.sourceforge.net/packages/libiconv.htm
+
+例：
+
+* http://unixhelp.ed.ac.uk/CGI/man-cgi?iconv[iconv]を利用して文字エンコードをWindows-1252からUTF-8へ変換
+* {blank}
++
+----
+iconv -f CP1252 -t utf-8 example.txt > exampleUTF8.txt
+----
+
+=== ユーティリティ：Unixストリームエディタ、SED
+
+ファイルをストリームとして操作するUnixコマンドラインツールです。これにより、最初にメモリにロードすることなく、非常に大きなファイルを変更できます（これは、viなどの少数を除くほとんどすべてのエディターが行うことです）。
+
+* http://www.unixguide.net/unix/sedoneliner.shtml
+* http://www.brunolinux.com/02-The_Terminal/Find_and%20Replace_with_Sed.html
+* 所定の場所に置き換えて、バックアップコピーを作成：
++
+----
+sed -i.old "s/\\\\N//g" allNames.txt
+----
+
+* DOS改行（CR / LF）をUnix形式に変換：
++
+----
+sed 's/.$//'
+----
