@@ -69,8 +69,8 @@
     <guice.version>4.2.3</guice.version>
     <httpclient.version>4.5.14</httpclient.version>
     <httpcore.version>4.4.16</httpcore.version>
-    <jackson.version>2.15.1</jackson.version> <!-- Fixed to the version used in tableschema-java -->
-    <jackson-dataformat-yaml.version>2.14.0</jackson-dataformat-yaml.version> <!-- Fixed to 2.14.0 for now because of issues with jackson-datatype-jts -->
+    <jackson.version>2.18.2</jackson.version> <!-- Fixed to the version used in tableschema-java -->
+    <jackson-dataformat-yaml.version>2.18.2</jackson-dataformat-yaml.version> <!-- Fixed to 2.14.0 for now because of issues with jackson-datatype-jts -->
     <jackson-datatype-jts.version>2.14</jackson-datatype-jts.version>
     <javassist.version>3.12.1.GA</javassist.version>
     <javax.mail.version>1.4.7</javax.mail.version>
