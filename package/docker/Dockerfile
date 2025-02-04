@@ -14,7 +14,7 @@ RUN perl -pi -e 's(\${buildNumber})('${GIT_REVISION}')' src/main/resources/appli
     mvn -DskipTests install && \
     rm target/*.war && mv target/ipt-* target/ipt
 
-FROM tomcat:9.0-jdk17
+FROM tomcat:9.0-jdk17@sha256:c7f5e6a8c40fdba9804f3c49bded2d2750c01d36380ecad872fb54c8182b544b
 LABEL maintainers="Matthew Blissett <mblissett@gbif.org>"
 
 ARG IPT_NAME=ROOT
