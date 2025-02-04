@@ -65,7 +65,7 @@
     <frictionless.datapackage-java.version>0.6.16.1-gbif</frictionless.datapackage-java.version>
     <frictionless.tableschema-java.version>0.6.16.2-gbif</frictionless.tableschema-java.version>
     <gson.version>2.11.0</gson.version>
-    <guava.version>20.0</guava.version>
+    <guava.version>32.0.0-android</guava.version>
     <guice.version>4.2.3</guice.version>
     <httpclient.version>4.5.14</httpclient.version>
     <httpcore.version>4.4.16</httpcore.version>
