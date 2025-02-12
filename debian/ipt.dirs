@@ -1,0 +1,8 @@
+# https://www.debian.org/doc/manuals/maint-guide/dother.en.html#dirs
+#
+# It is best to try to run the installation first and only use this if you run into trouble.
+# There is no preceding slash on the directory names listed in the dirs file.
+
+# Here you can place mysql install or upgrade scripts if necessary for some reason (although
+# is better to use flyway and similar tools
+var/lib/ipt

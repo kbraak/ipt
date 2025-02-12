@@ -21,3 +21,12 @@ target/
 /res1
 /resource.xml
 /rtf*.rtf
+# Debian
+debian/*.debhelper
+debian/*.debhelper.log
+debian/*.buildinfo
+debian/*.substvars
+debian/files
+debian/ipt
+debian/maven-repo-local
+debian/debhelper-build-stamp

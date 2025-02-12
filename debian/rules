@@ -1,0 +1,37 @@
+#!/usr/bin/make -f
+
+# https://www.debian.org/doc/manuals/maint-guide/dreq.en.html#rules
+# See also:
+#
+# man debhelper
+# man dh
+
+# Uncomment this to turn on verbose mode.
+# export DH_VERBOSE=1
+
+# $(CURDIR) is the repository directory
+
+CURVERSION = $(shell grep -oPm2 "(?<=<version>)[^<]+" "pom.xml" | tail -1)
+
+%:
+	dh $@
+
+override_dh_auto_build:
+	dh_auto_build
+	mkdir -p $(CURDIR)/target
+	curl -o $(CURDIR)/target/ipt.war https://repository.gbif.org/content/groups/gbif/org/gbif/ipt/$(CURVERSION)/ipt-$(CURVERSION).war
+
+override_dh_fixperms:
+	dh_fixperms
+#	If we need to set some special perms to a file
+#	chmod 4755 debian/foo/opt/ipt/foo.jar
+#	Also we use postinstall for this
+
+
+#override_dh_install:
+#	dh_install # calls default *.install and *.dirs installation
+#	man install
+
+override_dh_auto_clean:
+	dh_auto_clean
+	rm -rf target

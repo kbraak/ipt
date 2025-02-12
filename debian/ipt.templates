@@ -1,0 +1,4 @@
+Template: ipt/data-dir
+Type: string
+Default: /var/lib/ipt
+Description: Directory to store data resources, users, logs:

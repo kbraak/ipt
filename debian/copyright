@@ -1,0 +1,14 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: ipt
+Upstream-Contact: GBIF Development Team <helpdesk@gbif.org>
+Source: https://github.com/gbif/ipt
+
+Files: *
+Copyright: 2020, GBIF Development Team <helpdesk@gbif.org>
+License: Apache-2
+
+Files: debian/*
+Copyright: 2020, GBIF Development Team <helpdesk@gbif.org>
+License: Apache-2
+
+License: Apache-2

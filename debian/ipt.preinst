@@ -1,0 +1,48 @@
+#!/bin/sh
+
+#######################################################
+#
+# Add here the commands to be excuted before the package
+# has been installed
+#
+
+set -e
+
+# Example: create user and group for the service
+
+# More documentation in:
+# https://www.debian.org/doc/debian-policy/ch-files.html#s-permissions-owners
+# or
+# https://unix.stackexchange.com/questions/47880/how-debian-package-should-create-user-accounts
+
+
+# If in the future we use the ipt as a service without using tomcat
+# like using a jetty-runner, jetty-home or similar  we can create an
+# ipt user/group that should be create on preinstall
+
+# user=ipt
+# group=ipt
+
+# # creating ${group} group if he isn't already there
+# if ! getent group ${group} >/dev/null; then
+#        echo Adding group: ${group}.
+#        addgroup ${group} >/dev/null
+# fi
+
+# # creating ${user} user if he isn't already there
+# if ! getent passwd ${user} >/dev/null; then
+#        echo Adding user: ${user}.
+#        adduser \
+#          --disabled-login \
+#          --ingroup ${group} \
+#          --no-create-home \
+#          --home /nonexistent \
+#          --system \
+#          --quiet \
+#          --shell /bin/false \
+#          ${user} >/dev/null
+# fi
+
+#DEBHELPER#
+
+echo Installing ipt

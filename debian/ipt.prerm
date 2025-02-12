@@ -1,0 +1,30 @@
+#!/bin/sh
+
+#######################################################
+#
+# Add here the commands to be excuted before the package
+# has been removed
+#
+
+#Example stop tomcat and remove some log files
+#
+#/etc/init.d/tomcat stop
+#
+#rm -rf /opt/${appName}/logs/*
+#
+
+set -e
+
+. /usr/share/debconf/confmodule
+
+#DEBHELPER#
+
+# Remove the Tomcat service configuration override
+TOMCAT_SERVICE_OVERRIDE="/etc/systemd/system/tomcat9.service.d/override.conf"
+if [ -f "$TOMCAT_SERVICE_OVERRIDE" ]; then
+    rm "$TOMCAT_SERVICE_OVERRIDE"
+
+    # Reload the systemd daemon configuration and restart the Tomcat service
+    systemctl daemon-reload
+fi
+
