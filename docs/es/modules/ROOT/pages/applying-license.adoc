@@ -1,0 +1,66 @@
+= Aplicar una licencia a un conjunto de datos
+
+== Introducción
+
+De acuerdo con la http://www.gbif.org/terms/licences[política de licencias de GBIF], un conjunto de datos debe estar disponible para su uso bajo una licencia CC0, CC-BY o CC-BY-NC. La mejor opción, recomendada por GBIF, es utilizar la versión más reciente, la 4.0 para CC-BY y CC-BY-NC. Esto va acorde con la recomendación de Creative Commons que:
+
+[quote]
+Usted siempre debe usar la última versión de las licencias de Creative Commons para aprovechar al máximo las mejoras descritas en la https://wiki.creativecommons.org/wiki/License_Versions[página de versiones de licencias]. En particular, la licencia 4.0 está destinada a adaptarse mejor al uso internacional, y se puede usar en muchos contextos distintos, incluido https://blog.creativecommons.org/2011/08/23/data-governance-our-idea-for-the-moore-foundation/[el intercambio de datos].
+
+Puede encontrar más información sobre las novedades en la licencia 4.0 CC https://creativecommons.org/version4/[aquí]. Esta es la versión compatible con la versión v2.3.2 del IPT.
+
+El resto de esta página describe cómo aplicar correctamente una licencia a un conjunto de datos, y cómo garantizar la coherencia a nivel del conjunto de datos y al nivel del registro.
+
+Tenga en cuenta que CC0 es técnicamente una exención.
+
+== Nivel de conjunto de datos
+
+La licencia escogida debe aplicar a todo el conjunto de datos. Se debe aplicar una sola licencia a *nivel de conjunto de datos*, incluso si varias licencias son complementarias entre sí (p. ej., CC-BY y ODC-By).
+
+Para aplicar una licencia a *nivel de conjunto de datos* en el IPT, elija una licencia del menú desplegable en la página de metadatos básicos:
+
+image::ipt2/v22/LicenseDropdownWide.png[]
+
+En caso de que diferentes licencias apliquen a componentes separados de un conjunto de datos, la buena práctica recomendada es publicar cada componente por separado con sus propios metadatos y su propio identificador (p. ej., el DOI). Esta recomendación cumple con las recomendaciones de DataCite para tales casos.
+
+== Nivel de registro
+
+Todas las licencias especificadas bajo el *nivel de registro* deben ser coherentes con la licencia a nivel del conjunto de datos. 
+
+Para aplicar una licencia en el *nivel de registro* usando el IPT, los publicadores deben usar/mapear el término de Darwin Core http://rs.tdwg.org/dwc/terms/index.htm#dcterms:license[license]. Según la recomendación de Darwin Core, el URI de la licencia debe usarse para completar la licencia. Tenga cuidado de no agregar restricciones de uso contradictorias en el término de Darwin Core http://rs.tdwg.org/dwc/terms/index.htm#dcterms:accessRights[accessRights]. En teoría, la licencia debería proporcionar suficiente información sobre los derechos de acceso sin tener que especificarlos también en accessRights.
+
+Tenga en cuenta que el término de Darwin Core http://rs.tdwg.org/dwc/terms/history/#dcterms:rights[rights] ha quedado obsoleto y ya no debería utilizarse.
+
+== Información adicional
+
+=== Cómo aplicar una licencia manualmente
+
+Los recursos de metadatos se pueden completar automáticamente desde un documento de metadatos en EML durante la creación de recursos. Una licencia proporcionada en el documento EML es interpretable siempre que se proporcione en un formato legible por máquina.
+
+Para proporcionar una licencia en EML en un formato legible por máquina, utilice el elemento `<ulink>` dentro de `<intellectualRights><para>` para especificar tanto el título como la URL de la licencia. Tenga en cuenta que los documentos que cumplen con el Perfil de metadatos de GBIF deben utilizar la última versión del esquema (v1.1) para que sea un XML válido.
+
+A continuación se muestra un ejemplo de `<intellectualRights>` para las tres licencias que GBIF admite y muestra cómo proporcionarlas en formato legible por máquina. Para aplicar, simplemente reemplace el bloque `<intellectualRights>` en su documento EML con el `<intellectualRights>` a continuación correspondiente a la licencia de su elección.
+
+==== Dominio público (CC0 1.0)
+
+----
+<intellectualRights>
+   <para>En la medida de lo posible según la ley, el editor ha renunciado a todos los derechos sobre estos datos y los ha dedicado al <ulink url="http://creativecommons.org/publicdomain/zero/1.0/legalcode"><citetitle>Dominio público (CC0 1.0)</citetitle></ulink>. Los usuarios pueden copiar, modificar, distribuir y utilizar el trabajo, incluso con fines comerciales, sin restricción</para>
+</intellectualRights>
+----
+
+==== Atribución Creative Commons (CC-BY) 4.0
+
+----
+<intellectualRights>
+  <para>Este contenido se encuentra bajo una <ulink url="http://creativecommons.org/licenses/by/4.0/legalcode"><citetitle>Licencia de Atribución Creative Commons (CC-BY) 4.0</citetitle></ulink>.</para>
+</intellectualRights>
+----
+
+==== Atribución no comercial de Creative Commons (CC-BY-NC) 4.0
+
+----
+<intellectualRights>
+  <para>Este contenido se encuentra bajo una <ulink url="http://creativecommons.org/licenses/by-nc/4.0/legalcode"><citetitle>Licencia de Atribución No Comercial de Creative Commons (CC-BY-NC) 4.0</citetitle></ulink>.</para>
+</intellectualRights>
+----

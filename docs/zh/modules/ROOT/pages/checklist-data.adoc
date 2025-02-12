@@ -1,0 +1,51 @@
+= 物種名錄資料
+
+此類資源列出了屬於某個類別的物種（例如分類學、地理區域、基於性狀、紅皮書名錄、栽培作物野生近緣種等），並可選擇性地包括更高位階的分類和/或與每個物種相關的其他性狀。這類資料集的例子包括全球或地區的分類學物種名錄、全球或國家紅皮書名錄、未數位化收藏中的物種目錄、公園物種名錄等。如果來源資料集中有足夠的資訊（或適用於物種名錄中的所有物種），建議將這些資料集呈現為 xref:occurrence-data.adoc[物種出現紀錄資料]。這些資料集都包含在 xref:resource-metadata.adoc[資源詮釋資料]中提到的相同基本說明資訊。
+
+== 如何將您的資料轉換為物種名錄資料
+
+image::ipt2/flow-cd.png[]
+
+最終，您的資料需要使用達爾文核心標準（DwC）的術語名稱作為欄位名稱以轉換為表格結構。
+
+您可以嘗試將資料放入 <<Templates,Excel 模板>> 中，該模板包含所有 <<Required DwC Fields,必填的達爾文核心集欄位>> 和 <<Recommended DwC Fields,建議填寫的達爾文核心集欄位>>。
+
+或者，如果您的資料儲存在 xref:database-connection.adoc[支援的資料庫]中，您可以使用 DwC 欄位名稱撰寫 SQL 表格（視圖）。請務必包含所有 <<Required DwC Fields,必填的達爾文核心集欄位>>，並盡可能多地新增 <<Recommended DwC Fields,建議填寫的達爾文核心集欄位>>。
+
+如需更多指導，您可以參考 xref:best-practices-checklists.adoc[發布物種名錄的最佳實務導引]，並查看 <<Exemplar Datasets,示範資料集>>。
+
+=== 模板
+
+連結：{attachmentsdir}/downloads/checklist_ipt_template_v1.xlsx[image:ipt2/excel-template2.png[Excel 模板]] 連結：{attachmentsdir}/downloads/checklist_ipt_template_v1_example_data.xlsx[image:ipt2/excel-template-data2.png[Excel 模板（含範例資料）]]
+
+填寫後將其上傳到 IPT，並嘗試使用盡可能多的 http://rs.tdwg.org/dwc/terms/[DwC 術語] 增強資料。您可以在核心表格中新增額外的 DwC 欄位，但僅限於此 {latest-dwc-taxon}[列表]中的 DwC 術語。
+
+=== 必填的達爾文核心集欄位
+
+* https://dwc.tdwg.org/terms/#dwc:taxonID[taxonID]
+* https://dwc.tdwg.org/terms/#dwc:scientificName[scientificName]
+* https://dwc.tdwg.org/terms/#dwc:taxonRank[taxonRank]
+
+=== 建議填寫的達爾文核心集欄位
+
+* [https://dwc.tdwg.org/terms/#dwc:kingdom] - 如果可能，請包括其他更高分類位階。
+* [https://dwc.tdwg.org/terms/#dwc:parentNameUsageID] - 當目的是發布分類時使用。
+* [https://dwc.tdwg.org/terms/#dwc:acceptedNameUsageID] - 當目的是發布分類時使用。
+
+=== 示範資料集
+
+* [https://doi.org/10.5886/zw3aqw[加拿大維管束植物資料庫 (VASCAN)]]
+
+=== 問答集
+
+==== Q. *How do I add common names to a taxon record?*
+
+*A.* Make a table of common names. The table must include a taxonID column. That way, each row can link to the (core) taxon record. You can augment your common names table with extra columns, but only using term names from this {latest-vernacularname}[list]. You can upload this table to the IPT, and map it to the {latest-vernacularname}[Vernacular Name extension].
+
+==== Q. *How do I add the threat status of a species as defined by IUCN?*
+
+*A.* Make a table of geographic distributions of a taxon. The table must include a taxonID column. That way, each row can link to the (core) taxon record. You can augment your geographic distributions table with extra columns such as the threat status, but only using term names from this {latest-species-distribution}[list]. You can upload this table to the IPT, and map it to the {latest-species-distribution}[Species Distribution extension].
+
+==== Q. *Can I update the https://doi.org/10.15468/39omei[GBIF Backbone Taxonomy] with names from my checklist?*
+
+*A.* Yes. To do so, you must publish your checklist, make it publicly available online under a GBIF-supported license (CC0, CC-BY, CC-BY-NC) and register it with GBIF. GBIF can then manually review it to determine if it is a suitable backbone source, e.g. by looking at how its names overlap with the backbone. Ideally the checklist will provide at least a minimal classification like a https://dwc.tdwg.org/terms/#dwc:kingdom[kingdom] and https://dwc.tdwg.org/terms/#dwc:family[family], be of high data quality meaning it has few name usage issues, include https://dwc.tdwg.org/terms/#dwc:scientificNameAuthorship[scientificNameAuthorship] of names, supplying the https://dwc.tdwg.org/terms/#dwc:namePublishedIn[namePublishedIn] reference, etc.

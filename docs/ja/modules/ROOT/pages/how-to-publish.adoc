@@ -1,0 +1,51 @@
+= GBIF.orgを使用して生物多様性データを公開する方法
+
+GBIFは、4種類のデータの公開、発見、利用をサポートしています。
+
+* xref:resource-metadata.adoc[リソースメタデータ]
+* xref:checklist-data.adoc[チェックリストデータ]
+* xref:occurrence-data.adoc[オカレンスデータ]
+* xref:sampling-event-data.adoc[サンプリングイベントデータ]
+
+簡単に言えば、GBIFは、生物多様性データリソースを示す情報の共有を（たとえ現在その資源からそれ以上のデジタル情報が得られない場合であっても）可能にするものです。他のデータクラスは、種やその分布、存在量に関するさらに豊かで幅広い情報をサポートしています。
+
+データ公開者は、最もリッチで適切なデータクラスを使用してデータを共有することを強く推奨します。ユーザーにデータを最大限有効に使ってもらうためです。
+
+GBIF.orgを通じて生物多様性データを公開するためにIPTをどのように利用できるかを紹介するために、以下の25分間の簡潔なライブデモを見ることを強くおすすめします。
+
+[.responsive-video]
+.IPTを利用してGBIF.orgで生物多様性データを公開する方法
+video::eDH9IoTrMVE[youtube, width=100%]
+
+== Prerequisites
+
+. データを公開するためには、GBIF Integrated Publishing Toolkit（IPT）のアカウントが必要です。
+** Hint: it is highly recommended that you save yourself time and money by requesting an account on an IPT located at a https://www.gbif.org/data-hosting-centres[data hosting centre] in your country or community.
+** ヒント：技術的なスキルとほぼ100％オンラインで維持する能力があれば、あなた自身のIPTインスタンスをインストールし、維持することができます。
+** Hint: if no data hosting centre exists in your country, and you or your organization don't have the technical skills and capacity to host an IPT, you can contact the GBIF Help Desk <helpdesk@gbif.org> for assistance.
+. GBIFにデータセットを登録し、link:https://www.gbif.org[GBIF.org]を通じて世界中から発見できるようにしたい場合、データセットはGBIFに登録されている機関に所属している必要があります。
+** ヒント：GBIFに機関を登録するには、まずこのオンラインアンケートに回答してください。登録には数日かかりますので、並行してデータの公開を進めることもできます。
+** Hint: if you aren't affiliated with any organization, you can contact the GBIF Help Desk <helpdesk@gbif.org> for assistance. In the meantime, you can proceed to publish your data.
+
+== 手順
+
+データを公開するには、以下の7ステップを踏んでください。
+
+image::ipt2/flow-all.png[]
+
+. 生物多様性データの種類を下記リストから選択する。
+** xref:resource-metadata.adoc[リソースメタデータ]
+** xref:checklist-data.adoc[チェックリストデータ]
+** xref:occurrence-data.adoc[オカレンスデータ]
+** xref:sampling-event-data.adoc[サンプリングイベントデータ]
+. データをダーウィンコア（DwC）用語を列名に使用した表構造に変換する。
+** Hint: try using an Excel template to structure your data, and understand what DwC terms are required and recommended (Excel templates for each dataset class are available in the above links - see the previous point)
+** ヒント：xref:database-connection.adoc[サポートされているデータベース]に保存されているデータを使用することが可能です。
+. IPTにデータをアップロードする。
+** ヒント：補足的なガイダンスとして、本マニュアルの他のセクション（xref:manage-resources.adoc[リソース管理メニュー]など）も参照してください。
+. Map the data (e.g. xref:checklist-data.adoc[Checklist Data] gets mapped to the {latest-dwc-taxon}[Taxon Core], xref:occurrence-data.adoc[Occurrence Data] gets mapped to the {latest-dwc-occurrence}[Occurrence Core], xref:sampling-event-data.adoc[Sampling Event Data] gets mapped to the {latest-dwc-event}[Event Core]).
+. IPTのメタデータエディタを使用して、リソースのメタデータを入力する。
+. データセットを公開する（世界中で自由に利用できるようにする）。
+. GBIFにデータセットを登録する。
++
+NOTE: IPT管理者によってGBIFに登録され（先述の前提条件2を参照）、IPTに追加される必要があります。そうでないと、その機関はIPTで選択することができません。

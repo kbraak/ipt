@@ -1,0 +1,82 @@
+= Datos de eventos de muestreo
+
+== Introducción
+
+Los datos de eventos de muestreo proporcionan información detallada sobre la presencia de especies en lugares y momentos específicos, junto con los métodos de muestreo utilizados. Estos conjuntos de datos siguen protocolos estandarizados, lo que permite a los investigadores evaluar la abundancia de especies, la composición de la comunidad y comparar datos en diferentes momentos y lugares. Los ejemplos incluyen transectos de vegetación, censos de aves, datos de monitoreo y muestras de ADN ambiental. A diferencia de las observaciones ocasionales, los datos de eventos de muestreo son cuantitativos y están calibrados, lo que los hace útiles para detectar cambios y tendencias en las poblaciones. Al incluir detalles del protocolo y el esfuerzo de muestreo, los investigadores pueden incluso inferir la ausencia de especies y comprender mejor los patrones de biodiversidad. Estos conjuntos de datos incluyen la misma información descriptiva básica incluida en xref:resource-metadata.adoc[Metadatos de recursos] y los mismos elementos estándar que en xref:occurrence-data.adoc[Datos de Registros Biológicos].
+
+== Cómo transformar sus datos en datos de eventos de muestreo
+
+image::ipt2/flow-sed.png[]
+
+En última instancia, sus datos deben transformarse en dos tablas utilizando los nombres de los términos del Darwin Core (DwC) como nombres de columna: una tabla de eventos de muestreo y otra tabla de registros de especies derivados de (asociados a) cada evento de muestreo.
+
+Pruebe poner sus datos en la <<Plantillas,plantilla de Excel>>, que incluye dos hojas: una para los eventos de muestreo y otra para los registros biológicos asociados.
+
+Alternativamente, si sus datos están almacenados en xref:database-connection.adoc[bases de datos compatibles], puede escribir dos tablas SQL (vistas) usando nombres de columnas DwC: una para eventos de muestreo y otra para los registros biológicos de las especies asociadas.
+
+Cada evento de muestreo debe incluir todos los xref:occurrence-data.adoc#required-dwc-fields[campos DwC obligatorios] y tantos xref:occurrence-data.adoc#recommended-dwc-fields[campos DwC recomendados] como sea posible. Puede aumentar su tabla con columnas DwC adicionales, pero solo campos DwC de esta {latest-dwc-event}[lista].
+
+Del mismo modo, cada registro biológico de una especie debe incluir todos los xref:occurrence-data.adoc#required-dwc-fields[campos DwC obligatorios] y tantos xref:occurrence-data.adoc#recommended-dwc-fields[campos DwC recomendados] como sea posible. Puede aumentar su tabla con columnas DwC adicionales, pero sólo con elementos DwC de esta {latest-dwc-occurrence}[lista]. Algunos elementos DwC serán redundantes, es decir, se añadirán tanto a los registros de eventos de muestreo como a los registros biológicos de especies. Como regla general, intente no añadir términos redundantes con los mismos valores. Sin embargo, no hay problema si tienen valores diferentes, por ejemplo, si quiere definir la ubicación de un evento y luego definir ubicaciones más específicas para registros individuales. De lo contrario, cuando la ubicación de los registros individuales no se suministra, su ubicación se hereda del evento.
+
+Si necesita ayuda adicional, diríjase a la guía xref:best-practices-checklists.adoc[Buenas Prácticas para la publicación de listados de especies] y eche un vistazo a los <<Conjuntos de datos de ejemplo,conjuntos de datos de ejemplos>>.
+
+=== Plantillas
+
+link:{attachmentsdir}/downloads/event_ipt_template_v2.xlsx[image:ipt2/excel-template2.png[Plantilla de Excel]] link:{attachmentsdir}/downloads/event_ipt_template_v2_example_data.xlsx[image:ipt2/excel-template-data2.png[Plantilla de Excel (con datos de ejemplo)]]
+
+Llene el formato y cárguelo al IPT.
+
+=== Campos DwC obligatorios
+
+* https://dwc.tdwg.org/terms/#dwc:eventID[eventID], también es necesario para los datos de registros biológicos asociados (para vincularlos)
+* https://dwc.tdwg.org/terms/#dwc:eventDate[eventDate]
+* https://dwc.tdwg.org/terms/#dwc:samplingProtocol[samplingProtocol]
+
+=== Campos DwC recomendados
+
+* https://dwc.tdwg.org/terms/#dwc:sampleSizeValue[sampleSizeValue] & https://dwc.tdwg.org/terms/#dwc:sampleSizeUnit[sampleSizeUnit]
+* https://dwc.tdwg.org/terms/#dwc:parentEventID[parentEventID], en situaciones en las que el evento es parte de una serie de eventos
+* https://dwc.tdwg.org/terms/#dwc:samplingEffort[samplingEffort], para proporcionar evidencia del rigor del evento de muestreo
+* https://dwc.tdwg.org/terms/#dwc:locationID[locationID], en situaciones en las que la parcela/transecto muestreada tiene un identificador único
+* https://dwc.tdwg.org/terms/#dwc:decimalLatitude[decimalLatitude] & https://dwc.tdwg.org/terms/#dwc:decimalLongitude[decimalLongitude] & https://dwc.tdwg.org/terms/#dwc:geodeticDatum[geodeticDatum] - to provide a specific point location
+* https://dwc.tdwg.org/terms/#dwc:footprintWKT[footprintWKT] & https://dwc.tdwg.org/terms/#dwc:footprintSRS[footprintSRS], para proporcionar una ubicación de forma específica
+* https://dwc.tdwg.org/terms/#dwc:countryCode[countryCode]
+* https://dwc.tdwg.org/terms/#dwc:occurrenceStatus[occurrenceStatus], sólo para datos de registros biológicos asociados para registrar datos de presencia/ausencia.
+
+=== Conjuntos de datos de ejemplo
+
+* http://cloud.gbif.org/eubon/resource?r=butterflies-monitoring-scheme-il[Israeli Butterfly Monitoring Scheme (BMS-IL)]
+* http://cloud.gbif.org/eubon/resource?r=lvd[Dutch Vegetation Database (LVD)]
+* http://gbif.vm.ntnu.no/ipt/resource?r=lepidurus-arcticus-survey_northeast-greenland_2013[Lepidurus arcticus survey Northeast Greenland 2013]
+* http://danbif.au.dk/ipt/resource?r=rooftop[Insects from light trap (1992–2009), rooftop Zoological Museum, Copenhagen]
+
+=== Preguntas frecuentes
+
+==== P. ¿Cómo puedo indicar que un evento de muestreo forma parte de una serie temporal?
+
+*R.* Todos los eventos de muestreo en el mismo lugar deben compartir el mismo https://dwc.tdwg.org/terms/#dwc:locationID[locationID].
+
+==== R. ¿Cómo puedo publicar una jerarquía de eventos (tipo de datos recursivos) utilizando parentEventID?
+
+*A.* El ejemplo clásico es el submuestreo de una parcela más grande. Para agrupar todos los eventos de submuestreo (hijo) bajo el evento de muestreo (padre), el parentEventID de todos los eventos de submuestreo debe establecerse en el eventID del evento de muestreo (padre). Para que sean válidos, todos los parentEventIDs deben hacer referencia a eventIDs de registros definidos en el mismo conjunto de datos. De lo contrario, el parentEventID debe ser un identificador único global (p. ej., DOI, HTTP URI, etc.) que haga referencia a un evento descrito en otro lugar. Lo ideal es que todos los eventos de submuestreo (hijos) compartan la misma fecha y ubicación que el evento (padre) al que hacen referencia.
+
+==== P. ¿Cómo puedo publicar datos de ausencia?
+
+*A.* *Paso 1*: Puede hacer explícitas las ausencias de especies añadiendo un registro biológico para cada especie que podría haber sido observada en el momento y lugar del muestreo, pero que no fue observada, estableciendo los siguientes campos:
+
+Obligatorio:
+
+* https://dwc.tdwg.org/terms/#dwc:occurrenceStatus[occurrenceStatus]=link:{latest-occurrence-status}[ausente]
+
+Opcional (documente uno o ambos):
+
+* https://dwc.tdwg.org/terms/#dwc:individualCount[individualCount]="0"
+* https://dwc.tdwg.org/terms/#dwc:organismQuantity[organismQuantity] y https://dwc.tdwg.org/terms/#dwc:organismQuantityType[organismQuantityType] conectan: "0", "individuos"
+
+Alternativamente, incluya registros de eventos de muestreo, incluso si el muestreo no produjo registros biológicos de especies derivadas. Esto permite inferir ausencias de especies. Este https://gbif.vm.ntnu.no/ipt/resource?r=lepidurus-arcticus-survey_northeast-greenland_2013[este ejempo de conjunto de datos de eventos de muestreo de Noruega] (https://www.gbif.org/occurrence/search?dataset_key =78360224-5493-45fd-a9a0-c336557f09c3 [también en GBIF.org]) demuestra cómo se ve esto.
+
+*Paso 2*: Definir el alcance taxonómico de todos los eventos de muestreo incluidos en el conjunto de datos, se recomienda publicar una lista de chequeo con fechas junto con el conjunto de datos de eventos de muestreo, que represente la composición de especies que podría observarse en el momento y lugar del muestreo dado el protocolo de muestreo (y/o la cobertura taxonómica del estudio, y la experiencia del personal que realiza la identificación). Esto permitiría registrar datos precisos de presencia/ausencia. Además de la composición normal (esperada) de las especies, la lista de chequeo podría incluir especies invasoras (inesperadas). Sin embargo, por razones taxonómicas y biogeográficas/ecológicas, esta lista de chequeo existiría únicamente en el contexto del conjunto de datos del evento de muestreo.
+
+Puede encontrar instrucciones para crear una lista de chequeo xref:checklist-data.adoc[aquí]. Con la lista de chequeo deben incluirse metadatos detallados que documenten a) las personas que realizaron las identificaciones y su experiencia taxonómica y b) cómo se decidió que estas especies eran detectables e identificables en el momento y lugar del muestreo.
+
+Para vincular el listado de especies al conjunto de datos del evento de muestreo, añada la lista de comprobación a los metadatos del conjunto de datos en la sección xref:manage-resources.adoc#external-links[Enlaces externos].

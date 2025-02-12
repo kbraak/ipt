@@ -1,0 +1,413 @@
+= 發布調查活動資料的最佳實務導引
+
+版本 2.2
+
+== 文件版控
+
+|===
+| 版本 | 說明             | 發布日期 | 作者
+
+| https://links.gbif.org/ipt-sample-data-primer[1.0]   | 發布版本         | 2015 年    | Éamonn Ó Tuama
+| 2.0 | 移轉至 Wiki，重大變更 | 2017 年 5 月   | Kyle Braak
+| https://github.com/gbif/ipt/wiki/BestPracticesSamplingEventData[2.1] | 小幅變更與清理 | 2018 年 8 月   | Marie Grosjean
+| xref:best-practices-sampling-event-data.adoc[2.2] | 轉換至 Asciidoctor | 2021 年 5 月 | Matthew Blissett
+|===
+
+== 引用建議
+
+// The date uses the last change, ignoring formatting etc.
+> GBIF (2018) Best Practices in Publishing Sampling-event data, version 2.2. Copenhagen: GBIF Secretariat. https://ipt.gbif.org/manual/en/ipt/{page-version}/best-practices-sampling-event-data
+
+== 介紹
+
+本導引詳細說明如何使用達爾文核心集檔案格式（DwC-A）作為一種標準化方式來分享調查活動的相關資訊。內容聚焦於達爾文核心集檔案格式的具體組成部分及支持核心活動資料類別的一些延伸資料集，並提出如何最佳化使用這些組成部分的相關建議，以最大化共享資料的價值。此導引未提供達爾文核心集檔案格式的詳細概述，如需更多資訊，請參閱 xref:darwin-core.adoc[達爾文核心集檔案 — 操作導引]。
+
+DwC-A 格式及本文描述的特定配置是國際公認並通過的資料交換格式，用於共享調查活動資料。所有資料交換標準都必須在技術範疇與社會接受度之間取得平衡。簡單的解決方案犧牲了覆蓋範圍和複雜性，換取簡易性；而高度複雜的格式則能更全面地表達各種資料類型，但以犧牲簡易性為代價，並需要與之匹配的軟體及專業知識。達爾文核心標準格式介於這兩者之間，專注於調查活動資料的關鍵要素，並允許將多樣的資料類型與此核心結構連結。檔案中的資料可以被熟悉基本結構化文字檔案的生態學家及資料管理者輕鬆理解和使用。藉由此國際標準，GBIF 希望促進調查活動資料的分享，並推廣一個共通的方法來引用及認可創建與管理調查活動資料的社群貢獻。
+// By providing an international standard that is relatively easy to produce and consume, and that supports many of the key elements that compose a sampling-event data resource, GBIF hopes to provide the creators and managers of sampling-event data with a standardized approach to sharing their data and promote common approaches to the subsequent citation and recognition of their work. The specific degree of coverage depends very much on the individual resource.
+一個標準化的格式還能增加資料的使用相關性和實用性。
+
+== 什麼是調查活動（sampling-event）資料？
+
+調查活動資料是來自數千個環境、生態及自然資源調查的資料類型。這些資料可以是一次性研究或監測計畫的產物，通常具有定量性、校準性，並遵循某些協議，以便偵測族群的變化與趨勢。這與機會觀察及採集資料形成對比，後者目前佔公開生物多樣性資料的很大比例。
+
+=== 如何以 DwC-A 表現調查活動資料？
+
+達爾文核心集檔案（DwC-A）是一種資訊學資料標準，使用達爾文核心標準詞彙生成單一、獨立的資料集，用於物種名錄資料。檔案中的文件集合形成一個完整的資料集，可以作為單一壓縮檔案（Zip 或 GZIP）提供。一個資料集由一個描述性的詮釋資料文件和一個或多個資料檔案組成。更多有關 DwC-A 的資訊，請參閱 xref:darwin-core.adoc[達爾文核心集檔案 — 操作導引]。
+
+=== 調查活動的詮釋資料
+
+通過 GBIF 網路發布調查活動資料時，需要記錄資料集的來源及範疇。資料集的記錄被稱為“資源詮釋資料”，允許使用者評估資料集的適用性。詮釋資料可能描述其彙編所使用的調查方法，以及參與創建與管理的個人及組織。在達爾文核心集檔案中，詮釋資料以 XML 文件形式共享。GBIF 為調查活動資料集提供了基於生態詮釋資料語言的詮釋資料配置文件範本。如何使用此格式描述調查活動資料集的導引請參閱 xref:gbif-metadata-profile.adoc[]。
+
+=== 調查活動資料
+
+達爾文核心集檔案格式提供了一個特定的結構框架，用於發布調查活動資料。檔案由一系列一個或多個文字檔案組成，採用標準逗號分隔或製表符分隔格式。這些檔案以星狀結構排列，包含一個*核心檔案*，列出調查活動（如調查協議、樣本數、地點等），並由多個“*延伸資料集*”環繞，描述相關的資料類型（如物種出現jilt、與調查活動相關的測量或事件等）。核心檔案與延伸紀錄之間的連結使用事件標識符（*eventID*）資料元素完成。這種“星狀結構”提供了一種簡單的關聯資料模型，支援多種類型的調查活動資料集註解類型。
+
+.達爾文核心集檔案資料文件的星狀架構
+image::figures/dwc-a_event.png[]
+
+一種替代方式來編碼調查活動資料，是將物種出現紀錄列在核心檔案中，並圍繞其使用多個延伸資料集來描述相關的資料類型（例如與物種出現相關的測量資料等）。請注意，如果研究的主要焦點是樣地或站點，則建議在核心檔案中列出調查活動。
+
+需要注意的是，目前的 DwC-A 星狀架構存在一些限制。例如，它無法在同一資料集中將測量和事件同時連結到活動和出現紀錄。有關此原型延伸資料集的討論正在 GitHub 上進行，但尚未有解決方案。
+
+請檢查 https://www.gbif.org/data-quality-requirements-sampling-events[調查活動的資料品質要求]。如果您手動生成達爾文核心集檔案，可能需要添加一個 recordID 欄位以包含唯一識別碼。（如果您使用 IPT，此欄位將自動生成。）有關達爾文核心集檔案結構的更多資訊，請參考 https://dwc.tdwg.org/text/[TDWG 達爾文核心標準文本導引]。您也可以使用 https://www.gbif.org/tools/data-validator[GBIF 資料驗證工具]檢查您的檔案。
+
+=== 資料文件格式建議
+
+為了便於理解，我們在本導引中可能使用*欄位*一詞來指代調查活動發布檔案設定檔中的達爾文核心標準詞彙。這些詞彙將對應到使用者的資料。例如，當提到達爾文核心標準詞彙 *scientificName* 時，我們將稱其為 *dwc:scientificName 欄位*。
+
+* 建議使用標籤或逗號分隔值（CSV），避免使用自訂欄位分隔符號及引號。
+* 注意並保持引號的使用一致。
+* 將文字文件編碼為 UTF-8。
+* 確保替換資料欄位中的所有換行符號，例如 `\r`、`\n` 或 `\r\n`，可以用空格代替，或者用如 `$$` 的雙字符來替代 `\r` 以保留換行。另一種選擇是使用 HTML 的 `<br>` 標籤來作為換行符號。
+* 將空值編碼為空字串，例如分隔符號之間不包含任何字符，或者使用 `\N` 或 `\NULL`，但請勿使用其他文字序列！
+
+=== 樣本數
+
+以下為達爾文核心標準用於存儲調查活動樣本數的欄位：
+
+* *sampleSizeValue*: 數值，用於測量調查活動樣本的大小（如持續時間、長度、面積或體積）。
+* *sampleSizeUnit*: 測量樣本大小（如持續時間、長度、面積或體積）的單位。
+
+sampleSizeValue 的值必須是數字，並且必須有相應的 sampleSizeUnit。sampleSizeUnit 的值應限制為僅使用國際單位制 (SI) 單位/衍生單位，或國際單位制接受的非 SI 單位（例如分鐘、小時、天、升），依照 {latest-unit-of-measurement}[測量單位詞彙]。下表提供了一些示例：
+
+可以使用適當的 WKT 形狀或緯度/經度點位置表示調查區域。如果操作正確，還可以推導出調查方向。例如，使用 WKT 形狀 LINESTRING 表示的海洋拖網線，可以根據起點和終點的標準標記法確定拖網的方向。
+
+.sampleSizeValue 和 sampleSizeUnit 必須一起使用，例如：3 平方公尺或 1 升。
+|===
+| sampleSizeValue | sampleSizeUnit
+
+| 2 | hour
+| 3 | m2
+| 17 | km
+| 1 | litre
+|===
+
+=== 數量與豐度
+
+以下達爾文核心欄位也需要成對使用：
+
+* *organismQuantity*: 數值或枚舉值，表示生物數量。
+* *organismQuantityType*: 表示生物數量所使用的量化系統類型。
+
+表2列出了一些示例值。organismQuantity 的值可以是數字或枚舉值，例如：“27”（當 organismQuantityType 為 “individuals” 時），12.5（當 organismQuantityType 為 “%biomass” 時），或 r（當 organismQuantityType 為 “BraunBlanquetScale” 時）。organismQuantityType 的值應從控制詞彙中選取，例如 “Individuals”、“%Biomass”、“%Biovolume”、“%Species”、“%Coverage”、“BraunBlanquetScale”、“DominScale”。以下是一些與 organismQuantity 結合的範例：“+” 對應於 “DominScale”；5 對應於 “BraunBlanquetScale”；45 對應於 “%Biomass”。
+
+.organismQuantity 和 organismQuantityType 必須一起使用，例如：14 隻個體的數量，或 Braun Blanquet 位階中的代碼值 "r"。
+|===
+| organismQuantity | organismQuantityType
+
+| 14 | individuals
+| r | BraunBlanquetScale
+| 0.4 | %Species
+| 31 | %Biomass
+|===
+
+=== 如何唯一識別調查活動
+
+每個活動透過 dwc:eventID 唯一識別，有時也會使用 dwc:parentEventID。雖然標識符的類型和格式是任意的，但建議發布者選擇持久的全域唯一識別碼。如果沒有 GUID，發布者可以重複使用原始的 fieldNumber。
+
+請確保重用現有的穩定標識符，當活動已有標識符時，請勿重新創建新標識符。
+
+=== 如何掌握調查活動的層次結構
+
+調查活動之間可以相互關聯（例如，巢狀樣本）並共享一個共同的父標識符。例如，某 Whittaker 採樣地中的幾個子調查活動，各自擁有自己的 eventID（例如：“A1:1”、“A1:2”），可共享一個共同的 parentEventID（例如：“A1”），從而使它們能夠相互連結（見表4和圖3）。
+
+更多關係性資訊（例如屬於某監測系列）可以在附加詮釋資料的專案部分中描述。
+
+您也可以參考 xref:sampling-event-data.adoc#q-how-do-i-publish-a-hierarchy-of-events-recursive-data-type-using-parentEventID[常見問題]。
+
+=== 如何找出缺失資料
+
+請參考 xref:sampling-event-data.adoc#q-how-do-i-publish-absence-data[常見問題]。
+
+=== 如何添加補充多媒體資料
+
+您可以選擇添加補充媒體資料，以便資料更容易被詮釋。例如，對於植被資料，包含原始掃描的樣區紀錄表連結有助於資料的解讀。
+
+相關的檔案需要託管在外部伺服器上，並透過 dwc:associatedMedia 和 dwc:associatedReferences 連結到物種出現紀錄。這些檔案可以是圖片、文字，或兩者的組合，只要指定格式類型即可。例如，JPG、PNG 等圖片將以縮圖顯示，而 PDF 將顯示為可點擊的連結。
+
+== 發布調查活動資料
+
+=== 使用 GUID 作為識別碼
+
+以下多個欄位需要使用唯一識別碼：dwc:occurrenceID、dwc:eventID、dwc:organismID 和 dwc:locationID。
+
+如前所述，雖然沒有強制要求特定格式，但建議發布者使用全域唯一識別碼 (GUID)。一些線上服務可以提供此類識別碼。例如，您可以使用 http://www.geonames.org/ 來查找（甚至生成新的）dwc:locationID 識別碼，例如：http://sws.geonames.org/10793757/ 是格陵蘭一座湖泊的 GUID。
+
+=== 保護敏感物種的位置
+
+如果資料集中包含敏感物種，有以下幾種處理方式：
+
+* 將這些物種從資料集中移除；
+* 僅發布到屬級的物種鑑定結果；
+* 將敏感/受保護的物種發布為單獨的資料集；
+* 在主資料集中發布模糊化的敏感資料點，並在一個存取受限的獨立資料集中發布未模糊化的詳細資訊，兩個資料集都應包括完整的資料紀錄。
+
+=== 保留原始資料
+
+雖然原始資料和說明不會顯示在 GBIF.org 的網頁介面上，但它們可以通過下載提供給社群使用。輸入原始資料的說明時，請確保將其連結到原始活動或出現紀錄。例如，應將原始活動的 ID 或代碼輸入到 dwc:fieldNumber，並將原始出現觀察紀錄的 ID 或代碼輸入到 dwc:recordNumber。
+
+=== 將專案資料作為單一資料集發布
+
+大型調查專案產生的資料應盡可能以單一資料集發布。如果必須發布多個資料集，建議在詮釋資料中使用共同的專案識別碼來連結這些資料集。
+
+=== 將出現紀錄資料重新發布為調查活動資料
+
+調查活動資料能提供更好的紀錄文件，惠及科學界和政策制定者（https://www.gbif.org/sampling-event-data[閱讀更多]）。我們強烈建議在可能的情況下，將出現紀錄資料重新發布為調查活動資料。
+
+為此，您需要創建一個新的調查活動資料集，並將電子郵件發送至 GBIF 的服務台（helpdesk@gbif.org）。在郵件中，請提供出現紀錄資料集和新資料集的 UUID。我們將能夠在取消索引前，將第一個資料集與最新資料集連結，以避免資料重複並保留引用。
+
+=== 對活體個體的持續監測建模
+
+如果資料集中包含活體個體的持續監測（例如鳥類追蹤資料），可以使用 dwc:organismID 來存儲被追蹤個體的 ID。此外，應將每個被追蹤的個體表示為一個單獨的活動。
+
+// TODO: Provide a recommendation on how to model continuous monitoring of live individuals, such as bird tracking data by using dwc:organismID to store the ID of the individual being tracked and by using a single event for representing each individual being tracked (with associated occurrences where it was recorded).
+
+== 資料品質的持續改進
+
+=== 管理資料集相關的問題
+
+如可能，建議使用問題管理系統（例如 GitHub 提供的系統）來追蹤與資料集相關的所有問題。
+
+=== 分享生成或清理資料集所用的腳本與程式
+
+理想情況下，用於轉換資料的自定義腳本與程式應在 GitHub 上公開。其他發布者可從這些腳本以及詳細的使用說明中受益。
+
+== 在資料集詮釋資料中描述調查活動資料
+
+發布者應盡可能詳細記錄資料集，尤其是調查方法。
+
+除了https://www.gbif.org/data-quality-requirements-sampling-events[強制要求的部分]，詮釋資料應包括關於研究範圍、調查方法、品質控制和研究限制的資訊。雖然田野工作資訊可以作為資料內容的一部分，您也可以在詮釋資料中描述調查位置和條件。
+
+=== 連結相關資料集
+
+某些資料集可能來自同一研究專案，或者在某些情境下相關。目前的建議是使用專案識別碼將它們連結起來。
+
+=== 列出相關研究
+
+您可以在詮釋資料的書目引用部分或外部連結部分，加入相關已發布的作品（例如期刊文章、專案筆記、論文等）的連結，以便讓資料集更容易解讀。
+
+== 範例
+
+以下是一些典型調查活動資料集的範例。在每個案例中，均提供了調查活動核心集和物種出現紀錄延伸資料集中的關鍵欄位。某些範例還包含其他延伸資料集，例如樣區紀錄（Relevé）和“測量與事實”（Measurement-or-Fact）。
+
+=== 淡水無脊椎動物調查
+
+*核心集（調查活動）表格*
+
+|===
+| EventID | samplingProtocol | sampleSizeValue | sampleSizeUnit | eventDate | location | decimalLatitude | decimalLongitude
+
+| C_1428 | AQEM | 1.25 | m^2 | 2006-06-21 | Kinzig O3 Rothenbergen | 50.18689 | 9.100369
+| B_1538 | AQEM | 1.25 | m^2 | 2008-11-06 | Kinzig W3 Bulau | 50.1316 | 8.9657
+|===
+
+*延伸集（出現紀錄）表格*
+
+|===
+| EventID | scientificName | organismQuantity | organismQuantityType | ...
+
+| C_1428 | _Baetis rhodani_ | 14 | individuals |
+| C_1428 | _Ephemera danica_ | 15 | individuals |
+| C_1428 | _Gyraulus albus_ | 2 | individuals |
+| B_1538 | _Serratella ignita_ | 318 | individuals |
+|===
+
+*說明*
+
+_Ephemera danica_: 在此次調查活動中，從 1.25 平方公尺內取得了共 14 隻個體。每平方公尺衍生的個體數為 11.2 (14/1.25)。
+
+=== 鹹淡水無脊椎動物調查
+
+*核心集（調查活動）表格*
+
+|===
+| EventID | samplingProtocol | sampleSizeValue | sampleSizeUnit | startDayOfYear | endDayOfYear | year | location | decimalLatitude | decimalLongitude | ...
+
+| IA1 | hand operated van Veen grab | 0.04 | m^2 | 147 | 154 | 1995 | Gialova lagoon | 36.9564 | 21.6661 |
+| IA3 | hand operated van Veen grab | 0.04 | m^2 | 147 | 154 | 1995 | Gialova lagoon | 36.9564 | 21.6661 |
+|===
+
+*延伸集（出現紀錄）表格*
+
+|===
+| EventID | scientificName | organismQuantity | organismQuantityType | ...
+
+| IA1 | _Abra ovata_ | 57 | individuals |
+| IA3 | _Bittium reticulatum_ | 113 | individuals |
+|===
+
+*延伸集（測量與事實）表格*
+
+|===
+| EventID | measurementType | measurementValue | measurementUnit | measurementRemarks | ...
+
+| IA1 | Tmp (sed) | 21.5 | Degree C | temperature at the bottom surface | --
+| IA1 | Rdx (sed)0 | 170 | mv | Eh value at the bottom surface (0cm) | --
+|===
+
+*說明*
+
+*_Abra ovata_*: 在調查活動 IA1 中，從 0.04 平方公尺內取得了共 57 隻個體。
+
+每個調查活動也可以關聯測量或事實，例如沉積物溫度和氧化還原電位（Eh）等環境測量值。
+
+=== 大型水生植物調查
+
+此範例基於荷蘭植被資料庫（LVD）以前版本的資料，重新發布為調查活動資料集。自初步指南發布後，樣區紀錄（Relevé）延伸資料集有了大幅度的更改。有關 LVD 和植被調查活動資料模型的更多資訊，請參見：https://gbif.blogspot.com/2016/07/probably-turbovegs-best-kept-secret.html。
+
+|===
+| EventID | samplingProtocol | sampleSizeValue | sampleSizeUnit | eventDate | location | decimalLatitude | decimalLongitude | ...
+
+| 1001 | Braun Blanquet | 100 | m^2 | 09/08/2012 | Kinzig O3 Rothenbergen | 50.18689 | 9.100369 |
+|===
+
+*延伸集（出現紀錄）表格*
+
+|===
+| EventID | scientificName | organismQuantity | organismQuantityType | ...
+
+| 1001 | _Acer psuedoplatanus_ | r | BraunBlanquetScale |
+|===
+
+*延伸集（樣區紀錄）表格*
+
+|===
+| EventID | syntaxonCode | inclination | coverTotal | treesCover | coverShrubs | highTreeLayerHeight | highHerbLayerMeanHeight | mossesIdentified | ...
+
+| 1001 | 843200 | 40 | 100 | 95 | 50 | 25 | 40 | Y | --
+|===
+
+*說明*
+
+*_Acer pseudoplatanus_*: 在調查的 100 平方公尺內，該物種的豐度以 Braun Blanquet 位階中的 "r" 被回報。
+
+其他植被樣地測量，如植被群落類型 (syntaxon) 的覆蓋率百分比值，通常會記錄在 TurboVeg 類型資料庫中，並存放於樣區紀錄（植被樣地）延伸資料集中。
+
+=== 鱗翅目調查 I
+
+*核心集（調查活動）表格*
+
+|===
+| EventID | samplingProtocol | sampleSizeValue | sampleSizeUnit | startDayOfYear | endDayOfYear | year | location | decimalLatitude | decimalLongitude | ...
+
+| 2320 | Jalas-model light trap with 160W ML matt lamp | 16 | day | 164 | 180 | 1999 | Kungsmarken | 55.72 | 13.28 | ...
+|===
+
+*延伸集（出現紀錄）表格*
+
+|===
+| EventID | scientificName | organismQuantity | organismQuantityType | ...
+
+| 2320 | _Opisthograptis luteolata_ | 11 | individuals |
+|===
+
+*說明*
+
+*_Opisthograptis luteolata_*: 在 16 天的調查期間，觀察到 11 隻個體。每天的衍生個體數為 0.68 (11/16)。
+
+=== 鱗翅目調查 II
+
+*核心集（調查活動）表格*
+
+|===
+| EventID | samplingProtocol | sampleSizeValue | sampleSizeUnit | eventDate | location | decimalLatitude | decimalLongitude | ...
+
+| 1014-tr023m | Pollard walks | 250 | m^2 | 2012-10-11 | Ramat Hanadiv botanik garden | 32.553191 | 34.947492 |
+| 1012-tr006-s5 | Pollard walks | 250 | m^2 | 2012-05-02 | Carmel Hurshan haarbaim | 32.75789805 | 35.02697333 |
+|===
+
+*延伸集（出現紀錄）表格*
+
+|===
+| EventID | scientificName | organismQuantity | organismQuantityType | ...
+
+|  1014-tr023m  | _Pieris  rapae_ | 1 | individuals |
+| 1014-tr023-s5  | _Maniola  telmessia_ | 2 | individuals |
+|===
+
+*延伸集（測量與事實）表格*
+
+|===
+| EventID | measurementType | measurementValue | measurementUnit | measurementRemarks | ...
+
+| 1014-tr023m | Temp | 20 | Degree C |  |
+| 1014-tr023m | Wind speed | light | | |
+| 1014-tr023m | Cloudiness | 0 | Level 1 of 8 |  |
+| 1014-tr023m | AvgAltitude | 10 | m | Average altitude |
+|===
+
+*說明*
+
+*_Pieris rapae_*: 在此調查活動中，從 250 平方公尺內取得了共 1 隻個體。
+測量與事實延伸集中包含了多項環境測量值（例如溫度、風速和雲量）。
+
+=== 珊瑚礁魚類調查
+
+*核心集（調查活動）表格*
+
+|===
+| EventID | samplingProtocol | sampleSizeValue | sampleSizeUnit | eventDate | location | decimalLatitude | decimalLongitude | ...
+
+| 506003329 | Reef Life Survey methods | 500 | m^2 | 2006-09-02 | Cocos Islands | 5.56187 | -87.04693 |
+| 57003326 | Reef Life Survey methods | 500 | m^2 | 2006-12-11 | Panama Bight | 4.008553 | -81.605377 |
+|===
+
+*延伸集（出現紀錄）表格*
+
+|===
+| EventID | scientificName | organismQuantity | organismQuantityType | ...
+
+| 506003329 | Acanthurus nigricans | 42 | individuals |
+| 506003329 | Acanthurus xanthopterus | 1 | individuals |
+| 506003329 | Aulostomus chinensis | 4 | individuals |
+| 506003329 | Axoclinus cocoensis | 1 | individuals |
+|===
+
+*說明*
+
+*_Aulostomus chinensis_*: 在此調查活動中，從 500 平方公尺內取得了共 4 隻個體。
+
+=== 嵌套樣本
+
+.若干子樣區可能與 parentEventID 相關聯，例如包含 13 個子樣區的 Whittaker 樣地（參見圖 3 的樣地佈局）。
+|===
+| EventID | parentEventID | samplingProtocol | sampleSizeValue | sampleSizeUnit | eventDate | location | decimalLatitude | decimalLongitude | ...
+
+| A1 |  | Modified Whittaker Plot | 1000 | m^2 | 1984-03-18 | Monarch | 55.72 | 13.28 |
+| A1.1 | A1 |  | 100 | m^2 |  |  | | |
+| A1.2 | A1 |  | 10 | m^2 |  |  | | |
+| A1.3 | A1 |  | 10 | m^2 |  |  | | |
+| A1.4 | A1 |  | 1 | m^2 |  |  | | |
+| A1.5 | A1 |  | 1 | m^2 |  |  | | |
+| A1.6 | A1 |  | 1 | m^2 |  |  | | |
+| A1.7 | A1 |  | 1 | m^2 |  |  | | |
+| A1.8 | A1 |  | 1 | m^2 |  |  | | |
+| A1.9 | A1 |  | 1 | m^2 |  |  | | |
+| A1.10 | A1 |  | 1 | m^2 |  |  | | |
+| A1.11 | A1 |  | 1 | m^2 |  |  | | |
+| A1.12 | A1 |  | 1 | m^2 |  |  | | |
+| A1.13 | A1 |  | 1 | m^2 |  |  | | |
+|===
+
+.一個由 13 個不同面積的子樣區組成的 Whittaker 樣地示意圖。
+image::figures/whittaker_plot.png[]
+
+=== 其他可包含或曾經包含的資訊
+
+事件核心元素主要來自達爾文核心標準（DwC）的 Event、Location 和 Geological Context 類別（參見表 3）。物種出現紀錄延伸資料集的元素則來自 Occurrence、Taxon 和 Identification 類別。為了一致性，物種出現紀錄延伸資料集包含了所有來自物種出現紀錄核心的術語。因此，Event、Location 和 Geological Context 的術語也被列入物種出現紀錄延伸資料集，但實際上是冗餘的。注意，IPT 為方便使用者，默認會隱藏這些冗餘術語。
+
+.樣本相關術語在事件核心和物種出現紀錄延伸資料集中的位置。
+[cols="1h,1"]
+|===
+| Event Core
+| eventID, parentEventID, samplingProtocol, sampleSizeValue, sampleSizeUnit, samplingTaxaRange, siteTreatment, siteID, layer
+
+| Occurrence Extension
+| eventID, organismQuantity, organismQuantityType, siteID+, layer+
+|===
+
+「+」符號表示被建議且尚未正式通過的新術語。
+
+=== 計劃新增項目與修訂說明：
+
+xref:best-practices-sampling-event-planned-additions.adoc[]

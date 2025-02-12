@@ -1,0 +1,479 @@
+= 發布物種名錄的最佳實務導引
+
+版本 2.1
+
+image::figures/cover_art_stilt.png[]
+
+== 文件版控
+
+|===
+| 版本 | 說明 | 發布日期 | 作者
+
+| 1.0 | 初始發布版本 | 2011年4月1日 | David Remsen
+
+| https://links.gbif.org/checklist_best_practices[1.11] | 小幅編輯修改 | 2011年4月28日 | David Remsen
+
+| https://github.com/gbif/ipt/wiki/BestPracticesChecklists[2.0] | 移至 Wiki，重大變更 | 2017年3月30日 | Kyle Braak
+
+| xref:best-practices-checklists.adoc[2.1] | 移至 AsciiDoctor | 2021年5月24日 | Matthew Blissett
+|===
+
+== 引用建議
+
+// The date uses the last change, ignoring formatting etc.
+> GBIF (2017) Best Practices in Publishing Species Checklists, version 2.1. Copenhagen: GBIF Secretariat. https://ipt.gbif.org/manual/en/ipt/{page-version}/best-practices-checklists
+
+_Cover art credit: Gregory Basco, Black-necked stilt, Himantopus mexicanus_
+
+== 介紹
+
+此導引提供了有關如何使用達爾文核心集檔案 (DwC-A) 格式以標準化方式分享分類學名錄資訊的詳細說明。此外，此導引著重於達爾文核心集檔案格式的特定組成部分，以及支持核心分類資料類別的一些延伸資料集，並提供如何充分利用這些組件以最大化共享資料價值的建議。本導引不會對達爾文核心集檔案格式進行詳細概述，有關詳細資訊，請參考 xref:darwin-core.adoc[達爾文核心集檔案 — 操作導引]。
+
+此處描述的 DwC-A 格式及特定規範是一種國際認可且被正式核准用於分享分類資料的資料交換格式。所有資料交換標準都需要在技術範圍與能力，以及社會接受度與普及性之間取得平衡。簡單的解決方案犧牲了資料的覆蓋範圍和複雜性，以換取易用性；而高度複雜的格式提供更完整的資料表示能力，但需要相應的軟體及專業技術。達爾文核心集檔案格式介於這兩者之間的中間位置，專注於分類學名錄的關鍵元素，並支持將多種類型的延伸資料集連結到此核心結構。檔案中的資料對於熟悉基本結構化文字檔案的生物學家及資料管理者來說將易於理解和使用。GBIF 希望通過提供一種相對容易製作和使用的國際標準，包括支持構建分類資料資源的關鍵元素，為名錄創建者及管理者提供一種標準化的分享方式，並推動一個共同的方式使後續的引用和推廣工作變得更簡單。此外，標準化的格式還能提升資料之間的相關性及其實用性。
+
+== 範疇
+
+術語「物種名錄」與分類學「目錄」可能涵蓋一系列重疊的分類資源。這些資料成果均包含隱式或顯式地指向分類群的學名集合。此類清單中包含的名稱集可能受分類群組、地理區域或特定主題（如入侵物種）或三者結合的限制。以下是按詳盡程度排列的資源類型footnote:[這些類別及說明直接取自“Hyam, R.,《泛歐物種目錄的資料交換標準化之基礎架構（PESI）》，第 4.1 章。]：
+
+. *名稱清單* - 僅包含物種名稱的簡單清單，未明確標示分類地位，但通常隱含分類群的有效名稱。此類清單通常用於識別某些區域或主題背景內包含的分類群集。
+. *命名模式清單（命名冊）* - 包含名稱及名義分類群的清單，表示已發表的學名用法登記，這些用法是依據相應命名法規則進行的命名行為。這些行為大多數為新學名的「原始描述」，但也可能包括修訂、更正模式標本及其他命名行為。此類清單不包含分類概念中的同物異名，僅限於與基本名相關的命名學同物異名（如植物學中的新組合）。
+. *分類學名錄* - 在命名清單的基礎上，增加了以明確分類地位資訊及包含同物異名的形式呈現的分類學意義。此類簡單的分類清單不提供關於同物異名基礎的具體界定資訊。分類群通常被歸類為分類系統。「分類學目錄」這一術語也可用於指代此類名錄及其後續類別，特別是當資源包含經過驗證的發布內容及分類地位細節時。
+. *註解名錄* - 此類別在核心的、已同物異名化的分類學名錄基礎上，增加其他資料類型（註解），例如俗名、威脅狀態、分布及基本說明資訊。當註解類型提供足夠細節以有效定義或界定分類群（例如詳細的診斷性描述和插圖、分子資料、標本等），此註解名錄可能符合以下定義的兩種類別之一。
+. *植物誌或動物誌名錄* – 這類資源通常以書籍形式呈現，提供某一特定區域內物種的詳細記錄。內容可能包括註解名錄中提到的多種資料類型，但也包含特定資料類型，例如詳細描述與插圖、標本參考及其他明確界定分類群在該區域範疇內（不一定是全球範疇）的細節。
+. 專著 – 專著通常是以書籍形式發佈的，針對特定分類群於全球範疇內的詳細記錄。內容包含詳細的命名學資訊、同物異名及分類群界定細節，包括文字描述、插圖、檢驗標本的細節，以及相關文獻的書目。
+
+達爾文核心集檔案格式與 <<GBIF 延伸資料集名錄>> 支援在所有上述名錄資料類型中交換關鍵資料元素。具體涵蓋範圍高度依賴於每個資源的特性。在本文中，我們將廣義使用“名錄”這一術語來泛指上述任一或全部資源類別；當參考特定資源時，則會使用具體類別名稱。
+
+=== 達爾文核心集檔案格式
+
+達爾文核心集檔案 (DwC-A) 是一個資訊學資料標準，使用達爾文核心標準詞彙生成單一、獨立的名錄資料集。檔案中的文件集合形成一個完整的資料集，使用者可以利用單一壓縮文件（Zip 或 Gzip）提供此檔案。一個資料集由描述性的詮釋資料文件和一組一個或多個的資料文件組成。有關 DwC-A 的更多資訊，請參考 xref:darwin-core.adoc[達爾文核心集檔案 — 操作導引]。
+
+==== 名錄詮釋資料
+
+在通過 GBIF 網絡發布名錄資料時，需要記錄資料集的來源和範疇。這些記錄下來的文件稱為“資源詮釋資料”，可以幫助使用者評估資料集的適用性。詮釋資料可以描述名錄的範疇與預期用途、編製過程中的方法與資源，以及參與創建與管理的個人和機構。詮釋資料在達爾文核心集檔案中以 XML 文件形式共享。GBIF 為物種名錄提供了一種基於生態詮釋資料語言的詮釋資料配置文件範本。操作導引詳細說明了使用此格式描述物種名錄的所有選項。請參考 xref:gbif-metadata-profile.adoc[]。
+
+==== 物種名錄資料
+
+達爾文核心集檔案格式為發布物種名錄提供了特定的結構框架。達爾文核心集檔案由一系列一個或多個文字文件組成，採用標準的逗號或標籤分隔格式。這些文件組成一種星狀結構，*核心文件*包含基本的名錄元素（物種清單、分類、同物異名），周圍是一系列用以描述相關的資料類型（例如俗名）“*延伸資料集*”。核心和延伸資料集之間的連結通過分類群標識符 (taxonID) 資料元素建立。通過這種方式，每個核心分類群紀錄可以對應多個延伸資料集紀錄。此“星狀架構”提供了一種簡單的關聯資料模型，支援物種名錄中多種常見的註解類型。
+
+.達爾文核心集檔案資料文件的星狀架構
+image::figures/dwc-a_checklist.png[]
+
+==== 資料文件格式建議
+
+為方便理解，我們可能在本指南中使用“欄位”一詞，指代分類出版配置文件中的達爾文核心標準詞彙，使用者的資料將對應於此。例如，當提到 *dwc:scientificName* 欄位 時，指的是達爾文核心標準詞彙中 *scientificName* 的使用。
+
+* 建議使用標籤或逗號分隔值（CSV），避免使用自訂欄位分隔符號及引號。
+* 注意並保持引號的使用一致。
+* 將文字文件編碼為 UTF-8。
+* 確保替換資料欄位中的所有換行符號，例如 `\r`、`\n` 或 `\r\n`，可以用空格代替，或者用如 `$$` 的雙字符來替代 `\r` 以保留換行。另一種選擇是使用 HTML 的 `<br>` 標籤來作為換行符號。
+* 將空值編碼為空字串，例如分隔符號之間不包含任何字符，或者使用 `\N` 或 `\NULL`，但請勿使用其他文字序列！
+
+== 共享學名
+
+達爾文核心標準支援多種方式共享學名，包括以下選項：
+
+=== A. 以學名欄位拼接
+
+|===
+| scientificName
+
+| Gerardia paupercula var. borealis (Pennell) Deam
+|===
+
+*dwc:scientificName* 欄位存儲分類群的完整學名，包括著者信息。即使名稱已拆分為組成部分（如 C. 所示），此欄位仍應填入資料。對於未將名稱部分與著者部分明確分離的資料庫，應使用此欄位存儲整個拼接名稱字串。此欄位適用於混合式子、*sensu strictu* 名稱、自動命名及其他複雜的二名法名稱。通常，該欄位與 *dwc:taxonRank* 欄位結合使用，存儲完整分類學名錄中的學名部分，包括高階分類群。
+
+=== B. 分離名稱與著者部分
+
+|===
+| scientificName                | scientificNameAuthorship
+
+| Gerardia paupercula var. borealis | (Pennell) Deam
+|===
+
+某些資料庫將學名分為名稱部分與著者部分。在此情況下，應使用 *dwc:scientificName* 和 *dwc:scientificNameAuthorship* 欄位。
+
+=== C. 拆分名稱至多個部分
+
+|===
+| Genus | specificEpithet | taxonRank | infraspecificEpithet | scientificNameAuthorship
+
+| Gerardia  | paupercula          | var.          | borealis                 | (Pennell) Deam
+|===
+
+達爾文核心標準提供一系列詞彙，允許將學名拆分為幾個組成部分。一些資料庫以此解析組件形式存儲物種清單。在此情況下，可以考慮以此形式共享資料。然而，強烈建議從組件中組合出完整名稱，並將其共享在 *dwc:scientificName* 欄位中（如上文 A 節所述）。注意，上表中達爾文核心標準詞彙 *dwc:subgenus* 雖未顯示，但它代表另一個名稱組件。
+
+=== 種內位階標記
+
+若可能，請在學名中提供種內位階的標記，以避免與原始/基名作者混淆。例如，建議使用「*Ageratina subgen. Apoda* R.M.King & H.Rob」而非「*Ageratina (Apoda)* R.M.King & H.Rob」，因為後者中的 *Apoda* 可能會被解釋為亞屬或基名作者。
+
+== 分類集的發布
+
+達爾文核心標準提供兩種基本選項來發布分類集或分類階層：正規化與非正規化。這兩種選項對應於大多數資料庫中管理分類集的主要方式。
+
+=== 正規化分類（父/子關係）
+
+分類集的分享方式我們推薦正規化的格式，也被稱為資料庫中的「父子關係」或「鄰接清單」。在正規化的分類階層中，每個分類單元以一行表示，包括物種與所有更高階的分類。每行至少包含以下資料元素：
+
+* *dwc:taxonID* 指向當前分類單元的唯一標識符。 *您可使用任何現有的標識符*。
+* *dwc:scientificName* 為當前分類單元的學名，例如「 *Panthera tigris* 」。
+* *dwc:taxonRank* 為當前分類單元的位階，例如「 *species* 」。
+* *dwc:parentNameUsageID* 指向當前分類單元的直接父分類單元的標識符。在下例中，紀錄編號 7「*Panthera tigris* (Linnaeus)」的父分類單元是紀錄編號 6，即屬「*Panthera*」。
+
+以下是一個描述虎（*Panthera tigris*）的分類示例。請注意，階層中最高的分類單元無父分類，因此其父標識符應留空。請注意，在這種情況下，*dwc:scientificName* 提供了一個用於存儲名稱的通用欄位。其他名稱的命名共享方式已在上面的“共享科學名稱”中描述。
+
+|===
+| taxonID | taxonRank | scientificName         | parentNameUsageID
+
+| 1           | Kingdom       | Animalia                   |
+| 2           | Phylum        | Chordata                   | 1
+| 3           | Class         | Mammalia                   | 2
+| 4           | Order         | Carnivora                  | 3
+| 5           | Family        | Felidae                    | 4
+| 6           | Genus         | Panthera                   | 5
+| 7           | Species       | Panthera tigris (Linnaeus) | 6
+|===
+
+==== 優勢
+
+* *效率* – 正規化分類為階層中的每個分類單元儲存單一參考。
+* *參考完整性* – 每個分類單元都有一個唯一標識符，且明確引用其直接父分類單元。這將簡化檢查分類階層是否完整且結構正確的過程。
+* *擴展性* – 所有分類單元均有唯一的標識符，使更高階的分類單元也可以像物種紀錄一樣，通過延伸資料集進行更豐富的描述。
+
+==== 劣勢
+
+* *便利性* - 正規化分類不易於以原始表格形式直觀檢視分類階層。然而，許多生物學家以更直觀但效率較低的方式管理分類，即下述的 *非正規化格式* 。手動將非正規化分類轉換為正規化格式是一個較為困難的過程。
+
+NOTE: *dwc:parentNameUsageID* 必須指向資料集中的現有紀錄。指向不存在紀錄的更高階分類單元標識符是無效的。
+
+=== 非正規化分類
+
+此格式常見於以試算表管理物種資訊的情境。在非正規化分類中，資料表的每一行代表一個終端分類單元（如物種），並包含一組對應的父分類單元，以欄位形式表示，每個父分類單元對應一個欄位。
+
+雖然此格式並非分享分類資料的推薦方法，但由於在許多物種清單中普遍使用，GBIF 仍支持該格式。若需使用此方法分享資料，強烈建議遵守以下指導方針：
+
+. 確保每個更高階分類欄位均填滿，例如在下述「Plantae」的示例中，避免空白。
+. 確保清單的分類完整性。例如，確保同一屬中的兩個物種共享相同的科；若同物種以同物異名形式出現在多行中，確保它們的分類與可接受分類單元一致。
+
+|===
+| taxonID | kingdom | phylum | class | order | family | scientificName
+
+| 1001        | Animalia    | Chordata   | Mammalia  | Carnivora   | Felidae    | Panthera tigris
+| 1002        | Animalia    | Chordata   | Mammalia  | Carnivora   | Felidae    | Panthera leo
+| 1003        | Animalia    | Arthropoda | Insecta   | Hymenoptera | Apidae     | Apis mellifera
+| 1004        | Plantae     | --         | --        | --          | Poales     | Poa annularis
+|===
+
+=== 優勢
+
+* *可讀性* - 該格式的主要優勢在於容易閱讀，分類階層可通過直接閱讀欄位來評估。
+* *便利性* - 試算表應用程式和許多關聯式資料庫容易實現此結構，用於儲存階層式資料。
+
+=== 劣勢
+
+* *參考完整性較低* - 此格式中更高階分類單元重複出現，使同一分類單元拼寫不一致的可能性增加。例如，可能出現同一分類單元（如「Felidae」）被分配至不同的父分類單元，導致階層完整性有所衝突。
+* *缺乏更高階分類的詳細資訊* - 此格式將更高階分類單元視為物種的屬性，而非獨立的分類單元紀錄，因此無法在核心檔案或任何延伸資料集中分享更高階分類的屬性。
+
+=== 其他與分類相關的建議
+
+* 嘗試在所有紀錄中包含界（Kingdom）與命名法規的參考資料，即使是基本的物種清單。
+* 嘗試在非正規化分類中至少包括界、門（Phylum）和科（Family）的分類。
+* 如果整個資料集中的分類皆相同，考慮使用靜態對照方式指定術語和資料值。詳細資料參考 xref:dwca-guide.adoc[]（《達爾文核心集檔案 — 操作導引》）。
+
+== 不建議發布的分類格式
+
+以下範例展示了符合資料配置的方式，但 *不建議或不被 GBIF 支援* （GBIF 的解析器無法正確處理這些情況）。
+
+[.upperroman]
+. 這個範例將參照分類單元的值放在最後一個欄位。
++
+|===
+| taxonID | kingdom | phylum | class | order | family | scientificName
+
+| 997         | Animalia    |            |           |           |            |
+| 998         | Animalia    | Chordata   |           |           |            |
+| 999         | Animalia    | Chordata   | Mammalia  |           |            |
+| 1000        | Animalia    | Chordata   | Mammalia  | Carnivora |            |
+| 1001        | Animalia    | Chordata   | Mammalia  | Carnivora | Felidae    |
+| 1002        | Animalia    | Chordata   | Mammalia  | Carnivora | Felidae    | Panthera tigris
+| 1003        | Animalia    | Chordata   | Mammalia  | Carnivora | Felidae    | Panthera tigris
+|===
+
+. 這個範例與上述範例類似，但試圖透過僅記錄一次的高位階分類單元名稱來減少完整性錯誤。
++
+|===
+| taxonID | kingdom | phylum | class | order | family | scientificName
+
+| 997         | Animalia    |            |           |           |            |
+| 998         |             | Chordata   |           |           |            |
+| 999         |             |            | Mammalia  |           |            |
+| 1000        |             |            |           | Carnivora |            |
+| 1001        |             |            |           |           | Felidae    |
+| 1002        |             |            |           |           |            | Panthera tigris
+| 1003        |             |            |           |           |            | Panthera leo
+|===
+
+請避免以這些配置方式發布資料。
+
+== 同物異名的發布
+
+達爾文核心集檔案支持在物種名錄中發布同物異名。每個同物異名作為核心資料檔案中的單獨紀錄發布。透過使用 *dwc:acceptedNameUsageID* 欄位，將同物異名連結到其被接受的分類單元紀錄。該欄位包含代表被接受分類單元紀錄的 *dwc:taxonID*。以下的簡化範例中，第一筆紀錄代表分類單元的既定名稱，而紀錄 2 和 3 是同義詞。
+
+|===
+| taxonID | scientificName | acceptedNameID | taxonomicStatus | nomenclaturalStatus
+
+| 1           | Coeligena helianthea (Lesson 1838)                | 1                  | accepted            |
+| 2           | Ornismya helianthea Lesson 1838                   | 1                  | Homotypic synonym   |
+| 3           | Helianthea helianthea (Lesson 1838) J. Gould 1848 | 1                  | Homotypic synonym   |
+| 4           | Helianthea typica Bonaparte 1850                  | 1                  | Heterotypic synonym | nomen dubium
+| 5           | Helianthea porphyrogaster Mulsant 1876            | 1                  | Heterotypic synonym | nomen dubium
+| 6           | Coeligena helianthea tamai Berlioz & Phelps 1953  | 1                  | Heterotypic synonym | nomen dubium
+|===
+
+建議為每個同物異名紀錄提供一個獨立的 *dwc:taxonID*，且不得與已接受的分類單元紀錄使用相同的 *dwc:taxonID*。同物異名的最簡單表示方式如上述範例所示，即將同物異名列為獨立紀錄，並通過 *dwc:acceptedNameUsageID* 指向已接受的分類單元紀錄。這種簡化的同物異名表示法支持基本物種名錄分類表的發布，其中同物異名的詳細資訊僅限於核心分類單元類別的元素。*dwc:taxonomicStatus* 欄位確認紀錄的狀態，建議使用的詞彙範例為 {latest-taxonomic-status}[可用]。額外的命名細節（支持同物異名的理由）可使用 *dwc:nomenclaturalStatus* 欄位以及 {latest-nomenclatural-status}[支持詞彙] 來描述。
+
+通過確保每個同物異名記錄包含唯一的 *dwc:taxonID*，並利用可用的延伸資料集來支持物種名錄註解的共享，可以實現詳細的同物異名管理。這種方式支持將一個或多個書目紀錄、標本紀錄和其他 <<GBIF 物種名錄延伸資料集>> 支援的資料類型連結到核心資料檔中的單個同物異名紀錄。如果未為同物異名紀錄提供 *dwc:taxonID*，則無法使用延伸資料集，因為它們依賴 *dwc:taxonID* 將延伸資料與核心檔案中的分類單元紀錄連結。一個簡化的範例以表格展示了如何使用兩個文件利用引用延伸資料集為同物異名提供書目資訊。範例中反白顯示了共享的 *dwc:taxonID*。
+
+*Taxon.txt* 資料檔案
+
+|===
+| taxonID | scientificName | acceptedNameUsageID | taxonomicStatus
+
+| 1           | Coeligena helianthea  | 1                       | accepted
+| 2           | Ornismya helianthea   | 1                       | synonym
+| 3           | Helianthea helianthea | 1                       | synonym
+|===
+
+*References.txt* 資料檔案
+
+|===
+| taxonID | 書目引用
+
+| 2           | Schmidt, O. 1870. Grundzüge einer Spongien-Fauna des atlantischen Gebietes. (Wilhelm Engelmann: Leipzig): iii-iv, 1-88, pls I-VI.
+| 2           | Laubenfels, M.W. De 1942. Porifera from Greenland and Baffinland collected by Capt. Robert A. Bartlett. Journal of the Washington Academy of Sciences 32(9): 263-269.
+|===
+
+*同物異名管理的注意事項*
+
+* *dwc:acceptedNameUsageID* 必須指向資料集中的現有紀錄。指向不存在的已接受分類單元紀錄是無效的。
+* 請勿混淆描述分類的 *dwc:higherTaxonID* 與描述紀錄分類狀態的 *dwc:acceptedNameUsageID*。
+* 請勿“鏈式”連結同物異名。同物異名應僅通過 *dwc:acceptedNameUsageID* 指向已接受的分類單元紀錄，不應指向另一個同物異名。
+
+=== 命名法上的同物異名
+
+在核心資料檔案中，可以使用 *dwc:originalNameUsageID* 欄位支援 *命名法上的同物異名*。此欄位指向該名稱的原始分類單元參考所代表的行。建議該紀錄在 *dwc:namePublishedIn* 欄位中提供書目引用，該欄位指的是最初確定該名稱的出版物。
+
+|===
+| taxonID | scientificName | originalNameID | namePublishedIn
+
+| 1           | Tetrao afer Müller 1778             | 1                  | J. Syst. Nat 7:31
+| 2           | Pternistes afer (Müller 1778)       | 1                  |
+| 3           | Francolinus afer afer (Müller 1778) | 1                  |
+|===
+
+命名法和分類上的同物異名可在同一分類單元紀錄中指定。
+
+NOTE: *dwc:originalNameUsageID* 必須指向資料集中的現有紀錄。指向不存在紀錄的已接受分類單元是無效的。
+
+=== 部分同物異名
+
+有時同一名稱可能是多個已接受分類單元的同物異名，或者既是已接受的分類單元名稱又是同物異名。這種情況通常由於分類單元的分裂和範疇變更引起，例如一系列類型可能被分配到多個分類單元中。建議的做法如下範例所示。在此範例中，*Vireo solitarius* 是一個已接受的分類單元名稱，同時也被列為 *Vireo cassinii* 和 *Vireo plumbeus* 的同物異名。對於同物異名，它們被表示為單一紀錄，並在 *dwc:acceptedNameUsageID* 欄位中串聯已接受分類單元參考，使用管道符號（“|”）分隔。
+
+|===
+| taxonID | scientificName | acceptedNameUsageID | taxonomicStatus
+
+| 1           | Vireo solitarius   | 1                       | accepted
+| 2           | Vireo cassinii     | 2                       | accepted
+| 3           | Vireo plumbeus     | 3                       | accepted
+| 4           | Vireo solitarius   | 2&#124;3                     | pro-parte
+|===
+
+NOTE: IPT 使用者應為每個來源檔案定義多值分隔符號。請參考 IPT 使用手冊的 xref:manage-resources.adoc#source-data[來源資料部分] 以獲取更多指引。
+
+== 引用與歸屬
+
+物種名錄分類表通常代表了個人和組織在知識和財務上的重大努力。一些物種名錄可能源自或引用其他來源物種名錄，以創建對同一來源權威在主題性、區域性或分類性上的新視角。因此，正確的歸屬和這些來源的公開狀態至關重要。
+
+達爾文核心標準格式提供了一系列選項與建議，用於提供適當的引用與歸屬。其範圍涵蓋從全球引用和歸屬構成的來源詮釋資料，延伸到記錄級別的資料元素，支持多層次的歸屬。
+
+=== 詮釋資料的引用與歸屬
+
+GBIF 詮釋資料配置檔支援資源層級的資料元素，這些元素有助於資料集的引用與歸屬，並使物種名錄的範圍與來源能夠被詳細描述。本文件和 xref:gbif-metadata-profile.adoc[可用] 不包含完整的詮釋資料元素清單，而具體的引用與歸屬相關元素包括：
+
+* *智慧財產權* – 詮釋資料配置檔包含資源的權利管理聲明，或提供相關資訊的服務參考，例如 Creative Commons 授權聲明。它也包括一個用於描述該資料集的預期用途與目的的元素。
+* *個人與組織* – 詮釋資料配置檔允許描述與資料集相關的所有個人、機構或組織。這些代理者可被指定與資料集相關的不同角色，並可包含每個資源的 URL。本部分提供一種描述與連結貢獻於物種名錄的個人與組織的方法。
+* *來源 URL* – 連結至來源的主頁。
+* *專案資訊* – 如果物種名錄與特定專案相關（例如 “The Catalogue of Life”），則可使用一組欄位來詳細描述該專案。
+* *引用* – 此元素允許物種名錄的發布者指定在使用時應如何引用該名錄資料。例如 *“Appeltans W, Bouchet P, Boxshall GA, Fauchald K, Gordon DP, Hoeksema BW, Poore GCB, van Soest RWM, Stöhr S, Walter TC, Costello MJ. (eds) (2011). World Register of Marine Species. Accessed at http://www.marinespecies.org on 2011-02-22.”* 。
+* *參考文獻* – 可在詮釋資料檔案中描述並包含完整的參考文獻清單。
+
+=== 資料層級的引用與歸屬
+
+記錄在詮釋資料檔案中的歸屬與引用資訊適用於資料集中所有的紀錄。在某些情況下，可能需要更細化的層級，甚至到單筆紀錄的層級。在這些情況下，推薦使用記錄層級的術語來指定引用與歸屬資訊。
+
+* *dwc:nameAccordingTo* ：此術語可用來識別作為該紀錄權威分類參考的個人或引用（例如：“Erpenbeck, D.; Van Soest, R.W.M. 2002. Family Halichondriidae Gray, 1867. Pp. 787-816. In Hooper, J. N. A. & Van Soest, R. W. M. (ed.) Systema Porifera. A guide to the classification of sponges.”）。
+* *dwc:nameAccordingToID* ：返回上述 nameAccordingTo 參考的唯一識別碼，例如 URL。
+* *dwc:datasetName* ：如果紀錄源自外部資料集，此資料集可被引用為文字字串（例如：“World Register of Marine Species, cited on 12 April 2011”）。
+* *dwc:datasetID* – 指向資料集的識別碼，建議為可解析的。
+* *dc:source* – 連結至來源網頁。
+
+==== 使用案例 1 - 由多個貢獻資料集組成的物種名錄（例如 Catalogue of Life，PESI，WoRMS）
+
+一個分類學資料集可能由多個貢獻來源組成，每個來源除了共同的資源本身外，都需要被確認。這有很多例子，如 Catalogue of Life Annual Checklist，其目的是提供世界上所有已知生物的完整名錄，該名錄由代表主要分類群的單獨資料集組成。這些資源進一步也可能是由來自各專家子網路的貢獻組成。
+
+其他範例包括泛歐物種名錄（Pan-European Species list），該名錄由多個延伸資料集組成，包括歐洲動物誌（Fauna Europaea）、歐洲海洋物種名錄（European Register of Marine Species）、歐洲與地中海植物基礎資料庫（Euro+Med PlantBase）等。世界海洋物種名錄（World Register of Marine Species）是另一個與此相似的網絡。
+
+有效記錄這些資源來源的推薦做法總結如下：
+
+. 創建一份單一的詮釋資料文件用以代表整個資源（例如，生命名錄（Catalogue of Life）、世界海洋物種名錄（The World Register of Marine Species）等）。該詮釋資料文件提供正確的引用、相關代理人、權利及上述其他要素。該文件的檔名在達爾文核心集檔案描述文件 meta.xml 中被引用，從而將詮釋資料文件連結至整個達爾文核心集檔案資料集。建議的最佳做法是使用 GBIF 詮釋資料規範，並將此文件命名為 EML.xml 。在此情況下，詮釋資料描述文件的 XML 格式會如下所示：
++
+----
+<archive xmlns="http://rs.tdwg.org/dwc/text/" metadata="eml.xml">
+----
+
+. 作者可為每個組成的延伸資料集創建額外的詮釋資料文件，並將其包含在檔案中。這使得每個子延伸資料集能像“父”資料集一樣被完整記錄，附有其推薦的引用、貢獻者等。由於這些延伸資料集未記錄整個集合，它們不會在 meta.xml 描述文件中被引用，而是通過 *dwc:datasetID* 詞條從單個資料紀錄中被引用。如果詮釋資料文件包含在檔案本身中，則 *dwc:datasetID* 等於該文件的檔名。或者，它可以參考一個 URL 或其他唯一且可解析的資訊標識符。一種較不推薦但可行的替代方法是添加一個指向數據集的簡單網頁 URL ，即不是結構化的詮釋資料文件。
+. 若要在紀錄層級引用個人，提供第三層引用，建議使用 *dwc:nameAccordingTo* 欄位。其他紀錄層級的詞條已在上述內容中提供。
+
+=== 使用案例2 - 基於一個或多個權威來源的物種名錄
+
+在此使用案例中，物種名錄是為特定目的而編制，但其基本分類結構來源於一個或多個作為 *權威文件* 的外部分類物種名錄。該新編纂的名錄可能包含對基本來源紀錄的額外註解，這些註解適用於該新名錄的重點。例如，一份歐洲國家物種名錄可能基於歐洲動物誌（Fauna Europaea）或生命名錄（Catalogue of Life）等資料庫編制，這些資料庫理論上提供了一個國家的完整名錄，作為其自身覆蓋範圍的子集。國家名錄可能進一步添加其他區域性細節，如國家的威脅狀況或其他感興趣的屬性，最終生成一個新的衍生資料集。在這種情況下，能夠提供紀錄層級的來源引用和連結至來源資料集非常重要。推薦的方式如下：
+
+. 一份單一的詮釋資料文件被建立以代表新的衍生資源本身（例如，荷蘭物種名錄）。被引用的資料集可以在該詮釋資料文件中被引用。
+.. 完整描述作為具有“貢獻者”角色的組織，並連結至來源網站。
+.. 在書目引用部分中按照所參考資料集的建議進行引用。
+.  在資料檔案中，可以在紀錄層級進行額外的來源標註與連結，包括：
+.. 在 *dwc:datasetName* 中引用資料集的名稱
+.. 在 *dwc:datasetID* 中引用資料集的ID（如URL），並連結至資料集首頁
+.. 使用 *dc:source* 提供指向參考資料集網站的對應物種頁面的連結
+...  如果 dc:source 保留用於指向衍生資料庫的 URL，則仍可以使用延伸資料集的替代標識符添加連結至來源資料庫。
+.. 如果來源資料集為名錄中引用的分類群提供全球唯一標識符，建議使用該標識符作為衍生資料集中的 *taxonID*，以確保與來源分類群有明確的連結。
+.. 使用 *dwc:nameAccordingTo* 或 *dwc:nameAccordingToID* 來引用對應來源紀錄中的分類群定義作為參考或 URL。
+
+== 分享俗名
+
+本系統支援與分類單元相關的俗名資料共享，這些俗名資料可透過一個獨立的、相關的檔案使用 {latest-vernacularname}[俗名延伸資料集] 來分享。該延伸資料集提供了描述俗名使用的豐富屬性，包括地區和形態限定詞。
+
+image::figures/myristica_fragrans.png[]
+
+俗名需透過延伸資料集參照，因此必須與父核心資料檔案中的命名分類單元連結。此外，建議在俗名紀錄中提供語言參照，標識該俗名使用所代表的語言。最佳做法是使用 http://rs.gbif.org/vocabulary/iso/639-1.xml[ISO 639 語言代碼]來分享語言資訊。俗名可能具有特定地區的用法，可透過 dwc:locality 元素或使用較低精度的 dwc:country 元素來指明。建議國家名稱使用 http://rs.gbif.org/vocabulary/iso/3166-1_alpha2.xml[ISO 3166-1 Alpha-2 國家代碼]。
+
+== 分享物種描述
+
+本系統支援與分類單元相關的描述性資訊共享。這些描述性資料以一個獨立的、相關的檔案透過 {latest-description}[物種描述延伸資料集] 來分享。描述性資料可分配至不同的描述類型，並且由於這些資料發布於延伸資料集，單一分類單元可以關聯多個描述紀錄，提供相對豐富的資料集內容。建議使用 {latest-description-type}[描述類型詞彙表] 來描述這些資訊。
+
+=== 多行描述
+
+描述性資訊應限制在單段落文字區塊內。避免或謹慎處理包含換行符的多段落內容，以維持達爾文核心集檔案輸出的完整性。以文字檔格式提供的多行資料欄位需要記錄分隔符（通常是換行符）與多行欄位內的換行符區分開來。支援多行的最佳方式是用非斷行的字符或字符組替代換行符，讓使用者在解析資料時可替換為適當的換行符。一種選項是使用 HTML 的 `<br>` 標籤。
+
+== 分享物種分佈
+
+本系統支援分佈資料共享。這些分佈資料透過一個獨立的、相關的檔案使用 {latest-species-distribution}[物種分佈延伸資料集] 來分享。該延伸資料集不僅用於指定國家或地區的分佈描述，還支援對分佈的性質進行限定，例如該分類單元的威脅狀態、是否為外來種、本地種等，以及與特定定義區域相關的其他屬性。
+
+建議使用可解析或已知的區域識別碼，並透過 dwc:localityID 元素發布。
+
+如果使用 dwc:country 元素，建議使用 http://rs.gbif.org/vocabulary/iso/3166-1_alpha2.xml[ISO 3166-1 Alpha-2 國家代碼]。
+
+== 分享參考文獻
+
+本系統支援書目引用資料共享。這些書目資料透過一個獨立的、相關的檔案使用 {latest-references}[參考文獻延伸資料集] 來分享。該延伸資料集設計用於分享專著和註解物種名錄中的同物異名資訊。它支援分享解析的引用格式，比核心資料檔案中的引用存儲元素（如 dwc:namePublishedIn）提供更細緻的格式。此延伸資料集支援使用 *dc:type* 屬性對參考文獻進行分類和命名限定，並可結合 {latest-reference-type}[參考類型詞彙表] 使用，以區分與分類單元相關的一組參考文獻。
+
+延伸資料集必須透過 `taxonID` 欄位提供核心資料檔案中分類單元的連結。請參見 <<checklist-data,達爾文核心集檔案結構>>。
+
+== 分享模式資訊
+
+本系統支援關於模式和標本的資訊共享。這些資料透過一個獨立的、相關的檔案使用 {latest-typesandspecimen}[模式與標本延伸資料集] 分享。該延伸資料集支援共享關於模式標本、模式物種與屬的基本資訊。
+
+== 分享連結與識別碼
+
+可以使用 {latest-identifier}[替代識別碼延伸資料集] 分享和描述多個與外部資源相關的連結。該延伸資料集允許資料發布者透過可解析的識別碼嵌入返回來源資料庫或文件的連結。單一分類單元可能提供多個識別碼，例如連結到網頁以及更具機器可讀性的網頁服務響應。建議在每個紀錄中包含格式，以讓使用者了解如何解讀解析資訊，通常是透過此欄位中加入*媒體類型*（或 *MIME 類型*）來完成。完整的媒體類型清單可在 https://www.iana.org/assignments/media-types/media-types.xhtml[IANA 網站]查閱。
+
+=== 建立物種頁面的動態連結
+
+通常，返回來源資料庫的連結遵循一種通用格式，僅在 URL 中使用的識別碼或分類單元名稱不同。這可能導致延伸資料集檔案過於冗長。達爾文核心集格式支援更高效的方法來定義 URL 範本，只需定義一次，並允許在範本中嵌入變數，避免在資料檔案中為每個分類單元重複多組 URL。此方法可透過達爾文核心集檔案的 XML 詮釋文件部分完成。它不使用參考延伸資料集。這需要對 XML 有一定程度的熟悉以編輯 XML 詮釋文件。GBIF xref:gbif-metadata-profile.adoc[提供了達爾文核心標準詮釋文件的完整指南]。
+
+可在詮釋文件中創建變數，該變數可引用網頁或網頁服務呼叫。此變數可嵌入 URL，並將分類單元的識別碼或名稱作為 URL 中的參數之一。透過將索引號用大括號 “{}” 包裹，可以引用發布資料中的任何欄位。例如，核心資料檔案中的分類單元識別碼可透過變數 “\{id}” 來引用。以下示例展示了這些功能：
+
+. 整合分類學資訊系統（Integrated Taxonomic Information System，ITIS）系統使用分類序列號（Taxonomic Serial Numbers，TSN）提供到物種頁面網站的連結。例如：
++
+--
+http://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value=174375
+
+如果核心資料檔案使用 ITIS 的 TSN 系統，此連結可與核心資料標準中的 "identifier" 項目綁定，並使用以下語法：
+
+----
+<field default="http://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value={id}" term="http://purl.org/dc/terms/identifier"/>
+----
+
+其中，原始數值被變數 `\{id}` 取代。此值來自核心 ID。
+--
+
+. 《2010 年生命名錄年度物種名錄》提供了類似的識別碼。它也支援基於名稱的搜尋，這些搜尋可以編碼為 URL。例如：
++
+--
+----
+http://www.catalogueoflife.org/annual-checklist/2010/search/all/key/Struthio+camelus/match/1
+----
+將學名 “Struthio camelus” 嵌入到 URL 中。完整的學名組合可以使用達爾文核心標準中的 “scientificName” 欄位發布於核心資料檔案中。如果我們假設該欄位是核心資料檔案中的第 12 欄，我們可以使用以下語法：
+
+----
+<field default="http://www.catalogueoflife.org/annual-checklist/2010/search/all/key/{12}/match/1" term="http://purl.org/dc/terms/identifier"/>
+----
+
+其中，`\{12}` 代表第 12 欄的值，該值將替換為 URL 中的對應內容。
+--
+
+== GBIF 物種名錄延伸資料集
+
+在物種名錄中，核心資料檔案包含分類群紀錄。用於描述分類群紀錄的術語集合由分類群（核心）延伸資料集定義。
+
+每一筆分類群紀錄可以透過一個或多個延伸資料檔案進行擴充。每個延伸紀錄中可用於描述的術語集合由其對應的延伸資料集定義。
+
+以下是可用於為分類群紀錄提供額外資訊的延伸資料集完整列表：
+
+=== 分類群（核心）延伸資料集
+
+最新版本發布： {latest-dwc-taxon}[{date-dwc-taxon}]
+
+使用這套術語提供物種名錄的基本資訊，包括分類、異名及其他關鍵元素。名錄中的每一行代表一個分類群名稱，無論是公認名還是異名。這些術語支援不同的分類資訊表現方法。分類可以以「試算表樣式」分享，例如以 Kingdom、Phylum、Class 等欄位表示；或者以「資料庫樣式」分享，每一筆分類群資料行都包含其直接父級的 ID 欄位。請注意，這些表格包含可接受術語的完整列表。物種名錄分享的最低要求可以僅是一份物種清單，但強烈建議附加一個 ID。請參考這些術語列表，找出最能匹配所需分享資料的術語。不要對術語名稱感到畏懼，閱讀說明即可找到相關術語。
+
+=== 俗名延伸資料集
+
+最新版本發布： {latest-vernacularname}[{date-vernacularname}]
+
+此延伸資料集提供與分類群相關的俗名資訊分享方式。多個俗名可以透過 taxonID 連結至同一分類群。
+
+=== 參考文獻延伸資料集
+
+最新版本發布： {latest-references}[{date-references}]
+
+使用此延伸資料集描述與分類群相關的一個或多個參考文獻。可使用類型欄位來限定文獻的性質。此延伸資料集支援具參考性的同物異名物種名錄分享。
+
+=== 物種分布延伸資料集
+
+最新版本發布： {latest-species-distribution}[{date-species-distribution}]
+
+使用此延伸資料集分享分類群的一個或多個分布地紀錄。可以將多個地點、地區或國家紀錄連結到同一分類群。此延伸資料集還可描述分類群的威脅狀態、季節性分布變化，以及與特定區域相關的其他屬性。
+
+=== 物種說明延伸資料集
+
+最新版本發布： {latest-description}[{date-description}]
+
+使用此延伸資料集為分類群提供說明文字。通常每一筆紀錄有一段文字，與資料庫中一般的存儲的格式類似。說明可以用一個類型進行限定，例如該說明是否與形態特徵、保育狀態、繁殖等相關。在說明文件中，多條說明即對應多筆紀錄。
+
+=== 替代的識別碼
+
+最新版本發布： {latest-identifier}[{date-identifier}]
+
+如果需要分享一個分類群的多個識別碼或連結，請使用此延伸資料集。例如，來源資料庫可以提供網頁、網路服務以及可解析識別碼（如 LSID、DOI）等方式存取來源資料紀錄。
+
+=== 模式與標本延伸資料集
+
+最新版本發布： {latest-typesandspecimen}[{date-typesandspecimen}]
+
+使用此延伸資料集分享與一個或多個標本或類型參考相關的資料，並將其連結到核心分類群。
+
+=== 資源關係延伸資料集
+
+最新版本發布： {latest-resource-relation}[{date-resource-relation}]
+
+此延伸資料集用於描述核心分類群與其他分類群之間的一個或多個關係，無論是在來源列表中還是紀錄中。例如，此延伸資料集可以用於提供一個由核心物種列表中的某個蜜蜂物種進行授粉的植物物種列表（每條紀錄對應一個物種）。

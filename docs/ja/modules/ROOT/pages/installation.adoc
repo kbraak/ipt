@@ -1,0 +1,190 @@
+= インストール
+
+== データディレクトリ
+
+IPTは設定、リソース、ユーザー、ログをデータディレクトリに保存します。これは、インストール時またはIPTの初回実行時に設定することができます。
+
+Linux上では``/var/lib/ipt``（パッケージインストール時）または`/srv/ipt`（Tomcat内で運用時）が一般的な場所です。またWindowsでは、``C:\ipt-data``が適切です。IPTは選択した場所への書き込み権限を持っている必要があります。問題がある場合は、xref:faq.adoc#file-permissions[FAQエントリ]を参照してください。
+
+[CAUTION]
+====
+不注意による変更や削除の可能性があるデータディレクトリを選択しないでください。例えば、``/tmp``はシステムの再起動時に空になる可能性があるため、使用しないでください。
+
+*データディレクトリは、適切な災害復旧計画に従って、定期的にバックアップを取る必要があります。*
+
+データディレクトリの内容が失われると、リソース、ユーザー、その他の構成情報およびIPTインストールに対するカスタマイズが失われます。
+====
+
+NOTE: 同じバージョンで以前運用していたIPTのデータディレクトリがあり、その以前の設定（ユーザーとリソースを含む）を使用したい場合は、そのデータディレクトリの絶対パスを以下に入力するか、IPT設定の最初のステップで入力することができます。
+
+== インストール方法
+
+IPTのインストールにはいくつか方法があります。
+
+* **Red Hat**、**CentOS**、**Debian**、**Ubuntu**などをお使いの方は、<<Installation from Linux packages,Linuxパッケージ>>から直接インストールすることができます。これは、1台のサーバーに1つのIPTをインストールする場合の最も簡単な方法であり、また更新も最も簡単です。
+* その他の*Linux*ユーザーや全ての**MS Windows**ユーザー、また同じサーバー上で複数のIPTを実行したい方は、代わりにlink:https://ipt.gbif.org/manual/en/ipt/latest/installation#installation-within-a-servlet-container[サーブレットコンテナ内でのインストール]のセクションをご覧下さい。
+* **Docker**イメージも利用可能です。link:https://ipt.gbif.org/manual/en/ipt/latest/installation#installation-using-docker[Dockerを使ったインストール]を参照してください。
+
+== Linuxパッケージからのインストール
+
+=== RPM（Red Hat, CentOSなど）
+
+To install the IPT onto Red Hat 8–9, CentOS 8–9 or similar, first add the GBIF package repository and install the IPT package:
+
+[source, shell]
+----
+yum install yum-utils
+yum-config-manager --add-repo https://packages.gbif.org/gbif.repo
+yum install ipt
+----
+
+オプションとして、``/etc/sysconfig/ipt``を編集して、デフォルトのデータディレクトリとポートを変更します。最後に
+
+[source, shell]
+----
+systemctl enable ipt
+systemctl start ipt
+----
+
+（上記で変更されていない場合）IPTはポート8080で起動します。初期ログは``journalctl -u ipt``で見ることができますが、その後データディレクトリにログが記録されます。IPTのデータディレクトリは、デフォルトで``/var/lib/ipt``になっているので、*必ずバックアップをとってください*。
+
+IPTパッケージのインストールに成功すると、Webブラウザを通じて、サーバー名とポート（例：http://server.example.org:8080）で決まるURLでIPTにアクセスできるようになります。インストールに成功すると、IPT のURLを使用して、IPTの初期設定ページがWebブラウザに表示されます。
+
+続いて、<<_IPTをインターネットに接続する,IPTをインターネットに接続する>>に進みます。
+
+=== APT（Debian、Ubuntuなど）
+
+GitHubのlink:https://github.com/gbif/ipt/pull/1470[Debian packaging]を参照してください。これはGBIFスペインからの投稿であり、IPT開発者はまだサポートしていません。
+
+続いて、<<_IPTをインターネットに接続する,IPTをインターネットに接続する>>に進みます。
+
+== サーブレットコンテナ内へのインストール
+
+サーブレットコンテナへのIPTのインストールは、IPTの.warファイルをTomcatのようなサーブレットコンテナに配備することで構成されます。
+
+このセクションでは、サーバに様々な種類のサーブレットコンテナをインストールする方法と、その中でIPTをデプロイする方法について説明します。
+
+リバースプロキシは必要ありませんが、万が一使用する場合は、IPTにApache HTTPD仮想ホスト宣言を設定する方法について説明します。
+
+The most common servlet containers used to deploy the IPT are Tomcat, Jetty and Wildfly. The servlet container must support Servlet Specification 4.0 or later.
+
+=== Tomcat
+
+The IPT has been tested and works well with recent releases of Tomcat 9. Tomcat 10 and later versions are currently not supported. The minimum supported version is Tomcat 8, but this is likely to change as it is no longer supported by Apache or leading Linux distributions. The Apache Tomcat documentation can be found on https://tomcat.apache.org/.
+
+. Install Tomcat — see our guide for xref:tomcat-installation-linux.adoc[installing Tomcat on Linux] or refer to the https://tomcat.apache.org/[Tomcat documentation].
+
+. Tomcat内のIPTデータディレクトリの設定
++
+--
+TIP: このステップはオプションですが、セキュリティの向上とアップグレード手順の簡素化のために推奨します。
+
+Locate the Tomcat configuration directory (usually `/etc/tomcat` or `/etc/tomcat9` on Linux, `C:\Program Files\Apache Software Foundation\Tomcat X.Y\conf` on Windows), and create a file `Catalina/localhost/ipt.xml` (described in the https://tomcat.apache.org/tomcat-9.0-doc/config/context.html#Defining_a_context[Tomcat documentation "Defining a context"]).   For example, on a typical CentOS Linux installation, the file would be `/etc/tomcat/Catalina/localhost/ipt.xml`. The file should be readable by the Tomcat process.
+
+`IPT_DATA_DIR`パラメータをファイル内で定義します。文字の大文字と小文字が重要なので、ここにテキストをコピー＆ペーストしてください。
+
+[source, xml]
+----
+<Context>
+  <Parameter name="IPT_DATA_DIR" value="/srv/ipt"/>
+</Context>
+----
+
+Tomcatサーバーがこのディレクトリを作成する権限を持っているか、また作成してから読み取りと書き込みの権限を付与していることを確認してください。データディレクトリの書き込み権限に関するエラーが発生した場合は、こちらの xref:faq.adoc#i-get-the-following-error-the-data-directory-directory-is-not-writable-what-should-i-do[FAQエントリ] を参照してください。
+
+[NOTE]
+====
+この手順を行わないと、IPTの初回実行時にデータディレクトリを求めるプロンプトが表示されます。この場所は、IPTのベースインストールディレクトリの `datadir.location` というファイル （例：`/var/lib/tomcat/webapps/ipt/WEB-INF/datadir.location`）に格納されます。
+
+データディレクトリの場所を変更する必要がある場合は、このファイルを削除・編集し、Tomcat を再起動します。
+====
+--
+
+. IPTのデプロイ
++
+--
+xref:releases.adoc[リリースページ] からIPTの最新のWARリリースをダウンロードし、`ipt.war`（または同様の名前、ステップ2の``ipt.xml``を使用している場合はそれと同じ）にリネームします。``ipt.war``ファイルをTomcatのwebappsのフォルダにコピーし、Tomcatがまだ起動していない場合は起動します。
+--
+
+サーブレットコンテナ内にIPTを正常にデプロイすると、サーブレット名とポートの後に/iptを付けたURLで、WebブラウザからIPTにアクセスできるようになります（例：http://server.example.org:8080/ipt）。インストールに成功した場合、IPTのURLを使用して、IPTの初期設定ページがWebブラウザに表示されます。
+
+続いて、<<_IPTをインターネットに接続する,IPTをインターネットに接続する>>に進みます。
+
+インストールが開始されない場合は、`catalina.out` のログファイルを確認し、xref:faq.adoc[FAQ]を参照してください。
+
+以下のスクリーンキャストは、Tomcatが既にインストールされていることを前提に、Tomcatを使用してIPTをインストールする方法を説明しています。
+
+[.responsive-video]
+video::116142276[vimeo, width=100%]
+
+[TIP]
+====
+この作業を少し工夫することで、複数のIPTを同じサーバーにインストールすることができます。``ipt.xml`` と ``ipt.war``を使う代わりに（あるいはそれに加えて）、異なる名前を用い、それに応じてファイルを変更します。link:https://cloud.gbif.org/[cloud.gbif.org]では ``africa.xml`` と ``africa.war``、``bid.xml`` と ``bid.war``などです。
+
+異なるバージョンのIPTを並行してインストールすることも可能ですが、常に最新版を使用することをお勧めします。
+
+_各IPTが独自のデータディレクトリを使用するように設定されていることを確認してください！_
+====
+
+=== Jetty
+
+_非常に大まかな目安として、CentOS 7で、IPTのシングルインスタンスを動作させる場合：_
+
+[source, shell]
+----
+yum install jetty-runner
+java -jar /usr/share/java/jetty/jetty-runner.jar --port 8080 ipt.war
+----
+
+続いて、<<_IPTをインターネットに接続する,IPTをインターネットに接続する>>に進みます。
+
+== Dockerを用いたインストール
+
+GBIF maintain a Docker image, published to the https://hub.docker.com/r/gbif/ipt/[Docker Hub]. The image builds upon the Docker community Tomcat 9 / OpenJDK 17 image. Tomcat is exposed on port 8080 and the IPT runs as the ROOT application.
+
+新しいDockerコンテナを実行し、Tomcatを起動し、Tomcatのポートを公開するには、このように実行します。
+
+[source, shell]
+----
+docker run --detach --volume /full/path/to/data-directory:/srv/ipt --publish 8080:8080 gbif/ipt
+----
+
+すると、8080番ポートでIPTの設定画面にアクセスできるようになります。
+
+データディレクトリを上書きする必要がある場合は、`-e IPT_DATA_DIR=/path/within/container` とすることで可能です。
+
+デフォルトのDockerマシンのIPアドレスを知りたい場合は、``docker-machine ip default``を使用してください。
+
+``gbif/ipt``ではなく``gbif/ipt:version``を使って、link:https://hub.docker.com/r/gbif/ipt/tags[利用可能なバージョン]の中から特定のものを実行します。
+
+== IPTをインターネットに接続する
+
+IPTをインターネット上で利用するためには、システム管理者またはネットワーク管理者と連携する必要があると思われます。
+
+サーバーのDNS名（「``ipt.example.org``」）とアクセスを許可するファイアウォールが必要です。
+
+主にHTTPSアクセスを提供したり、同じサーバで他のウェブサイトを共有できるようにするため、多くの人がリバースプロキシとしてApache HTTPDを使用しています。
+
+``ipt.gbif.org``が使用している設定を例として示します。Apache HTTPD を使用し、``mod_proxy`` モジュールがインストールされています。静的画像ファイル（オカレンス画像など）を同じサーバでホストできるように、link:https://ipt.gbif.org/media/[`/media`]とlink:https://ipt.gbif.org/icons/[`/icons`]のパスはIPTに渡されないようにします。http://ipt.gbif.org/ へのリクエストは、安全な https://ipt.gbif.org/ にリダイレクトされます。
+
+// The Apache configuration example is in a separate file so the translation system can ignore it.
+[source, apache]
+----
+include::partial$apache-configuration-example.conf[]
+----
+
+Nginxはリバースプロキシとして使用することもできます。設定例を以下に示します。
+
+// The Nginx configuration example is in a separate file so the translation system can ignore it.
+[source, nginx]
+----
+include::partial$nginx-configuration-example.conf[]
+----
+
+=== TLS証明書の設定
+
+IPTの本番環境では、IPTにアクセスする際にログインなどの情報が保護されるように、TLS証明書を使用することをお勧めします。これを設定する手順は機関のポリシーに依存することがありますが、無料のlink:https://letsencrypt.org/[LetsEncrypt]サービスは良い選択です。LetsEncryptは、LinuxやWindowsで動作するApache、Nginx、その他多くのウェブサーバーに証明書を追加するlink:https://certbot.eff.org/instructions[手引き]を提供しています。
+
+新規導入の場合は、まずTLSでWebサーバーをセットアップし、その後IPTをインストールしてセットアップするのがベストです。設定されたIPTに証明書を追加するには、xref:administration.adoc#public-url[公開URLを変更する]必要があります。管理セクションの公開URLの更新に関する注意を参照してください。
+
+Verify your setup is correct using https://whatsmychaincert.com/[What's My Chain Cert?]. The requirements for GBIF's servers to retrieve published data are stricter than those for normal web browsers, so ensure you receive a "has the correct chain" message from this test. (See also xref:faq.adoc#why-is-gbif-unable-to-access-my-ipt-over-https[this FAQ entry].)

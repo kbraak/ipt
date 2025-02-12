@@ -1,0 +1,77 @@
+= 發布通知
+
+*IPT Versions: pass:[3.0.*]*
+
+== Upgrade instructions
+
+WARNING: Be sure to *backup the IPT data directory before performing an upgrade*. As per the https://www.gbif.org/data-hosting-centres#_criteria-for-data-hosting-centres[criteria for data hosting centres], it is highly recommended to run scheduled backups of the IPT data directory in general.
+
+Check your system meets the xref:requirements.adoc[installation requirements] for this release. Ensure your operating system and any other installed software (such as Java, Tomcat and Apache HTTPD) is up-to-date with any security patches.
+
+The upgrade method depends on the original xref:installation.adoc#installation-method[installation method].
+
+=== Upgrades using Linux packages
+
+Users of Linux packages on Red Hat, CentOS, Debian, Ubuntu etc. may upgrade using the system package manager.
+
+[source, shell]
+----
+# Red Hat, CentOS etc:
+yum update ipt
+# Debian, Ubuntu etc:
+apt install ipt
+----
+
+These commands can be used to test a pre-release version on Red Hat/CentOS:
+
+[source, shell]
+----
+# Ensure the GBIF repository configuration is up-to-date:
+yum-config-manager --add-repo https://packages.gbif.org/gbif.repo
+
+# Install the latest pre-release/testing version:
+yum install --enablerepo=gbif-testing ipt
+
+# Roll back to a previous, stable version:
+yum downgrade ipt-2.7.5
+
+# Show all available versions, testing and stable:
+yum --showduplicates list --enablerepo=gbif-testing ipt
+----
+
+// #TODO:# Debian instructions, once the 2.5.0-RC1 pre-release package is prepared.
+
+=== Upgrades using a servlet container
+
+TIP: When upgrading to version 2.5.0 or later, follow xref:installation.adoc#tomcat[step 2] of the installation instructions to set a data directory location. You will no longer need to reconfigure the data directory each time you upgrade the IPT.
+
+An upgrade can be performed in 4 steps:
+
+. Backup the existing data directory and any xref:customization.adoc[custom styling] (images, stylesheets, etc) previously applied to your IPT.
+. Without shutting down Tomcat, replace the previous .war file with the latest edition, but keep the same name (e.g. `ipt.war`).
++
+NOTE: If you replace the .war file while Tomcat is stopped, be sure to delete the associated expanded directory before restarting Tomcat, so that the updated WAR file will be re-expanded when Tomcat restarts.
+
+. (If the data directory is not configured within Tomcat.) Immediately open the IPT in a web browser, and reuse the existing data directory on the initial IPT setup page
+. To be sure the upgrade worked, try logging in and look for the new version number in the footer. (_Restart Tomcat if the previous version still appears._)
+. Reapply your custom styling (if applicable)
+
+=== Upgrades using Docker
+
+See the xref:installation.adoc#installation-using-docker[installation using Docker] instructions. In general, the `latest` tag will point to the current, stable release.
+
+== Post-upgrade instructions
+
+Following the upgrade, a warning message may appear indicating that some resources failed to load. This is caused when an old resource is missing required metadata after not being republished for a long time. Resource managers can fix this problem by re-publishing the affected resources.
+
+Additionally, the IPT administrator should update all installed cores and extensions to the latest versions. This will allow publishers to take advantage of any new terms and vocabularies included in the latest versions.
+
+== Important changes in this release
+
+The full list of new features is documented on the xref:releases.adoc[releases page]. Please pay particular attention to these points after upgrading:
+
+* IPT 3.0.0 requires Tomcat 8 or 9. Tomcat 7 is not supported anymore.
+
+== When all else fails
+
+See the xref:faq.adoc[FAQ], which continues to be updated with good questions, or ask the https://lists.gbif.org/mailman/listinfo/ipt/[IPT mailing list].

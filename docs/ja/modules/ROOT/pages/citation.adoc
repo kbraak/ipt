@@ -1,0 +1,63 @@
+= データセット引用形式
+
+NOTE: IPTで使用されている引用形式は、GBIF.orgでは使用されません。これに関する背景情報は、https://www.gbif.org/faq?q=citation を参照してください。
+
+== Introduction
+
+IPT v2.2以降、データ公開者は、IPTにデータセットの引用形式を自動生成させることを選択できます。以前は、公開者が自分で引用形式を入力する必要がありました。
+
+自動生成される引用の形式には、データセットのバージョン番号とDOIが含まれます。読者はDOIからデータセットのホームページへリンクし、バージョン番号から正確なバージョンを検索してダウンロードすることができます。これにより、データセットを利用した科学的成果を再現することができます。
+
+IPTの引用形式の詳細については、以下に記述します。このフォーマットはDataCiteの推奨する引用フォーマットに基づき、link:https://www.force11.org/datacitation[データ引用原則の共同宣言]を満たしていることが重要です。DataCiteのフォーマットについては，同社のlink:http://schema.datacite.org/meta/kernel-3/doc/DataCite-MetadataKernel_v3.0.pdf[メタデータスキーマ]のSection 2.2 Citationを参照することができます。引用の各部分は以下の表で説明され，その後にいくつかの例が示されています。
+
+== 引用形式
+
+----
+Creators¹ (PublicationYear²): Title³. Version⁴. Publisher⁵. ResourceType⁶. Identifier⁷
+----
+
+7つの引用パートを解説。
+
+[cols="2"]
+|===
+| 引用部門
+| 説明
+
+| 1. 作成者
+| データセットの作成に携わった1人以上の個人、グループ、機関。データセットに貢献したすべての人をリストアップしてください（link:https://www.force11.org/datacitation#JDCP2[データ引用の原則2]を参照）。ただし作成者は、ジャーナルが組版の際に全リストを切り捨てる可能性があることに注意してください（例：link:http://www.nature.com/sdata/for-authors/submission-guidelines#references[Natureのガイドライン]では、6人の作成者で切り捨てられます）。作成者は、姓を先に、名前のイニシャルを後に記載します。作成者は、データセットの作成に果たした役割の重要度に従ってリストアップし、最も重要な作成者を最初に表示します。複数の作成者はカンマで区切ります。
+
+| 2. 出版年
+| データセットのバージョンが公開された年です。
+
+| 3. タイトル
+| データセットのタイトルです。タイトルの最初の単語のみ頭文字を大文字にし、タイトルは引用文献に記載されているのと同じように書き、最後にフルストップで終わるようにします。
+
+| 4. バージョン
+| データセットのバージョンです。データセットが公開されるたびに，IPTが新しいバージョン番号を割り当てます。バージョンは，「Version major_version.minor_version」と記述します。このバージョン番号によって、「ある主張を裏付ける特定のデータの識別・入手・検証」が可能になります。（link:https://www.force11.org/datacitation#JDCP7[データ引用の原則7]を参照）
+
+| 5. 公開者
+| データセットを公開した（所有する）機関です。データを保管しているリポジトリへの謝意を示すために，リポジトリ名を作成者の下に記載することができます。
+
+| 6. リソースタイプ
+| 公開されているリソースの種類です。ResourceTypeGeneral/ResourceTypeのペアを用いて構築されたリソースの種類の説明です。ResourceTypeGeneralは常に "Dataset"と等しく、ResourceTypeは "Occurrence "や "Checklist "など、データセットの特定のタイプを示す単一の用語です。
+
+| 7. 識別子
+| オンラインデータセットに解決するDOI（digital object identifier）ハンドルです。DOIがない場合、IPTのオンラインデータセットページへのリンクが代わりに使われます。IPTのURLは変更される可能性がありますが、DOIは持続的なアクセスを保証するため、DOIが非常に好ましいです。引用のためには、DataCiteはDOIをリンク可能な恒久的なURLとして表示することを推奨しています。
+|===
+
+== 引用例
+
+.オカレンスデータセットの引用例です（機関作成者、DOIを含む）。
+****
+Biodiversity Institute of Ontario (2011) Migratory birds of Ontario. Version 2.1. University of Guelph. Dataset/Occurrence. https://doi.org/10.5886/qzxxd2pa
+****
+
+.チェックリストデータセット（作成者が9人以上）の引用例、およびDOIです。
+****
+Brouillet L, Desmet P, Coursol F, Meades SJ, Favreau M, Anions M, Bélisle P, Gendreau C, Shorthouse D (2010) Database of vascular plants of Canada. Version 3.1. Université de Montréal Biodiversity Centre. Dataset/Checklist. https://doi.org/10.5886/1bft7W5f
+****
+
+.3人の作成者がいるオカレンスデータセットの引用例（DOIなし）です。
+****
+Harihar A, Pandav B, Hussein M (2014) Camera trap database of Tigers from Rajaji National Park, Uttarakhand. Version 1.0. Wildlife Institute of India. Dataset/Occurrence Data. http://ibif.gov.in:8080/ipt/resource.do?r=camera_trap_rajaji_np
+****

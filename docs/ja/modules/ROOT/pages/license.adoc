@@ -1,0 +1,50 @@
+= 新規ライセンスの追加
+
+[WARNING]
+--
+このページは、IPT上級者向けの設定方法です。GBIFに含まれるライセンスと異なるライセンスで公開されたデータセットは、GBIFへの公開、およびGBIFへの登録はできません。
+
+メタデータのみのデータセットを公開することをお勧めします。
+--
+
+IPT v2.2以降、IPTは3種類の機械可読ライセンスを提供し、リソースにライセンスを適用する際に選択することができます。
+
+* パブリックドメイン（CC0 1.0、厳密には権利放棄）
+* クリエイティブ・コモンズ　表示（CC-BY 4.0）
+* クリエイティブ・コモンズ　表示 - 非営利（CC-BY-NC 4.0）
+
+各ライセンスには、ユーザーに表示されるデフォルトの権利声明が関連付けられています。たとえば、出版者がリソースにCC-BYを適用することを選択した場合、利用者に表示されるこの権利声明は次のようになります。
+
+[quote]
+この作品は、link:https://creativecommons.org/licenses/by/4.0/legalcode[Creative Commons Attribution (CC-BY) 4.0 License]の下に提供されています。
+
+ただし、ライセンスのリストとその権利表記は変更することができます。これは、自分たちのリソースに異なるライセンスを適用する必要があるコミュニティや、追加の使用方法を含めたいコミュニティにとって便利です。
+
+以下の手順は、別のライセンスを選択してIPTを設定する方法を説明します。
+
+== 手順
+
+licenses.propertiesファイル（例：`/tomcat7/webapps/ipt/WEB-INF/classes/org/gbif/metadata/eml/licenses.properties`）を探します。テキストエディタでファイルを開き、以下のようにします。
+
+. 次のフォーマットを使用して、ライセンス名を定義する新しいプロパティを追加します。
++
+----
+license.name.<prefix>=Name
+# For example:
+license.name.odcby=Open Data Commons Attribution License (ODC-By) 1.0
+----
+
+. 次のフォーマットを利用して、権利声明を定義する新しいプロパティを追加します。
++
+----
+license.text.<prefix>=Text
+# For example:
+license.text.odcby=This work is licensed under a <a href="http://www.opendatacommons.org/licenses/by/1.0">Open Data Commons Attribution License (ODC-By) 1.0</a>.
+----
+
+. 再確認
+.. 両方のキーの_prefix_が一致し
+.. （ライセンスマシンを読み取り可能にするために）ライセンス名とURLを定義するHTMLアンカーがテキストに含まれていて、
+.. HTMLアンカーで使用される名前が上記のnameプロパティで使用される名前と同じであること。
+. 次に、IPTをアップグレードすると上書きされるため、licenses.propertiesファイルをバックアップします。
+. サーブレットコンテナ（Tomcatなど）を再起動して、新しい設定を有効にします。

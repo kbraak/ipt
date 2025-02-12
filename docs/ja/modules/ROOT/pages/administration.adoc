@@ -1,0 +1,241 @@
+= 管理メニュー
+
+このメニューは、管理責任者ロールを持つユーザーのみが見ることができます。
+
+このセクションでは、「管理」メニューからアクセスできる各機能について説明します。管理メニューをクリックすると、以下のようなページが表示され、各ボタンから管理作業にアクセスできます。
+
+image::ipt2/administration/IPTAdminBeforeRegistration.png[]
+
+== IPTの設定
+このページでは、管理責任者ロールを持つユーザーが、IPTインスタンスの特性に関する設定を行い、変更することができます。
+
+image::ipt2/administration/IPTAdminConfigIPT.png[]
+
+* IPTデータディレクトリ - IPTのすべての構成、リソース、およびログファイルが格納されているサーバー上のディレクトリを示します。リソース
+* *Default language* - This shows the default IPT language. English by default.
+* IPT管理者メールアドレス - パスワードを忘れたユーザーにログインページで表示されるメールです。設定されていない場合は、最初の管理者ユーザーの電子メールが使用されます。
+* *公開URL* - これは、この IPT インストールのルートを指す URL です。このURLは、IPTのインストール中に自動的に設定されます。IPTが完全に機能するためには、パブリックURLはインターネット経由でアクセス可能である必要があります。例えば、IPTのパブリックURLをローカルホストに設定すると、IPTのインスタンスがGBIFに登録されず、IPTが機関と関連付けられず、リソースがパブリックにアクセスできなくなります。
++
+--
+[NOTE]
+.公開URLを手動で更新する
+====
+IPTは、IPT設定を保存する際に、クライアントコンピュータから公開URLにアクセスできるかどうかをテストします。指定された公開URLでIPTにアクセスできない場合、IPTは警告メッセージを表示し、変更内容は保存されません。新しいURLがまだ機能していない場合（IPTの再起動を必要とするポート変更など）に公開URL を変更する手順は、ここに記載されています。
+
+* IPTをシャットダウンします。
+* IPTのデータディレクトリ内で、config/ipt.properties ファイルをメモ帳、TextEdit、vim などのシンプルまたはプログラミング用テキストエディター（Microsoft Wordではありません）で開きます。
+* ``ipt.properties``ファイルの ``ipt.baseURL``で始まる行を、バックスラッシュを使用してコロン文字をエスケープし、新しいポートで新しいURLに変更します。例えば、http://example.org:7001/ipt に ``ipt.baseURL=http\://example.org\:7001/ipt`` と入力します。
+* サーブレットコンテナでIPTを再起動します。
+* このマニュアルの次のセクション「すべてのリソースを公開する」で説明されている通りにIPTのメタデータを更新する。
+====
+
+--
+* *機関プロキシURL* - IPT がインストールされているサーバーがインターネットに直接 HTTP/HTTPS アクセスできず、代わりに機関プロキシ サーバーを介して HTTP/HTTPS 要求の送信をルートする必要がある場合、ホスト アドレスとポート番号をここに入力します。例えば、`http://proxy.example.org:8080`
+* *Google Analytics key* - If you would like to track the use of your instance of the IPT with Google Analytics, you can enable it to do so by entering your Google Analytics key in this text box. For more information about Google Analytics, see https://www.google.com/intl/en/analytics/.
+* *デバッグモード* - IPTに詳細デバッグモードでログを開始させたい場合は、このボックスをチェックします。デバッグモードは、IPTの問題を追跡するのでなければ、通常不要です。IPTログファイルは、IPTのデータディレクトリにある debug.log というファイルに格納されます。データディレクトリは、インストールプロセスの最初のステップで設定されます（「はじめに」を参照）。管理者ロールを持つユーザーが debug.log ファイルを簡単に表示する方法については、「管理メニュー」セクションの「IPT ログの表示」の下にある情報を参照してください。
+* *アーカイブモード* - IPTですべてのリソースのすべての公開バージョンをアーカイブしたい場合は、このボックスをチェックします。これにより、リソースのバージョン履歴を追跡できるようになります。チェックを外すと、古いバージョンは最新版で上書きされます。ディスク容量が足りなくならないように注意してください。
+* *保存するバージョンの数* - アーカイブ・モードが有効な場合、この設定値に数値を設定すると、その数だけ以前のバージョンを保持し、それより古いバージョンは自動的に削除されます。
+* *IPT サーバーの場所* - このページのこのエリアでは、管理者が IPT がインストールされているサーバーの場所の地理的座標（緯度と経度）を設定することができます。この座標を設定することで、GBIF は世界中の登録された IPTインストールの中でこの位置をマップすることができます。
+
+== すべてのリソースを公開する
+このオプションは、「公開」ボタンと同様の管理アクションですが、すべてのリソースを公開します。したがって、各リソースについて、新しいDwC-A、EML、RTFが作成され、レジストリおよびRSS経由で更新が配信されます。また、レジストリに登録されているIPTやリソースのメタデータも更新されます。複数のリソースが更新され、それらを個別に公開するのではなく、すべてのリソースの新しいリリースを公開したい場合は、このボタンをクリックしてください。
+
+== ユーザーアカウントの設定
+このページでは、管理責任者ロールを持つユーザーがユーザーアカウントを作成、変更、削除することができます。このページを開くと、既存のユーザーの表が表示され、名前、電子メールアドレス、役割、最終ログインの日時などの基本情報が表示されます。右側のアイコンをクリックすると、ユーザーの削除やパスワードの再設定が可能です。
+
+image::ipt2/administration/IPTAdminUserAccounts.png[]
+
+=== 新規ユーザーの作成
+既存ユーザー一覧の下にある「作成」ボタンをクリックすると、新しいユーザーを作成することができます。ユーザー情報を入力するページが表示されますので、入力後、「保存」ボタンをクリックすると、新しいユーザーが作成されます。
+
+image::ipt2/administration/IPTAdminUserCreateUser.png[]
+
+* *Eメール* - ユーザーの現在のEメールアドレスは、IPT内でログインするための識別子として使用され、変更することはできません。
++
+--
+[NOTE]
+====
+If the user requires a change of email address, the recommended procedure is to create a new user account with the new email address, then delete the user account having the antiquated email address.
+====
+
+--
+* *名前* - ユーザーの名前
+* *姓* - ユーザーの姓
+* *ロール* - IPTのこのインストールに関して、ユーザーが持つ権限。管理責任者ユーザーは、IPTのインスタンスのすべての側面に変更を加えることができます。登録権限のない管理者ロールを持つユーザーは、IPT インスタンス内で作成した、または管理するよう招待されたリソースを作成、編集、削除、管理することができます。登録権限を持つ管理者というロールを持つユーザーは、GBIFネットワークにリソースを登録する追加機能を持ちます。その他のユーザーは、IPTにログインしてリソースを見ることはできますが、変更を加えることはできません。
+* *パスワード* - ユーザーのパスワードは4文字以上で構成され、IPTアプリケーションから回復することはできないため、忘れずに、安全である必要があります。
++
+--
+[NOTE]
+====
+If a user's password is lost, it can be reset to an automatically generated new value by a user having the Admin role. It is the responsibility of the Admin user to communicate this new password to the user for whom it was reset. The user can then change the password to the desired value by entering it in the IPT Account page accessible through the "Account" link in the header in the upper right corner of every page after logging in.
+====
+
+--
+* *パスワードの確認* - パスワードのテキストボックスに入力されたパスワードと一致するかで、意図したとおりに入力されたか確認します。
+
+After creation, an email with credential can be sent to the user:
+
+image::ipt2/administration/IPTAdminUserCreateUserEmailCredentials.png[]
+
+=== 既存のユーザーを変更する
+ユーザーの情報は、既存のユーザー一覧から変更したいユーザー名を選択し、ユーザー詳細ページで変更することができます。ユーザー詳細ページには、そのユーザーに関するすべての情報が表示されます。ユーザーの姓、名、ロールを変更するには、新しく入力し、「保存」ボタンをクリックしてください。このページで入力する情報の詳細は、上記の「新規ユーザーを作成する」セクションで説明されています。
+
+image::ipt2/administration/IPTAdminUserEditUser.png[]
+
+The Options dropdown contains to buttons:
+
+* *パスワードのリセット* - ユーザーがパスワードを忘れた場合、「パスワードのリセット」ボタンをクリックすると、新しいパスワードが生成され、その後、ページの上部に表示されるメッセージで新しいパスワードが発行されます。
+* *Delete* - delete current user.
++
+--
+[NOTE]
+====
+The IPT does not inform the affected user of this change, so it is the responsibility of the Admin who resets the password to inform the user of the new one.
+====
+
+--
+
+After password reset, an email with a new password can be sent to the user:
+
+image::ipt2/administration/IPTAdminUserEmailResetPassword.png[]
+
+=== ユーザーの削除
+不要になったユーザーアカウントは、ユーザー詳細ページで削除することができます。ユーザー詳細ページの下にある「削除」ボタンをクリックすると、このユーザーアカウントが削除されます。ユーザーが削除できない条件はいくつかあります。
+
+. 管理者はログインしたまま自分のアカウントを削除することができないので、他の管理者が削除する必要があります。
+. IPTのインストールには、管理責任者権限を持つユーザーが少なくとも1人必要です。したがって、最後に残った管理責任者を削除することはできません。そのユーザーを削除するには、まず管理責任者ロールを持つ新しいユーザーを作成し、その新しいユーザーでログインして、他の管理責任者アカウントを削除してください。
+. 各リソースには、管理責任者または管理者のいずれかのロールを持つユーザーが少なくとも1人関連付けられなければならないので、リソースの最後に残った管理者を削除することはできません。そのユーザーを削除するには、まず、管理責任者または管理者のロールを持つ別のユーザーを、削除したいユーザーが最後に残った管理者であるリソースに関連付けます。新しい管理者の割り当て方法については、xref:manage-resources.adoc#resource-managers[リソースの管理者]を参照してください。
+. ユーザーが何かしらのリソースの作成者である場合、そのユーザーを削除することはできません。ユーザーのリソースへのアクセスを制限するには、ユーザーのロールをユーザータイプにダウングレードしてください。ユーザーのロールを変更する方法については、link:https://ipt.gbif.org/manual/ja/ipt/latest/administration#modify-an-existing-user[既存のユーザーを変更する]セクションを参照してください。
+
+== GBIF登録オプションの設定
+このページでは、GBIFレジストリにIPTインスタンスを登録することができます（まだ登録されていない場合）。IPTは、IPTのリソースを機関と関連付けたり（「管理メニュー」セクションの「機関の設定」見出しの情報を参照）、公開したり（xref:manage-resources.adoc#published-versions[公開バージョン]セクションを参照）する前に登録されている必要があります。登録されたIPTとその公開リソースに関する情報は、レジストリのサービスを通じて検索可能になり、IPTで公開された公開リソースのデータは、GBIFポータルを通じて検索できるようにインデックス化されます。すでにIPTが登録されている場合は、link:https://ipt.gbif.org/manual/ja/ipt/latest/administration#edit-gbif-registration[GBIF登録内容を編集する]ページでIPTの登録情報を編集することができます。
+
+GBIFに登録する最初のステップは、IPTがGBIFのサービスから到達できる有効なURLを持つかどうかをテストすることです。このテストを実行するには、「検証」と表示されたボタンをクリックします。
+
+検証に失敗した場合、GBIFレジストリとIPT間の通信に関する問題の内容を示唆するエラーメッセージが表示されます。エラーの原因は以下の通りです。
+
+* *インターネットに接続されていない* - IPT が正しく機能するには、アクティブなインターネット接続が必要です。「有効化」ボタンをクリックしたときにインターネットへ接続されていなかった場合、エラーが発生します。登録を続行する前に、インターネット接続を回復してください。
+* *公開URLまたは機関プロキシURLが正しくない* - 公開URLは、IPTセットアッププロセス中に自動的に検出・設定されます (xref:initial-setup.adoc[初期セットアップ]セクションを参照)。IPT がインストールされているサーバーの構成を変更すると、公開URLまたは機関プロキシURLの変更が必要になる場合があります。公開URLと機関プロキシURLは、「IPT の構成」ページで変更できます (link:https://ipt.gbif.org/manual/ja/ipt/latest/administration#configure-ipt-settings[IPT の構成]セクションの公開URLと機関プロキシURLの説明を参照してください)。
+* *ファイアウォール* - インターネット接続が生きている場合、ファイアウォールが公開URLまたは機関プロキシへの接続を妨げている可能性があります。ファイアウォールまたは機関プロキシの設定をすべての外部接続に変更します。
+* *GBIF Registry inaccessible* - If an error message suggests that none of the previous errors has occurred and yet there is a failure to communicate with the GBIF Registry, please report that there are problems connecting to the GBIF registry to the GBIF Help Desk (helpdesk@gbif.org).
+
+image::ipt2/administration/IPTAdminRegistrationStep1.png[]
+
+IPTが上記の検証ステップを通過した場合、登録に必要な追加情報を示すフォームが表示される。このステップでは、IPTインスタンスは機関に関連付けられます。**機関はすでにGBIFレジストリに登録されている必要があり、その共有トークンがわかっている必要があります。**このフォームのフィールドと選択項目の説明については、以下の情報を参照してください。
+
+image::ipt2/administration/IPTAdminRegistrationStep2.png[]
+
+以下は、選択・入力する情報の具体的な説明です。
+
+* *機関* - セレクトボックスには、GBIFレジストリに登録されている機関のリストが表示されます。このIPTインスタンスが関連付けられる単一の機関を選択します。リスト上でお探しの機関が見つからない場合は、GBIFレジストリ（https://www.gbif.org/publisher/search）を使用して、その機関が異なる名前で登録されているかどうかを確認します。機関がGBIFに未登録の場合は、IPTの登録を進める前に、GBIFヘルプデスクに連絡し、機関の登録をお願いします。ヘルプアイコンをクリックし、役に立つGBIFヘルプデスクのリンクをクリックすると、デフォルトのメールクライアントでメールテンプレートが開き、必要な情報を記入してから送信するだけです。
+* *機関の共有トークン* - 選択した機関のGBIFレジストリに登録されている共有トークンをこのテキストボックスに入力し、ユーザーがその機関とIPTインスタンスを関連付けるために必要な権限を持っていることを検証する必要があります。機関の共有トークンがない場合は、登録した連絡先に要求することができます。機関選択ボックスで機関を選択すると、機関の記録上の主要な連絡先へのリンクが、機関の共有トークンのテキストボックスの下に表示されます。共有トークンは、「保存」ボタンをクリックすると、IPT登録の認証に使用されます。
+* *エイリアス* - IPTのこのインスタンス内の機関を表すために便利な名前またはコードを入力します。エイリアスは、IPTのユーザーインターフェイスの機関のセレクトボックスで、正式な機関名の代わりに表示されます。
+* *リソースを公開できますか？* - 選択した機関もIPTのこのインスタンスで公開されたリソースと関連付けることができる場合は、これをオンにします。チェックを外すと、機関はリソースと関連付けるために利用可能な機関のリストに表示されません。この機関は、IPTインスタンスのホストではなく、IPTインスタンスを介して公開されたリソースのいずれかのためのものである場合にのみ、チェックを外してください。
+* *IPT インストールのタイトル* - GBIFレジストリで使用されるIPTインストールのタイトルを入力します。タイトルは、レジストリでIPTインストールを一覧表示および検索するために使用される主な情報です。
+* *このIPTインストールの説明* - GBIFレジストリで使用されるIPTインストールの説明を入力します。この説明は、特定のメタデータフィールド以外の情報を共有できるようにすることで、レジストリのユーザーがIPTインスタンスの重要性をさらに理解できるようにすることを目的としています。
+* *連絡先名* - IPTインストールに関する情報のために連絡を受ける人の名前を入力する。この担当者は、IPTインスタンスの管理者の役割を持ち、インストールに関する技術的な詳細を理解している人である必要があります。
+* *連絡先Eメール* - 「連絡先名」で指定された人物の現在のEメールアドレスを入力します。
+* *IPTパスワード* - GBIFレジストリのこのIPTインストールのエントリを編集するために使用されるパスワードを入力します。
+* *保存* - 上記のすべての情報を入力または選択したら、「保存」ボタンをクリックして、GBIFレジストリにIPTインストールを登録します。IPTインストールの登録に成功すると、「GBIFの設定」登録ページには、IPTがすでに登録され、選択した機関と関連付けられていることが表示されます。また、登録に成功すると、「管理」メニューから「機関の設定」ページにアクセスできるようになります。
+* *注*：IPTの登録（リソースの登録ではなく、「リソース管理」セクションの「リソース概要」見出しの「公開状況」セクション、および「管理メニュー」セクションの「すべてのリソースの公開」見出しの情報を参照）への変更は、GBIFヘルプデスク（helpdesk@gbif.org）と相談しながら行う必要があります。
+
+=== GBIFの登録内容を編集する
+After the IPT has been registered, this page allows a user to update the IPT registration information. The update will ensure the IPT and all its registered resources are in sync with the GBIF Registry. *Administrators should run an update each time the public URL of the IPT changes*. Administrators can also run an update in order to update the title, description, contact name, and contact email of the IPT instance. This page does not support changing the hosting organization. To do so, administrators must contact the GBIF Help Desk (helpdesk@gbif.org) directly.
+
+image::ipt2/administration/IPTAdminEditRegistration.png[]
+
+Network view:
+
+image::ipt2/administration/IPTAdminEditRegistrationNetwork.png[]
+
+機関の共有トークンのビューを編集：
+
+image::ipt2/administration/IPTAdminEditRegistrationTokens.png[]
+
+== 機関を設定する
+このページは、IPTインスタンスがGBIFレジストリに正常に登録されるまで利用できません（「管理メニュー」セクションの「GBIF登録の設定」の見出しにある情報を参照してください）。登録されると、このIPTインスタンスのリソースに関連付けることができる機関のリストが表示されます。関連付けられた機関以外の機関のデータをホストするIPTは、使用する前に追加の機関を設定する必要があります。
+
+****
+_Assigning DOIs within the IPT is unusual, very few publishers use this function. See xref:doi-workflow.adoc[]._
+
+An IPT capable of assigning DOIs to resources must also have an organization configured with a DataCite account. To be configured with a DataCite account, the organization does not necessarily have to be able to publish resources (be associated with resources). Only one DataCite account can be used to register DOIs at a time, and the IPT's archival mode must also be turned on (please refer to the <<Configure IPT settings>> section to learn more about the archival mode). The list of organizations shows which organizations have been configured with DataCite accounts, and which one has been selected to register DOIs for all resources in this IPT instance.
+****
+
+image::ipt2/administration/IPTAdminOrgs.png[]
+
+=== 機関の編集
+このページでは、管理責任者ロールを持つユーザーが機関を編集できます。選択した機関の詳細を含むページを開くには、「編集」というラベルの付いたボタンをクリックします。このフォーム上のフィールドと選択の説明については、下記を参照してください。
+
+image::ipt2/administration/IPTAdminOrgsEditOrg.png[]
+
+以下は、選択・入力する情報の具体的な説明です。
+
+* *機関名* - GBIFレジストリに登録されている機関の名称です。*注*：これは変更できません。
+* *機関共有トークン* - GBIFレジストリの機関のエントリを編集するために使用されるべき共有トークンです。
+* *機関のエイリアス* - IPTインスタンス内の利便性のために機関に与えられた名前。エイリアスではなく、正式な機関名は、IPTの機関の選択リストで表示されます。
+* *リソースの公開が可能* - このチェックボックスは、機関がIPTのリソースと関連付けることができるかどうかを示しています。このボックスがチェックされている機関のみが、リソースと関連付けられるリストに表示されます。
+* *DOI registration agency* - the type of account used to xref:doi-workflow.adoc[register DOIs] for resources; only DataCite is supported. _Most publishers do not need this feature._ *Note*: an account is issued to the organization after it signs an agreement with a DataCite member, which gives it permission to register DOIs under one or more prefixes (e.g. 10.5072) in one or more domains (e.g. gbif.org). Confirm that the account can actually register DOIs under the IPT's domain/public URL otherwise registrations via the IPT won't work.
+* *アカウントのユーザー名* - 機関に発行されたDataCiteアカウントのユーザー名（シンボル）です。
+* *アカウントのパスワード* - 機関に発行されたDataCiteアカウントのパスワード。
+* *DOI prefix/shoulder* - the preferred DOI prefix/shoulder used to mint DOIs. This prefix is unique to the account issued to the organization. Note: always use a https://blog.datacite.org/test-prefix-10-5072-retiring-june-1/[test prefix] when running the IPT in test mode.
+* *アカウント有効化* - このDataCiteアカウントが、IPTがデータセットのDOIを登録するために使用する唯一のアカウントであるかどうかを示します。一度にアクティブにできるDataCiteアカウントは1つだけです。
+
+=== 機関の追加
+機関は、管理者ロールを持つユーザーが追加するまで、リソースと関連付けることができません。「追加」ボタンをクリックすると、IPTのこのインスタンスで使用するために、追加の機関をGBIFレジストリから選択することができるページが開きます。このページのフィールドと選択項目の説明については、上記の「機関の編集」セクションを参照してください。希望する機関を選択し、機関の共有トークンなど他のデータをすべて入力したら、「保存」ボタンをクリックし、選択した機関をリストに追加します。
+
+image::ipt2/administration/IPTAdminOrgsAddOrg.png[]
+
+== コアタイプおよび拡張機能の設定
+このページでは、管理責任者ロールを持つユーザーは、IPTのインスタンスがGBIFレジストリから様々な定義済みのデータタイプをインポートして共有できるようにすることができます。各タイプには、特定の目的をサポートするプロパティ（フィールド、用語）が含まれています。たとえば、ダーウィンコア・タクソンコアタイプは、分類名、分類名の用法、分類名の概念に関する情報をサポートし、IPT が分類学および命名法チェックリストのリソースをホストできるようにします。コアタイプと拡張機能は区別されます。コアタイプはデータレコードの基礎となるもの（例：オカレンス、タクソン、イベント）で、一方拡張機能は コアタイプのレコードに追加データを関連付ける手段を提供するものです。「リソース概要」の「ダーウィンコアマッピング」で説明するように、1つのリソースには1つのCore Typeしか選択できません。
+
+語彙には、コアタイプや拡張機能の特定の用語が取りうる有効な値のリストが含まれています。例えば、link:{latest-basis-of-record}[ダーウィンコアタイプの語彙]には、ダーウィンコアの用語link:http://rs.tdwg.org/dwc/terms/#basisOfRecord[basisOfRecord]で許可されるすべての標準的な値が含まれています。
+
+インストールされているコアタイプと拡張機能のリストに続いて、「拡張機能と語彙を同期させる」というセクションがあり、「同期」というボタンが1つ付いています。GBIFレジストリに存在し、まだインストールされていないコアタイプと拡張機能の最新バージョンが、語彙セクションの下にリストアップされています。
+
+image::ipt2/administration/IPTAdminExtensions.png[]
+
+拡張機能（インストール済み/未インストール）のリストには、それぞれ2つの列があります。左側の列には、拡張機能の名前がリンクとして表示され、「インストール」または「削除」と書かれたボタンが表示されます。拡張機能が古い場合、「更新」というボタンも表示されます。右側の列には、拡張機能の情報の概要が表示されます。拡張機能が対応するデータの種類の簡単な説明、拡張機能の詳細情報がある場合はそのリンク、発行 (リリース) 日、拡張機能のプロパティ (フィールド、用語) の数、拡張機能の名前、名前空間、行の種類、キーワードが表示されます。拡張子のこれらの属性の詳細については、ダーウィンコア・アーカイブのドキュメント（http://rs.tdwg.org/dwc/terms/guides/text/）を参照してください。以下は、拡張子に関して実行可能なアクションです。
+
+=== 拡張機能と語彙を同期させる
+拡張機能には、あらかじめ定義された値を持つ用語のリスト（統制語彙）を使用することができます。これらの語彙は定期的に変更されることがあり（新しい翻訳が追加された場合など）、IPTで更新する必要があります。「同期」ボタンをクリックすると、既存の語彙がGBIFレジストリと同期されます。更新が完了すると、同期が成功したか、エラーが発生したかを示すメッセージが表示されます。
+
+=== 拡張機能の詳細を見る
+1列目の各拡張機能のタイトルは、その拡張機能の詳細ページへのリンクになっています。詳細ページには、拡張機能リストの右側の列で見ることができる要約情報のすべてと、拡張機能内の各プロパティの詳細な説明、リファレンス、例が表示されます。
+
+image::ipt2/administration/IPTAdminExtensionsDetail.png[]
+
+統制語彙を持つプロパティについては、右側の列のプロパティ情報に、「語彙」というラベルの隣に、語彙の名前がリンクとして表示されます。このリンクをクリックすると、その語彙の詳細ページが開き、上部に語彙の概要、有効な値の表、さらに優先用語や代替用語、識別子などの詳細情報が表示されます。
+
+image::ipt2/administration/IPTAdminExtensionsDetailVocabulary.png[]
+
+=== 拡張機能のインストール
+まだIPTにインストールされていない拡張機能については、左側の列の拡張機能名の下に「インストール」と書かれたボタンがあります。このボタンをクリックすると、GBIFレジストリから拡張機能が取得され、IPTにインストールされます。
+
+=== 拡張機能の削除
+すでにIPTにインストールされている拡張機能は、「削除」ボタンをクリックすることで削除することができます。IPT の任意のリソースのデータをマッピングするために使用中の拡張機能は、削除できません。削除しようとすると、エラーメッセージと、マッピングでその拡張機能を使用しているリソースのリストが表示されます。
+
+=== 拡張機能のアップデート
+すでにIPTにインストールされ、古くなってしまった拡張機能は、「更新」ボタンをクリックすることで更新することができます。拡張機能を更新すると、新しい用語や新しい語彙を利用できるようになります。更新中、非推奨の用語に対する既存のマッピングは削除され、別の用語に置き換えられた非推奨の用語に対する既存のマッピングは自動的に更新されます。更新後、影響を受けるすべてのリソースを確認し、再公開する必要があります。
+
+image::ipt2/administration/IPTAdminExtensionsUpdate.png[]
+
+== データパッケージ
+
+This page allows a user having the Admin role to enable the instance of the IPT to import and share various pre-defined types of data from the GBIF Registry. Each type includes properties (fields) that support a specific purpose.
+
+image::ipt2/administration/IPTAdminDataPackages.png[]
+
+Details page:
+
+image::ipt2/administration/IPTAdminDataPackagesDetail.png[]
+
+== UI管理
+
+IPTのロゴとカラースキームは、UI管理ページから管理することができます。
+
+image::ipt2/administration/IPTAdminUIManagement.png[]
+
+== IPTのログを見る
+IPTの実行中に発生したメッセージは、IPTデータディレクトリ内の「logs」というディレクトリに参照用ファイルとして記録されます（「管理メニュー」の「IPT設定」の項を参照してください）。「IPTログを確認する」ページには、admin.log というファイルからのメッセージが表示され、これには警告以上の重要度を持つログメッセージ（エラーなど）だけが含まれます。メッセージの完全なログ（ debug.log というファイルに含まれる）は、「完全なログファイル」というラベルの付いたリンクをクリックすることによって開いて見ることができます。完全なログファイルの内容は、明らかなバグを報告する際に役立つ場合があります。
+
+image::ipt2/administration/IPTAdminLogs.png[]

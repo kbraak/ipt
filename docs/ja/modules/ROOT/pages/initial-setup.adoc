@@ -1,0 +1,77 @@
+= 初期設定
+
+== データディレクトリ
+
+NOTE: このステップは、インストール時点でデータディレクトリがまだ設定されていない場合にのみ表示されます。
+
+The first time the IPT is run, you will be presented with a few simple steps to prepare the IPT for use. First it requires a location where the data for the IPT installation can be stored. The format of the location entered on the page must conform with the standard for an absolute path to a directory on the operating system where the IPT is installed; relative paths are not supported. For example, use a path such as `C:\datadir` for Windows environments or `/srv/datadir` for Unix and Mac OS X environments. The IPT must have write permission to the selected location. If it does, the path can be entered in the text box provided and then click on the button labelled "Save" - the directory will be created if it doesn't already exist. It is permissible to create the data directory first with the appropriate write permissions, then enter the absolute path to the directory in the text box and click on the "Save" button.
+
+CAUTION: 不注意による変更や削除の可能性があるデータディレクトリを選択しないでください。例えば`/tmp`のように、システム再起動時に空になる可能性があるシステムでは使用しないでください。*データディレクトリは、適切な災害復旧計画に沿って、定期的にバックアップを取る必要があります。*データディレクトリの内容が失われると、リソース、ユーザー、その他の構成情報、およびIPTインストールに対するカスタマイズが失われます。
+
+NOTE: 同じバージョンで以前動作していたIPTのデータディレクトリがあり、当時の設定（ユーザーとリソースを含む）を使用したい場合、IPT設定のこの最初のステップでそのデータディレクトリの絶対パスを入力することができます。この場合、「保存」をクリックすると、IPT設定IIと題されたページがスキップされ、IPT管理ページが表示されます。
+
+NOTE: 書き込みができない場所であるというエラーが発生した場合は、xref:faq.adoc#file-permissions[FAQのこちら]を参照してください。
+
+TIP: 右上の言語名をクリックすると、希望の言語でIPTが利用できるかどうか確認できます。
+
+image::ipt2/setup/IPTSetup-1-dataDirectory.png[]
+
+== Administrator user
+
+If the initial data directory assignment step was successful, the IPT will present a second setup page (see screen image, below) on which the information about the default administrator of the IPT must be entered.
+
+--
+The default administrator will have a distinct login and the authority to make changes to all aspects of the IPT installation. The default administrator will be able to make additional user accounts, including other administrators having the same authority to make changes. Though administrators can be added and removed, the IPT must always have at least one. Following are explanations of the fields encountered on the second setup page:
+
+* *Email* - IPTインストールのデフォルト管理責任者の完全かつ有効なEメールアドレス。
+* *名前* - デフォルトの管理責任者のファーストネーム。
+* *名字* - デフォルトの管理責任者のラストネーム。
+* *パスワード* - デフォルトの管理責任者のパスワード。
++
+[NOTE]
+====
+パスワードはIPTアプリケーションからは復元できないため、紛失しないよう安全な状態にする必要があります。
+====
+* *パスワードの確認* - パスワードのテキストボックスに入力されたパスワードと一致するかで、意図したとおりに入力されたか確認します。
+--
+
+image::ipt2/setup/IPTSetup-2-administrator.png[]
+
+== IPTモード
+
+If the second step was successful, the IPT will present a third setup page (see screen image, below) on which the information about the IPT mode must be entered.
+
+--
+WARNING: インストールを選択した場合、これは最終的なものであり、後から変更することはできません。
+
+The IPT mode decides whether the hosted resources will be indexed for public search access by GBIF. GBIF recommends IPT administrators try Test mode first in order to understand the registration process, and then reinstall in Production mode for formal data publishing. To switch from test to production mode or vice versa, you will have to reinstall your IPT and repeat any configurations you made.
+
+* *IPTモード*
++
+テストモードと本番モードのどちらかを選択します。テストモードは、IPTを評価するため、またはトレーニングシナリオで実行するためのもので、登録はテストレジストリに入り、リソースは決してインデックスされません。テストモードのリソースに対して作成されるすべてのDOIは、一時的であることを意味するテストプレフィックス（DataCiteに要求可能）を使用する必要があります。一方本番モードは、リソースを正式に公開するためのモードであり、リソースはGBIFレジストリに登録され、インデックスが作成されます。リソースに付与されたDOIは削除することができず、リソースが一般に公開され続けることが求められます。
+--
+
+image::ipt2/setup/IPTSetup-3-mode.png[]
+
+== 公開 URL
+
+If the third step was successful, the IPT will present a fourth setup page (see screen image, below) on which the information about the IPT mode must be entered.
+
+このIPTインストールのルートを指す、インターネットにアクセス可能な公開URLです。可能であれば、URLは自動的に検出されます。本番システムでは、IPTが完全に機能するために、インターネット経由でアクセスできる必要があります。例えば、IPT公開URLをローカルホストに設定すると、IPTをGBIFに登録できず、IPTを機関と関連付けることや、リソースに一般にアクセスすることもできなくなります。
+
+* 機関のプロキシURL（オプション）
++
+IPTがインストールされているサーバーがインターネットに直接HTTP/HTTPSアクセスできず、代わりに機関プロキシサーバーを介してHTTP/HTTPSリクエストのアウトバウンドをルーティングする必要がある場合、ここにホストアドレスとポート番号を入力します。 例えば、``http://proxy.example.org:8080``です。
+
+image::ipt2/setup/IPTSetup-4-url.png[]
+
+
+When all the information on the page is complete and correct, click on the button labelled "Save" to complete the IPT setup process. If a problem occurs, an error message will appear at the top of the page with recommendations about how to resolve the issue. Provided the issue has been resolved, restarting the web server will make it disappear. If the setup is successful, a page confirming the success of the setup will appear.
+
+image::ipt2/setup/IPTSetup-5-complete.png[]
+
+「続ける」をクリックすると、IPT管理ページ（下図参照）が表示され、IPTの詳細な設定を行うことができます。続行する前に、すべての管理機能の説明を確認してください。この画面に表示されるオプションの詳細については、xref:administration.adoc[管理メニュー]のセクションで説明しています。IPTにデータリソースを追加する前に、管理者は少なくともIPTの設定を確認し、GBIF登録オプションを設定して、IPTを機関と関連付ける必要があります。
+
+image::ipt2/administration/IPTAdminBeforeRegistration.png[]
+
+このスタートアップ・ガイドのステップを完了すると、IPTはリソース（データセットとメタデータ）を追加する準備が整います。一般的なIPTタスクの実行方法を理解するために、チュートリアルを完了するとよいでしょう。さらに詳しいIPTの説明については、このユーザーマニュアルの次のセクションを参照してください。

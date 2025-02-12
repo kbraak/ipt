@@ -1,0 +1,753 @@
+= Menú gestión de recursos
+
+Este menú es visible para los usuarios que tienen el rol de Administrador o Editor.
+
+Esta página permite, a usuarios que cumplan el rol que corresponde (editores y administradores), realizar cambios en los recursos existentes o crear nuevos recursos.
+
+image::ipt2/manage/IPTManageResources.png[]
+
+== Tabla gestión de recursos
+Cuando se abre por primera vez la página "Gestión de recursos", se muestra una tabla de los recursos existentes que el usuario actual tiene permiso para modificar, incluidos los creados por este usuario y los que ha sido invitado a gestionar por otros. Consulte la información en la sección xref:home.adoc#table-de-recursos-publicos[Tabla de recursos públicos] para obtener una explicación detallada acerca de las columnas Nombre, Organización, Tipo, Subtipo, Registros, Última modificación, Última publicación y Próxima publicación. Además, la "Tabla de gestión de recursos" incluye las siguientes columnas de información básica sobre los recursos:
+
+* *Visibilidad* - una categoría que indica quién tiene acceso a ver el recurso. Si el recurso es "Público", todos los usuarios podrán verlo en la tabla xref:home.adoc#public-resource-table[Tabla de recursos públicos] de la página de inicio. Si el recurso es "Privado", será visible en la tabla de Gestión de Recursos sólo para el usuario que lo creó, para aquellos que hayan sido invitados a editarlo y para los usuarios que tengan el rol de Administrador. Los detalles sobre cómo invitar a otras personas a editar un recurso se encuentran en la sección "Editores de Recursos", en el apartado "Vista General del Recurso" de la sección "Gestionar recursos".
+* *Autor*: El usuario del IPT que creó el recurso.
+
+== Crear un nuevo recurso
+Debajo de la tabla de "Gestión de recursos" hay un formulario que puede utilizarse para crear un nuevo recurso. En primer lugar, debe proporcionarse un "nombre corto" único para el recurso. Este nombre corto se utilizará para identificar de forma exclusiva el recurso dentro de la instancia IPT y se utilizará dentro de la URL para acceder al recurso a través de Internet. El nombre corto debe tener al menos tres caracteres, puede contener caracteres alfanuméricos (A-Z, a-z y 0-9), pero no debe contener espacios en blanco, signos de puntuación que no sean guiones o guiones bajos, ni caracteres acentuados (p. ej., "primerrecurso" o "primer_recurso", pero no "primer recurso" o "première ressource!"). En segundo lugar, se puede proporcionar un tipo de recurso (opcional). Tenga en cuenta que cuando se cargue un archivo (ver más adelante) el tipo se determinará automáticamente y sobrescribirá esta selección. En tercer lugar, se puede cargar un archivo (opcional). Las siguientes secciones describen los 3 tipos diferentes de archivos de los que se puede derivar un nuevo recurso:
+
+* <<Upload a Darwin Core Archive,Darwin Core Archive>> o un Paquete de Datos Camtrap de Frictionless,
+* <<Cargar una carpeta comprimida con un recurso IPT configurado, carpeta comprimida (.zip) con un recurso IPT configurado>>
+* <<Upload a metadata file,metadata file>> (metadatos EML o Frictionless)
+
+Por supuesto, siempre se puede simplemente _crear un recurso completamente nuevo_ sin cargar un archivo que contenga un recurso. Con esta opción, la configuración del recurso tendrá que crearse en su totalidad a través de los formularios del IPT, incluyendo cargar archivos de datos fuente (o la conexión a una base de datos o a URLs) y el mapeo de los campos de los mismos a elementos en la extensión o extensiones adecuadas. *Tenga en cuenta que el IPT tiene un límite de carga de archivos de 10 GB.*, sin embargo, *no hay límite en el tamaño del Archivo Darwin Core que el IPT puede exportar/publicar*. Consulte la sección <<upload-limits,note about file upload limits>> para saber cómo evitar el límite de carga de archivos.
+
+Para hacerlo, hay que comenzar ingresando un nombre corto para el nuevo recurso, como se describió anteriormente, y luego hacer clic en el botón "Crear". Se abrirá inmediatamente la página de "Vista general del recurso". Proceda a completar las diferentes secciones de la página gestión del recurso teniendo en cuenta las descripciones bajo el encabezado "Vista general del recurso" de la sección de "Gestión del recurso"
+
+=== Cargar un Archivo Darwin Core
+El IPT puede importar y exportar archivos válidos del tipo Darwin Core de hasta 10GB. Puede encontrar más información sobre archivos Darwin Core en el https://dwc.tdwg.org/[sitio web del Darwin Core], junto con información sobre su uso xref:dwca-guide.adoc[aquí]. Para importar un Archivo Darwin Core, haga clic en el botón "Seleccionar archivo", a continuación busque y seleccione el archivo. Después de seleccionarlo, el nombre aparecerá junto al botón "Seleccionar archivo".
+
+image::ipt2/manage/IPTManageResourceUploadDwcA.png[]
+
+Haga clic en el botón "Crear". Si hay algún problema al importar el archivo seleccionado, un mensaje de error alertará al usuario. Si la importación es exitosa, una página de "Vista general del recurso" aparecerá con un mensaje informativo en la parte superior que describe los resultados del proceso de importación.
+
+image::ipt2/manage/IPTManageResourceUploadDwCASuccess.png[]
+
+=== Cargar una carpeta comprimida de configuración de recursos IPT
+Es posible crear una copia de un recurso a partir de su carpeta de configuración de recursos IPT en formato comprimido. La única condición es que el recurso se haya creado con una versión compatible del IPT. En efecto, esto copiará todos los metadatos, datos de origen y asignaciones del recurso. *No* copiará la información de registro del recurso, el historial de versiones, los DOI, el número de versión, los editores, el estado de publicación, la fecha de creación, la fecha de última publicación, ni siquiera conservará el nombre corto del recurso.
+
+Para hacerlo, siga estas instrucciones:
+
+. correspondiente al recurso que desea copiar. Las carpetas de configuración de recursos se almacenan dentro de la carpeta `$directorio-datos/recursos`y se nombran utilizando el nombre corto del recurso. Por ejemplo, si el recurso tiene el nombre corto "ants", se encontrará en `$directorio-datos/recursos/ants`.
+. Comprima la carpeta de configuración del recurso: `ants/` → `ants.zip`
+. En la sección "Crear un nuevo recurso" de la página "Gestión de recursos":
+.. Ingrese un nombre corto para el nuevo recurso. Puede mantener el nombre corto del recurso comprimido, siempre y cuando no exista ya en su IPT.
+.. Haga clic en el botón "Examinar", busque y seleccione la carpeta comprimida de configuración del recurso.
+.. Después de seleccionar el archivo, la ruta donde se encuentra aparecerá al lado del botón "Examinar". Ahora haga clic en el botón "Crear". Si hay algún problema al importar el archivo seleccionado, un mensaje de error alertará al usuario. Si la importación es exitosa, aparecerá una página de "Vista general del recurso" con los metadatos, la fuente de datos y el mapeo del recurso, que fueron copiados del recurso comprimido al nuevo recurso.
+
+=== Cargar un archivo de metadatos
+El IPT puede importar y exportar archivos válidos de metadatos de conjuntos de datos que se ajusten al "Perfil de metadatos de GBIF". La información acerca del Perfil de metadatos EML de GBIF y cómo crear un documento de metadatos que se ajuste al Perfil de metadatos de GBIF Darwin Core puede ser encontrada en el xref:gbif-metadata-profile.adoc[Perfil de metadatos de GBIF: Guía práctica]. Para importar un archivo de metadatos, seleccione el tipo de recurso "solamente metadatos" y haga clic en el botón "Examinar", busque y seleccione el archivo de metadatos deseado. Después de seleccionar el archivo, el nombre aparecerá junto al botón de "Examinar".
+
+image::ipt2/manage/IPTManageResourceUploadEml.png[]
+
+Haga clic sobre el botón "Crear". Si existe un problema importando el archivo seleccionado, un mensaje de error alertará al usuario. Si la importación es exitosa, la página "Vista general del recurso" aparecerá con los metadatos que habían sido documentados. Las secciones de fuente de datos y mapeo permanecerán ocultas debido a que es un recurso de solo metadatos. Si usted más adelante decide agregar un conjunto de datos primarios, sólo cambie el tipo de recurso en la página de "Metadatos" en la sección de los <<Metadatos básicos>>.
+
+== Editar un recurso existente
+La tabla de recursos existentes muestra sólo aquellos recursos que pueden ser editados por el usuario actual. Para editar un recurso, haga clic en el nombre del recurso en la "Tabla de Gestión de recursos". El enlace abrirá la página "Vista general del recurso" del recurso seleccionado. Consulte las descripciones en el encabezado "Vista General del recurso", de la sección "Gestión de recursos" para conocer los detalles acerca de cómo editar diversos aspectos del recurso.
+
+== Vista general del recurso
+Esta página permite a los usuarios con permiso de administración realizar cambios en varios aspectos de la configuración de un recurso. El nombre del recurso se encuentra en la parte superior de la página, debajo de la barra de menú. Si no se ha asignado un nombre al recurso, el nombre corto estará en la parte superior de la página y funcionará a manera de título. Debajo del nombre del recurso hay una tabla que muestra las categorías de la configuración del recurso a la izquierda, con las secciones correspondientes a la derecha. Los iconos de información a lo largo de la tabla pueden ayudar a guiar a los administradores en el uso de cada categoría. Cada una de estas categorías se configura por separado como se explica en detalle en las siguientes secciones.
+
+image::ipt2/manage/IPTManageResourceOverview.png[]
+image::ipt2/manage/IPTManageResourceOverview-2.png[]
+
+=== Conjunto de datos
+Esta área de la página "Vista general del recurso" permite al usuario importar datos primarios al IPT a partir de archivos, bases de datos o URL. Si un recurso no pertenece un conjunto de datos, es considerado un recurso de metadatos con información acerca de un conjunto de datos o una colección, pero sin ningún tipo de datos primarios. Es posible conectar un recurso a más de un conjunto de datos, si los conjuntos están relacionados entre sí. Encontrará más información sobre la relación entre múltiples conjuntos de datos en la sección http://rs.tdwg.org/dwc/terms/guides/text/index.htm#implement[Guía de implementación (Implementation Guide)] de la "Guía de texto" de Darwin Core. A continuación se encuentran las explicaciones de la etapa preliminar para seleccionar el conjunto de datos, ya sea de archivos de texto, de fuentes de bases de datos o de un archivo de texto disponible en una URL:
+
+==== Archivo como conjunto de datos
+El IPT puede importar archivos de texto delimitados (CSV, archivos separados por tabuladores y que utilicen cualquier otro delimitador) o archivos equivalentes comprimidos con Zip o Gzip, también admite archivos de Excel. Seleccione la opción "Archivo" del menú desplegable y haga clic en el botón "Elejir archivo" para seleccionar el archivo a importar. El nombre del archivo sólo puede estar compuesto por caracteres alfanuméricos (A-Z, 0-9), espacios, guiones bajos, puntos, paréntesis y guiones. Tras seleccionar el archivo, el nombre aparecerá a la derecha del botón "Elejir archivo".
+
+image::ipt2/manage/IPTManageResourceSourceSummary.png[]
+
+Haga clic en el botón "Limpiar" para eliminar el archivo seleccionado y volver al estado anterior a la selección del archivo de conjunto de datos. Haga clic en el botón "Agregar" para abrir la página detallada "Archivo de conjunto de datos" (si existe el riesgo de sobrescribir un archivo con el mismo nombre, se abre un diálogo que pide al usuario confirmar sí realmente desea sobrescribir).
+
+WARNING: Si el IPT detecta que el número de columnas de una fuente de datos mapeada ha cambiado al sobrescribirla, se advierte al usuario que debe actualizar sus mapeos.
+
+[NOTE#upload-limits]
+.Límites de carga
+====
+El IPT tiene un límite de 10GB para la carga de archivos. Sin embargo no se tienen límites de tamaño para los Archivos Darwin Core que se deseen exportar o publicar a través del IPT. Para la carga en el IPT de conjuntos de datos de un tamaño mayor a los 10GB, se recomiendan las siguientes alternativas:
+
+* comprimir el archivo (con zip o gzip)
+* cargar los datos a una de las xref:database-connection.adoc[bases de datos soportadas por el IPT]
+* recuperar el archivo desde una URL
+* dividir el archivo (cuando se publique el conjunto de datos, el IPT concatenará los archivos en el orden en que sean mapeados)
+====
+
+Esta página mostrará el nombre del recurso, junto con un resumen de las características del archivo (legibilidad, número de columnas detectadas, ruta absoluta de acceso al archivo, tamaño del archivo, número de filas detectadas y fecha en la que el archivo se cargó en el IPT). La página de detalles del archivo del conjunto de datos permite al usuario ver y editar los parámetros que describen el contenido del archivo seleccionado, y utilizar estos ajustes para analizar y obtener una vista previa el archivo.
+
+image::ipt2/manage/IPTManageResourceSourceDataFormat.png[]
+
+* *Nombre del archivo del conjunto de datos* - El nombre del archivo seleccionado, sin la extensión del archivo.
+* *Tipo de fuente* - tipo de fuente, aquí Archivo de texto.
+* *Se puede leer*: este icono indica si los datos son accesibles utilizando la información sobre el formato de los archivos que se proporciona en esta página.
+* *Archivo*: la ruta completa a la ubicación del archivo que desea utilizar como conjunto de datos.
+* *Columnas*: el número de columnas en el conjunto de datos como se ha configurado usando los parámetros en esta página.
+* *Filas*: el número de filas que se encuentran en el archivo de datos. (Nota: este número ayuda a comprobar si todos los registros fueron identificados.)
+* *Tamaño*: el tamaño del archivo.
+* *Modificado*: el sello de fecha del archivo que indica cuándo se guardó por última vez.
+* *Reporte del conjunto de datos*: este enlace descarga el archivo que contiene el registro producido al procesar el archivo utilizando la información contenida en esta página. Cualquier problema que surja al procesar el archivo, como la falta de datos o un formato inesperado, aparecerá en este archivo de registro.
+* *Analizar* - (en el menú desplegable Opciones) haga clic en este botón para generar un resumen de datos basado en la configuración del archivo en esta página. El análisis indicará si la base de datos tiene posibilidad de lectura y, si es así, el número de columnas que contiene.
+* *Vista previa* - (en el menú desplegable Opciones) de clic en este botón para visualisar una interpretación de los datos dentro del archivo.
+* *Número de filas del encabezado*: 0 si el archivo no contiene una fila con los nombres de columna, 1 si el archivo contiene una fila de encabezado.
+* *Delimitador de texto*: el o los caracteres que indican una ruptura entre columnas de datos.
+* *Delimitadot de texto*: un solo carácter (o ninguno) que se utiliza para delimitar el contenido de una columna en los datos (por ejemplo, `'` o `"`). Tenga en cuenta que esto no delimitará correctamente las columnas cuyo contenido incluya una nueva línea de caracteres (\n) o saltos de línea (`\r`).
+* *Delimitador multivalor*: un solo carácter utilizado para delimitar el contenido de un campo multivalor (p. ej., `|` o `;`).
+* *Codificación de caracteres*: el sistema que determina las definiciones en bytes de los caracteres de los datos  (p. ej., la norma ISO 8859-5 se refiere al alfabeto cirílico).
+* *Formato de fecha*: un código que describe el formato de los elementos que tienen un tipo de datos de fecha (p. ej., `AAAA-MM-DD` para año de cuatro dígitos, mes de dos dígitos y día de dos dígitos, separados por guiones).
+* *Hoja de cálculo seleccionada* - (sólo archivos Excel) esta lista de selección muestra los nombres de todas las hojas de cálculo del archivo/libro de Excel. Sólo puede utilizar una hoja de cálculo como fuente de datos, por defecto aparecerá señeccionada la primera hoja del archivo. Despues de seleccionar la hoja de calculo que contenga los datos haga clic en  *Analizar* para actualizar la información de  filas y columnas.
+
+Después de ajustar los parámetros del conjunto de datos para que el archivo se interprete correctamente, haga clic en el botón "Guardar" para almacenar esta configuración. Si el almacenamiento se realiza correctamente, aparecerá la página "Vista general del recurso", con información resumida acerca del archivo. Para abrir nuevamente el "Conjunto de datos", haga clic en el botón apropiado.
+
+image::ipt2/manage/IPTManageResourceSourceSummary.png[]
+
+En caso de que el usuario desee eliminar este conjunto, puede volver a abrir la página detallada de "Archivo de fuente de datos" y hacer clic en el botón "Eliminar el conjunto de datos". Tenga en cuenta, sin embargo, que cualquier mapeo asociado a este archivo también será eliminado.
+
+Si el conjunto de datos se encuentra en varios archivos de texto, el proceso descrito en esta sección se puede repetir para cada uno de los archivos que desea importar. Un archivo comprimido con varios archivos de texto también puede ser importado para añadir todos los conjuntos de datos de una sola vez.
+
+==== Base de datos como conjunto de datos
+El IPT puede utilizar conexiones a bases de datos para importar datos desde tablas o vistas. En la sección xref:database-connection.adoc[Bases de datos compatibles] encontrará un listado de las conexiones a bases de datos compatibles. Para configurar una base de datos como fuente de datos, de clic en el menú {threedots} y selecciones "Añadir". Luego escoja "Base de datos" de la lista de fuentes de datos en el menú desplegable , luego de clic en el botón "Conectar". Se abrirá la página de detalles de la base de datos fuente.
+
+La página detallada de "Conjunto de datos" muestra el nombre del recurso, junto con un resumen de las características de la base de datos (legibilidad, número de columnas detectadas) y permite al usuario ver y editar los parámetros que describen cómo acceder a los datos de la base de datos, y utilizar estos ajustes para analizar y previsualizar los datos
+
+WARNING: Si el IPT detecta que el número de columnas de una fuente de datos mapeada ha cambiado al editarla, se advierte al usuario que debe actualizar sus mapeos.
+
+image::ipt2/manage/IPTManageResourceSourceDatabase.png[]
+
+* *Nombre del archivo del conjunto de datos* - el nombre de la fuente de datos. A diferencia de una fuente de datos de tipo archivo, ésta puede ser editada y recibir cualquier nombre dado por el usuario.
+* *Tipo de fuente* - tipo de fuente, aquí SQL.
+* *Se puede leer*: este ícono indica si los datos están disponibles usando la información de conexión proporcionada en esta página.
+* *Analizar*: (en el menú desplegable Opciones) haga clic en este botón para generar un resumen de datos basado en la configuración de la conexión a la base de datos en esta página. El análisis indicará si la base de datos es legible y, en caso afirmativo, cuántas columnas hay en los resultados de la sentencia SQL.
+* *Vista previa* - (en el menú desplegable Opciones) haga clic en este botón para ver una interpretación de los datos basada en la configuración de la conexión a la base de datos en esta página.
+* *Sistema de la base de datos*: el sistema de administración de bases de datos relacionales al que debe conectarse el IPT para recuperar los datos.
+* *Alojador*: la dirección del servidor de la base de datos, que opcionalmente incluye el número de puerto no predeterminado (p. ej., `localhost` o `mysql.example.org:1336`). Para las conexiones ODBC, esto no es necesario.
+* *Base de datos*: el nombre de la base de datos en el sistema de administración de base de datos o el DSN para una conexión ODBC.
+* *Usuario de la base de datos*: el nombre del usuario de la base de datos que se utilizará cuando se conecte a la base de datos.
+* *Contraseña de la base de datos*: la contraseña utilizada por el usuario para conectarse a la base de datos.
+* *Sentencia SQL*: la sentencia de lenguaje de consulta estructurado (Structured Query Language) utilizada para leer los datos de la fuente de base de datos. La sentencia se enviará como está, a la base de datos configurada, por lo cual usted puede utilizar cualquier característica local de la base de datos como funciones, agrupación de documentos, límites, o uniones, si son compatibles. Ejemplo: `SELECT * FROM specimen JOIN taxon ON taxon_fk = taxon.id`. Al momento de probar una fuente de datos de gran tamaño es buena idea incluir el lenguaje apropiado en la sentencia SELECT para limitar el número de filas arrojadas por la consulta, por ejemplo, en MySQL, `SELECT * FROM specimen JOIN taxon ON taxon_fk = taxon.id LIMIT 10`. Cuando la sentencia ha sido totalmente probada con el enlace de Darwin Core (consulte la siguiente sección), cambie la sentencia SQL para que retorne todo el conjunto de datos previsto.
+* *Codificación de caracteres*: el sistema que determina las definiciones en bytes de los caracteres de los datos (p. ej., Latin1, UTF-8 ).
+* *Formato de fecha*: un código que describe el formato de los elementos que tienen un tipo de datos de fecha (p. ej., `AAAA-MM-DD` para año de cuatro dígitos, mes de dos dígitos y día de dos dígitos, separados por guiones).
+* *Delimitador multivalor*: un solo carácter utilizado para delimitar el contenido de un campo multivalor (p. ej., `|` o `;`).
+
+Después de establecer los parámetros del conjunto de datos de manera que haya un acceso adecuado a los datos, haga clic en el botón "Guardar" para almacenar esta configuración. Si el proceso de almacenamiento se realiza correctamente, aparecerá la página "Vista general del recurso", con información resumida acerca de los datos, en la columna de la derecha del área "Conjunto de datos". el botón "Editar" también aparecerá con la información resumida del conjunto de datos, permitiendo al usuario volver a abrir la página detallada del Conjunto de datos.
+
+==== URL como conjunto de datos
+El IPT puede importar archivos de texto delimitados sin comprimir (CSV, tab y archivos que utilizan cualquier otro delimitador) o archivos directamente desde una URL. Haga clic en el menú {threedots} y seleccione "Agregar". Luego seleccione "URL" de la lista desplegable del tipo de datos de origen, proporcione el nombre de la fuente y escriba o copie y pegue la URL completa (incluido `http://` o `https://`) en el cuadro a continuación.
+
+image::ipt2/manage/IPTManageResourceSourceSummary.png[]
+
+Haga clic en el botón "Limpiar" para eliminar el archivo seleccionado y volver al estado anterior a la selección del archivo de conjunto de datos. Alternativamente, haga clic en el botón "Agregar" para abrir la página de detalles de la URL del Conjunto de datos.
+
+Esta página muestra el nombre del recurso junto con un resumen de las características de la URL (legibilidad, número de columnas detectadas, ubicación de la URL, el número de filas detectadas y la fecha en que la URL se cargó por última vez en el IPT). La página de detalles de la URL del "Conjunto de datos" permite al usuario ver y editar los parámetros que describen el contenido del archivo seleccionado, así como utilizar estos ajustes para analizar y previsualizar el archivo.
+
+image::ipt2/manage/IPTManageResourceSourceURL.png[]
+
+A partir de este punto, el proceso es muy similar al de utilizar un archivo como fuente de datos. Consulte la sección <<Archivo como fuente de datos>> para consultar una explicación de la página.
+
+=== Mapeo Darwin Core
+Esta área de la página "Vista general del recurso", permite al usuario mapear los elementos de los datos de entrada a los elementos de las extensiones instaladas e identificar los elementos que aún no han sido mapeados. Esta opción no estará disponible hasta que se haya añadido correctamente al menos un conjunto de datos y se haya instalado al menos una extensión.
+
+Una vez cumplidas estas condiciones, el menú desplegable contendrá un cuadro de selección con una lista de Tipos de Core y Extensiones que se han instalado. Seleccione un Core y mapeelo antes de seleccionar una extensión a mapear. Seleccione la extensión apropiada que tenga campos que coincidan con los que se van a mapear en la fuente de datos. Si el tipo de core o la extensión apropiados no aparecen en el cuadro de selección, será necesario instalarlos primero. Consulte la información del apartado "Configurar Tipos de Core y Extensiones" de la sección "Menú Administración" para obtener una explicación sobre cómo instalar extensiones.
+
+image::ipt2/manage/IPTManageResourceDwCMapping.png[]
+
+Una vez seleccionado el core o la extensión deseada, haga clic en el botón "Agregar" para abrir la <<Página de selección del conjunto de datos>>.
+
+==== Página de selección del conjunto de datos
+Esta página ofrece una explicación del tipo de datos que la extensión puede soportar, y muestra un cuadro de selección que contiene una lista de todas las fuentes de datos configuradas.
+
+NOTE: Un recurso debe usar solamente un tipo de estándar: elija "Darwin Core Taxon" cuando la base del recurso sean nombres de taxones o elija "Darwin Core Occurrence" cuando la base del recurso sean observaciones en campo o especímenes en una colección. Sólo cuando se haya mapeado el core deseado, será posible mapear otras extensiones.
+
+NOTE: Es posible mapear otro tipo de core como una extensión, siempre y cuando éste sea diferente del tipo de core mapeado inicialmente.
+
+image::ipt2/manage/IPTManageResourceSourceSelect.png[]
+
+Seleccione el conjunto de datos a mapear y luego haga clic en el botón "Guardar". Esto abrirá la página de vista general del "Mapeo del conjunto de datos" (vaya a <<Página de vista general del mapeo del conjunto de datos>> abajo para obener ayuda acerca del mapeo).
+
+Una vez añadido un nuevo mapeo, será visible en el área de Mapeos del Darwin Core. Esta área contendrá una lista de todos los mapeos del recurso divididos en mapeos de Tipo Core y mapeos de Extensión. Haga clic en el elemento para modificarlo, o haga clic en el menú {threedots} y seleccione "Vista previa" para previsualizar el mapeo. Se recomienda a los administradores de recursos que previsualicen todos los mapeos antes de publicar una nueva versión.
+
+image::ipt2/manage/IPTManageResourceDwCMapping2.png[]
+
+==== Página de vista general del mapeo del conjunto de catos
+Después de que se ha realizado el mapeo entre el conjunto de datos y los elementos del Core o la Extensión, se abrirá esta página. En ésta se mostrará un mensaje de estado indicando cuántos elementos de la fuente de los datos se mapearon automáticamente a los elementos de las extensiones. Los elementos se mapearán automáticamente, si los nombres de los elementos, convertidos a minúsculas, coinciden entre sí.
+
+image::ipt2/manage/IPTManageResourceSourceMapping.png[]
+
+La página "Mapeo del conjunto de datos" permite al usuario especificar exactamente cómo deben configurarse los datos disponibles a través de este recurso IPT en función de la extensión seleccionada. En la parte superior de la página se describe a qué extensión se están mapeando los datos del conjunto de datos. El nombre del conjunto de datos funciona como un enlace a la página de edición del conjunto de datos. El nombre de la extensión funciona como un enlace a la descripción de la extensión.
+
+La barra lateral al lado izquierdo de la página contiene los enlaces para acceder a conjuntos específicos de campos relacionados (clases/grupos) en la extensión. Además cuenta con filtros para mostrar u ocultar campos.
+
+A la derecha de la barra lateral hay filas de información divididas en dos columnas: la primera columna (lado izquierdo) contiene los nombres de los campos de la extensión, la segunda columna (lado derecho) contiene un conjunto de controles (cuadros de selección, cuadros de texto) para establecer el valor que debe contener el campo de la extensión. Si se ha elegido un nombre de campo en el cuadro de selección del campo de conjuntos de datos, aparecerá debajo un texto etiquetado como "Muestra de los datos" y un botón etiquetado como "Traducir". A continuación se describen los controles que pueden aparecer en la columna derecha de la tabla de asignación de datos:
+
+* *Cuadro de selección del elemento del conjunto de datos*: el cuadro de selección de la izquierda está en blanco o contiene el nombre de un campo del conjunto de datos. El IPT diligencia tantas selecciones como sea posible a partir de los nombres de elementos de la extensión que coincidan con el nombre del elemento del conjunto de datos. Todos los cuadros de selección de campos fuente restantes se dejan en blanco, lo que significa que el campo de extensión no se ha asignado a un campo del conjunto de datos. Si se selecciona un nombre de campo, el recurso utilizará el valor de ese campo en el conjunto de datos como valor para el campo de extensión en el Archivo Darwin Core creado por el IPT cuando se publique el recurso.
+* *Cuadro de selección del campo del conjunto de datos*: ID del campo. Este campo puede ser asignado a un campo en el conjunto de datos, o puede seleccionarse "Sin ID" lo cual significa que el elemento no será mapeado a un campo en el conjunto de datos. El ID es requerido para vincular los registros de las dos fuentes. El ID puede ser generado automáticamente a partir del "Número de línea" o del "Generador UUID", pero esta característica es exclusiva del ID del Taxón cuando se realiza un mapeo de una fuente de datos al Taxon Core.
+* *Cuadro de texto de valor constante*: para establecer el valor publicado de cualquier campo de extensión sin identificador en un único valor para cada registro del conjunto de datos, introduzca la constante deseada para el campo de extensión en el cuadro de texto situado a la derecha del cuadro de selección del campo del conjunto de datos. Para activar el cuadro de texto, asegúrese de que no hay ningún valor seleccionado en el cuadro de selección del campo del conjunto de datos. Ejemplo:
+
+image::ipt2/manage/IPTManageResourceMappingConstant.png[]
+
+* *Cuadro de selección de valor constante controlado*: si la columna de la derecha del campo de extensión contiene un segundo cuadro de selección en lugar de un cuadro de texto, significa que el elemento se rige por un vocabulario controlado. En este caso, escoja un valor de la lista de vocabulario para utilizar como un valor constante en lugar de simplemente introducir una constante en un cuadro de texto.
+
+image::ipt2/manage/IPTManageResourceMappingSelectConstant.png[]
+
+* *Usar el DOI del recurso* : (valor constante controlado especial) Es posible fijar el valor predeterminado del ID del conjunto de datos para que este sea igual al DOI del recurso. Esta opción solo aplica para extensiones que contengan el termino Darwin Core http://rs.tdwg.org/dwc/terms/#datasetID[datasetID], como la extensión Occurrence. Para activar la casilla, asegúrese de que no se ha seleccionado ningún campo del conjunto de datos, ni se ha introducido ningún valor constante.
+
+image::ipt2/manage/IPTManageResourceMappingSourceDatasetID.png[]
+
+* *Botón de detalle del vocabulario*: los campos de extensión que se rigen por un vocabulario controlado tendrán un icono junto a la casilla de selección de valores controlados. Haga clic en este ícono para abrir una <<Página de detalle del vocabulario>> en una nueva pestaña del navegador, en la que encontrará una lista de valores aceptados para el campo de extensión con explicaciones y sinónimos en varios idiomas.
+* *Muestra de los datos*: esta área muestra los valores reales de los primeros registros del elemento seleccionado de la fuente de datos, separados por espacios y el carácter `|`. Esto ayuda al usuario a comprender si el contenido del elemento de la fuente de datos es apropiado para el elemento de extensión al que ha sido mapeado.
+
+image::ipt2/manage/IPTManageResourceMappingSourceSample.png[]
+
+* *Traducción*: haga clic en el botón "Agregar" para abrir una página de <<Traducción del valor>>, en la que distintos valores del elemento seleccionado del conjunto de datos, pueden ser traducidos a nuevos valores en el archivo generado por el IPT para este recurso de datos. Después de que las traducciones se han ingresado y guardado, volverá a aparecer la página "Mapeo del conjunto datos" volverá a aparecer, y mostrará el texto como un enlace en lugar del botón "Traducir", para mostrar el número de valores que han sido traducidos a valores diferentes de los originales. Haga clic en este enlace para volver a abrir la página de  <<Traducción del valor>> para este elemento de extensión.
+* *Filtro*: el filtro permite al usuario incluir sólo los registros que coincidan con un criterio establecido para uno de los elementos de la fuente de datos. Para utilizar el filtro, primero seleccione en la lista desplegable, si desea que el filtro se aplique *Antes de la traducción (BeforeTranslation)* o *Después de la traducción (AfterTranslation)* (en otras palabras, después de aplicar la traducción en la fuente de datos, o antes. Consulte la sección "Traducción" para obtener más detalles acerca de la traducción). A continuación, seleccione el elemento en el que se basa el criterio, utilizando el cuadro de selección a la izquierda. El cuadro de texto de la derecha puede contener un valor con el que comparar el valor del elemento en el conjunto de datos. No encierre el valor con ningún signo de puntuación. El segundo cuadro de selección permite al usuario elegir un operador de comparación entre los siguientes:
++
+--
+* *IsNull*: este operador es verdadero si el elemento del conjunto de datos está vacío. En este caso no se necesita un valor en el cuadro de texto de la derecha. Si hay un valor en el cuadro de texto, se ignorará.
+* *IsNotNull*: ste operador es verdadero si el elemento del conjunto de datos no está vacío. En este caso no se necesita un valor en el cuadro de texto de la derecha. Si hay un valor en el cuadro de texto, se ignorará.
+* *Equals*: este operador es verdadero si el elemento del conjunto de datos es igual al valor ingresado en el cuadro de texto de la derecha. La equivalencia se evalúa basándose en la correspondencia de palabras, por lo tanto, si el valor del conjunto de datos para un registro es de 2.0 y el valor en el cuadro de texto es 2, el registro no se incluirá en el conjunto de datos filtrado.
+* *NotEquals*: este operador es verdadero si el elemento del conjunto de datos no es igual al valor ingresado en el cuadro de texto de la derecha. La equivalencia se evalúa basándose en la correspondencia de palabras, por lo tanto, si el valor de la fuente de datos para un registro es de 2.0 y el valor en el cuadro de texto es 2, el registro se incluirá en el conjunto de datos filtrado.
+
+image::ipt2/manage/IPTManageResourceSourceFilter.png[]
+
+image::ipt2/manage/IPTManageResourceSourceFilterEquals.png[]
+--
+
+* *Elementos requeridos*: si hay alguna propiedad requerida que debe ser mapeada para el tipo de core o la extensión, sus nombres se muestran resaltados. Tenga en cuenta que la publicación de basisOfRecord fallará si http://rs.tdwg.org/dwc/terms/#basisOfRecord[basisOfRecord] no ha sido mapeada para el core Occurrence. Además, existe un caso especial para el elemento del ID, que sólo es necesario cuando se enlazan dos fuentes.
+
+Además de la información explicativa sobre la extensión en la parte superior de la página y de las dos columnas descritas anteriormente, la página de "Mapeo de datos" puede tener las siguientes secciones, enlaces y botones:
+
+* *Título del recurso*: al hacer clic en este enlace regresará a la página "Vista general del recurso", sin guardar los cambios pendientes.
+* *Esconder campos no mapeados* este filtro/enlace eliminará de la vista de esta página todos los elementos que aún no han sido mapeados, dejando solo los que tienen un mapeo finalizado. Para volver a ver los campos que no han sido mapeados, haga clic en el enlace "Mostrar todo".
+* *Mostrar todo*: este filtro/enlace hará visibles todos los campos, estén ya mapeados o no. Este enlace sólo aparece después de que se haya activado el enlace "Ocultar campos no mapeados".
+* *Ocultar clases redundantes*: este filtro/enlace ocultará de la vista actual todos los campos pertenecientes a clases/grupos de términos que sean redundantes. Una clase es redundante si ya está incluida en la extensión principal. Para volver a ver los campos que pertenecen a clases redundantes, haga clic en el enlace "Mostrar todas las clases". 
+* *Mostrar todas las clases*: este filtro/enlace hará visibles todos campos que representan clases/grupos con términos redundantes. Este enlace sólo aparece después que se ha activado el enlace "Ocultar clases redundantes".
+* *Guardar*: al hacer clic en cualquiera de los numerosos botones con la etiqueta "Guardar", se guardarán los cambios pendientes en la página.
+* *Eliminar*: al hacer clic en este botón se eliminará todo el mapeo a una fuente de datos, no sólo los campos mapeados, y se volverá a la página de "Vista general del recurso".
+* *Volver*:  al hacer clic en este botón, abandonarán todos los cambios que se han hecho en esta página desde que fue guardada por última vez y volverá a la página "Vista general del recurso".
+* *Columnas sin mapear*: esta sección contiene una lista de las columnas del conjunto o tabla de datos que no han sido mapeados. Esta lista puede ayudar a determinar si todos los datos que estaban destinados a ser mapeados lo lograron.
++
+image::ipt2/manage/IPTManageResourceMappingUnmappedColumns.png[]
+
+* *Clases con terminos redundantes*: esta sección contiene una lista de las clases cuyos terminos son redundantes, esto significa que estas clases ya aparecen en la extensión del core. Idealmente un termino que ha sido mapeado en la extensión del core no necesita ser mapeado de nuevo en una extensión. Ocultar los terminos redundantes tiene el beneficio adicional de hacer la página de mapeo más sencilla para el usuario.
++
+image::ipt2/manage/IPTManageResourceMappingRedundantClasses.png[]
+
+==== Página de traducción del valor
+
+Cuando esta página se abre por primera vez, muestra un mensaje en la parte superior que indica el número de valores distintos del elemento seleccionado en el conjunto de datos, hasta 1000 valores. La página muestra el nombre y la descripción del elemento de extensión para el que se están realizando las traducciones. Si el elemento se rige por un vocabulario controlado, aparecerá en la descripción del elemento información sobre dicho vocabulario y un ícono para abrir una página de detalle del vocabulario (vea la explicación del botón de "Detalle del vocabulario" arriba). Debajo de la descripción del elemento hay una tabla que muestra los distintos valores del elemento que se encuentra en la fuente de datos con el encabezado "Valor del conjunto de datos" con cuadros de texto con el encabezado "Valor traducido". Introduzca en el cuadro de texto el valor al que debe traducirse el valor del conjunto de datos. El ícono a la izquierda del cuadro de texto del valor traducido indica si el valor proporcionado existe en el vocabulario para este término.
+
+image::ipt2/manage/IPTManageResourceSourceTranslation.png[]
+
+Vinculando la tabla de arriba y de abajo usando el siguiente conjunto de botones:
+
+* *Guardar*: haga clic en este botón para guardar todos los cambios que se han hecho en esta página y volver a la página "Mapeo del conjunto de datos".
+* *Eliminar* - (en el menú desplegable Opciones) haga clic en este botón para eliminar todas las traducciones de este elemento y volver a la página de "Mapeo del conjunto de datos".
+* *Recargar*: (en el menú desplegable Opciones) haga clic en este botón para volver a buscar valores distintos en el conjunto de datos. Las traducciones existentes se conservan y los nuevos valores del conjunto de datos aparecen en la lista sin traducción.
+* *Mapeo automático*: (en el menú desplegable Opciones) este botón aparece sólo si el elemento se rige por un vocabulario controlado. Haga clic en este botón para completar los valores traducidos automáticamente con valores estándar basados en sinónimos conocidos. Los valores en el conjunto de datos para los que no hay sinónimos conocidos permanecerán en blanco.
+* *Cancelar*: haga clic en este botón para cerrar la página "Traducción del valor" sin guardar ninguno de los cambios realizados.
+
+==== Página de detalle del vocabulario
+Esta página muestra una lista de los conceptos que se encuentran dentro del vocabulario. En el contexto del mapeo de los datos, muestra una lista de valores aceptados que pueden ser utilizados para los campos de la extensión. Cada concepto contiene una descripción, elementos preferidos (en varios idiomas), además de elementos alternativos (en varios idiomas).
+
+image::ipt2/manage/IPTManageResourceVocabularyDetail.png[]
+
+=== Metadatos
+Esta área de la página de Vista General del Recurso permite al usuario editar los metadatos del recurso. Para ello, haga clic en el menú {threedots} y seleccione "Editar" en el desplegable. Cada recurso requiere un conjunto mínimo de metadatos descriptivos para ser publicado en la red de GBIF, y si es necesario que GBIF le asigne un DOI. Si falta alguno de los metadatos requeridos, la página de Vista General del Recurso se abrirá con un distintivo "Incompleto" en el área de Metadatos de la página.
+
+image::ipt2/manage/IPTManageResourceMetadataMissing.png[]
+
+Se puede cargar un archivo de un recurso existente, sustituyendo cualquier metadato existente. Para ello, haga clic en el menú {treedots} y seleccione "Cargar". A continuación, haga clic en el botón "Examinar" y seleccione el archivo EML.
+
+Al hacer clic en la opción "Editar" se abre la página <<Basic Metadata>>, la primera de una serie de páginas de metadatos. Cada página aparecerá en secuencia a medida que se pulse el botón "Guardar" al terminar de ingresar la información en cualquier página de metadatos. Al guardar los metadatos en la última de las páginas de metadatos, se volverá a la página <<Basic Metadata>>. Al hacer clic en el botón "Cancelar" en cualquier página de metadatos, no se tendrán en cuenta los cambios realizados en esa página y se volverá a la página de Vista general del recurso. En una columna a la izquierda de cada página de metadatos hay una lista de enlaces a todas las páginas de metadatos para facilitar la referencia y la navegación. Haga clic en cualquiera de los enlaces para abrir la página de metadatos correspondiente a ese tema.
+
+image::ipt2/manage/IPTManageResourceMetadataPagesList.png[width=168]
+
+A continuación se encuentra una lista de las páginas de metadatos y sus contenidos:
+
+=== Metadatos básicos
+Todos los campos de metadatos de esta página son obligatorios. Tenga en cuenta que para cada contacto debe proporcionar al menos un apellido, un cargo o una organización.
+
+image::ipt2/manage/IPTManageResourceMetadataBasicMetadata.png[]
+
+* *Título*: el título del recurso. Este título aparecerá como el nombre del recurso en todo el IPT. El título también aparecerá en el Registro de GBIF y formará parte de la citación. Utilice un título descriptivo para los usuarios del conjunto de datos. "Colección Aves de Tanzania en el Museo de Historia Natural de Dinamarca (SNM)" es un buen título, ¡"aves_tz_snm" no lo es! Evite usar nombres de archivo o acrónimos conocidos solo dentro de su organización.
+* *Organización publicadora*: la organización responsable de la publicación (producción, liberación, mantenimiento) de este recurso. Se utilizará como titular de los derechos del recurso y como organización publicadora cuando se registre este recurso en GBIF y cuando se envíen los metadatos durante el registro del DOI.También se utilizará para generar la referencia del recurso (si la generación automática está activada), así que considere la importancia de este rol. Si la organización deseada no aparece en la lista, puede ser añadida por el administrador del IPT (vea la información en el apartado "Configurar organizaciones" de la sección "Menú administración"). Por favor, tenga en cuenta que su selección no puede ser cambiada después de que el recurso haya sido registrado en GBIF o se le haya asignado un DOI.
+* *Frecuencia de actualización*: la frecuencia con la que se realizan cambios en el recurso luego de que el recurso inicial ha sido publicado. Para su comodidad, este valor se asignará por defecto para el intervalo de la publicación automática (si se ha activado la publicación automátrica), sin embargo, este puede ser modificado posteriormente. Tenga en cuenta que también puede introducirse una descripción de la frecuencia de mantenimiento del recurso en la página "Metadatos adicionales".
+* *Tipo* : el tipo del recurso. El valor de este campo depende del mapeo del recurso y no es posible editarlo si el mapeo Darwin Core ya se ha hecho. Si el tipo de recurso deseado no se encuentra en la lista, puede elegir el campo "otro". Puede ver más información en el encabezado “Configurar cores y extensiones" de la sección "Menú administración".
+* *Subtipo*: el subtipo del recurso. Las opciones de este elemento dependen del campo Tipo. Si el subtipo deseado no se encuentra en la lista, puede dejar el campo con la selección por defecto.
+* *Idioma de los metadatos*: el idioma en que está escrito el documento de los metadatos.
+* *Idioma de los datos*: el idioma en el que están escritos los datos del recurso.
+* *Licencia de los datos*: la licencia que se aplica al recurso. La licencia proporciona una forma estandarizada de definir los usos apropiados de su trabajo. GBIF invita a los publicadores a adoptar la licencia menos restrictiva posible de entre tres opciones de lectura mecánica (CC0 1.0, CC-BY 4.0 o CC-BY-NC 4.0), para fomentar de la manera más amplia posible el uso y aplicación de los datos. Aprenda más sobre la política de GBIF https://www.gbif.org/es/terms/licences[aquí]. Si no es posible que usted elija una de las tres opciones y su conjunto de datos contiene registros biológicos, no podrá registrar su conjunto de datos en GBIF o hacerlo globalmente visible a través de GBIF.org. Si se siente incapaz de seleccionar una de las tres opciones, por favor contacte a la Secretaría de GBIF en participation@gbif.org. Para saber cómo aplicar una licencia a nivel de registro, consulte la sección xref:applying-license.adoc[Cómo aplicar una licencia a un conjunto de datos]. Para saber cómo cambiar el conjunto de licencias por defecto del IPT, consulte la página xref:applying-license.adoc[Cómo aplicar una licencia a un conjunto de datos] en el wiki del IPT.
+* *Descripción*: una breve descripción del recurso que está siendo documentado, separado en párrafos. Debe proveer suficiente información para ayudar a los potenciales usuarios de los datos a entender si estos pueden ser de su interés.
+* *Contactos del recurso*: la lista de personas y organizaciones con las que hay que ponerse en contacto para obtener más información sobre el recurso, que lo custodian o a las que hay que dirigir los posibles problemas con el recurso o sus datos. Los contactos de la lista pueden reordenarse simplemente arrastrando los elementos y colocándolos en el lugar adecuado.
++
+--
+image::ipt2/manage/IPTManageResourceMetadataResourceContact.png[]
+
+* *Copiar de otro* - haga clic en este enlace para copiar los datos de contacto de cualquier recurso. Aparecerá una ventana emergente con opciones para elegir el recurso y el contacto.
+* *Añadir contacto del recurso*: al hacer clic en este enlace se abre un nuevo formato para ingresar un contacto del recurso adicional.
+* *Eliminar contacto del recurso*: al hacer clic en este enlace se eliminará el formato de contacto que se encuentra inmediatamente debajo del enlace.
+* *Nombre*: el nombre del contacto del recurso.
+* *Apellido* (obligatorio si se dejan vacíos la Posición y la Organización, obligatorio si se suministra el Nombre): el apellido del contacto del recurso.
+* *Posición* (obligatorio si se dejan vacíos el Apellido y la Organización): el título relevante o cargo que tiene el contacto del recurso.
+* *Organización* (obligatorio si se dejan vacíos el Apellido y la Posición): la organización o institución a la cual está vinculado el contacto del recurso. Si la organización o institución es una de las registradas en el Registro GBIF, esta no será obligatoria. De lo contrario, la organización debe ser ingresada en el campo de texto en vez de seleccionarla de una lista de organizaciones registradas.
+* *Dirección*: dirección física del contacto del recurso.
+* *Ciudad*: la ciudad, municipio o localidad física similar de la dirección del contacto del recurso.
+* *Estado/Provincia*: el departamento, estado, provincia o región geográfica similar de la dirección del contacto del recurso.
+* *País*:  el nombre del país o región administrativa de primer nivel de la dirección del contacto del recurso.
+* *Código postal*: el código postal (p. ej., código zip) de la dirección del contacto del recurso.
+* *Teléfono* : el número de teléfono internacional preferido del contacto del recurso.
+* *Correo electrónico*: la dirección de correo electrónica preferida del contacto del recurso.
+* *Página web*: la URL a una página web del contacto del recurso.
+* *Perfil en línea*: la URL del perfil en línea al que pertenece el identificador personal. Hay cuatro directorios predeterminados para escoger: ORCID, ResearchID, LinkedIn y Google Scholar. Si desea cambiar los directorios predeterminados del IPT consulte xref:user-id.adoc[Añadir un nuevo directorio de ID de usuario] en la página del wiki del IPT.
+* *Identificador Personal*: un ID ORCID de 16 dígitos (por ejemplo 0000-0002-1825-0097) u otro identificador que enlaza esta persona con el repositorio del perfil en línea especificado.
+--
+
+* *Creadores del recurso*: la lista de creadores representa a las personas y organizaciones que han creado el recurso, en orden de prioridad. La lista será utilizada para generar la referencia del recurso (si la generación automática está activada). Si la persona o la organización es la misma del contacto del recurso, todos los detalles anteriores pueden ser copiados a los campos equivalentes en la sección creadores del recurso haciendo clic en el enlace "Copiar los datos del contacto del recurso". El formato de creadores del recurso tiene los mismos campos obligatorios que el contacto del recurso. Consulte las explicaciones de los campos en Contactos del recurso, más arriba.
++
+NOTE: la(s) persona(s) u organización(es) responsables de la creación del recurso, como aparece en el IPT y para la publicación efectiva del recurso pueden agregarse como partes asociadas con el rol de 'publicador'.
+
+* *Proveedor de los Metadatos* : el proveedor de los metadatos es la persona u organización responsable de producir los metadatos del recurso. Si la persona u organización es la misma del contacto del recurso, todos los detalles de este último pueden ser copiados en los campos equivalentes para el proveedor de los metadatos, haciendo clic sobre el enlace “copiar los datos del contacto del recurso”. El proveedor de los metadatos tiene los mismos campos y requerimientos del contacto del recurso. Consulte las explicaciones de los campos en Contactos del recurso, más arriba.
+
+=== Cobertura geográfica
+
+Esta página de metadatos contiene información acerca del área geográfica cubierta por el recurso. La página contiene un mapa y campos asociados que permiten al usuario establecer la cobertura geográfica. A continuación se muestra una imagen del contenido de la página "Cobertura geográfica", seguida por una explicación de los campos.
+
+image::ipt2/manage/IPTManageResourceMetadataGeographicCoverage.png[]
+
+* *Inferir automáticamente a partir de los datos fuente* - los datos fuente se analizarían y la cobertura geográfica se establecería automáticamente al publicarse.
+* *Ver inferidos* - analiza los datos fuente y muestra los valores inferidos.
+* *Mapa de cobertura*: si está conectado a Internet, aparecerá un mapa de la Tierra en la página de cobertura geográfica. Este mapa muestra una caja con puntos de control (marcadores) en todas las esquinas. Las esquinas coinciden con los valores de los cuadros de texto de latitud y longitud que se explican a continuación. Arrastre todo el cuadro o arrastre los marcadores individuales a una nueva ubicación para restablecer los límites geográficos del cuadro. Los valores de latitud y longitud correspondientes cambiarán para coincidir con el recuadro en el mapa. El mapa cuenta con sombreado de montañas, colores naturales de la vegetación, etiquetado avanzado, etc. El mapa dispone de botones para acercarse (+) y alejarse (-) y puede arrastrarse en cualquier dirección para cambiar la zona de la tierra que se muestra.
+* *Establecer cobertura global*: al hacer clic en este cuadro, la cobertura geográfica cambia a una cobertura completa de la Tierra.
+* *Sur/Oeste y Norte/Este*: estas cuatro casillas de texto corresponden a las esquinas SO y NE del recuadro que delimita el área cubierta por el recurso. Los valores a introducir en estas casillas de texto son grados decimales (p. ej., 45.2345), con los valores límite estándar de -90 a +90 de latitud (Sur/Norte) y -180 a +180 de longitud (Oeste/Este), con latitud positiva en el hemisferio norte y longitud positiva al este del meridiano de Greenwich hasta la línea internacional de cambio de fecha. Si se manipulan los marcadores de los recuadros delimitadores en el mapa se establecerán nuevos valores, pero los valores válidos pueden introducirse directamente en estos cuadros de texto si se desea. El mapa se actualizará cuando se guarde la información de la página haciendo clic en el botón "Guardar".
+* *Descripción*: una descripción textual de la cobertura geográfica. Esta información puede proporcionarse en lugar de o para aumentar la información en los otros campos de la página.
+
+=== Cobertura taxonómica
+
+Esta página de metadatos permite al usuario introducir información sobre uno o más grupos de taxa cubiertos por el recurso, cada uno de los cuales se denomina como una cobertura taxonómica. Cada cobertura consiste en una descripción y una lista de taxa, donde cada taxa consiste en un nombre de taxón (ya sea científico o común) y un rango del taxón. Antes de que se creen coberturas taxonómicas, la página sólo muestra un enlace llamado "Añadir cobertura taxonómica". Al hacer clic en este enlace aparecerá un cuadro de texto para la descripción y varios enlaces. A continuación se muestra una imagen de la página "Cobertura taxonómica" antes de ingresar algún dato, seguida por explicaciones para los campos vistos en la página en este estado.
+
+image::ipt2/manage/IPTManageResourceMetadataTaxonomic.png[]
+
+* *Inferir automáticamente a partir de los datos fuente* - los datos fuente se analizarían y la cobertura taxonómica se establecería automáticamente en el momento de la publicación.
+* *Ver inferidos* - analiza los datos fuente y muestra los valores inferidos.
+* *Eliminar cobertura taxonómica: al hacer clic en este enlace se elimina la cobertura taxonómica que está inmediatamente debajo del enlace, incluyendo la descripción, la lista y todos los taxa ingresados.
+* *Descripción*: una descripción textual de una categoría taxonómica de los taxa representados por el recurso. Cada cobertura taxonómica tiene su propia descripción. Esta información puede ser proveída en lugar de o para argumentar la información contenida en los otros campos de la página.
+* *Añadir varios taxa*: este enlace adiciona un cuadro de texto a la página llamado “Lista de taxa”.
+
+image::ipt2/manage/IPTManageResourceMetadataTaxonList.png[]
+
+* *Lista de taxa* : este cuadro de texto permite a los usuarios ingresar una lista de taxa con un taxón por línea, usando la tecla ENTER dentro del cuadro de texto. Los taxa ingresados en esta lista son tratados como nombres científicos.
+* *Agregar* : este botón procesa los valores ingresados en el cuadro de texto “Lista taxonómica” y crea nombres científicos para cada uno de ellos dentro de la cobertura taxonómica.
+* *Añadir nuevo taxón* - este enlace añade controles para ingresar un solo taxón a la cobertura taxonómica - casillas de texto para Nombre Científico y Nombre Común, una casilla de selección para el Nivel y un enlace "Eliminar este taxón". El taxón puede contener cualquier combinación de nombre científico y común con un nivel opcional.
+
+image::ipt2/manage/IPTManageResourceMetadataSingleTaxon.png[]
+
+* *Nombre científico*: este cuadro de texto está destinado para el nombre científico del taxón.
+* *Nombre común* : este cuadro de texto está destinado para el nombre común del taxón.
+* *Categoría*: este cuadro de texto está destinado para la categoría taxonómica del taxón.
+* *Eliminar este taxón* - al hacer clic en este enlace se eliminará el taxón (nombre científico, nombre común y nivel) a la izquierda del icono de la cobertura taxonómica.
+* *Añadir cobertura taxonómica*: al hacer clic sobre este enlace, se agrega una nueva cobertura taxonómica como se describió anteriormente, con un cuadro de texto marcado como “Descripción” y enlaces a “Añadir varios taxa” y “Añadir taxón”.
+
+=== Cobertura temporal
+
+Esta página de metadatos contiene información acerca de una o más fechas, rangos de fechas o nombres de periodos de tiempo cubiertos por el recurso, donde cada uno es llamado una cobertura temporal. Las coberturas pueden referirse a tiempos durante el cual la colección o conjunto de datos fue recopilado (Fecha única, Rango de fechas y Periodo de formación) o a tiempos durante los cuales estaban vivas las entidades biológicas del conjunto de datos o colección (Época de existencia). Antes que sea creada alguna cobertura temporal para el recurso, la página mostrará únicamente un enlace marcado como “Añadir cobertura temporal”. Haciendo clic sobre este enlace se mostrará por defecto, en el cuadro de selección, el tipo de cobertura temporal “Fecha única”, un cuadro de texto marcado como “Fecha inicial”, un ícono de calendario y dos enlaces. A continuación se muestra una imagen de la página "Cobertura temporal" antes de ingresar algún dato, seguida por explicaciones para los campos vistos en la página en este estado.
+
+image::ipt2/manage/IPTManageResourceMetadataTemporalCoverages.png[]
+
+* *Inferir automáticamente a partir de los datos fuente* - los datos fuente se analizarían y la cobertura temporal se establecería automáticamente al publicarse.
+* *Ver inferidos* - analiza los datos fuente y muestra los valores inferidos.
+* *Añadir cobertura temporal*: al hacer clic sobre este enlace se adiciona una nueva cobertura temporal.
+* *Eliminar cobertura temporal*: al hacer clic sobre este enlace se elimina la cobertura temporal que está inmediatamente debajo del enlace.
+* *Tipo de cobertura temporal*: elija una de las opciones en el cuadro de selección para establecer el tipo de cobertura temporal, el cual puede consistir de una fecha única, un rango de fechas, un periodo de formación o un periodo de existencia. Seleccionado un tipo, se revelarán los campos apropiados para la elección como se explica a continuación.
+** *Fecha única*: este es el tipo de cobertura temporal por defecto que se muestra cuando se crea una cobertura temporal por primera vez. Este tipo está pensado para representar una cobertura que abarca un día. Al seleccionar este tipo aparece un cuadro de texto para una "Fecha inicial", con un icono de calendario a la derecha con el que se puede seleccionar una fecha.
+*** *Fecha inicial*: este cuadro de texto está destinado a contener una sola fecha en uno de los formatos de fecha admitidos. Para seleccionar una fecha, haga clic en el icono del calendario y elija una fecha, o introduzca la fecha manualmente. Para saber qué formatos de fecha son compatibles, abra el icono de información. Ejemplo: 2010-12-31 para el 31 de diciembre de 2010 en el calendario de la Nueva Era.
++
+image::ipt2/manage/IPTManageResourceMetadataTemporalCoverageSingleDate.png[]
+
+** *Rango de fechas*: esta cobertura temporal sirve para describir el período de tiempo en el que se colectaron los datos o ejemplares de la colección. Seleccionando este tipo de cobertura temporal, se revela un cuadro de texto para una "Fecha inicial" y otro para un "Fecha final", cada uno con un ícono de calendario a la derecha, en el cual puede ser seleccionada la fecha deseada.
+*** *Fecha inicial*: este cuadro de texto está destinado para la fecha en que comenzó la cobertura, en uno de los formatos de fecha soportados. Para seleccionar una fecha, haga clic sobre el ícono del calendario y elija una fecha o ingrésela manualmente. Para saber que formatos de fechas son soportados, abra el ícono de información. Ejemplo: 2012-12-31 para el 31 de Diciembre de 2012 en el calendario de la nueva era.
+*** *Fecha Final*: este cuadro de texto está destinado para la fecha en que finalizó la cobertura, en uno de los formatos de fecha soportados. Para seleccionar una fecha, haga clic sobre el ícono del calendario y elija una fecha o ingrésela manualmente. Para saber que formatos de fechas son soportados, abra el ícono de información. Ejemplo: 2012-12-31 para el 31 de Diciembre de 2012 en el calendario de la nueva era.
++
+image::ipt2/manage/IPTManageResourceMetadataTemporalCoverageDateRange.png[]
+
+** *Periodo de formación*: este tipo de cobertura temporal está destinada para alojar un periodo de tiempo determinado u otro durante el cual una colección o conjunto de datos fue creado. Ejemplos: “Victoriano”, “1922-1932”, “c. 1750”.
++
+image::ipt2/manage/IPTManageResourceMetadataTemporalCoverageFormationPeriod.png[]
+
+** *Época de existencia*: este tipo de cobertura temporal está destinado para alojar un periodo de tiempo nombrado o de otro tipo durante el cual las entidades biológicas de la colección o conjunto de datos estaban vivas, incluyendo periodos de tiempo paleontológicos. Ejemplos: “1900-1950”. “Dinastía Ming”, “Pleistoceno”.
++
+image::ipt2/manage/IPTManageResourceMetadataTemporalCoverageLivingTimePeriod.png[]
+
+=== Palabras clave
+
+Esta página de metadatos permite a los usuarios crear uno o más conjuntos de palabras clave acerca del recurso. Cada conjunto de palabras clave puede ser asociado con un tesauro o vocabulario que rige los términos en la lista.
+
+image::ipt2/manage/IPTManageResourceMetadataKeywords.png[]
+
+* *Eliminar palabras clave*: al hacer clic sobre este enlace se elimina el conjunto de palabras clave que está inmediatamente debajo del enlace.
+* *Tesauro/Vocabulario*: se ingresa el nombre de un tesauro o vocabulario controlado, desde el cual se derivó el conjunto de palabras clave. Si las palabras clave no están regidas por un tesauro o vocabulario, se ingresa “n/a”, que indica no aplica. Ejemplo: Tesauro IRIS.
+* *Lista de palabras clave*: se ingresa una lista de palabras clave separadas por comas, que describen o están relacionadas al recurso.
+* *Añadir palabras clave*: haciendo clic sobre este enlace, se adiciona un nuevo conjunto de palabras clave.
+
+=== Partes asociadas
+
+Esta página de metadatos contiene información acerca de una o más personas u organizaciones asociadas con el recurso, además de las ya incluidas en la página "Metadatos básicos". Muchos de los campos en esta página son comunes con aquellos para el "Contacto del recurso" en la página de <<Metadatos básicos>>. Las explicaciones para los campos diferentes se dan a continuación:
+
+image::ipt2/manage/IPTManageResourceMetadataAssociatedParties.png[]
+
+* *Copiar de otro* - si esta persona u organización es la misma que el otro contacto de cualquier recurso, todos los detalles pueden copiarse en los campos equivalentes para la parte asociada haciendo clic en este enlace.
+* *Eliminar parte asociada*: haciendo clic sobre este enlace, se elimina la parte asociada que está inmediatamente debajo del enlace.
+* *Rol*: este campo de selección contiene una https://rs.gbif.org/vocabulary/gbif/agent_role.xml[lista de posibles roles] que la parte asociada puede tener en relación con el recurso. Haga clic en el icono de información situado a la izquierda del campo de selección para ver las descripciones de las posibles funciones. Elija el rol más apropiado para la parte asociada.
+** *Autor*: un participante asociado a la autoría de una publicación en la que se haya utilizado el conjunto de datos, o de un artículo sobre datos
+** *Proveedor de contenido*: un participante que ha aportado contenido a un conjunto de datos (el conjunto de datos descrito puede ser un conjunto compuesto)
+** *Custodio de los datos*: un participante que se encarga del conjunto de datos
+** *Distribuidor*: un participante en la cadena de publicación o distribución de un conjunto de datos
+** *Editor*: un participante asociado a la edición de una publicación en la que se haya utilizado el conjunto de datos, o de un artículo sobre datos
+** *Proveedor de metadatos*: un participante responsable de suministrar los metadatos (el mismo que el proveedor de metadatos de la página de metadatos básicos)
+** *Creador*: un participante que recopiló/preparó en un principio el conjunto de datos (el mismo que el creador de la página de metadatos básicos)
+** *Propietario*: un participante propietario del conjunto de datos (puede ser o no el custodio)
+** *Punto de contacto*: un participante al cual dirigirse para obtener más información sobre el conjunto de datos
+** *Investigador principal*: un contacto científico principal asociado al conjunto de datos
+** *Procesador*: un participante responsable del procesamiento posterior a la recopilación de los datos
+** *Publicador*: el participante asociado a la elaboración de una publicación en la que se haya utilizado el conjunto de datos, o de un artículo sobre datos
+** *Usuario*: un participante que utiliza el conjunto de datos
+** *Programador*: un participante que aporta apoyo informático o de programación en relación con el conjunto de datos
+** *Curador*: participante que mantiene y documenta los especímenes de una colección. Algunas de sus funciones son preparar y etiquetar los especímenes para que estén listos para su identificación y preservación
+** *Revisor*: persona encargada de revisar el conjunto de datos y verificar la calidad de sus datos o metadatos. Esta función es análoga a la que desempeñan los pares evaluadores en el proceso de una publicación académica.
+* *Añadir parte asociada*: al hacer clic sobre este enlace se adiciona una nueva parte asociada.
+
+=== Datos del proyecto
+
+Esta página de metadatos contiene información sobre el proyecto en el que se produjeron los datos del recurso.
+
+image::ipt2/manage/IPTManageResourceMetadataProjectData.png[]
+
+* *Título*: el título del proyecto.
+* *Identificador*: un identificador único para el proyecto de investigación. Este puede usarse para unir múltiples instancias de conjuntos de datos/EML que están asociados de alguna manera al mismo proyecto, por ejemplo una serie de monitoreo. La naturaleza de la asociación puede ser descrita en la descripción del proyecto.
+* *Descripción*: resumen sobre el proyecto de investigación.
+* *Fuentes de financiación*: información acerca de la(s) fuente(s) de financiación del proyecto y sus detalles (títulos y números de las becas, números de contrato, nombres y direcciones, periodo activo, etc.). También se puede incluir otra información relacionada con la financiación. 
+* *Descripción del área de estudio*: una descripción del área física donde ocurrió el proyecto (ubicación física, hábitat, cobertura temporal, etc.).
+* *Descripción del diseño*: una descripción general del diseño de la investigación. Puede incluir un informe detallado de objetivos, motivaciones, teoría, hipótesis, estrategia, diseño estadístico y trabajo en campo.
+* *Personas asociadas al proyecto*: esta lista representa a las personas involucradas en el proyecto.
+** *Nombre*: el nombre de la persona asociada al proyecto.
+** *Apellido*: el apellido de la persona asociada al proyecto.
+** *Perfil en línea*: la URL del perfil en línea al que pertenece el identificador personal. Hay cuatro directorios predeterminados para escoger: ORCID, ResearchID, LinkedIn y Google Scholar. Si desea cambiar los directorios predeterminados del IPT consulte xref:user-id.adoc[Añadir un nuevo directorio de ID de usuario] en la página del wiki del IPT.
+** *Identificador Personal*: un ID ORCID de 16 dígitos (por ejemplo 0000-0002-1825-0097) u otro identificador que enlaza esta persona con el repositorio del perfil en línea especificado.
+** *Rol*: el rol de la persona asociada al proyecto. Haga clic en el ícono de información al lado izquierdo de la caja de selección para ver las descripciones de los posibles roles. Elija el rol más apropiado para la persona que nombró en la parte superior.
+
+=== Métodos de muestreo
+
+Esta página de metadatos contiene información acerca de los métodos de muestreo en general, y acerca de los pasos específicos del muestreo de los datos contenidos en el recurso.
+
+image::ipt2/manage/IPTManageResourceMetadataSamplingMethods.png[]
+
+* *Área de estudio*: una descripción de las condiciones físicas y temporales bajo las cuales ocurrió el muestreo. El área geográfica de estudio generalmente sustituye el área documentada en “Descripción del área de estudio” de la sección “Datos del proyecto”.
+* *Descripción del muestreo* : descripción de los protocolos de muestreo usados para recolectar los datos del recurso. La descripción puede ser similar a los procedimientos de muestreo encontrados en la sección de métodos de un artículo científico.
+* *Control de calidad*: una descripción de las acciones tomadas para controlar o evaluar la calidad de los datos resultantes de la metodología paso a paso asociada. 
+* *Metodología paso a paso*: este campo describe los elementos que documentan la serie de métodos y procedimientos utilizados en el estudio y los pasos que condujeron a la producción de los datos del archivo. Estos incluyen descripciones textuales de los procedimientos, literatura relevante, software, instrumentación, conjuntos de datos y las medidas de control de calidad adoptadas. Cada método debe ser descrito en suficiente detalle para, si es necesario, permitir a otros investigadores interpretar y replicar el estudio.
+* *Añadir paso metodológico*: haciendo clic sobre este enlace, se agrega a la página un cuadro de texto llamado “Descripción de la metodología paso a paso”. Un paso metodológico es uno de una serie de pasos llevados a cabo para el muestreo. Se pueden adicionar tantos pasos metodológicos como se desee.
+* *Eliminar paso metodológico*: haga clic en este enlace para eliminar el cuadro de texto del paso del método que está inmediatamente debajo del enlace.
+
+=== Referencias
+
+Esta página de metadatos contiene información sobre cómo citar el recurso, así como una bibliografía de citas relacionadas con el conjunto de datos, como las publicaciones que se utilizaron o resultaron de la producción de los datos. Cada Referencia, ya sea para el recurso o para la bibliografía, consta de un identificador de la referencia único (opcional) y de una citación textual tradicional. El identificador de la referencia permite que la cita pueda ser encontrada en fuentes digitales. Antes que sea ingresado algún dato de las "Referencias", la página mostrará campos de texto para el identificador de la referencia del recurso, para la referencia del recurso, un encabezado denominado “Bibliografía” y un enlace llamado “Añadir referencia bibliográfica”.
+
+image::ipt2/manage/IPTManageResourceMetadataCitations.png[]
+
+CAUTION: las citas de texto libre son sobrescritas en la página del conjunto de datos en GBIF.org. Obtenga más información en la página de https://www.gbif.org/faq?q=citation[preguntas frecuentes de GBIF].
+
+* *Referencia del recurso*: la referencia única que se utilizará al citar el conjunto de datos.
+** Ejemplo de una referencia con un autor institucional:
++
+Biodiversity Institute of Ontario (2011) Migratory birds of Ontario. Version 1.2. University of Guelph. Dataset/Species occurrences. https://doi.org/10.5886/qzxxd2pa
+
+** Ejemplo de una referencia con 9 autores:
++
+Brouillet L, Desmet P, Coursol F, Meades SJ, Favreau M, Anions M, Belisle P, Gendreau C, Shorthouse D (2010) Database of vascular plants of Canada. Version 1.2. Universite de Montreal Biodiversity Centre. Dataset/Species checklist. https://doi.org/10.5886/1bft7W5f
+
+* *Generación automática Desactivada - Activar*: active la generación automática para que el IPT genere la referencia por usted. El formato de citación utilizado en la generación automática se basa en el formato de citación preferido por DataCite, y satisface la "Joint Declaration of Data Citation Principle". Este formato incluye un número de versión, que es especialmente importante para los conjuntos de datos que se actualizan continuamente. Puede leer más sobre el formato de citación en la página xref:citation.adoc[Formato de referencias de conjuntos de datos] en el wiki del IPT.
+* *Identificador de la cita* - un DOI, URI u otro identificador persistente que remita al conjunto de datos en línea. Se recomienda incluir el identificador en la cita. Si al recurso se le ha asignado un DOI (xref:doi-workflow.adoc[usando el IPT]), el IPT establece el DOI como identificador de la cita y ya no puede editarse.
+* *Referencias Bibliográficas* - referencias de otros recursos relacionados con lo que se utilizaron en la creación de este recurso.
+* *Añadir referencia bibliográfica*: al hacer clic sobre este enlace se añaden los cuadros de texto necesarios para agregar una cita a la bibliografía.
+** *Referencias bibliográficas*:  referencia de un recurso externo relacionado o utilizado en la creación de este recurso.
+** *Identificador de la referencia bibliográfica*: un DOI, URI u otro identificador persistente que dirija al recurso externo en línea. Debe utilizarse en la cita, generalmente al final.
++
+image::ipt2/manage/IPTManageResourceMetadataBibCitations.png[]
+
+** *Eliminar referencia bibliográfica*: al hacer clic sobre este enlace, se elimina la referencia que está inmediatamente debajo del enlace.
+
+=== Datos de la colección
+
+Esta página de metadatos contiene información sobre la colección física de historia natural asociada al recurso (si la hay), así como listas de los tipos de objetos de la colección, denominados "Unidades curatoriales", e información resumida sobre ellas. Antes de introducir los datos de la colección, la página mostrará un encabezado para cada sección (Colecciones, Métodos de preservación de los ejemplares, Unidades curatoriales) y un enlace "Añadir unidad curatorial".
+
+image::ipt2/manage/IPTManageResourceMetadataCollectionData.png[]
+
+* *Colecciones*: la lista de colecciones en las que se basa este recurso.
+** *Añadir colección*: al hacer clic sobre este enlace se adicionan los cuadros de texto requeridos para agregar una colección a la sección de Colecciones.
+** *Nombre de la colección*: Nombre oficial de la Colección en el idioma local.
+** *Identificador de la colección*: El URI (LSID o URL) de la colección. En RDF, se utiliza como URI del recurso de la colección.
+** *Identificador de la colección parental*: Identificador de la colección parental para esta subcolección. Permite construir una jerarquía de colecciones y subcolecciones. Introduzca "No aplica" si esta colección no tiene una colección parental.
+** *Eliminar colección*:al hacer clic sobre este enlace se eliminará la colección que está inmediatamente debajo del enlace.
++
+image::ipt2/manage/IPTManageResourceMetadataCollections.png[]
+
+* *Métodos de preservación de especímenes*: la lista de métodos de preservación de especímenes cubiertos por el recurso, indicando el proceso o la técnica utilizada para prevenir el deterioro físico de las colecciones (no vivas). Los valores a elegir se basan en el {latest-preservation-method}[Método de preservación de los especímenes de GBIF]. Recuerde que puede incluir una lista de preparaciones y métodos de preservación para un espécimen en el elemento "Preparaciones" del mapeo de datos DwC (http://rs.tdwg.org/dwc/terms/preparations). Por favor, no seleccione ningún tratamiento para colecciones vivas. Esto puede referirse a la(s) unidad(es) de conservación de la colección.
+** *Añadir método de preservación*: haga clic en este enlace para añadir los cuadros de texto necesarios para agregar un método de preservación adicional en la sección Métodos de preservación de especímenes.
+** *Eliminar método de preservación*: al hacer clic sobre este enlace se elimina el método que está inmediatamente debajo del enlace.
++
+image::ipt2/manage/IPTManageResourceMetadataPreservationMethods.png[]
+
+* *Unidades curatoriales*: el recuento de las unidades curatoriales cubiertas por el recurso. El recuento puede introducirse como un rango o como un valor con una incertidumbre. Algunos ejemplos de unidades son las pieles, las láminas, los alfileres, las cajas y los frascos. En general, esta sección resume el contenido físico de la colección por tipo.
+** *Añadir nueva unidad curatorial*: haga clic en este enlace para añadir los cuadros de texto de selección necesarios para agregar una unidad curatorial en la sección Unidades curatoriales. Cuando se añade una nueva unidad curatorial, la selección del tipo de método por defecto es "Rango de conteo".
+** *Tipo de método*: este cuadro de selección permite al usuario elegir entre dos métodos para especificar el número de unidades de un tipo determinado, ya sea un rango de conteo o un conteo con incertidumbre. Después de hacer la selección, aparecerán los cuadros de texto apropiados que permiten documentar el método de conteo.
+*** *Rango de conteo*: este tipo de método permite al usuario establecer los límites inferior y superior para un número de unidades de un tipo de unidad en particular. Vea la imagen anterior.
+**** *Entre*: en este cuadro de texto se ingresa el límite inferior del número de unidades.
+**** *y*: en este cuadro de texto se ingresa el límite superior del número de unidades.
+*** *Conteo con incertidumbre*: este método permite al usuario establecer un número de unidades de un tipo de unidad en particular, con una incertidumbre por encima o por debajo de aquel número.
+**** *Conteo*: en este cuadro de texto se ingresa el número de unidades promedio aproximado.
+**** *+/-*: se ingresa el número de unidades en incertidumbre respecto al número ingresado en el campo de conteo, para crear un rango de posibles conteos del tipo de unidad en particular.
+*** *Tipo de unidad*: un solo tipo de unidad (espécimen, lote, placa, caja, frasco, etc.) representado por el tipo de método y de conteo.
+** *Eliminar unidad curatorial*: al hacer clic sobre este enlace se elimina la unidad curatorial que está inmediatamente debajo del enlace.
++
+image::ipt2/manage/IPTManageResourceMetadataCuratorialUnits.png[]
+
+=== Enlaces externos
+
+Esta página de metadatos contiene enlaces a la página web del recurso, así como enlaces alternos al recurso (archivos de bases de datos, hojas de cálculo, datos relacionados, etc.) y la información acerca de ellos. Antes que sea ingresado algún enlace externo, la página mostrará un campo de texto para la URL del Recurso y un enlace llamado “Añadir enlace externo”.
+
+image::ipt2/manage/IPTManageResourceMetadataExternalLinks.png[]
+
+* *URL del Recurso*: ingrese la URL actual completa de la página web que contiene información sobre el recurso o su conjunto de datos.
+* *Otros formatos de datos*: enlaces al recurso en otros formatos (p. ej., bases de datos, hojas de cálculo, archivos nexus, datos enlazados, etc.). 
+** *Añadir enlace externo*: al hacer clic sobre este enlace se adicionan los cuadros de texto requeridos para agregar un enlace externo.
+** *Nombre*: el nombre del archivo o conjunto de datos.
+** *Conjunto de caracteres*: el nombre o código de la codificación de caracteres (p. ej., ASCII, UTF-8).
+** *URL del archivo*: URL desde la cual se puede descargar el archivo en el formato mencionado.
+** *Formato del archivo*: el nombre o código del formato del documento o archivo (p.ej., CSV, TXT, XLS, Microsoft Word, MySQL).
+** *Versión del formato del archivo*: la versión del documento o el formato de archivo indicado en el cuadro de texto de Formato del archivo (p. ej., 2003, 5.2).
+** *Eliminar enlace externo*: al hacer clic sobre este enlace se elimina el enlace externo que está inmediatamente debajo del enlace.
+
+=== Metadatos adicionales
+
+Esta página de metadatos contiene información acerca de otros aspectos del recurso que no fueron capturados en las otras páginas de metadatos, incluyendo identificadores alternativos para el recurso. Antes de ingresar algún identificador alternativo, la página mostrará campos de texto para los metadatos adicionales, un encabezado para el área de identificadores alternativos y un enlace llamado “Añadir identificador alternativo”.
+
+image::ipt2/manage/IPTManageResourceMetadataAdditionalMetadata.png[]
+
+* *Fecha de la primera publicación*: la fecha en la cual la primera versión del recurso fue publicada. Se utilizará como el año de publicación en la referencia generada automáticamente del recurso. Este valor se genera automáticamente cuando se realiza la publicación y no puede ser editado.
+* *Fecha de publicación* - fecha en la que el recurso se publicó por última vez. Este valor se establece automáticamente al publicar (véase la sección <<Publicación>>).
+* *URL del logo del recurso* : un logo que represente al recurso. La URL del logo puede ser usada para cargar el recurso. Si no se posee una URL para el logo del recurso, se puede subir un archivo de imagen desde el disco duro.
+* *Propósito*: Un resumen de las finalidades para las que se ha desarrollado el conjunto de datos. Incluye los objetivos de la creación del conjunto de datos y su alcance esperado.
+* *Descripción de mantenimiento*: una descripción de la frecuencia de mantenimiento de este recurso. Esta descripción complementa la frecuencia de actualización seleccionada en la sección "Metadatos básicos".
+* *Información adicional*: cualquier información que no esté descrita en los demás campos de los metadatos, p. ej., historia del proyecto, publicaciones que han usado estos datos, información sobre datos relacionados publicados en otro lugar, etc.
+* *Identificadores alternativos* - esta sección contiene una lista de identificadores adicionales o alternativos para el recurso. Cuando se publica el recurso, la URL del IPT al recurso se añade a la lista de identificadores. Si a un recurso se le asigna un nuevo DOI xref:doi-workflow.adoc[usando el IPT], el IPT se asegura de que este DOI se coloca en primer lugar en la lista de identificadores. Cuando un recurso se registra en el Registro de GBIF, la clave única del recurso del Registro también se añade a la lista de identificadores. Si el recurso representa un recurso registrado existente en el Registro de GBIF, el UUID del recurso registrado existente puede añadirse a la lista de identificadores. Esto permitirá al recurso IPT actualizar el recurso existente durante el registro, en lugar de registrar un recurso completamente nuevo. Para más información sobre cómo migrar un recurso, vea la sección <<Migrate a Resource, this>>.
+** *Añadir identificador alternativo*: al hacer clic sobre este enlace se adicionan en la sección los cuadros de texto requeridos para agregar un identificador alternativo.
+** *Identificador alternativo*: el texto para el identificador alternativo del recurso (p. ej., una URL, UUID o cualquier otro valor clave único).
+** *Eliminar identificador alternativo*: al hacer clic sobre este enlace se eliminará el identificador alternativo inmediatamente debajo del enlace.
+
+=== Publicación
+Esta área de la página "Vista general del recurso" permite al usuario publicar una nueva versión del recurso.
+
+image::ipt2/manage/IPTManageResourcePublish.png[]
+
+Haga clic en el menú {threedots} y seleccione la opción "Publicar" para activar la publicación de una nueva versión. La opción "Publicar" se activará si
+
+. los metadatos requeridos para el recurso están completos, y
+. el usuario tiene el rol de "Editor con/sin derechos de registro".
+
+Una vez registrado el recurso, sólo los usuarios con el rol " Administrador con derechos de registro " pueden publicar, ya que el registro del recurso se actualiza en cada publicación (véase la explicación del rol en la sección " Crear un nuevo usuario " en el apartado " Configurar las cuentas de usuario " de la sección " Menú Administración "). Tras pulsar la opción "Publicar", aparecerá un cuadro de diálogo de confirmación:
+
+image::ipt2/manage/IPTManageResourcePublishConfirm.png[]
+
+El editor del recurso debe ingresar un resumen de los cambios que se le han realizado al recurso (datos o metadatos) desde que fue publicada la última/actual versión. El resumen de cambios será guardado como parte del historial de versiones del recurso, y podrá ser modificado por el editor del recurso a través de la página principal del recurso. A continuación se hace una descripción completa de lo que sucede después de presionar el botón "Publicar", al igual que los "Pasos de publicación".
+
+.Una publicación pendiente:
+image::ipt2/manage/IPTManageResourcePublish.png[]
+
+Aquí se muestra una tabla que compara la versión actual con la versión pendiente. Los administradores de recursos pueden utilizar esta tabla para gestionar el versionado de recursos, previsualizar la versión pendiente y revisar y validar la versión actual. Los datos de la tabla incluyen:
+
+* *Version* - el número de versión que rastrea la `major_version.minor_version` de la versión actual/pendiente.  Esto suele ser relevante sólo si se utiliza el xref:doi-workflow.adoc[flujo de trabajo para el DOI emitido por el IPT].
+* *Actual* - versión actual ya publicada.
+* *Pendiente* - próxima versión.
+* *Licencia* - licencia del recurso (por ejemplo, CC0 1.0).
+* *DOI* - véase xref:doi-workflow.adoc[] si está activado el DOI emitido por IPT.
+* *Visibilidad* - la visibilidad de la versión actual/pendiente. Para registrar el recurso en GBIF, el administrador de recursos debe asegurarse de que la versión actual es pública.
+* *Publicada el* - la fecha en que se publicó la versión actual / la fecha en que se publicará la versión pendiente.
+* *Log de la publicación* - botón. Haga clic para recuperar el "publication.log" de la versión actual. El administrador de recursos puede utilizar el log de la publicación para diagnosticar, por ejemplo, por qué ha fallado la publicación. Una descripción más detallada de su contenido se describe más adelante en la sección <<Página del estado de la publicación>>. Esto no es aplicable a la versión pendiente.
+
+==== Pasos para publicar
+
+La acción de publicar consiste de los pasos descritos enseguida. La publicación es un proceso de todo o nada, lo que significa que cada paso debe ser finalizado exitosamente para que la nueva versión sea publicada. Si alguno de los pasos falla, o si se cancela la acción de publicación, la versión se revierte a la última versión publicada.
+
+1. Los metadatos actuales se escriben en un archivo eml.xml. Una versión posterior llamada eml-n.xml siempre se guarda (donde n es el número de la versión, reflejando la versión de la publicación).
+2. Un documento de publicación de datos en Formato de Texto Enriquecido (RTF) es guardado en el archivo nombrecorto.rtf. Una versión posterior del archivo RTF siempre es guardada, llamada nombrecorto-n.rtf.
+3. Los datos de recursos primarios actuales como fueron configurados a través del mapeo se escriben en el archivo Darwin Core Archive llamado dwca.zip. Los archivos de datos contenidos en el Archivo Darwin Core luego son validados (vea la sección "Validación de datos" más abajo).
+4. Si el "Modo archivo" del IPT está activado (ver la sección xref:administration.adoc#configuracion-de-las-opciones-del-ipt[Configuración de las opciones del IPT]), una versión posterior del Archivo Darwin Core se guardará y se llamará dwca-n.zip.
+5. La información sobre el recurso se actualiza en el Registro de GBIF si el recurso está registrado.
+6. Los metadatos del DOI sobre el recurso se actualizan y se propagan a los resolutores de DOI si al recurso se le asigna un DOI mediante el IPT.
+
+==== Validación de datos
+
+El IPT escribe los archivos de datos dentro del DwC-A como archivos delimitados por tabulaciones y sin caracteres de salto de línea (*nota: los caracteres de salto de línea que se encuentran en los datos originales se sustituyen por una cadena vacía*).
+
+Luego de escribir los datos, el IPT también valida su contenido de las siguientes maneras:
+
+* Si una columna que representa el identificador del core (p. ej., occurrenceID es el identificador del core Occurrence) se encuentra en el archivo de datos del core, el IPT validará que para cada registro, el identificador del core está presente y es único.
+* El término Darwin Core http://rs.tdwg.org/dwc/terms/#basisOfRecord[basisOfRecord] es un término obligatorio para la extensión Occurrence. Por esto el IPT valida que cada archivo de datos tenga una columna de basisOfRecord. Adicionalmente, el IPT valida que cada registro de Ocurrence esté presente en el basisOfRecord y que su valor coincidan con el {latest-basis-of-record}[Vocabulario del Tipo de Darwin Core].
+
+==== Página de estado de publicación
+
+La página titulada "Estado de la publicación" mostrará mensajes de estado que indican el éxito o el fracaso de cada paso de la publicación. La publicación de una nueva versión es un evento de "todo o nada", lo que significa que todos los pasos deben terminar con éxito, de lo contrario la versión será revertida.
+
+* *Vista General del recurso*: Este enlace lleva a la página de "Gestión del recurso" del recurso que se acaba de publicar.
+* *Log de publicación* - Este enlace inicia la descarga de un archivo llamado "publication.log", que contiene la salida detallada del proceso de publicación. Este archivo contiene información específica para ayudar a los editores a identificar problemas durante la publicación, como por ejemplo:
+** cuántos registros no se pudieron leer y, por tanto, no se escribieron en el DwC-A
+** cuántos registros no tenían identificador o cuántos tenían identificadores duplicados (en el caso de que el campo del identificador del registro principal estuviera mapeado)
+** cuántos registros contenían menos columnas que las que fueron mapeadas
+* *Mensajes del sistema*: la página de "Estado de la publicación" muestra un resumen de la información que se envió al archivo denominado publication.log, que se almacena en el directorio del recurso dentro del directorio de datos del IPT y al que se puede acceder a través del enlace al "Reporte de publicación" que se encuentra sobre el "Mensaje del sistema".
+
+image::ipt2/manage/IPTManageResourcePublishingStatus.png[]
+
+=== Publicación automática
+
+Para activar la publicación automática, en la sección Publicación automática haga clic en el menú {threedots} y seleccione "Editar".
+
+image::ipt2/manage/IPTManageResourceAutoPublishingStatus.png[]
+
+Seleccione uno de los 5 intervalos de publicación (anual, semestral, mensual, semanal o diario) y elija una hora, después haga clic en "Guardar".
+
+image::ipt2/manage/IPTManageResourceAutoPublishingSetup.png[]
+
+Cuando la publicación automática está activada, el intervalo de publicación y la próxima fecha de publicación se muestran claramente en la sección de auto-publicación. La opción "Editar" permite modificar o desactivar la publicación automática.
+
+En caso de fallo, la publicación se reintentará automáticamente hasta 3 veces más. Esto evita bucles de publicación infinitos. Los recursos configurados para publicarse automáticamente, pero que no hayan finalizado con éxito, tendrán una fecha de próxima publicación pasada y aparecerán resaltados en las tablas de recursos públicos y de administración.
+
+=== Visibilidad
+El área de Visibilidad de la página Gestión de Recursos permite a los usuarios con derechos de administrador del recurso cambiar su estado de visibilidad. La visibilidad de un recurso determina quién podrá verlo, y si el recurso puede registrarse en GBIF. Por defecto, cada recurso es visible sólo para el usuario que lo creó y para cualquier otro usuario que tenga el rol de Administrador en el IPT donde se creó el recurso. Para obtener más detalles sobre cada estado de visibilidad, consulte la siguiente información.
+
+* *Privado* - Un recurso privado sólo es visible para aquellos que lo crearon, o aquellos a los que se les ha concedido permiso para administrarlo dentro del IPT, o por un usuario que tenga el rol de Administrador. El objetivo principal es evitar la visibilidad pública del recurso hasta que se haya configurado completa y correctamente.
++
+--
+image::ipt2/manage/IPTManageResourceVisibilityPrivate.png[]
+
+Cuando el recurso esté listo para su visibilidad pública, haga clic en el menú {threedots} y seleccione la opción "Cambiar". Aparecerá una ventana emergente con dos opciones. Puede hacer público el recurso inmediatamente o en una fecha determinada
+
+image::ipt2/manage/IPTManageResourceVisibilityMakePublic1.png[]
+
+image::ipt2/manage/IPTManageResourceVisibilityMakePublic2.png[]
+
+Tras enviar el formulario, aparecerá un mensaje en la parte superior de la página indicando que el estado se ha cambiado a "Público".
+--
+
+* *Público* - Un recurso público es visible para cualquiera que utilice la instancia IPT en la que está alojado el recurso (en la tabla de recursos públicos de la página de inicio de IPT). En última instancia, el recurso es accesible a través de Internet para cualquiera que conozca la URL de su página de inicio. Sin embargo, el recurso no es accesible globalmente a través de la página web de GBIF hasta que haya sido registrado en el Registro de GBIF (véase <<Registration>>).
++
+--
+image::ipt2/manage/IPTManageResourceVisibilityPublic.png[]
+
+Una opción aparece en el menú {threedots} del área de visibilidad. Al hacer clic en la opción "Cambiar" aparecerá una ventana emergente
+
+image::ipt2/manage/IPTManageResourceVisibilityMakePrivate.png[]
+
+Al hacer clic en el botón "Sí", el recurso dejará de ser público y volverá a ser privado.
+--
+
+* *Registrado* - Un recurso que ha sido registrado en la red de GBIF es visible a través de la página web de GBIF y los datos del recurso pueden ser indexados y accedidos desde el portal de GBIF. Si su nodo GBIF cuenta con un portal nacional, allí también será visible. Tenga en cuenta que GBIF puede tardar hasta una hora en indexar los datos después del registro. Un resumen de la información registrada en GBIF aparecerá en el área de <<Registration>> cuando el registro se haya completado.
++
+--
+image::ipt2/manage/IPTManageResourceVisibilityRegistered.png[]
+
+Si el recurso ya ha sido registrado, cada vez que se pulsa el botón "Publicar", también se actualiza su información en el Registro de GBIF. La visibilidad de un recurso registrado no puede cambiarse a privada. Si un recurso debe ser eliminado del Registro de GBIF, siga el procedimiento descrito en la sección "Eliminar un recurso" bajo el título "Vista general del recurso" en la sección "Menú de gestión de recursos".
+--
+
+=== Registro
+
+El recurso no es globalmente visible a través de la página web de GBIF hasta que haya sido registrado en el Registro de GBIF.
+
+image::ipt2/manage/IPTManageResourceRegistration.png[]
+
+El registro se habilita cuando:
+
+. los metadatos necesarios para el recurso están completos,
+. el recurso ha sido publicado (véase la explicación del área <<Publication>> de la página Vista General del recurso, más abajo), y
+. el usuario tiene el rol "Editor con derechos de registro" (ver explicación de Función en la sección "Crear un Nuevo Usuario" en el encabezado "Configuración de Cuentas de Usuario" de la sección "Menú Administración”). Un usuario que tiene el rol Administrador puede otorgar la posición "Editor con Derechos de Registro" a cualquier usuario.
+
+Haga clic en el menú {threedots} y seleccione la opción "Registrar" para registrar el recurso en el Registro de GBIF.
+
+NOTE: Si desea que este recurso actualice un recurso DiGIR, BioCASe o TAPIR ya registrado, consulte la sección <<Migrar un recurso>> a continuación
+
+Al hacer clic en esta opción se abrirá un cuadro de diálogo con el que podrá confirmar que ha leído y comprendido el acuerdo de publicación de datos de GBIF, al que se proporciona un enlace. Haga clic en la casilla para indicar que está de acuerdo con estos términos. Al hacerlo, aparecerá un botón "Sí" en la parte inferior del cuadro de diálogo. Haga clic en "Sí" para registrar el recurso, o haga clic en "No" para aplazar la decisión y cerrar el cuadro de diálogo. Traducción realizada con la versión gratuita del traductor DeepL.com
+
+image::ipt2/manage/IPTManageResourceVisibilityRegisterAgreement.png[]
+
+Si el intento de registro tiene éxito, aparecerá un mensaje en la parte superior de la página indicando que el estado ha cambiado a "Registrado". Sección de registro cuando el recurso está registrado:
+
+image::ipt2/manage/IPTManageResourceVisibilityRegistered.png[]
+
+=== Redes
+
+Esta sección permite que el recurso sea incluido en una o más redes de GBIF - colecciones de conjuntos de datos potencialmente de muchos publicadores, normalmente sobre un mismo tema. La mayor red de GBIF es el https://www.gbif.org/network/2b7c7b4f-4d4f-40d3-94de-c28b6fa054a6[Sistema de Información sobre Biodiversidad Oceánica (OBIS)].
+
+image::ipt2/manage/IPTManageResourceNetworks.png[]
+
+Para agregar el recurso a una red, haga clic en el menú {threedots} y seleccione la opción "Agregar". Para eliminarlo, haga clic en el menú {threedots} del elemento de red y seleccione la opción "Eliminar".
+
+IMPORTANT: Por favor, sólo añada su recurso a una red con la aprobación de los administradores de la red o de la Mesa de ayuda de GBIF.
+
+=== Editores de Recursos
+
+image::ipt2/manage/IPTManageResourceManagers.png[]
+
+Cada recurso tiene uno o varios administradores asignados explícitamente que pueden ver, modificar y eliminar el recurso. El usuario que crea un recurso tiene automáticamente estas capacidades. Se pueden asociar administradores adicionales a un recurso y otorgarles estas mismas capacidades seleccionándolos por su nombre en el cuadro de selección de esta área de la página de Vista general del recurso y, a continuación, haciendo clic en el menú {threedots} y seleccionando la opción etiquetada como "Añadir". Cualquier administrador asociado a un recurso y que tenga el rol "Administrador con derechos de registro" puede también registrar el recurso y actualizarlo en el registro de GBIF. Todos los usuarios que tengan el rol de Administrador tienen automáticamente roles de gestión completos para todos los recursos de la instancia IPT. El área muestra el nombre y la dirección de correo electrónico del creador del recurso. Si se han agregado administradores, sus nombres y direcciones de correo electrónico aparecerán debajo del creador. Cualquier administrador agregado puede eliminar la función de administrador del recurso haciendo clic en el menú {threedots} correspondiente y seleccionando la opción "Eliminar".
+
+image::ipt2/manage/IPTManageResourceManagerAdded.png[]
+
+=== Eliminar un recurso
+
+Al hacer clic en el botón "Eliminar" de la página Vista General del Recurso, se mostrará una ventana de confirmación.
+
+image::ipt2/manage/IPTManageResourceDelete.png[]
+
+Para los recursos registrados en GBIF, se mostrará una ventana con dos opciones.
+
+image::ipt2/manage/IPTManageResourceDeleteRegistered.png[]
+
+* *Eliminar del IPT y de GBIF.org*
+* *Eliminar sólo del IPT (huérfano)*
+
+Cualquiera de las dos opciones eliminará el recurso del IPT y todos los documentos relacionados del sistema de archivos. La primera también eliminará el recurso de GBIF.org.
+
+Si desea conservar la información del recurso, y eliminar el recurso del IPT, haga una copia de la carpeta del recurso en un lugar seguro fuera de la estructura del directorio IPT. El nombre de la carpeta para el recurso es el mismo que el nombre corto del recurso, y se puede encontrar en la carpeta denominada "Recursos" en el directorio de datos del IPT. Un recurso guardado de esta manera se puede volver a integrar en el IPT o en una instancia distinta del IPT, siguiendo el procedimiento descrito en la sección "Integrar una carpeta de configuración de recursos existente" bajo el encabezado "Crear un nuevo recurso" en la sección “Menú gestión de recursos".
+
+== Migrar un recurso
+
+Ahora hay una manera de migrar los recursos existentes registrados DiGIR, BioCASe, TAPIR, o DwC-A a un IPT. Esto permite que el recurso existente conserve su UUID del Registro de GBIF.
+
+La forma en que esto funciona, es que el recurso IPT está configurado para actualizar el recurso registrado existente al que corresponde en el Registro de GBIF.
+
+Para migrar un *recurso registrado existente* a *su IPT*, siga estas instrucciones:
+
+. Asegúrese que la visibilidad del *recurso IPT* es pública y NO registrado.
+. Determine la organización propietaria del *recurso registrado existente* y asegúrese que esta ha sido agregada al IPT como una organización y que está configurada para publicar conjuntos de datos. Para realizar esto, refiérase a la sección xref:administration.adoc#add-organization[Agregar una organización].
+. Seleccione la organización propietaria en la lista desplegable de la página de metadatos básicos. No olvide guardar la página de "Metadatos básicos".
+. Vaya a la página de GBIF del conjunto de datos del *recurso registrado existente*. Dependiendo de si está ejecutando el IPT en modo de prueba o de producción, visitaría https://www.gbif-uat.org/dataset o https://www.gbif.org/dataset respectivamente.
+. Asegúrese que la página del conjunto de datos de GBIF, muestre la *organización propietaria* correcta del *recurso registrado existente* 
++
+WARNING: si muestra una *organización propietaria* diferente, el Registro de GBIF debe ser actualizado antes de que pueda proceder con los pasos restantes. Envíe un correo electrónico a helpdesk@gbif.org alertando de la actualización necesaria.
+
+. Copie el UUID del Registry de GBIF desde la URL de la página del conjunto de datos, por ejemplo `5d637678-cb64-4863-a12b-78b4e1a56628`.
+. Agregue este UUID a la lista de identificadores alternativos del *recurso IPT* en la página de "Metadatos adicionales", no olvide guardar esta página.
+. Asegúrese de que ningún otro recurso público o registrado en su IPT incluya este UUID en su lista de identificadores alternativos. En los casos en los que intente reemplazar un recurso registrado que ya existe en su IPT, el otro recurso tiene que ser eliminado primero.
+. En la página de resumen de recursos, haga clic en el botón de "Registrar". De forma similar a cualquier otro registro, tendrá que confirmar que ha leído y entendido el acuerdo de intercambio de datos de GBIF antes de que se ejecute el registro.
++
+Recibirá un mensaje de confirmación como este, que muestra que el conjunto de datos existente en GBIF ha sido actualizado.
++
+image::ipt2/manage/IPTManageResourcePublishOverwrite.png[]
+
+. Si aplica, envíe un correo electrónico a helpdesk@gbif.org alertando que la instalación técnica DiGIR/BioCASe/TAPIR/IPT que usaba el recurso ha quedado en desuso, y puede ser eliminada del Registro de GBIF.

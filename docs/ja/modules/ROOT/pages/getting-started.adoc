@@ -1,0 +1,7 @@
+= はじめに – インストールと初期設定について
+
+このスタートアップガイドは、初めてIPTインスタンスをインストールして実行しようとする人のためのものです。IPT の機能的なインストールを実際に見てみたい場合は、link:https://ipt.gbif.org/[] にある最新の一般リリース版の公開テストインスタンスを使用することができます（アカウントについては helpdesk@gbif.org にお問い合わせください）。その場合、表示される画面の使用方法の詳細については、 xref:overview.adoc[] を参照してください。
+
+最新リビジョンのソースコードを使用したい開発者は、xref:developer-guide.adoc[]のセクションを参照してください。
+
+Publishers who would prefer not to run their own IPT may refer to the list of https://www.gbif.org/data-hosting-centres[data hosting centres^].

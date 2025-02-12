@@ -1,0 +1,54 @@
+= GBIF 資料整合發布工具（IPT）使用者手冊
+
+_有關最新版本的資訊，包括下載內容，請參閱 xref:releases.adoc[發佈] 頁面._
+
+GBIF 資料整合發布工具（IPT）是一個免費的開源網路應用程式，讓您輕鬆共享四種類型的生物多樣性相關資訊：
+
+. 原始的分類單元出現紀錄資料
+. 分類單元清單
+. 調查活動資料
+. 資料來源的一般詮釋數據。
+
+IPT 實例以及通過該 IPT 所註冊的資料和詮釋資料將連接到 GBIF 登錄系統。這些資料會被 GBIF 編入索引，以便讓使用者只要通過 GBIF 入口網站進行檢索，就能公開地查詢和使用。此外，IPT 還可以設置 DataCite 帳戶，為資料集分配 DOI，使其成為資料儲存庫。
+
+全球生物多樣性資訊機構（GBIF）經由各國政府資助成立於2001年，是全球最大旨在通過網路平臺提供生物多樣性資料的免費訪問與使用的多邊倡議。 https://www.gbif.org/zh-tw/participation/participant-list[GBIF 的多元參與者] 主要包括各個國家和國際組織。GBIF 也與相關的國際條約機構建立了正式合作夥伴關係。GBIF 的使命是促進和實現全球免費和開放的生物多樣性資料訪問，以支持科學、保育和永續發展。關於 GBIF 的更多資訊，請訪問 https://www.gbif.org/zh-tw/[GBIF.org]。
+
+有幾個因素促使了 GBIF 主導 IPT 的開發：
+
+* 先前的發布工具（如 DiGIR、TAPIR、BioCASe）在發布和轉移大型資料集方面有所限制；
+* 需要減少發布者伺服器和 GBIF 伺服器在索引過程中的負載。這是因為來自 DiGIR、TAPIR 或 BioCASe 的索引會因重複的 HTTP 請求與回應的交互動作而造成負載過重。
+* 需要加快生物多樣性出現紀錄資料集的索引過程；
+* 需要為資料發布者提供額外的利益和服務，以鼓勵他們發布資料；
+* 缺乏適當的工具來發布某些類型的生物多樣性資料，例如名稱清單和資料集詮釋資料。
+
+若要了解 IPT 的運作方式，可以觀看這段 25 分鐘的示範影片，它簡明地演示了如何通過 GBIF.org 正確地發布和註冊資料集。
+
+[.responsive-video]
+.如何使用 IPT 來透過 GBIF.org 發布生物多樣性資料
+video::eDH9IoTrMVE[youtube, width=100%]
+
+== 使用者
+
+如果您只是想試用 IPT，請發送電子郵件至 helpdesk@gbif.org 來申請一個 https://ipt.gbif.org/[IPT 示範系統] 的帳戶。
+
+開始使用 IPT 最簡單的方法是在 https://www.gbif.org/zh-tw/data-hosting-centres [可信賴的數據託管中心^] 申請一個免費的帳戶。這樣一來，您就可以管理自己的數據集，並通過 GBIF.org 發佈，而無需自己另外設置和維護 IPT 伺服器。
+
+或者，如果您想自行設置 IPT 實例，可以參考 xref:getting-started.adoc[入門指南] 作為您的起點。
+
+NOTE: 請務必訂閱 https://lists.gbif.org/mailman/listinfo/ipt/[IPT 郵件列表]。該列表是 IPT 使用者的支持小組。確保 IPT 保持最新狀態對於其安全性和穩定性至關重要，因此，如果您負責管理 IPT，應訂閱以接收新版本通知，便於立即更新。
+
+== 開發人員
+
+IPT 的核心開發由 GBIF 主導，但程式碼的編寫是一項需要社群努力的任務，歡迎大家參與。您可以瀏覽 https://github.com/gbif/ipt/issues[開放議題] 尋找您想要處理的項目。請注意，貢獻可以通過倉庫的分支或複製來提交 https://help.github.com/articles/creating-a-pull-request/[pull request]。完整的開發者指南請參閱 xref:developer-guide.adoc[此處]。
+
+== 翻譯人員
+
+IPT 的使用者介面和手冊都需要國際化，這是一項社群協作，歡迎大家參與。翻譯人員的完整說明可參閱 xref.adoc[此處]。
+
+由於廣大社群的努力，並借助 https://crowdin.com/project/gbif-ipt[Crowdin] 本地化工具的力量，IPT 使用者介面已被翻譯成七種不同的語言：英文、法文、西班牙文、繁體中文、巴西葡萄牙文、日文和俄文。
+
+== 致謝
+
+眾多熱心志願者的貢獻成就了這款軟體。在您的幫助下，IPT 已成為全球廣泛使用的成功工具。
+
+https://crowdin.com/[Crowdin] 慷慨地支持此開源專案，為 GBIF 提供免費的本地化管理平台訪問權限，並使同時管理大量的翻譯成為可能。

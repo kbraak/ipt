@@ -1,0 +1,25 @@
+= Requerimientos
+
+== Conexión a internet
+El IPT está diseñado bajo el supuesto de que el servidor desde el cual se ejecuta cuenta con una conexión constante a internet. Aunque muchas de las funciones del IPT continuan funcionando aún cuando no hay conexión, algunos de sus elementos (el registro en GBIF, la instalación de extensiones, vocabularios controlados y bases de datos externas como fuentes de datos), requieren comunicación con recursos externos de internet. Desde el punto de vista de la administración del IPT, la velocidad de la conexión a internet afecta sólo a este tipo de comunicaciones. El acceso a la aplicación web del IPT y a sus servicios desde fuera de una intranet local también requiere conexión constante, y una conexión lenta puede tener efectos adversos sobre estos elementos, especialmente cuando se transfieren grandes conjuntos de datos.
+
+== URL estable
+Aunque puede utilizarse simplemente como una herramienta para generar http://rs.tdwg.org/dwc/terms/guides/text/[archivos Darwin Core], el IPT fue diseñado para ser una aplicación y un servicio basados en internet fáciles de encontrar y accesibles. Para mantener esta funcionalidad, el servidor en el que se instala el IPT debe ser capaz de soportar el acceso a la aplicación y los servicios a través de una URL estable.
+
+== TLS
+Aunque no es requerido por el IPT, GBIF recomienda ejecutar el IPT sobre un HTTPS seguro (TLS, que reemplazó a SSL) si es posible.
+
+== Memoria
+El servidor que aloja la instalación del IPT debe tener como mínimo 256 MB de memoria RAM disponibles para la aplicación.
+
+== Espacio en disco
+El espacio requerido por la aplicación del IPT es de unos 100MB. El contenido del directorio de datos del IPT después de la instalación requiere menos de 1MB de almacenamiento en disco con permiso de escritura para el IPT. Sin embargo, el contenido del directorio de datos crecerá a medida que se creen recursos y requerirá un espacio equivalente al tamaño de los archivos o tablas importados que contienen los conjuntos de datos. Una estimación razonable del tamaño de un conjunto de datos de registros biológicos relativamente rico es de un kilobyte por registro. El uso normal del IPT anexa información a los archivos de registro que crecerán con el tiempo, pero que generalmente requieren un espacio mínimo en el disco.
+
+== Versión de Java
+
+Se ha probado que la versión actual de IPT se ejecuta en Java 11 y 17. Consulte https://adoptopenjdk.net/support.html#roadmap[hoja de ruta de lanzamiento de OpenJDK], https://www.oracle.com/java/technologies/java-se-support-roadmap.html[Hoja de ruta de la versión Java de Oracle] o la documentación de su distribución de Linux para obtener una descripción general de cuánto tiempo será compatible su versión Java.
+
+Consulte las instrucciones de instalación para obtener información sobre las versiones del sistema operativo y del contenedor de servlets.
+
+== Soporte técnico
+Ejecutar un IPT es un compromiso. Hay que hacer copias de seguridad de los datos regularmente y las actualizaciones de seguridad (para el sistema operativo o la IPT) deben aplicarse poco después de que estén disponibles.

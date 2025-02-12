@@ -1,0 +1,7 @@
+= 起手式：安裝及初始設定
+
+This Getting Started Guide is meant for those wishing to install and run an IPT instance for the first time. If you would like to see a functional installation of the IPT in action, you may use the public test instance of the latest general release version at https://ipt.gbif.org/ (contact helpdesk@gbif.org for an account). If you do so, refer to xref:overview.adoc[] for details on how to use the screens you will see.
+
+Developers who wish to work with the latest revision of the source code should consult the xref:developer-guide.adoc[] section.
+
+Publishers who would prefer not to run their own IPT may refer to the list of https://www.gbif.org/data-hosting-centres[data hosting centres^].

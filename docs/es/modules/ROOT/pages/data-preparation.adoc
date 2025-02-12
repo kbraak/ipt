@@ -1,0 +1,56 @@
+= Preparación de datos
+
+== Cosas a considerar
+* crear un identificador local si no existe
+* Crear dwc:scientificName completo incluyendo los datos de autoría
+* crear las coordenadas decimales y la precisión
+
+== Servidor de la base de datos
+
+* configurar una vista SQL para utilizar las funciones (también puede hacerse en la definición de la fuente SQL del IPT)
+** concatenación, separación de cadenas: p. ej., construir el nombre científico completo (tener cuidado con los autónimos)
+** formato de fechas de acuerdo a ISO
+** crear año/mes/día analizando tipos de fecha SQL nativos
+* utilizar UNION para unir 2 o más tablas, p. ej., taxa aceptados y sinónimos o especímenes y observaciones
+* seleccione valores fijos (elija hacer esto en el mapeo IPT)
+
+== Fuente de los archivos de texto
+* convertir a UTF8
+* usar el estándar CSV (es decir, separador de cadenas=`,` delimitador de cadenas=`"`) o archivos separados por tabuladores
+* asegúrese de haber reemplazado los saltos de línea, es decir, `\r`` \n` o `\r\n` con espacios simples o use 2 caracteres `\r` para escapar el salto de línea si la intención es preservarlos
+* codifique valores nulos como campos vacíos, es decir, sin caracteres entre 2 delimitadores, ni `\N` ni `\NULL`
+
+=== Herramienta: convertidor de codificación de caracteres - iconv
+
+Herramienta básica para Linux y Windows para convertir codificaciones de caracteres de archivos.
+
+* http://en.wikipedia.org/wiki/Iconv
+* http://www.gnu.org/software/libiconv/
+* http://gnuwin32.sourceforge.net/packages/libiconv.htm
+
+Ejemplos:
+
+* convertir la codificación de caracteres de Windows-1252 a UTF-8 usando http://unixhelp.ed.ac.uk/CGI/man-cgi?iconv[iconv]
+* {blank}
++
+----
+iconv -f CP1252 -t utf-8 example.txt > exampleUTF8.txt
+----
+
+=== Herramienta: editor de secuencias de Unix, SED
+
+Una herramienta en línea de comandos de Unix para manipular archivos como secuencias, lo que permite modificar archivos muy grandes sin la necesidad de cargarlos en la memoria primero (esto es lo que hacen casi todos los editores, excepto algunos, p. ej., vi, do)
+
+* http://www.unixguide.net/unix/sedoneliner.shtml
+* http://www.brunolinux.com/02-The_Terminal/Find_and%20Replace_with_Sed.html
+* reemplazar y crear una copia de seguridad
++
+----
+sed -i.old "s/\\\\N//g" todoslosnombres.txt
+----
+
+* convierta el carácter de nueva línea DOS (CR/LF) a formato Unix:
++
+----
+sed 's/.$//'
+----
