@@ -86,7 +86,7 @@
     <servlet-api.version>3.0.1</servlet-api.version>
     <struts2.version>2.5.33</struts2.version>
     <validation-api.version>2.0.1.Final</validation-api.version>
-    <hibernate-validator.version>6.2.5.Final</hibernate-validator.version>
+    <hibernate-validator.version>8.0.2.Final</hibernate-validator.version>
     <jakarta.el.version>3.0.4</jakarta.el.version>
     <javax.el.version>3.0.0</javax.el.version>
     <!-- NB XStream does not use semantic versioning.  Take care when upgrading, as we need to
