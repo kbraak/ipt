@@ -1,0 +1,97 @@
+#!/bin/sh
+
+#######################################################
+#
+# Add here the commands to be excuted after the package
+# has been removed
+#
+
+set -e
+
+if [ -f /usr/share/debconf/confmodule ]; then
+    . /usr/share/debconf/confmodule
+fi
+
+#DEBHELPER#
+
+# Example: del user and group for the service
+
+#
+# POSIX-compliant shell function
+# to check for the existence of a command
+# Return 0 if found
+#
+pathfind() {
+    OLDIFS="$IFS"
+    IFS=:
+    for p in $PATH; do
+        if [ -x "$p/$*" ]; then
+            IFS="$OLDIFS"
+            return 0
+        fi
+    done
+    IFS="$OLDIFS"
+    return 1
+}
+
+
+case "${1}" in
+    remove)
+        # If in the future we use the ipt as a service without using tomcat
+        # like using a jetty-runner, jetty-home or similar  we can create an
+        # ipt user/group that should be deleted on postrm
+
+        # _USERNAME=ipt
+        # _GROUPNAME="${_USERNAME}"
+
+        # pathfind deluser
+        # if [ $? = 0 ] ;
+        # then
+        #     deluser --quiet ${_USERNAME}
+        # fi
+
+        # pathfind delgroup
+        # if [ $? = 0 ] ;
+        # then
+        #     delgroup --quiet --only-if-empty ${_GROUPNAME} || true
+        # fi
+        ;;
+
+    purge)
+
+        # Source debconf library
+        . /usr/share/debconf/confmodule
+
+        # Read the data directory from debconf
+        db_get ipt/data-dir
+        DATA_DIR="$RET"
+
+        # Remove the data directory only if it's not empty
+        if [ -d "$DATA_DIR" ] && [ -n "$(ls -A "$DATA_DIR")" ]; then
+              echo "Data directory is not empty. Skipping removal."
+        else
+            echo "Removing empty data directory."
+            # rm -r "$DATA_DIR"
+        fi
+
+        # Remove the configuration file
+        CONFIG_FILE="/var/lib/tomcat9/webapps/ipt/WEB-INF/datadir.location"
+        if [ -f "$CONFIG_FILE" ]; then
+              rm "$CONFIG_FILE"
+        fi
+
+        # Purge the debconf data
+        db_purge
+
+        ;;
+
+    upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
+        ;;
+
+    *)
+        echo "postrm called with unknown argument \`${1}'" >&2
+        exit 1
+        ;;
+esac
+
+exit 0

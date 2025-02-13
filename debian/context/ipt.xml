@@ -1,0 +1,6 @@
+<Context
+  docBase="/usr/share/ipt/ipt.war">
+  <!-- Enable symlinks for the jars linked from /usr/share/java -->
+  <Resources allowLinking="true"/>
+  <Parameter name="IPT_DATA_DIR" value="@data-dir@"/>
+</Context>
