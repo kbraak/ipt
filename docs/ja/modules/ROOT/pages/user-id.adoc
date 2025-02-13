@@ -1,0 +1,39 @@
+= 新しいユーザーIDディレクトリを追加する
+
+WARNING: このページでは、IPT上級者向けの設定方法を説明します。
+
+IPT v2.2以降では、連絡先、作成者、メタデータ提供者、関連当事者、プロジェクト担当者のユーザーIDを入力する際に、4つのユーザーディレクトリから選択できるようになりました。これらのディレクトリは次のとおりです。
+
+* https://orcid.org/ （ORCID）
+* https://www.researcherid.com/rid/（ResearcherID）
+* https://scholar.google.com/citations?user=（Google Scholar）
+* https://www.linkedin.com/profile/view?id= （LinkedIn）
+
+IPTユーザーは、ユーザーディレクトリを選択した後、結合ユーザーIDを入力します。この2つの組み合わせにより、例えばユーザープロファイルのページへのリンクが形成されます。
+
+* https://orcid.org/0000-0002-1825-0097
+* https://www.researcherid.com/rid/A-1009-2008
+* https://scholar.google.com/citations?user=drZVfmcAAAAJ
+* https://www.linkedin.com/profile/view?id=190869005
+
+ただし、ユーザーディレクトリのリストは変更することができるので、他のディレクトリに依存しているコミュニティでは便利です。
+
+以下の手順では、IPTに別のユーザーディレクトリを選択できるように設定する方法を説明します。
+
+== 手順
+
+UserDirectories.propertiesファイル（例：`tomcat7/webapps/ipt/WEB-INF/classes/org/gbif/metadata/eml/licenses.properties`）を探してください。テキストエディタでファイルを開き、以下の操作を行います。
+
+. 以下のフォーマットで、ユーザーディレクトリを定義する新しいプロパティを追加します。
++
+----
+URL=URL
+# For example:
+http\://orcid.org/=http://orcid.org/
+----
+
+. 再確認
+.. プロパティキーのコロンがバックスラッシュでエスケープされています。
+.. キーと値の両方が等しく、キーのエスケープ文字を除きます。
+. UserDirectories.propertiesファイルは、次回IPTをアップグレードするときに上書きされるため、バックアップしてください。
+. サーブレットコンテナ（Tomcatなど）を再起動して、新しい設定を有効にします。

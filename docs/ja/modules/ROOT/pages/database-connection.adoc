@@ -1,0 +1,65 @@
+= 対応データベース
+
+このセクションでは、IPTが対応しているソースデータベースの種類についての情報を提供します。
+
+== 対応するデフォルトのデータベース
+
+IPTは、データベース接続を使用して、テーブルまたはビューからデータをインポートすることができます。現在、以下のデータベースがサポートされています。
+
+* Microsoft SQL Server
+* MySQL
+* Oracle
+* PostgreSQL
+* Sybase
+
+== 新しいJDBCドライバを追加する
+
+IPTをサーブレットコンテナ（Tomcatなど）内で実行する場合、IPTに独自のJDBCドライバを追加することができます。これにより、別のデータベースをサポートしたり、既存のデータベース・タイプの1つに対する接続設定を変更したりすることができます。
+
+以下の手順は、「分解された」 WAR で動作するIPT がインストールされている、つまりアプリケーションサーバーのwebapps フォルダに `ipt` (または名前が変更されたインスタンス) フォルダがあることを前提としています。ドライバの追加を開始する前に、IPTを停止する必要があります。
+
+=== JDBCドライバのJARをクラスパスに追加する
+
+まず、追加したいドライバの JAR ファイルを入手します。例えば、SQLiteのjarファイルは以下からダウンロードできます：https://bitbucket.org/xerial/sqlite-jdbc/downloads
+
+このJARをウェブアプリのクラスパスにコピーする必要があります。最も簡単なのは、 `ipt/WEB-INF/lib` ディレクトリにコピーすることです。
+
+=== jdbc.properties の修正
+
+IPTが、どのドライバが利用可能で、そのためのJDBC URLをどのように構築するかを理解するために、すべての情報を含む簡単なプロパティファイルを維持します。`ipt/WEB-INF/classes/jdbc.properties`を開き、例えば PostgreSQL のような既存のエントリを検査します。
+
+----
+# PostgreSQL driver
+pgsql.title=PostgreSQL
+pgsql.driver=org.postgresql.Driver
+pgsql.url=jdbc:postgresql://{host}/{database}
+pgsql.limitType=LIMIT
+----
+
+各ドライバーに追加する必要のあるプロパティは4つです。4つとも同じ接頭辞で始まる必要があり、特に意味はなく自由に選ぶことができます。
+
+* `title`：このドライバのIPTに表示されるタイトル。
+* `driver`：接続時に使用されるドライバJavaクラス
+* `url`：接続用のURLを作成するためのテンプレート。URL文字列で使用できる変数は`\{host}` と `\{database}`の2つです。これらは構成された実際の設定に置き換えられます。
+* `limitType`：返されるデータの量を制限する方法。使用可能な値は`LIMIT`、`TOP`、`ROWNUM`です。これはドライバ固有です。
+
+上記のPostgreSQLの例では、link:https://jdbc.postgresql.org/documentation/head/connect.html[PostgreSQLドライバーのドキュメント]を参照すると、次の変更により暗号化された接続が有効になります。
+
+----
+pgsql.url=jdbc:postgresql://{host}/{database}?sslmode=require
+----
+
+次の例は、SQLiteドライバー用です。これはファイルに接続するため、URLテンプレートで`\{host}`は使用されません。
+
+----
+# SQLite driver
+# uses files only, so {host} is ignored
+# database example on Windows: C:/work/mydatabase.db
+# database example on Linux: /home/leo/work/mydatabase.db
+sqlite.title=SQLite
+sqlite.driver=org.sqlite.JDBC
+sqlite.url=jdbc:sqlite:{database}
+sqlite.limitType=LIMIT
+----
+
+これでIPTを再起動し、SQLiteデータソースのマッピングに新しいドライバーを使用することができます。

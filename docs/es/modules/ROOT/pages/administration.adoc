@@ -1,0 +1,241 @@
+= Menú administración
+
+Este menú es visible únicamente para los usuarios que tienen el rol de Administrador.
+
+Esta sección describe cada una de las funciones a las que se puede acceder desde el menú Administración. Al hacer clic en el menú Administración, se abre una página (consulte la imagen de la pantalla a continuación) desde la que se puede acceder a cada una de estas tareas administrativas específicas haciendo clic en el botón correspondiente.
+
+image::ipt2/administration/IPTAdminBeforeRegistration.png[]
+
+== Configuración de las opciones del IPT
+Esta página permite a un usuario con el rol Administrador, realizar y cambiar la configuración de este IPT.
+
+image::ipt2/administration/IPTAdminConfigIPT.png[]
+
+* *Directorio de datos del IPT* - Muestra el directorio del servidor donde se almacenan la configuración, los recursos y los archivos de log del IPT.
+* *Idioma por defecto* - Muestra el idioma por defecto del IPT. Inglés por defecto.
+* *Correo electrónico del administrador de IPT* - Este es el correo electrónico que se muestra en la página de inicio de sesión a los usuarios que han olvidado su contraseña.  Si no está configurado, se utiliza el correo electrónico del primer usuario administrador.
+* [[public-url]] *URL pública*: esta es la URL que direcciona a la raíz de esta instalación IPT. La URL se establece automáticamente durante la instalación del IPT. La URL pública debe ser accesible a través de Internet para que el IPT funcione completamente. Configurar la URL pública del IPT para usar el localhost, por ejemplo, no permitirá que la instancia IPT se registre con GBIF, se asocie con una organización, ni que los recursos sean de acceso público.
++
+--
+[NOTE]
+.Actualización manual de la URL pública
+====
+Cuando la configuración del IPT es guardada, el IPT prueba la disponibilidad de la URL pública desde el computador del cliente. Si el IPT no está disponible en la URL pública establecida, mostrará un mensaje de advertencia y los cambios no podrán ser guardados. El procedimiento para cambiar la URL pública, si la nueva URL aún no es funcional (como un cambio de puerto que requiere que el IPT se reinicie), se indica aquí:
+
+* apague el IPT
+* en el directorio de datos del IPT, abra el archivo `config/ipt.properties` con un editor de texto simple o de programación como Notepad, TextEdit, vim (no Microsoft Word).
+* en el archivo `ipt.properties` cambie la línea de inicio `ipt.baseURL` a la nueva URL con el nuevo puerto, usando la barra invertida para evitar el caracter dos puntos. Por ejemplo, ingrese `ipt.baseURL=http\://example.org\:7001/ipt` para http://example.org:7001/ipt.
+* reinicie el IPT en el contenedor del servlet.
+* actualice los metadatos para el IPT como se describe en la siguiente sección titulada “Publicar todos los recursos”.
+====
+
+--
+* *URL del proxy institucional*: si el servidor en el que está instalado el IPT no tiene acceso HTTP / HTTPS directo a Internet, sino que debe enrutar las solicitudes HTTP / HTTPS salientes a través de un servidor proxy institucional, ingrese la dirección del host y el número de puerto aquí. Por ejemplo, `http://proxy.example.org:8080`.
+* *Clave de Google Analytics* - Si desea rastrear el uso de su IPT con Google Analytics, puede habilitarlo ingresando la clave de Google Analytics en este cuadro de texto. Para obtener más información sobre Google Analytics, consulte https://www.google.com/intl/es/analytics/.
+* *Modo corrección de errores*: marque este cuadro si desea iniciar el IPT en modo corrección de errores. El "Modo corrección de errores" generalmente es innecesario, a menos que esté tratando de monitorear un problema con el IPT. La actividad del sistema del IPT está ubicada en el archivo debug.log del directorio de datos del IPT. El directorio de datos se establece durante el primer paso del proceso de instalación (ver "Primeros pasos: instalación y configuración inicial"). Si tiene el rol Administrador, consulte la información en “Ver actividad del sistema del IPT” de la sección “Menú administración” para ver fácilmente el archivo debug.log.
+* *Modo archivo*: marque esta casilla si desea que su IPT guarde todas las versiones publicadas para todos los recursos. Esto le permitirá realizar un seguimiento del historial de versiones de un recurso. Si no se marca, las versiones anteriores serán reemplazadas por la última. Tenga cuidado de no quedarse sin espacio en disco.
+* *Número de versiones archivadas* - Cuando el modo de archivo está activado, si se establece este valor de configuración en un número, se conservarán ese número de versiones antiguas, pero se borrarán automáticamente las versiones más antiguas.
+* *Ubicación del servidor IPT*: esta área de la página permite al administrador establecer las coordenadas geográficas (latitud y longitud) de la ubicación del servidor en el que está instalado el IPT. Establecer estas coordenadas permite a GBIF mapear la ubicación de esta y otras instalaciones IPT registradas alrededor del mundo.
+
+== Publicar todos los recursos
+Esta opción es una acción administrativa al igual que el botón "Publicar", solo que publica TODOS los recursos. Por lo tanto, para cada recurso, crea un nuevo DwC-A, EML y RTF, y transmite la actualización al Registro y vía RSS. Además, también actualiza el IPT y los metadatos de los recursos registrados en el Registro. Haga clic en este botón si se han actualizado varios recursos y desea publicar una nueva versión para todos ellos en lugar de publicarlos individualmente.
+
+== Configurar cuentas de usuario
+Esta página permite al usuario con rol Administrador, crear, modificar y eliminar cuentas de usuario. Cuando se abre la página, muestra una tabla de usuarios existentes e información básica acerca de ellos, incluyendo sus nombres, direcciones de correo electrónico, roles y la fecha y hora de su ultimo inicio de sesión. Los usuarios pueden eliminar o restablecer sus contraseñas haciendo clic en los iconos de la derecha.
+
+image::ipt2/administration/IPTAdminUserAccounts.png[]
+
+=== Crear un nuevo usuario
+Se puede crear un nuevo usuario haciendo clic en el botón "Crear" ubicado debajo de la lista de usuarios existentes. Se abrirá una página en la que se puede introducir la información sobre el usuario, tras lo cual se puede crear el nuevo usuario pulsando el botón "Guardar".
+
+image::ipt2/administration/IPTAdminUserCreateUser.png[]
+
+* *Correo electrónico*: la dirección de correo electrónico del usuario, es usada como un identificador para ingresar al IPT y no puede ser cambiada.
++
+--
+[NOTE]
+====
+Si el usuario requiere un cambio de dirección de correo electrónico, el procedimiento recomendado es crear una nueva cuenta de usuario con la nueva dirección de correo electrónico y, a continuación, eliminar la cuenta de usuario que tiene la dirección de correo electrónico antigua.
+====
+
+--
+* *Nombre*: el nombre del usuario.
+* *Apellido*: el apellido del usuario.
+* *Rol* - El rol que tendrá el usuario dentro del IPT. Usuarios con el rol “Administrador” pueden hacer cambios en todos los aspectos del IPT. Usuarios con el rol “Editor sin derechos de registro” están en la capacidad de crear, editar, eliminar y administrar los recursos que ellos crearon o aquellos a los que fueron invitados para administrar dentro del IPT. Usuarios con el rol “Editor con derechos de registro” están en la capacidad adicional de registrar los recursos en la red GBIF. Otros usuarios pueden ingresar al IPT y ver los recursos, pero no podrán hacer cambios.
+* *Contraseña*: la contraseña del usuario debe contener al menos 4 caracteres y debe ser segura y evitar la pérdida, puesto que desde la aplicación del IPT esta contraseña no es recuperable.
++
+--
+[NOTE]
+====
+Si se pierde la contraseña de un usuario, puede ser restablecida a un nuevo valor generado automáticamente por un usuario que tenga el rol de Admin. Es responsabilidad del usuario Administrador comunicar esta nueva contraseña al usuario para el que se restableció. A continuación, el usuario puede cambiar la contraseña por el valor deseado introduciéndola en la página Cuenta IPT, a la que se accede a través del enlace "Cuenta" que aparece en la parte superior derecha de cada página después de iniciar sesión.
+====
+
+--
+* *Verificar contraseña*: una copia exacta de la contraseña que fue ingresada anteriormente para confirmar que se ha introducido como se pretendía.
+
+Una vez creada, puede enviarse al usuario un correo electrónico con las credenciales:
+
+image::ipt2/administration/IPTAdminUserCreateUserEmailCredentials.png[]
+
+=== Modificar un usuario existente
+La información de los usuarios puede modificarse en la página de detalles del usuario después de seleccionar el nombre del usuario que desea modificar de la lista de usuarios existentes. La página de detalles del usuario muestra toda la información sobre ese usuario. El nombre, el apellido y la función del usuario pueden modificarse introduciendo los nuevos valores y haciendo clic en el botón "Guardar". Los detalles de la información que debe introducirse en esta página se encuentran en las explicaciones de la sección "Crear un nuevo usuario", más arriba.
+
+image::ipt2/administration/IPTAdminUserEditUser.png[]
+
+El menú desplegable Opciones contiene dos botones:
+
+* *Restablecer contraseña*: si un usuario olvida su contraseña, al hacer clic en el botón "Restablecer contraseña" se puede generar una nueva, tras lo cual se da una nueva contraseña en un mensaje informativo en la parte superior de la página.
+* *Eliminar* - elimina el usuario actual.
++
+--
+[NOTE]
+====
+El IPT no informa al usuario afectado de este cambio, por lo que es responsabilidad del Administrador que restablece la contraseña informar al usuario de la nueva.
+====
+
+--
+
+Después de restablecer la contraseña, se puede enviar al usuario un correo electrónico con una nueva contraseña:
+
+image::ipt2/administration/IPTAdminUserEmailResetPassword.png[]
+
+=== Eliminar un usuario
+Las cuentas de usuario que ya no son necesarias pueden eliminarse a través de la página de detalles del usuario a la que se accede seleccionando el nombre del usuario que se desea eliminar de la lista de usuarios existentes. En la parte inferior de la página de detalles del usuario, haga clic en el botón "Borrar" para eliminar esta cuenta de usuario. Hay varias condiciones en las que un usuario no puede ser eliminado:
+
+. Un administrador no puede eliminar su propia cuenta mientras está conectado, por lo que debe ser eliminado por otro administrador.
+. Igualmente, la instalación del IPT siempre debe tener al menos un usuario con el rol Administrador, de tal forma que el último Administrador no podrá ser eliminado. Para eliminar aquel usuario, primero se debe crear un nuevo usuario con el rol Administrador e ingresar con este nuevo usuario para eliminar la otra cuenta de Administrador.
+. Finalmente, cada recurso debe tener al menos un usuario asociado que tenga el rol Administrador o uno de los otros roles de Editor, de tal forma que el último Editor de un recurso no pueda ser eliminado. Para eliminar aquel usuario, primero se debe asociar otro usuario que tenga uno de los roles de Editor, con el recurso al cual el usuario desea eliminarle el último editor del mismo. Para saber cómo pueden ser asignados los nuevos editores, consulte la información de xref:manage-resources.adoc#gestores-del-recurso[Editores del recurso].
+. No se puede eliminar un usuario si es el creador o uno o más recursos. Para restringir el acceso del usuario a sus recursos baje su rol al tipo Usuario. Consulte la sección <<Modificar un usuario existente>> para obtener información sobre cómo cambiar el rol de un usuario.
+
+== Configuración de las opciones de registro de GBIF
+Esta página permite al usuario registrar la instancia del IPT en el Registro de GBIF si aún no se ha hecho. El IPT debe ser registrado antes de que cualquiera de los recursos del IPT pueda ser asociado con una organización (ver la información en el encabezado "Configurar organizaciones" en la sección "Menú administración") o publicado (ver la sección xref:manage-resources.adoc#published-versions[Versiones publicadas]). La información sobre un IPT registrado y sus recursos públicos se pueden buscar a través de los servicios del Registro, y los datos de los recursos públicos publicados en el IPT pueden ser indexados para su búsqueda a través del portal de GBIF. Si el IPT ya ha sido registrado, la información registrada para el IPT puede ser editada abriendo la página <<Editar el Registro GBIF>>.
+
+El primer paso para registrar un recurso en GBIF es probar que el IPT tenga una URL valida que pueda ser localizada por los servicios del GBIF. Para correr esta prueba, haga clic sobre el botón “Validar”.
+
+Si la prueba de validación no tiene éxito, un mensaje de error sugerirá la naturaleza del problema con la comunicación entre el Registro GBIF y el IPT. Las causas de error incluyen:
+
+* *No hay conexión a Internet:  el IPT requiere una conexión activa a Internet para funcionar correctamente. Se producirá un error si se pierde la conectividad a Internet al pulsar el botón "Validar". Restaure la conectividad a Internet antes de intentar proceder con el registro.
+* *URL de proxy pública o institucional incorrecta*: la URL pública se detecta y configura automáticamente durante el proceso de configuración del IPT (consulte la sección xref:initial-setup.adoc[Configuración inicial del IPT]). Los cambios en la configuración del servidor en el que está instalado el IPT podrían requerir un cambio en la URL pública o la URL del proxy institucional. Las URL de proxy públicas e institucionales se pueden cambiar en la página Configurar opciones de IPT (consulte las explicaciones de la URL pública y la URL de proxy institucional en la sección <<Opciones de configuración del IPT>>).
+* *Firewall*: si la conexión a Internet es correcta, un firewall puede estar evitando las conexiones a la URL pública o el Proxy. Cambie la configuración del firewall o proxy para todas las conexiones externas.
+* *Registro de GBIF inaccesible* - Si un mensaje de error sugiere que ninguno de los errores anteriores ha ocurrido y aún así hay un fallo en la comunicación con el Registro de GBIF, por favor informe de que hay problemas de conexión con el registro a la Mesa de ayuda de GBIF (helpdesk@gbif.org).
+
+image::ipt2/administration/IPTAdminRegistrationStep1.png[]
+
+Si el IPT supera el paso de validación anterior, aparecerá un formulario con información adicional necesaria para el registro. En este paso, la instancia del IPT se asocia a una organización. *La organización debe estar registrada en el Registro de GBIF y su token compartido debe ser conocido*. A continuación se encuentran las explicaciones de los campos y selecciones de este formato.
+
+image::ipt2/administration/IPTAdminRegistrationStep2.png[]
+
+A continuación se encuentran las explicaciones de la información específica que debe ser seleccionada o ingresada:
+
+* *Organización*: el cuadro seleccionado contiene una lista de organizaciones en el Registro GBIF. Seleccione una única organización con la cual será asociado este IPT. Si la organización deseada no se encuentra en la lista, use el Registro GBIF (https://www.gbif.org/es/publisher/search) para determinar si la organización está registrada con un nombre distinto al que esperaba. Si la organización aún no está registrada en GBIF, por favor contacte al Centro de ayuda de GBIF para registrar la organización antes de proceder con el registro del IPT. Haga clic sobre el enlace de ayuda “GBIF Help Desk” para abrir un correo electrónico predeterminado que puede completar con la información necesaria antes de enviarlo.
+* *Token compartido de la organización*: el token compartido registrado en GBIF para la organización seleccionada debe ser ingresado en esta caja de texto para verificar que el usuario tiene la autorización requerida para asociar la instancia de IPT con esa organización. Si no dispone del token compartido de la organización, puede solicitarlo al contacto registrado. Aparecerá un enlace al contacto principal registrado para la organización debajo del cuadro de texto "Token compartido de la organización" después de seleccionar una organización en el cuadro de selección Organización. El token compartido se utilizará para autenticar el registro del IPT cuando se pulse el botón "Guardar".
+* *Alias*: ingrese un nombre o código conveniente para representar la organización dentro del IPT. El alias aparecerá en lugar del nombre completo de la organización en los cuadros de selección de "Organización" en las interfaces de usuario del IPT.
+* *¿Puede publicar recursos?*: seleccione este recuadro si la organización también puede ser asociada con recursos publicados en este IPT. Si se deja sin seleccionar, la organización no aparecerá en la lista de organizaciones disponibles para asociar con un recurso. Deje el recuadro sin marcar solamente si la organización tiene como función alojar el IPT y no asociar recursos publicados a través del IPT.
+* *Título para la instalación del IPT*: ingrese el título de la instalación del IPT a ser usado en el Registro GBIF. El título es la información primaria usada para listar y buscar en el Registro por instalaciones de IPT.
+* *Descripción para esta instalación del IPT*: ingrese en el Registro GBIF la descripción de la instalación del IPT a ser usada. La descripción pretende ayudar a los usuarios del Registro a entender el significado del IPT, permitiendo información adicional a la compartida en los campos específicos para metadatos.
+* *Nombre del contacto*: ingrese el nombre de la persona quien debe ser contactada para información acerca de la instalación del IPT. Esta persona debe ser alguien quien tenga un rol de Administrador y conozca los detalles técnicos acerca de la instalación.
+* *Correo electrónico del contacto*: ingrese la dirección electrónica actual de la persona cuyo nombre fue ingresado en el campo anterior.
+* *Contraseña del IPT*: ingrese la contraseña que debe ser usada para editar la instalación de este IPT en el Registro GBIF.
+* *Guardar*: cuando toda la información anterior haya sido ingresada o seleccionada, haga clic sobre el botón “Guardar” para registrar la instalación del IPT ante el Registro de GBIF. Después de registrar con éxito la instalación del IPT la página para configurar las opciones del Registro GBIF mostrará que el IPT ya ha sido registrado y asociado con la organización seleccionada. Además, la página "Configurar organizaciones" será accesible desde el "Menú administración".
+* *Nota*: cualquier cambio en el registro del IPT (no en el registro de un recurso, para el cual debe dirigirse la sección “Visibilidad” bajo el encabezado “Vista general del recurso” en la sección “Menú gestión de recursos”, así como a la información bajo el encabezado “Publicar todos los recursos” en la sección “Menú administración”) tendrá que ser consultado con el Centro de ayuda de GBIF (helpdesk@gbif.org).
+
+=== Editar el registro en GBIF
+Una vez registrado el IPT, esta página permite al usuario actualizar la información de registro del IPT. La actualización asegurará que el IPT y todos sus recursos registrados estén sincronizados con el Registro de GBIF. *Los administradores deben ejecutar una actualización cada vez que la URL pública del IPT cambie*. Los administradores también pueden ejecutar una actualización para actualizar el título, descripción, nombre de contacto, y correo electrónico de contacto de la instancia IPT. Esta página no permite cambiar la organización de alojamiento. Para ello, los administradores deben ponerse en contacto directamente con la Mesa de ayuda de GBIF (helpdesk@gbif.org).
+
+image::ipt2/administration/IPTAdminEditRegistration.png[]
+
+Vista de la red:
+
+image::ipt2/administration/IPTAdminEditRegistrationNetwork.png[]
+
+Editar la vista de tokens compartidos de la organización:
+
+image::ipt2/administration/IPTAdminEditRegistrationTokens.png[]
+
+== Configurar organizaciones
+Esta página no está disponible hasta que la instancia de IPT haya sido registrada con éxito en el Registro de GBIF (ver la información en el encabezado "Configurar el registro de GBIF" de la sección "Menú administración"). Una vez registrado, esta página muestra una lista de organizaciones que pueden ser asociadas con recursos en esta instancia de IPT. Un IPT que aloja datos de organizaciones distintas a la que está asociado debe tener configuradas las organizaciones adicionales antes de poder utilizarlas.
+
+****
+_La asignación de DOI dentro del IPT es inusual, muy pocos editores utilizan esta función. Consulte xref:doi-workflow.adoc[]._
+
+Un IPT capaz de asignar DOI a los recursos también debe tener una organización configurada con una cuenta de DataCite. Para configurarse con una cuenta de DataCite, la organización no necesariamente tiene que poder publicar recursos (estar asociada con recursos). Solo se puede usar una cuenta de DataCite para registrar DOI a la vez, y el modo de archivo de IPT también debe estar activado (consulte la sección <<Configurar ajustes de IPT>> para obtener más información sobre el modo de archivo). La lista de organizaciones muestra qué organizaciones se configuraron con cuentas de DataCite y cuál se seleccionó para registrar DOI para todos los recursos en esta instancia de IPT.
+****
+
+image::ipt2/administration/IPTAdminOrgs.png[]
+
+=== Editar una organización
+En esta página, un usuario con el rol de Administrador puede editar la organización. Haga clic en el botón "Editar" para abrir la página que contiene los detalles de la organización seleccionada. Para obtener explicaciones sobre los campos y las selecciones de este formulario, consulte la información a continuación:
+
+image::ipt2/administration/IPTAdminOrgsEditOrg.png[]
+
+A continuación se encuentran las explicaciones de la información específica que debe ser seleccionada o ingresada:
+
+* *Nombre de la organización*: el título de la organización inscrita en el Registro de GBIF. *Nota*: No puede ser cambiado.
+* *Token compartido de organización*: el token compartido que debe usarse para editar la entrada de esta organización en el Registro de GBIF.
+* *Alias*: ingrese un nombre conveniente para representar la organización dentro del IPT. El alias aparecerá en lugar del nombre completo de la organización y en los campos de selección de organización de las interfaces del usuario en el IPT.
+* *¿Puede publicar recursos?*: seleccione este recuadro si la organización seleccionada también puede ser asociada con recursos publicados en este IPT. Si selecciona este recuadro la organización aparecerá en la lista de organizaciones disponibles para asociar con un recurso.
+* *Entidad de registro de DOI* - tipo de cuenta utilizada para xref:doi-workflow.adoc[registrar DOIs] para recursos; sólo es compatible con DataCite. La mayoría de los publicadores no necesitan esta función. *Nota*: se emite una cuenta a la organización después de que firme un acuerdo con un miembro de DataCite, que le da permiso para registrar DOIs bajo uno o más prefijos (por ejemplo, 10.5072) en uno o más dominios (por ejemplo, gbif.org). Confirme que la cuenta puede realmente registrar DOIs bajo el dominio/URL pública del IPT, de lo contrario los registros a través del IPT no funcionarán.
+* *Nombre de usuario de la cuenta*: el nombre de usuario (símbolo) de la cuenta expedida a la organización por DataCite.
+* *Contraseña de la cuenta*: la contraseña de la cuenta expedida a la organización por DataCite.
+* *prefijo del DOI* - el prefijo del DOI preferido utilizado para acuñar DOIs. Este prefijo es exclusivo de la cuenta emitida a la organización. Nota: utilice siempre https://blog.datacite.org/test-prefix-10-5072-retiring-june-1/[prefijo de prueba] cuando ejecute el IPT en modo de prueba.
+* *Cuenta activada*: este cuadro de selección indica si la cuenta en DataCite es la única utilizada para registrar los DOI de los conjuntos de datos en el IPT. Solo es posible activar una cuenta DataCite a la vez.
+
+=== Adicionar una organización
+Las organizaciones no se pueden asociar con los recursos hasta que un usuario que tenga el rol de Administrador las agregue. Haga clic en el botón "Añadir" para abrir una página en la que se puede seleccionar una organización adicional del Registro de GBIF para ser utilizada en esta instancia del IPT. Para las explicaciones de los campos y selecciones de esta página, consulte la información en la sección "Editar organización" más arriba. Una vez seleccionada la organización deseada y diligenciados todos los demás datos, incluido el token compartido para la organización, haga clic en el botón "Guardar" para añadir la organización seleccionada a la lista.
+
+image::ipt2/administration/IPTAdminOrgsAddOrg.png[]
+
+== Configurar estándares y extensiones
+Esta página permite a un usuario con el rol de Administrador habilitar la instancia del IPT para importar y compartir varios tipos de datos predefinidos del Registro de GBIF. Cada tipo incluye propiedades (campos, elementos) que soportan un propósito específico. Por ejemplo, el Estándar Darwin core Taxon soporta información relativa a nombres taxonómicos, usos de nombres de taxones y conceptos de taxones, y permite al IPT alojar recursos para listas taxonómicas y de nomenclatura. Hay una diferencia entre Estándares y Extensiones. Los estándares proveen la base para el registro de los datos (por ejemplo, Registros biológicos y Nombres taxonómicos), mientras que las extensiones facilitan los medios para asociar datos adicionales con un registro del estándar. Solamente un estándar puede ser seleccionado para un recurso de datos, como se explicó en el encabezado “Mapeo Darwin Core” de la sección “Vista general del recurso”.
+
+Los vocabularios contienen una lista de valores válidos que puede tomar un elemento particular en un estándar o extensión. Por ejemplo, el {latest-basis-of-record}[Vocabulario Darwin Core para Type] contiene todos los valores del estándar permitidos en el elemento Darwin Core http://rs.tdwg.org/dwc/terms/#basisOfRecord[basisOfRecord].
+
+Luego de la lista de estándares y extensiones instaladas, hay una sección llamada "Sincronizar Extensiones y Vocabularios" que tiene un único botón llamado "Sincronizar". Las últimas versiones de los estándares y extensiones que existen en el Registro de GBIF pero que aún no han sido instaladas están listadas debajo de la sección de Vocabularios.
+
+image::ipt2/administration/IPTAdminExtensions.png[]
+
+Cada lista de extensiones (instaladas y no instaladas) tiene dos columnas. La columna de la izquierda muestra el nombre de la extensión como un enlace y un botón “Instalar” o “Eliminar”. Si la extensión esta desactualizada, aparecerá el botón "Actualizar". En la columna de la derecha hay un resumen de la información de la extensión, el número de propiedades (campos, elementos) en la extensión, el nombre de la extensión, su Namespace, RowType y palabras clave. Para más información acerca de los atributos de una extensión diríjase a la documentación sobre Archivos Darwin Core en http://rs.tdwg.org/dwc/terms/guides/text/. A continuación están las acciones que pueden ser tomadas respecto a las extensiones.
+
+=== Sincronizar extensiones y vocabularios
+Una extensión puede utilizar una lista de términos de valores predefinidos, conocidos como vocabularios controlados. Estos vocabularios pueden cambiar periódicamente (o. ej., si se agrega una nueva traducción) lo cual requiere su actualización en el IPT. Haga clic en el botón "Sincronizar" para Actualizar los vocabularios existentes con el Registro de GBIF. Luego de que la actualización se haya completado, aparecerá un mensaje que indicará si la sincronización ha sido exitosa o si hubo errores en el proceso.
+
+=== Ver detalles de una extensión
+El título de cada extensión en la primera columna es un enlace a una página de detalles para esa extensión. La página de detalles muestra toda la información resumida que puede verse en la columna de la derecha de la lista de extensiones, así como la descripción detallada, las referencias y los ejemplos de cada una de las propiedades de la extensión.
+
+image::ipt2/administration/IPTAdminExtensionsDetail.png[]
+
+Para las propiedades que tienen vocabularios controlados, la información de la propiedad en la columna de la derecha contendrá el nombre del vocabulario como un enlace junto a la etiqueta "Vocabulario:". Al hacer clic en el enlace se abrirá una página de detalles para el vocabulario, con un resumen del vocabulario en la parte superior y una tabla de los valores válidos con más información detallada, como los términos e identificadores preferidos y alternativos.
+
+image::ipt2/administration/IPTAdminExtensionsDetailVocabulary.png[]
+
+=== Instalar una extensión
+Para cualquiera de las extensiones que aún no ha sido instalada en el IPT, hay un botón “Instalar” debajo del nombre de la extensión en la columna de la izquierda. Haga clic sobre este botón para adquirir la extensión desde el Registro GBIF e instalarla en el IPT.
+
+=== Eliminar una extensión
+Cualquier extensión que ya esté instalada en el IPT puede eliminarse haciendo clic en el botón "Eliminar". Las extensiones que se utilizan para mapeae datos para cualquier recurso en el IPT no pueden eliminarse. Cualquier intento de hacerlo mostrará un mensaje de error y una lista de recursos que utilizan la extensión en una asignación.
+
+=== Actualizar extensión
+Para cualquier extensión que ya esté instalada en el IPT y que esté desactualizada, puede actualizarse haciendo clic en el botón "Actualizar". La actualización de una extensión permite aprovechar los nuevos términos y vocabularios. Durante la actualización, se eliminarán los mapeos existentes a los términos obsoletos, y se actualizarán automáticamente los mapeos existentes a los términos obsoletos que hayan sido sustituidos por otro término. Tras la actualización, todos los recursos afectados deberán ser revisados y publicados de nuevo
+
+image::ipt2/administration/IPTAdminExtensionsUpdate.png[]
+
+== Paquetes de datos
+
+Esta página permite a un usuario con rol de Administrador habilitar la instancia del IPT para importar y compartir varios tipos predefinidos de datos del Registro de GBIF. Cada tipo incluye propiedades (campos) que soportan un propósito específico.
+
+image::ipt2/administration/IPTAdminDataPackages.png[]
+
+Página de detalles:
+
+image::ipt2/administration/IPTAdminDataPackagesDetail.png[]
+
+== Gestión de la interfaz de usuario
+
+El logotipo de IPT y el esquema de colores se pueden administrar desde la página de administración de la interfaz de usuario.
+
+image::ipt2/administration/IPTAdminUIManagement.png[]
+
+== Ver los logs del IPT
+Los mensajes generados por las acciones ejecutadas mientras se ejecuta el IPT se registran en archivos de referencia en el directorio denominado "logs" dentro del directorio de datos del IPT (ver la información en el apartado "Configuración del IPT" de la sección "Menú administración"). La página de visualización de los registros del IPT muestra los mensajes del archivo denominado admin.log, que contiene únicamente los mensajes de registro que tienen una severidad de ADVERTENCIA o superior (como los errores). El registro completo de mensajes (contenido en el archivo llamado debug.log) puede abrirse y visualizarse haciendo clic en el enlace denominado "archivo log completo". El contenido del archivo de registro completo puede ser útil a la hora de informar sobre un aparente error.
+
+image::ipt2/administration/IPTAdminLogs.png[]

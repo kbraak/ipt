@@ -1,0 +1,276 @@
+= Preguntas frecuentes
+
+Aquí encontrará respuestas a las preguntas más frecuentes sobre el IPT de GBIF. Por favor, compruebe el contenido de esta página antes de contactar a la Mesa de ayuda de GBIF.
+
+== Instalación
+
+=== ¿Cuál es la mejor manera de migrar mi IPT a otro servidor sin perder ningún dato?
+
+Hay un directorio importante que contiene toda la configuración y los recursos del IPT: el directorio de datos del IPT. Si se asegura de que se haga una copia de seguridad de este directorio con regularidad en algún lugar seguro nunca perderá ningún dato.
+
+Para migrar el IPT a otro servidor, solo asegúrese de copiar todo el contenido del directorio de datos del IPT a el nuevo servidor. Es importante conservar los mismos permisos de la carpeta/archivo. Luego, xref:installation.adoc[instalar el IPT en el nuevo servidor], usando este directorio como el directorio de datos.
+
+=== Mi instancia del IPT de GBIF es lenta. ¿Qué puedo hacer para mejorar el rendimiento?
+
+Algunas configuraciones predeterminadas de Apache Tomcat vienen con muy poca memoria asignada. Para aumentar el rendimiento, se debe incrementar el espacio asignado dependiendo de la cantidad de memoria física en el servidor. Si el servidor tiene al menos 4 GB de RAM, la memoria disponible debe aumentarse a 2 GB. Para obtener más información sobre cómo hacerlo, consulte las https://cwiki.apache.org/confluence/display/TOMCAT/Memory[Preguntas frecuentes del Tomcat]
+
+Se ejecuta lo siguiente:
+
+----
+exportar CATALINA_OPTS="-Xmx2048M"
+----
+
+[#file-permissions]
+=== Obtengo el siguiente error: "The data directory '/directory' is not writable." ¿Qué debo hacer?
+
+Esto también aplica a errores similares para crear archivos, como `RollingFileManager … unable to create manager for … debug.log`.
+
+Suponiendo que está ejecutando el Tomcat, debe asegurarse que el usuario que ejecuta el Tomcat tenga permisos en el directorio. Para averiguar el usuario que está ejecutando Tomcat en Linux, abra un shell e ingrese el siguiente comando:
+
+----
+$ ps waux | grep tomcat
+----
+
+Si el usuario es un "tomcatuser" y este usuario pertenece al grupo "tomcatgroup", cambie la propiedad del directorio de datos del IPT (y de sus sub-carpetas y archivos) ingresando el siguiente comando:
+
+----
+$ chown -R tomcatuser:tomcatgroup directory
+----
+
+Para asegurarse de que únicamente este usuario tenga permiso de escritura, ingrese el siguiente comando:
+
+----
+$ chmod -R 755 directory
+----
+
+[IMPORTANT]
+====
+Algunos sistemas Linux utilizan sandboxing para proporcionar seguridad adicional. Establecer la propiedad y los permisos de los archivos _no es suficiente_ en estos sistemas. Ver la <<sandboxing, siguiente pregunta>>.
+====
+
+Tenga en cuenta que si está ejecutando su IPT en un sistema operativo Windows, deberá comprobar que su carpeta no haya vuelto a los permisos de solo lectura.
+
+[#sandboxing]
+=== Mis permisos de archivo son correctos, pero sigo viendo errores sobre los permisos de lectura/escritura.
+
+Algunos sistemas Linux tienen protecciones adicionales, denominadas sandboxing de seguridad. En este caso, normalmente hay que conceder permisos adicionales para que Tomcat pueda acceder al directorio de datos. Por ejemplo, en Debian y Ubuntu es necesario añadir una anulación de SystemD:
+
+----
+$ sudo systemctl edit tomcat9.service
+
+# Escriba esto en el archivo que se abre (normalmente estará en blanco), y luego guárdelo:
+[Service]
+ReadWritePaths=/path/to/data/directory/
+
+$ sudo systemctl restart tomcat9
+----
+
+=== ¿Cómo puedo cambiar el idioma predeterminado del IPT?
+
+El idioma por defecto del IPT es el inglés, pero puede cambiarse fácilmente a través de la interfaz de usuario (Administración->Configuración IPT->Idioma por defecto).
+
+Para versiones anteriores del IPT, puede cambiarse mediante configuración manual. Para cambiar el idioma por defecto de inglés a español, por ejemplo, primero localice el archivo `struts.properties` (si el IPT está desplegado en Tomcat, por ejemplo, se encontraría en `tomcat/webapps/ipt/WEB-INF/classes`). Luego actualiza la propiedad `struts.locale` a:
+
+----
+struts.locale=pt
+----
+
+Reinicie el tomcat y el IPT se iniciará en portugués.
+
+Tenga en cuenta que el código de idioma de dos letras debe coincidir con el código utilizado por el IPT. Los idiomas admitidos actualmente son portugués (`pt`), japonés (`ja`), francés (`fr`), español (`es`), chino tradicional (`zh`) y ruso (`ru`).
+
+Tenga en cuenta que cada vez que actualice a una nueva versión del IPT, deberá aplicar el mismo cambio.
+
+=== ¿Cómo puedo cambiar el IPT del modo prueba al modo de producción?
+
+El cambio del modo de prueba al modo de producción del IPT no se puede hacer automáticamente. Esto es por diseño, porque cada modo se conecta a un registro diferente (el modo de prueba utiliza el registro GBIF UAT mientras que el nodo de producción utiliza el registro GBIF Live). 
+
+Por lo tanto, para cambiar al modo de producción, debe configurar una instancia IPT completamente nueva en modo de producción.
+
+Para ahorrar tiempo en restablecer los recursos, puede intentar transferir sus recursos del modo de prueba al IPT de producción. Para hacer esto simplemente cargue un recurso IPT existente utilizando su carpeta de configuración de recursos comprimida. Las instrucciones completas sobre cómo hacer esto se encuentran xref:manage-resources.adoc#upload-a-zipped-ipt-resource-configuration-folder[aquí].
+
+=== ¿Qué conexiones de salida hace el IPT?
+
+Durante la configuración y en modo de prueba, el IPT hace conexiones HTTPS seguras a https://gbrds.gbif-uat.org y a https://tools.gbif.org.
+
+Si se configura en modo de producción, el IPT hace conexiones HTTPS seguras a https://gbrds.gbif.org.
+
+En ambos modos, el IPT hace conexiones HTTP normales a http://rs.gbif.org. Si instala vocabularios adicionales, el IPT los descargará de raw.githubusercontent.com o de eol.org.
+
+Recomendamos configurar su firewall para permitir el acceso saliente en los puertos 80 y 443 a todos los servidores GBIF: `130.225.43.0/24`.
+
+Antes de la versión 2.3.4, las conexiones se realizaban mediante HTTP, en lugar de HTTPS a http://gbrds.gbif.org y http://gbrdsdev.gbif.org. Las conexiones HTTP usan el puerto 80.
+
+=== ¿Cómo puedo configurar mi IPT para asignar DOI a los conjuntos de datos?
+
+Consulte el xref:doi-workflow.adoc[].
+
+== Utilización
+
+=== ¿Por qué los archivos publicados contienen líneas discontinuas?
+El IPT no admite archivos de origen que contienen campos multi línea (campos que incluyen el carácter de nueva línea (`\n`) o saltos de línea (`\r`), incluso si se ha especificado un carácter separador de campos (un carácter que delimita cada campo/columna en un renglón) en la configuración original. 
+
+A menos que se eliminen estos caracteres de salto de línea, el IPT publicará archivos con líneas discontinuas (las columnas aparecerán mezcladas).
+
+Para solucionar este problema, puede eliminar los caracteres de salto de línea del archivo fuente, reemplace el archivo fuente por el nuevo archivo y vuelva a publicar el recurso. Recuerde que al cargar un archivo puede indicarle al IPT que reemplace el archivo con uno nuevo siempre que ambos tengan el mismo nombre. De esa forma, no es necesario rehacer los mapeos.
+
+=== ¿Por qué los archivos publicados no incluyen todos los registros?
+Compruebe el registro de publicación para ver si hay excepciones como:
+
+----
+java.sql.SQLException: Cannot convert value '0000-00-00 00:00:00' from column 65 to TIMESTAMP
+----
+
+esto quiere decir que tiene un valor de fecha que no es válido en su conjunto de datos, que en este caso es `0000-00-00 00:00:00`. 
+
+Para resolver esto, puede actualizar el valor con "Null" y actualizar el recurso. Por lo general, puede basarse en el mensaje de la bitácora para identificar la columna de interés, como en el ejemplo anterior, dice "columna 65", que es la columna 65 en la fuente de datos.
+
+El valor `0000-00-00 00:00:00` en su tabla SQL podría generarse durante la importación, al haber definido la columna "Not Null" y el valor por defecto como `0000-00-00 00:00`.
+
+=== ¿Qué significa el error "No space left on device" y cómo lo soluciono?
+Si encontró una excepción como:
+
+----
+Caused by: java.io.IOException: No space left on device
+----
+
+en su registro de publicación, significa que no queda espacio en la partición del disco que contiene su directorio de datos IPT.
+
+Para solucionar esto, puede:
+
+* Asignar más espacio a esta partición.
+* Mover su directorio de datos IPT a otra partición donde haya mas espacio disponible. (Consulte las xref:installation.adoc[instrucciones de instalación] para cambiar la ubicación del directorio de datos).
+* Liberar espacio en disco (p. ej., eliminar archivos temporales, eliminar aplicaciones no utilizadas, etc.)
+
+=== ¿Cómo cambio la organización que publica mi recurso? El menú desplegable de la página de metadatos básicos está desactivado.
+
+Idealmente, organización publicadora del recurso no debe cambiarse después de que el recurso se haya registrado en GBIF o se le haya asignado un DOI.
+
+Dicho esto, hay dos formas de cambiar la organización publicadora.
+
+La forma más sencilla es volver a publicar el recurso y, a continuación, restablecer la organización publicadora deseada. Para simplificar el proceso, puede volver a crear el conjunto de datos desde su carpeta de recursos IPT comprimida. Encontrará instrucciones sobre cómo hacerlo xref:manage-resources.adoc#upload-a-zipped-ipt-resource-configuration-folder[aquí]. Si migra el recurso de la antigua organización publicadora a la nueva organización publicadora, siga xref:manage-resources.adoc#migrate-a-resource[estas instrucciones]: Por favor, preste mucha atención al paso 5, donde tendrá que pedir a la Mesa de ayuda de GBIF que actualice el Registro de GBIF.
+
+La otra forma de proceder es trabajar directamente en el directorio IPT. Antes de empezar, haga una copia de seguridad de sus archivos. A continuación, edite el archivo resource.xml del conjunto de datos en el que desea trabajar (en su servidor, en la carpeta IPT):
+
+* En `<organisation>`, reemplace el UUID actual por el UUID de la organización que desea que sea la nueva organización publicadora,
+* Reinicie el IPT (reinicie Tomcat, reinicie el servicio IPT, etc.),
+* Compruebe que no aparezca ningún mensaje de error en su IPT al hacer clic en publicar.
+
+Además de eso, *por favor contacte a la Mesa de ayuda de GBIF y pida que la organización sea actualizada en el Registro de GBIF* (esta parte es muy importante).
+
+
+=== ¿Cómo cambio el tipo de un recurso existente?
+
+El tipo de un recurso se deriva de su mapeo con el estándar:
+
+* Si el mapeo con el estándar es a la {latest-dwc-occurrence}[Extensión Occurrence], el tipo es igual a "occurrence".
+* Si el mapeo con el estándar es a la {latest-dwc-taxon}[Extensión Taxon], el tipo es igual a "checklist".
+* Si el mapeo con el estándar es a la {latest-dwc-event}[Extensión Event], el tipo es igual a "sampling-event".
+* Si el mapeo con el estándar no es igual a alguno de los estándares predeterminados del IPT (Occurrence, Taxon o Event), el tipo es igual a "other".
+
+Por lo tanto, para cambiar el tipo de recurso, debe cambiar su mapeo con los términos. Para cambiar un recurso de tipo "occurrence" al tipo "checklist", por ejemplo, simplemente elimine todo el mapeo con los términos de la extensión "occurrence" y luego vuelva a crear el mapeo para los términos de "Taxon". Para finalizar el cambio se debe publicar una nueva versión del recurso. Si el recurso se ha registrado con GBIF, su tipo se actualizará automáticamente después de que se haya vuelto a publicar.
+
+=== ¿Cuáles son algunos trucos para simplificar la creación y el mantenimiento de los metadatos?
+Los conjuntos de datos pueden cambiar con el tiempo. Mantener los metadatos de los conjuntos de datos actualizados puede ser una carga, ya que las inconsistencias pueden comenzar a aparecer con el paso del tiempo. A continuación, se muestra una lista de trucos que puede utilizar para simplificar la creación de los metadatos y facilitar su mantenimiento a través del tiempo:
+
+* use el ORCID de un contacto en lugar de proporcionar su correo electrónico y otros campos que son susceptibles al cambio si la persona cambia de trabajo. Para más información de cómo proporcionar un contacto ORCID consulte xref:manage-resources.adoc#basic-metadata[aquí].
+* para conjuntos de datos que continúan cambiando/creciendo (versus conjuntos de datos estáticos) evite especificar conteos exactos en las descripciones textuales, p. ej., para registros o conteos de taxones.
+* utilice la xref:manage-resources.adoc#citations[función de generación automática] de citas del IPT en lugar de proporcionar una cita de los datos creada manualmente.
+* al ingresar la cobertura taxonómica utilice la importación por medio de la xref:manage-resources.adoc#taxonomic-coverage[función de lista Taxon] del IPT en lugar de proporcionar cada taxón manualmente, uno por uno.
+
+=== ¿Cómo cambio la organización de alojamiento de mi IPT?
+
+WARNING: las instrucciones a continuación asumen que su IPT ya ha sido registrado e implican cambios manuales que requieren competencia técnica.
+
+En primer lugar, asegúrese de que la organización de alojamiento deseada ha sido añadida a su IPT. Puede hacerlo a través de la interfaz de usuario. Si necesita ayuda para añadir una nueva organización a su IPT, consulte xref:administration.adoc#add-organization[esta sección] del manual de usuario.
+
+A continuación, realice los siguientes 2 cambios manuales en el archivo registration2.xml ubicado dentro del folder /config del directorio de datos de su IPT:
+
+. {blank}
++
+[source, xml]
+----
+<registration>
+  <registry>
+    <hostingOrganisation>
+      <key>UUID de la deseada organización de alojo</key>
+----
+
+. {blank}
++
+[source, xml]
+----
+<registration>
+  <registry>
+    <ipt>
+      <organisationKey>UUID de la deseada organización de alojamiento</key>
+----
+
+Reiniciar Tomcat.
+
+Por último presione el botón "actualizar registro" en la página de Edición del Registro de GBIF. Esto propagará el cambio hacia el Registro de GBIF. Para mayor información acerca de esta actualización, puede consultar xref:administration.adoc#edit-gbif-registration[esta sección] del manual de usuario.
+
+=== ¿Cómo restablezco la contraseña del administrador?
+
+Si ha olvidado la contraseña del administrador, el administrador del servidor deberá restablecerla.
+
+Utiliza un editor de texto para abrir el archivo `config/users.xml` que se encuentra en el directorio de datos del IPT. Busca el usuario admin (con `role="Admin"`) y sustituye la contraseña cifrada por `$2a$12$FxYdvOAlQ4cP8q1qU77fZePpdwrXS5PC3zmSYgdZuWlU6XUUe6FRu`. Reinicia el IPT. A continuación, puede iniciar sesión como usuario administrador con la contraseña `Ga_1bxiedrvNHSyK` — por supuesto, esta contraseña debe ser cambiada.
+
+=== ¿Cómo migro un conjunto de datos de una instalación de IPT a otra?
+Este proceso de migración debe realizarse directamente en el servidor siguiendo los siguientes pasos:
+
+. Apague el servidor del IPT anterior, solo para asegurar que nadie haga ningún cambio.
+. En el IPT anterior vaya a `/old-ipt-datadir/resources/[dataset_name]` y copie toda la carpeta del conjunto de datos
+. En el IPT nuevo vaya a `/new-ipt-datadir/resources/` y pegue la carpeta del conjunto de datos
+. Reinicie el nuevo servidor IPT
+. Publique el conjunto de datos en el nuevo IPT (actualiza el punto terminal).
+
+== Indexación por GBIF
+
+=== ¿Cuánto tiempo tarda GBIF en comenzar a (re)indexar mi conjunto de datos?
+
+La respuesta depende de la longitud de la cola de indexación de GBIF, del tamaño de su conjunto de datos y de si el servicio de indexación de GBIF está activado.
+
+Normalmente GBIF tardará entre 5 y 60 minutos en comenzar la indexación de su conjunto de datos. Puede llevar varias horas terminar la indexación de grandes conjuntos de datos una vez que se inician (aquellos con varios millones de registros), así que tenga paciencia. En la parte inferior de la https://www.gbif.org/health[página de salud del sistema de GBIF] se muestra la longitud de la cola de indexación, y la cola completa se puede visualizar en el https://registry.gbif.org/monitoring/running-crawls[monitor de avance].
+
+Si cree que GBIF no ha podido indexar su conjunto de datos con éxito, por favor envíe sus comentarios directamente a través de GBIF.org, o envíe un correo electrónico a la Mesa de ayuda de GBIF <helpdesk@gbif.org> para investigar lo sucedido. Si está interesado en averiguar por qué GBIF puede no haber (re)indexado su conjunto de datos, por favor vea el punto 2 más abajo.
+
+=== ¿Por qué GBIF aún no ha (re)indexado mi conjunto de datos?
+
+Eventualmente, GBIF apaga su servicio de indexación para realizar mantenimiento (vea los enlaces en la pregunta anterior). Esta es la razón más frecuente de por qué los conjuntos de datos no son indexados tan rápido como se espera.
+
+Si cree que GBIF no ha indexado su conjunto de datos, por favor envíe sus comentarios directamente a través de GBIF.org, o envíe un correo electrónico directamente a la Mesa de ayuda de GBIF <helpdesk@gbif.org> para investigar lo sucedido.
+
+=== ¿Con qué frecuencia GBIF reindexa mis conjuntos de datos?
+
+GBIF automáticamente intenta reindexar un conjunto de datos registrado cada vez que se actualiza su registro. Esto sucede cada vez que el conjunto de datos se vuelve a publicar a través del IPT.
+
+Para los conjuntos de datos no publicados mediante el IPT, GBIF automáticamente intenta reindexar cada 7 días todos los conjuntos de datos registrados.
+
+NOTE: GBIF solo reindexará un conjunto de datos si su última fecha de publicación ha cambiado desde la última vez que se indexó.
+
+=== ¿Qué tipos de conjuntos de datos indexa/admite GBIF?
+
+GBIF acepta 4 clases de conjunto de datos descritos xref:how-to-publish.adoc[aquí]. Actualmente, GBIF solo indexa los registros biológicos de especies, que pueden proporcionarse como registros del estándar o como registros de una extensión. En el caso de conjuntos de datos de eventos de muestreo, los registros biológicos de especies de una extensión serán ampliados con información que proviene desde su evento del estándar, siempre que sea posible.
+
+=== ¿Por qué la cita de mi conjunto de datos es diferente en GBIF.org?
+
+El IPT acepta citas de los conjuntos de datos en texto libre, sin embargo, estas se sobrescriben en la página del conjunto de datos en GBIF.org. Puede averiguar por qué en https://www.gbif.org/faq?q=citation[Preguntas frecuentes de GBIF.org].
+
+=== ¿Por qué GBIF no puede acceder a mi IPT a través de HTTPS?
+
+Esto suele deberse a una mala configuración del servidor web (Apache, IIS, Tomcat, etc.). Asegúrese de que puede acceder a su servidor a través de la línea de comandos (`curl https://ipt.example.org`), desde dispositivos externos a la red de su organización (por ejemplo, desde un teléfono personal) y ejecute una https://www.ssllabs.com/ssltest/[Prueba de servidor SSL].
+
+Cualquier error como "unable to get local issuer certificate" o "certificate chain incomplete" normalmente impedirá que los sistemas de GBIF accedan a su IPT.
+
+Para solucionarlos, consulte la documentación de su servidor web o pida consejo a su departamento informático. Por lo general, estos problemas no están relacionados con el IPT.
+
+Un recurso útil para configurar muchos servidores web es https://ssl-config.mozilla.org[Mozilla SSL Configuration Generator], y en https://whatsmychaincert.com/[What's My Chain Cert] encontrará una prueba rápida para el problema más común.
+
+== Indexación por otros
+
+=== ¿Cómo puedo exportar una lista de recursos publicados en mi IPT?
+
+Algunas organizaciones necesitan indexar su propio IPT, a menudo para incluir registros de cada recurso en un sistema público de datos abiertos o similar. El IPT es compatible con DCAT (Vocabulario de catálogo de datos) para permitir esto. La exportación al DCAT está disponible en `/dcat`, por ejemplo, https://ipt.gbif.org/dcat.
+
+Una alternativa es https://www.gbif.org/developer/registry#installations[GBIF Registry Installations API], aunque esto solo incluirá conjuntos de datos publicados en GBIF.

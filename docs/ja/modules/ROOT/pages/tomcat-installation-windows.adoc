@@ -1,0 +1,58 @@
+= Tomcat 8をWindowsにインストールする
+
+WARNING: Tomcat 8 is no longer supported. Search for alternative installation instructions to install Tomcat 9.
+
+このチュートリアルでは、Windows 8.1 ProにApache Tomcat Java Servlet 8をインストールする方法について説明します。このドキュメントは、他のバージョンのTomcatでの動作は確認されていません。詳細については、それぞれのソフトウェアのインストールにフォーカスした説明を参照してください。
+
+== Prerequisites
+以下の条件（ソフトウェア、バージョン）を満たしていることをご確認の上、お進みください。
+
+. Windows 8.1 Proのクライアント版。このチュートリアルは、64ビット版のWindows 8.1 Professionalをベースに書かれています。
+. 最新のセキュリティアップグレード。
+. Java 8 Frameworkがインストールされていること。このチュートリアルは、バージョン jre1.8.0_60 (Java Version 8 Update 60) に基づいて書かれています。JREのインストールは、http://java.com/en/download/ を参照してください。このページは、通常、あなたのOSを検出し、ダウンロードする正しいバージョンのヒントを与えます。JavaがC:\Program Files (x86)\Java\jre8 にインストールされていると仮定します。（Windows 8.1のテスターからの注記：C:\Program FilesディレクトリにJavaをインストールするとうまく動作せず、(x86)フォルダーに入れる必要がありました。）
+. 管理者としてログインします。
+
+== 手順
+
+=== 1. Tomcat 8.xをダウンロード
+
+Tomcat 8 Binary Distribution Core (32-bit/64-bit Windows Service Installer) の最新安定版リリースを https://tomcat.apache.org/download-80.cgi からダウンロードしてください。これにより、apache-tomcat-8.x.x.exe（Safariでダウンロードした場合はapache-tomcat-8.x.tar）という形式のファイルがダウンロードフォルダに置かれるはずです。
+
+=== 2. Tomcat 8.xをインストール
+
+実行ファイルをダブルクリックすると、インストールウィザードが起動します。ロールを変更せずに、*コネクタポート*、*Tomcat管理者ログイン情報*を*入力*します。資格情報を記入し忘れた場合は、Tomcatの設定ディレクトリから``conf/tomcat-users.xml``ファイルを編集し、Tomcatを再起動して、権限をフラッシュする必要があります。(このシナリオをテストしたとき、デフォルトで提案された*コネクタ・ポート*設定が機能したことに注意してください）。
+
+image::screenshots/Capturetomcat1.JPG["Apache Tomcatのセットアップ設定オプション"]
+
+=== 3. Tomcatを実行
+
+C:\Program Files (x86)\Apache Software Foundation\Tomcat 8.0\bin に移動し、**tomcat8**アプリケーションをダブルクリックします。
+
+ターミナルウィンドウに、Tomcatの起動に関するログが表示されるはずです。このとき、
+
+----
+INFO: Server startup in xxxx ms
+----
+
+これでTomcatの準備が整いました。
+
+また、*tomcat8w*アプリケーションを右クリックして「管理者として実行」を選択することで実行できます。サービス設定ペインが表示されるので、Tomcatを一度だけ起動するか、Windows 8を起動するたびに自動的に起動させるかを決めることができます。
+
+タスクマネージャー>サービスタブからTomcatを起動することもできます（Windows 8.1の場合）。
+
+=== 4. Tomcatのテスト
+上記手順5でTomcatが正常に動作していれば、以下のURLでTomcatのWelcomeページが表示されるはずです： http://localhost:8080/
+
+image::screenshots/Capturetomcat2.JPG["Tomcatウェルカムページ"]
+
+セットアップウィザードで入力した管理者資格で、http://localhost:8080/manager/html にアクセスし、IPTをインストールするための ipt.war ファイルをアップロードすることができます。
+
+image::screenshots/Capturetomcat4.JPG["Tomcat管理者ページ"]
+
+=== 5. Tomcatをシャットダウン
+
+ターミナルウィンドウを閉じると、Tomcatがシャットダウンします。
+
+また、tomcat8wでTomcatを起動した場合は、停止ボタンをクリックしてTomcatをシャットダウンしてください。
+
+あるいは、タスクマネージャー>サービスタブで、右クリックして「停止」を選択し、Tomcatを停止します。

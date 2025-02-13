@@ -1,0 +1,50 @@
+= Adding a new License
+
+[WARNING]
+--
+This page contains configuration instructions for advanced IPT users only. Datasets published with a different license to those included by GBIF cannot be published to GBIF, or registered to GBIF.
+
+We recommend publishing a metadata-only dataset instead.
+--
+
+Since IPT v2.2 the IPT offers 3 machine readable licenses to choose from when applying a license to your resource:
+
+* Public Domain (CC0 1.0, technically a waiver)
+* Creative Commons Attribution (CC-BY 4.0)
+* Creative Commons Attribution Non Commercial (CC-BY-NC 4.0)
+
+Each license has a default rights statement associated to it that gets shown to users. For example, if the publisher chooses to apply CC-BY to their resource, this rights statement shown to users is:
+
+[quote]
+This work is licensed under a https://creativecommons.org/licenses/by/4.0/legalcode[Creative Commons Attribution (CC-BY) 4.0 License].
+
+The list of licenses and their rights statements can be modified, however, which is useful for communities that need to apply different licenses to their resources, or that want to include additional usage instructions.
+
+The steps below explain how to configure the IPT with another license to choose from.
+
+== Instructions
+
+Locate the licenses.properties file e.g. `/tomcat7/webapps/ipt/WEB-INF/classes/org/gbif/metadata/eml/licenses.properties`. Open the file in a text editor, and do the following:
+
+. Add a new property defining the license name using the following format:
++
+----
+license.name.<prefix>=Name
+# For example:
+license.name.odcby=Open Data Commons Attribution License (ODC-By) 1.0
+----
+
+. Add a new property defining the license rights statement using the following format:
++
+----
+license.text.<prefix>=Text
+# For example:
+license.text.odcby=This work is licensed under a <a href="http://www.opendatacommons.org/licenses/by/1.0">Open Data Commons Attribution License (ODC-By) 1.0</a>.
+----
+
+. Double check
+.. the _prefix_ of both keys matches,
+.. an HTML anchor defining the license name and URL is included in the text since this is what makes the license machine readable,
+.. the name used in the HTML anchor is the same as name used in the name property above.
+. Backup the licenses.properties file, since it will get overwritten the next time you upgrade your IPT
+. Restart your servlet container (e.g. Tomcat) so that the new configuration takes effect

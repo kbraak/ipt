@@ -1,0 +1,27 @@
+= リソース
+
+== ダーウィンコア・アーカイブのドキュメント
+DwC-Aと略されるダーウィンコア・アーカイブ（Darwin Core Archive）の構造に関する詳細は、ダーウインコアWebサイトの「テキストガイド」セクション（ http://rs.tdwg.org/dwc/terms/guides/text/ ）に記載されています。IPTのDwC-A利用に関する詳細は、xref:darwin-core.adoc[こちら]のページで確認できます。
+
+== GBIFヘルプデスク
+GBIFレジストリなどのGBIFサービスに関する問題を報告するには、helpdesk@gbif.org あてにEメールを送ってください。IPT特有の疑問は、ヘルプデスクに送らず、IPTメーリングリスト（下記参照）まで送ってください。
+
+== GBIFレジストリ
+GBIFに登録されている機関、IPTインスタンス、リソースに関する情報を検索するためのオンラインアプリケーションをご利用ください。https://www.gbif.org/dataset
+
+== IPT GitHubサイト
+https://github.org/gbif/ipt[IPT GitHubサイト]は、IPTのすべてのオープンソースコード、管理、ドキュメントのためのプロジェクトリポジトリです。
+
+== IPT開発者ドキュメント
+手伝いたい、あるいは自分のインストールに最新リビジョンのソースコードを導入したい開発者は、xref:developer-guide.adoc[開発者ガイド]セクションを参照してください。
+
+== IPT課題管理システム
+https://github.com/gbif/ipt/issues[イシュートラッカー]は、IPTソフトウェアとドキュメントにおけるバグレポートと機能要件の管理システムです。
+
+== IPTメーリングリスト
+すべての *IPT管理者*はlink:https://lists.gbif.org/mailman/listinfo/ipt/[IPTメーリングリスト]にサインアップして、新しいリリースとIPTを維持するためのベストプラクティスの通知を受け取ってください。IPTのメンテナンスについて、xref:faq.adoc[FAQ] または xref:index.adoc[ユーザーマニュアル] でも解決しない疑問がありますか？質問をメーリングリストに送って、回答を得ましょう！
+
+link:https://lists.gbif.org/mailman/listinfo/ipt/[IPTメーリングリスト]は、*IPTユーザー*がお互いをサポートするために使用することもできます。IPTのメンテナンスについて、xref:faq.adoc[FAQ] または xref:index.adoc[ユーザーマニュアル] でも解決しない疑問がありますか？質問をメーリングリストに送って、回答を得ましょう！
+
+== IPT テストインストール
+GBIFは、評価およびテスト目的でIPTの機能的なインストールを提供しています。最新リリースのテストインストールは https://ipt.gbif.org/ でご覧いただけます。

@@ -1,0 +1,9 @@
+[WARNING]
+.Obsolete version
+====
+You are reading the manual for version {page-version}, which is out of date. You may wish to read the manual for xref:{latest-manual-version}@releases.adoc[version {latest-manual-version}]. You can choose other versions of the manual with the selectors at the top right or bottom left of the page.
+
+ifeval::["{language}" != "en"]
+Note that the not all manual versions are available in TRANSLATOR_PUT_YOUR_LANGUAGE_HERE.
+endif::[]
+====

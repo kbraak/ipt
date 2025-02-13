@@ -1,0 +1,27 @@
+= Recursos
+
+== Documentación del Archivo Darwin Core 
+Los detalles sobre la estructura de un archivo Darwin Core, abreviado DwC-A, se pueden encontrar en la sección "Guía de texto" del sitio web de Darwin Core: http://rs.tdwg.org/dwc/terms/guides/text/ . Puede encontrar más información sobre el uso de DwC-A por parte del IPT en xref:darwin-core.adoc[esta] página.
+
+== Centro de ayuda de GBIF
+Envíe correos electrónico a helpdesk@gbif.org para informar problemas con los servicios de GBIF, como el Registro de GBIF. No envíe preguntas de ayuda específicas de IPT al centro de ayuda. En su lugar, envíelos a la lista de correo de IPT (ver más abajo).
+
+== Registro de GBIF
+Utilice esta aplicación en línea para encontrar información sobre organizaciones, instancias de IPT y recursos registrados con GBIF: https://www.gbif.org/es/dataset.
+
+== Sitio GitHub del IPT
+El https://github.org/gbif/ipt[sitio de GitHub del IPT] es el repositorio del proyecto para todo el código fuente abierto, la administración y la documentación del IPT.
+
+== Documentación para desarrolladores de IPT
+Los desarrolladores que deseen contribuir o utilizar la última revisión del código fuente para su instalación deben consultar la sección xref:developer-guide.adoc[Guía para desarroladores].
+
+== Seguimiento de problemas del IPT
+El https://github.com/gbif/ipt/issues[seguimiento de problemas] es el informe de errores y el sistema de gestión de solicitudes de funciones para el software y la documentación del IPT.
+
+== Lista de correo del IPT
+Todos los *administradores del IPT* deben registrarse en https://lists.gbif.org/mailman/listinfo/ipt/[Lista de correo del IPT] para recibir notificaciones sobre nuevas versiones y mejores prácticas para mantener su IPT. ¿Tiene alguna pregunta sobre cómo mantener el IPT y no puede encontrar la respuesta en las xref:faq.adoc[preguntas frecuentes] o en el xref:index.adoc[manual del usuario]? ¡Entonces envíe su pregunta a la lista para obtener una respuesta!
+
+La https://lists.gbif.org/mailman/listinfo/ipt/[lista de correo de IPT] también puede ser utilizada por *usuarios de IPT* para apoyarse entre sí. ¿Tiene alguna pregunta sobre cómo usar el IPT y no puede encontrar la respuesta en las xref:faq.adoc[preguntas frecuentes] o en el xref:index.adoc[manual del usuario]? ¡Entonces envíe su pregunta a la lista para obtener una respuesta!
+
+== Instalación de IPT de prueba
+GBIF proporciona una instalación funcional del IPT con fines de evaluación y prueba. La instalación de prueba de la última versión se puede encontrar en https://ipt.gbif.org/.

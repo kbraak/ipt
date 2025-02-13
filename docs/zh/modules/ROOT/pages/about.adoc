@@ -1,0 +1,13 @@
+= 選單：關於
+
+預設的「關於」頁面提供當前已安裝 IPT 的基本資訊。
+
+如果 IPT 尚未註冊，將顯示以下畫面：
+
+image::ipt2/about/IPTAbout.png[]
+
+如果 IPT 已註冊，則顯示以下畫面：
+
+image::ipt2/about/IPTAboutRegistered.png[]
+
+頁面上顯示的資訊可在 xref:administration.adoc#configure-gbif-registration-options[管理 → 設定 GBIF 註冊選項]中進行編輯。

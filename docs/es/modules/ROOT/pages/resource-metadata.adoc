@@ -1,0 +1,66 @@
+= Metadatos del recurso
+
+Descripción y detalles de contacto de un recurso de información sobre biodiversidad donde actualmente no se pueden compartir datos en algún formato digital. Todas las demás clases de datos de GBIF también incluyen esta información básica. Estos metadatos pueden ser una herramienta valiosa para que los investigadores descubran recursos que aún no están disponibles en línea. También es una forma útil de evaluar la importancia y el valor de los recursos no digitales para su futura digitalización. GBIF garantiza que cada conjunto de datos esté asociado con un Identificador de objeto digital (DOI) para facilitar la referenciación.
+
+== Cómo escribir los metadatos de los recursos
+
+image::ipt2/flow-rm.png[]
+
+Finalmente, sus metadatos deben transformarse en un documento de metadatos XML. El XML debe ajustarse al perfil de metadatos de GBIF, que se basa en el Lenguaje de metadatos ecológicos (EML).
+
+No existe una plantilla en Excel para los metadatos de recursos. Utilice el editor de metadatos integrado del IPT para completar los metadatos. El IPT se asegura de que esté en el formato XML válido.
+
+Opcionalmente si sus metadatos están en un formato EML o de Dublin Core, puede cargarlos en esos formatos al IPT. Puede encontrar orientación sobre cómo hacerlo xref:manage-resources.adoc#upload-a-metadata-file[aquí].
+
+Para obtener orientación adicional, puede consultar los <<Conjuntos de datos de ejemplo>>.
+
+=== Plantilla
+
+No existe una plantilla en Excel para los metadatos de recursos. Utilice el editor de metadatos integrado del IPT para completar los metadatos. 
+
+=== Campos obligatorios de los metadatos
+
+* título
+* descripción
+* Organización publicadora
+* Tipo
+* licencia
+* contacto(s)
+* creador(es)
+* proveedor(es) de los metadatos
+
+=== Campos de metadatos recomendados
+
+* metodología de muestreo, en situaciones en las que los datos provienen de eventos de muestreo
+* cita, para garantizar que su conjunto de datos se cite de la manera que desee
+
+== Conjuntos de datos de ejemplo
+
+* Inter-Valley Soil Comparative Survey of the McMurdo Dry Valleys: https://ipt.biodiversity.aq/eml.do?r=ictar_ivscs&v=1.0[EML] / https://ipt.biodiversity.aq/resource.do?r=ictar_ivscs[IPT homepage]
+
+== Preguntas frecuentes:
+
+=== P. ¿Qué debo hacer si mis datos no pueden estar disponibles de manera gratuita?
+
+*R.* Debe dar a conocer su existencia mediante la publicación de sus metadatos. Puede indicar que los datos pueden estar disponibles por solicitud, para fomentar la colaboración y el metaanálisis en el futuro.
+
+=== P. ¿Cómo puedo aplicar una licencia a mi conjunto de datos?
+
+*R.* Utilice el editor de los metadatos integrado del IPT siguiendo xref:applying-license.adoc#dataset-level[estas instrucciones].
+
+Opcionalmente, si sus metadatos están en EML asigne al conjunto de datos una licencia "machine readable" antes de cargarlo al IPT siguiendo xref:applying-license.adoc#supplementary-information[estas instrucciones].
+
+=== P. ¿Puedo añadir un enlace al artículo de datos relacionado con el conjunto de datos?
+
+*R.* Si. Para hacerlo, agregue una cita del artículo a la lista de citas bibliográficas. Tenga especial cuidado de incluir el DOI del artículo como parte de la cita. Debe escribirse como una URL enlazable (p. ej., https://doi.org/10.1038/sdata.2017.16). Esto permitirá descubrir el artículo al leer los metadatos del recurso.
+
+=== P. GBIF asignó un DOI a mi conjunto de datos, ¿Puedo agregarlo a mis metadatos?
+
+*R.* Si. Para hacerlo agregue el DOI escrito como una URL enlazable (p. ej., https://doi.org/10.15468/nc6rxy) en los siguientes lugares:
+
+* Cita con DOI (recuerde activar las citas con xref:manage-resources.adoc#citations[generación automática], para asegurarse de que la cita de su conjunto de datos cumpla con el xref:citation.adoc[formato de buenas prácticas]).
+* Lista de identificadores alternativos
+
+Tenga en cuenta que GBIF sólo asigna un DOI a un conjunto de datos durante el registro si no se le ha asignado previamente un DOI.
+
+También tenga en cuenta que el uso del DOI de GBIF en la cita puede inducir a error a los usuarios, ya que se resuelve en la página del conjunto de datos de GBIF, no en el conjunto de datos en línea. Sin embargo, se prefiere un DOI que usar una URL al conjunto de datos en línea porque garantiza un acceso persistente.

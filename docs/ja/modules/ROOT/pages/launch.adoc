@@ -1,0 +1,84 @@
+= New IPT Version Launch Procedure
+
+== Introduction
+
+A checklist documenting the ordered steps of the release and launch procedure of the IPT. Learn as you go – review and adjust the process to streamline it.
+
+Many players are involved in the process, not least the GBIF Communications team and GBIF Systems Administrator. Make sure they are on standby ready to help before embarking on the launch.
+
+== Pre-release steps
+
+. Label all issues related to version
+** Label issues with issue type (`Bug`, `Enhancement`, `Duplicate`, `Won’t fix`, etc.), used in statistical reporting.
+** Label issues requiring a change in the user manual with `UserManual`.
+** Assign milestone to each issue, used to group all issues addressed since last version was released. For example, here are https://github.com/gbif/ipt/issues?q=is%3Aissue+milestone%3A2.3.5+is%3Aclosed[all issues addressed in version 2.3.5].
+. Finalize work
+** Work on each issue should be considered "Done". The meaning of "Done" being understood and agreed on by the entire team, but ideally this also includes having written automated testing, performed code reviews as well as UI testing.
+. Finalize translations
+** Work translating each language (by volunteer translators in https://crowdin.com/project/gbif-ipt[Crowdin]) should be both 100% translated and approved.
+** The translation pull request from Crowdin should be merged.
+** Open the https://ipt.gbif-uat.org/[UAT IPT] to volunteer translators to verify their work _in vivo_ (see step below).
+. Test release candidate
+** Update the https://ipt.gbif-uat.org/[UAT IPT] with the release candidate. There is a helper script in `/etc/ipt/upgrade`.
+** When it makes sense, invite volunteer testers to join efforts by sending an invitation to the https://lists.gbif.org/mailman/listinfo/ipt[IPT mailing list] explaining how to request an account on the https://ipt.gbif-uat.org/[UAT IPT] and what areas of testing to focus on.
+** Test new features — issues labelled as `Enhancement`. Directly involve the reporter of the enhancement in testing, to verify its implementation meets their expectations.
+** Test bug fixes — issues labelled as `Bug`. Try to reproduce the bug following the detailed instructions provided in the issue description.
+** Test all areas possibly affected by code changes. Build a list of affected areas to test by scanning the commit history.
+** Always ensure that GBIF can index the data published by the IPT, for example using the GBIF Data Validator.
+** Put on different user hats, testing as an "Admin", "Manager" and "Manager with registration rights".
+** Where applicable, test the IPT in both production and test mode.
+** Where applicable, perform cross-browser testing.
+. Update the xref:index.adoc[User Manual].
+** Add/update user manual content – see issues labelled as `UserManual`.
+** After applying all changes in English, send a message using Crowdin to request translators translate the user manual, though note this does not block the software release.
+. Update Release Notes
+** The Release Notes should contain all the information needed to properly upgrade their IPT to the latest version. Typically it contains the following sections:
+*** アップグレード方法
+*** アップグレード後の注意事項
+*** 本リリースにおける重要な変更点
+*** 他に方法がない場合
+
+== Release and public launch steps
+
+. Release the new version using Jenkins
+** Check the WAR, RPM and Docker image have been released!
+** Create a release on GitHub (using the same tag), so people watching the repository are notified.
+. Update GBIF IPTs to new version
+** Update production instances. There is a helper script in `/mnt/auto/ipt-data/upgrade`:
+*** https://cloud.gbif.org/bid[BID IPT] — customized (see below for help).
+*** https://cloud.gbif.org/eubon[EU BON IPT] — customized (see below for help).
+*** https://cloud.gbif.org/griis[GRIIS IPT] — customized (see below for help).
+*** https://cloud.gbif.org/[Regional IPTs] — vanilla IPTs on cloud.gbif.org.
+*** https://giasip.gbif.org[GIASIP IPT] — vanilla. Note this runs in test mode but is treated like it's in production.
+** Update Test/Sandbox instances:
+*** https://ipt.gbif.org/[Demo IPT] — vanilla. Note It is always a good idea to cleanup old resources to save disk space.
+*** https://ipt.gbif-uat.org/[UAT IPT] — vanilla.
+*** https://ipt.gbif-dev.org/[Development IPT] — vanilla.
+*** https://training-ipt-a.gbif.org/[Training IPT A], https://training-ipt-b.gbif.org/[B] and https://training-ipt-c.gbif.org/[C] — customized. This update can be delayed if required by the Participation team.
+*** http://eubon-ipt.gbif-uat.org/[Test EU BON IPT] — vanilla. Seems no longer to be used.
+** Simple customizations for the above IPTs are done by
++
+--
+. changing the logo image in https://github.com/gbif/ipt/blob/master/src/main/webapp/WEB-INF/pages/inc/menu.ftl#L12[menu.ftl#L12],
+. removing the test image in https://github.com/gbif/ipt/blob/master/src/main/webapp/WEB-INF/pages/inc/menu.ftl#L20[menu.ftl#L20] (where applicable) and
+. tweaking the CSS in https://github.com/gbif/ipt/blob/master/src/main/webapp/styles/main.css#L297[main.css#L297].
+
+NOTE: before an upgrade, the custom logo image(s) and CSS need to be backed-up/preserved and then copied back to the expanded data directory.
+--
+
+. For a major or minor release (but not a patch release), add a new version to the user manual
+. Publish blog post
+** Publicize in some detail, select improvements that users will value. For example, here is an example blog post for http://gbif.blogspot.com/2015/03/ipt-v22.html[IPT v2.2].
+** Be sure to acknowledge volunteer translators and coders that contributed to the release.
+** Review the blog post with the help of the GBIF Communications team before publishing.
+. Update xref:releases.adoc[release history].
+** Add section for new version including a link to the .war download, release notes, user manual, how many issues were addressed broken down by type, blog post and a short summary of what changed.
+** Add/update a plan for the next release, or use the generic statement.
+. Announce to https://lists.gbif.org/mailman/listinfo/ipt[IPT mailing list]
+** Keep the message short so that people actually read it, linking to the blog post when applicable that has more detailed information about the release. Here are a couple example announcements for https://lists.gbif.org/pipermail/ipt/2015-March/000591.html[2.2 major release], https://lists.gbif.org/pipermail/ipt/2017-January/000666.html[2.3.3 minor release] and https://lists.gbif.org/pipermail/ipt/2017-March/000671.html[2.3.4 security patch release]
+** Highlight GBIF's vigilance in keeping the IPT secure, while reminding people of the importance of updating their instance with this latest version.
+. Broadcast on social media
+** Done using the https://www.facebook.com/gbifnews[GBIF Facebook] and https://twitter.com/GBIF[GBIF Twitter] accounts via the GBIF Communications team
+. Reward volunteers
+** Say thank you again, in addition to saying it in the blog post and mailing list announcement.
+** Encourage volunteers to include this experience on their CV.

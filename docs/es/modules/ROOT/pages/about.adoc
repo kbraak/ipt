@@ -1,0 +1,13 @@
+= Menú Acerca de
+
+La página predeterminada Acerca de, ofrece información básica sobre la instalación actual del IPT.
+
+Si no se ha registrado el IPT, aparecerá la siguiente página
+
+image::ipt2/about/IPTAbout.png[]
+
+y si el IPT está registrado
+
+image::ipt2/about/IPTAboutRegistered.png[]
+
+La información mostrada en la página se puede editar en xref:administration.adoc#configure-gbif-registration-options[Administración → Opciones de registro en GBIF].

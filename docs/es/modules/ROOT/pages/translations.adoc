@@ -1,0 +1,121 @@
+= Cómo traducir
+
+Tanto la interfaz, como el manual de usuario del IPT se benefician de la internacionalización. La internacionalización es un esfuerzo de la comunidad y todos son bienvenidos a unirse.
+
+La traducción utiliza una herramienta de traducción en línea llamada https://crowdin.com/project/gbif-ipt[Crowdin]. Para unirse, inicie sesión en https://crowdin.com/project/gbif-ipt[Crowdin], seleccione el idioma que desea traducir y haga clic en el botón "Join". Un editor de traducciones se encargará de tu solicitud y te añadirá al equipo de traducción. A continuación, podrá empezar a traducir. La mayoría de la gente encuentra Crowdin fácil e intuitivo de usar. Para obtener ayuda sobre el uso de Crowdin, siempre puede consultar su https://support.crowdin.com5/crowdin-intro/[Introducción a Crowdin].
+
+En el proyecto Crowdin del IPT, el archivo `Glosario` no forma parte ni de la interfaz de usuario ni del manual de usuario, pero se utiliza para comprobar la coherencia de los términos traducidos. Los demás archivos pertenecen a la interfaz de usuario o al manual de usuario.
+
+== Traduciendo la interfaz de usuario
+
+Las traducciones para la interfaz de usuario están contenidas en el fichero `ApplicationResources_en.properties`. Puede pedir a mailto:helpdesk@gbif.org[la Mesa de ayuda] una cuenta en https://ipt.gbif-uat.org/[el IPT de desarrollo de GBIF], donde se aplicarán las nuevas traducciones.
+
+image::ipt2/v22/Crowdin-Join.png[]
+
+=== Idiomas actuales
+
+* Francés
+* Japonés
+* Portugués
+* Ruso
+* Español
+* Chino tradicional
+* Persa (incompleto)
+
+Si desea traducir la interfaz de usuario a otro idioma, envíe un correo electrónico a helpdesk@gbif.org.
+
+== Traducción el manual de usuario
+
+Las traducciones del manual de usuario están en la carpeta de Crowdin `docs/translations`. El manual de usuario está escrito en https://docs.asciidoctor.org/asciidoc/latest/[Asciidoctor], y es necesaria cierta sintaxis en las traducciones , por ejemplo, `+++*negrita*, _cursiva_ o `texto monoespaciado` +++`.
+
+Hay que prestar especial atención a que las referencias cruzadas (enlaces entre páginas y/o secciones dentro de las páginas) funcionen en las versiones traducidas.
+
+TIP: Las traducciones nuevas añadidas mediante Crowdin deberían aparecer en https://ipt.gbif-uat.org/manual/[versión UAT de este manual] entre 15 y 60 minutos después. Puede usar esta función para verificar que sus traducciones aparezcan de manera adecuada.
+
+=== Hipervínculos simples
+
+Al traducirlos, es conveniente enlazar con una versión traducida de la página si el contenido es equivalente. Traduzca de la siguiente manera:
+
+[source, asciidoctor]
+----
+https://www.gbif.org/the-gbif-network[La diversidad de los participantes en GBIF]
+
+https://www.gbif.org/es/the-gbif-network[los diversos Aliados de GBIF]
+----
+
+Tenga en cuenta que el texto del enlace (entre `[corchetes cuadrados]`) ha sido traducido.
+
+=== Referencias cruzadas en la misma página
+
+Se trata de enlaces a lugares dentro de una página y suelen hacerse con la sintaxis de referencia cruzada: `\<<Encabezado de destino>>`, y a veces con la forma `\<<TEncabezado de destino,texto mostrado>>` cuando el texto a mostrar no debe ser el mismo que el del encabezado al que apunta el enlace.
+
+Por lo tanto, una traducción cruzada es así:
+
+[source, asciidoctor]
+----
+clic en el botón "Agregar" para abrir la <<Página de selección de la fuente de datos>>.
+
+clic en el botón "Agregar" para abrir la <<Página de selección del Conjunto de Datos>>.
+----
+
+=== Referencias cruzadas de diferentes páginas
+
+Los enlaces más sencillos a las diferentes páginas se encuentran en la parte superior de la página enlazada. Tienen la forma `\xref:filename.adoc[texto a mostrar]`. Sólo debe traducirse el texto a mostrar, el nombre del archivo no cambia:
+
+[source, asciidoc]
+----
+consulte la página xref:doi-workflow.adoc[Flujos de trabajo para el DOI]
+
+consulte la página de xref:doi-workflow.adoc[flujo de trabajo de los DOIs].
+----
+
+Los enlaces a una sección específica dentro de otra página son más complicados. Estos deben utilizar el enlace objetivo, que se genera automáticamente en cada encabezado: los espacios en el texto del encabezado se sustituyen por guiones (`-`) y el resultado se convierte a minúsculas. En un navegador web, se muestran en la barra de URL tras un `#`, en el menú "Contenido" o con el símbolo "§" junto a un encabezado.
+
+La referencia cruzada se escribe entonces como `\xref:filename.adoc#link-target[texto a mostrar]`, por ejemplo `\xref:manage-resources.adoc#resource-managers[leer sobre gestores de recursos]` se muestra como xref:manage-resources.adoc#resource-managers[leer sobre gestores de recursos].
+
+Un encabezado en inglés, `Source Data`, tiene como enlace objetivo `source-data`. La traducción al español del encabezado, `Conjunto de datos`, tiene como enlace objetivo `conjunto-de-datos`.
+
+[source, asciidoc]
+----
+Los archivos se pueden cargar ... cuando xref:manage-resources.adoc#source-data[se agregan nuevos archivos de datos fuente].
+
+La carga de archivos al se puede … cuando se xref:manage-resources.adoc#conjunto-de-datos[agregan nuevos archivos de conjuntos de datos].
+----
+
+=== Imágenes y descargas
+
+Algunas imágenes de capturas de pantalla pueden traducirse y otras (sin texto en inglés) pueden ser las mismas en todos los idiomas. Por defecto, se utiliza la misma imagen en todos los idiomas. Se debe subir una imagen diferente en https://github.com/gbif/ipt[GitHub]. Cree una imagen con el mismo nombre de archivo y la misma ruta, excepto con `en` cambiado al idioma de destino.
+
+Por ejemplo, la imagen por defecto (Inglés) que se muestra en xref:home.adoc[página de menú de inicio] se guarda en GitHub en https://github.com/gbif/ipt/blob/master/docs/en/modules/ROOT/assets/images/ipt2/home/IPTHome.png[`docs/en/modules/ROOT/assets/images/ipt2/home/IPTHome.png`] y su traducción a español se encuentra en https://github.com/gbif/ipt/blob/master/docs/es/modules/ROOT/assets/images/ipt2/home/IPTHome.png[`docs/es/modules/ROOT/assets/images/ipt2/home/IPTHome.png`].
+
+La sintaxis para incluir esta imagen en el manual, `image::ipt2/home/IPTHome.png[]`, no requiere traducción.
+
+=== Japonés, Chino y Coreano.
+
+Estos idiomas no utilizan espacios entre palabras, por lo que la sintaxis abreviada usada en inglés o español no funcionarán.
+
+* Los hipervínculos simples deben tener el prefijo `link:`. La forma abreviada sin `link:` solo funciona si hay un espacio antes de `https:` o `http:`
++
+[source, asciidoc]
+----
+Asegúrese de inscribirse en https://lists.gbif.org/mailman/listinfo/ipt/[Lista de correo del IPT], que sirve como grupo de apoyo para los usuarios de IPT.
+
+IPTユーザーのサポートグループであるlink:https://lists.gbif.org/mailman/listinfo/ipt/[IPTメーリングリスト]に必ずご登録ください。
+----
+
+* El texto *Negrita*, _cursiva_ y `monoespaciado` formateado con caracteres `*`, `_` y `++++`+++` solo funciona si hay espacios por fuera de esos caracteres. Donde no haya espacios, los caracteres deben ser duplicados:
++
+[source, asciidoc]
+----
+Haga doble clic en el ejecutable para iniciar el asistente de instalación. *Llene la información para especificar *el puerto del conector, las credenciales de inicio de sesión del administrador de Tomcat* sin cambiar los Roles. Si olvida proporcionar la información de las credenciales, tendrá que editar el archivo `conf/tomcat-users.xml` del directorio de configuración de Tomcat, y luego reiniciar Tomcat para eliminar los privilegios. (Tenga en cuenta que al probar este escenario, la configuración por defecto sugerida de *puerto conector* funcionó).
+
+実行ファイルをダブルクリックすると、インストールウィザードが起動します。ロールを変更せずに、コネクタポート、**Tomcat管理者ログイン情報**を**入力**します。資格情報を記入し忘れた場合は、Tomcatの設定ディレクトリから``conf/tomcat-users.xml``ファイルを編集し、Tomcatを再起動して、権限をフラッシュする必要があります。(このシナリオをテストしたとき、デフォルトで提案された**コネクタ・ポート**設定が機能したことに注意してください）。
+----
+
+=== Idiomas
+
+* Español (completo)
+* Japonés (completo)
+* Chino tradicional (iniciado)
+
+Si desea traducir el manual de usuario a otro idioma, envíe un correo electrónico a helpdesk@gbif.org. No es necesario traducir todo el manual: las secciones no traducidas se mostrarán en inglés.

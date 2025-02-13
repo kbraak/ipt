@@ -1,0 +1,65 @@
+= Bases de datos compatibles
+
+Esta sección proporciona información sobre los tipos de bases de datos que son aceptadas por el IPT
+
+== Bases de datos compatibles por defecto
+
+El IPT puede utilizar conexiones a bases de datos para importar datos de tablas o imágenes. Actualmente, las siguientes bases de datos son compatibles para su uso inmediato:
+
+* Microsoft SQL Server
+* MySQL
+* Oracle
+* PostgreSQL
+* Sybase
+
+== Añadir nuevos controladores JDBC
+
+Si ejecuta el IPT dentro de un contenedor web (como Tomcat), puede agregar sus propios controladores JDBC al IPT. Esto le permite soportar bases de datos diferentes o cambiar la configuración de la conexión para uno de los tipos de bases de datos existentes.
+
+Los pasos siguientes asumen que tiene un IPT en funcionamiento instalado con un WAR, es decir, tiene una carpeta `ipt` (o como haya nombrado su instancia) en la carpeta de aplicaciones web de su servidor de aplicaciones. El IPT debe detenerse antes de comenzar a agregar un controlador.
+
+=== Añadir JAR del controlador JDBC a la ruta de clase
+
+Primero, obtenga el archivo JAR del controlador que quiera añadir, por ejemplo puede descargar el jar de SQLite aquí: https://bitbucket.org/xerial/sqlite-jdbc/downloads
+
+Debe copiar este JAR en la ruta de clase de su aplicación web. Lo más sencillo es copiarlo al directorio `ipt/WEB-INF/lib`.
+
+=== Modifique jdbc.properties
+
+Para entender qué controladores están disponibles para el IPT y cómo construirle la URL del JDBC, mantenemos un sencillo archivo de propiedades con toda la información. Abra `ipt/WEB-INF/classes/jdbc.properties` y explore las entradas existentes, por ejemplo para PostgreSQL:
+
+----
+# PostgreSQL driver
+pgsql.title=PostgreSQL
+pgsql.driver=org.postgresql.Driver
+pgsql.url=jdbc:postgresql://{host}/{database}
+pgsql.limitType=LIMIT
+----
+
+Hay 4 propiedades que necesita añadir para cada controlador. Las 4 tienen que empezar con el mismo prefijo que puede elegir libremente sin ningún otro significado:
+
+* `title`: el título que se mostrará en el IPT para este controlador
+* `driver`: La clase de controlador java que usará cuando se conecte
+* `url`: Una plantilla para crear la URL para conectarse. Existen 2 variables que pueden ser usadas en la cadena de la URL que serán reemplazadas por la configuración actual: `\{host}` y `\{database}`
+* `limitType`: cómo limitar la cantidad de datos retornados. Posibles valores son `LIMIT`, `TOP`, `ROWNUM`. Esto es específico del driver.
+
+En el ejemplo de PostgreSQL anterior, y con referencia a https://jdbc.postgresql.org/documentation/head/connect.html[Documentación del controlador PostgreSQL], el siguiente cambio habilitaría una conexión cifrada:
+
+----
+pgsql.url=jdbc:postgresql://{host}/{database}?sslmode=require
+----
+
+El siguiente ejemplo es para un controlador SQLite. Este se conecta a un archivo, por lo que no se usa `\{host}` en la plantilla URL:
+
+----
+# SQLite driver
+# uses files only, so {host} is ignored
+# database example on Windows: C:/work/mydatabase.db
+# database example on Linux: /home/leo/work/mydatabase.db
+sqlite.title=SQLite
+sqlite.driver=org.sqlite.JDBC
+sqlite.url=jdbc:sqlite:{database}
+sqlite.limitType=LIMIT
+----
+
+Ahora puede reiniciar el IPT y utilizar el nuevo controlador para mapear fuentes de datos SQLite.

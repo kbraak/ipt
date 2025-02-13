@@ -1,0 +1,54 @@
+= Manual del usuario del GBIF Integrated Publishing Toolkit (IPT)
+
+_Para obtener información sobre la última versión, incluyendo las descargas, consulte la página de xref:releases.adoc[versiones]._
+
+El Integrated Publishing Toolkit (IPT) de GBIF es una aplicación web de código abierto, disponible gratuitamente, que facilita la publicación de cuatro tipos de información relacionada con la biodiversidad:
+
+. Datos primarios sobre registros biológicos
+. Listas de chequeo taxonómico
+. Datos de eventos de muestreo
+. metadatos generales sobre las fuentes de datos.
+
+Una instancia del IPT, así como los datos y metadatos registrados a través del mismo, están conectados al Registro de GBIF, indexados para su consulta a través de la red y el portal de GBIF y disponibles para uso público. El IPT también puede configurarse con una cuenta de DataCite para asignar DOIs a los conjuntos de datos, transformándolo en un repositorio de datos.
+
+Fundada y financiada por los gobiernos en el año 2001, el Sistema Global de Información en Biodiversidad (GBIF, por sus siglas en inglés) es la iniciativa multilateral más grande del mundo, creada para facilitar el acceso libre a datos sobre biodiversidad a través de Internet. Entre los diversos https://www.gbif.org/es/participation/participant-list[participantes de GBIF] se incluyen principalmente países y organizaciones internacionales. GBIF también ha constituido alianzas formales con importantes organismos que son producto de tratados internacionales. La misión de GBIF consiste en promover y facilitar el acceso libre y gratuito a datos sobre biodiversidad en todo el mundo, a través de Internet, para apoyar a la ciencia, la conservación y el desarrollo sostenible. Puede obtener más información acerca de GBIF en https://www.gbif.org/es/[GBIF.org].
+
+Múltiples factores han servido como motivación para que GBIF lidere el desarrollo del IPT:
+
+* Las limitaciones de aplicaciones y protocolos anteriores (DiGIR, TAPIR, BioCASe) para publicar y transferir fácilmente conjuntos de datos de gran tamaño;
+* La necesidad de reducir la carga en los servidores de los publicadores y de GBIF durante el proceso de indexación. Esto se debe a que el proceso de indexación desde DiGIR, TAPIR, o BioCASe se convierte en una carga pesada debido a las interacciones requerimiento-respuesta HTTP repetidas;
+* La necesidad de agilizar el proceso de indexación de los conjuntos de datos sobre biodiversidad;
+* La necesidad de ofrecer beneficios y servicios adicionales a los publicadores de datos para incentivar la publicación;
+* La carencia de herramientas apropiadas para la publicación de determinado tipo de datos sobre biodiversidad, tales como listas de chequeo y metadatos.
+
+Para comprender cómo funciona el IPT, intente ver esta demostración en vivo concisa de 25 minutos que muestra cómo un conjunto de datos se publica y registra correctamente a través de GBIF.org.
+
+[.responsive-video]
+.Cómo publicar datos sobre biodiversidad a través de GBIF.org usando el IPT
+video::eDH9IoTrMVE[youtube, width=100%]
+
+== Usuarios
+
+Si solo está interesado en probar el IPT, solicite una cuenta en https://ipt.gbif.org/[IPT Demo] enviando un correo electrónico a helpdesk@gbif.org.
+
+The simplest way to begin using the IPT is to request a free account on a https://www.gbif.org/data-hosting-centres[trusted data hosting centre^] allowing you to manage your own datasets and publish them through GBIF.org without the hassle of setting up and maintaining the IPT on your own server.
+
+Otherwise if want to setup your own instance of the IPT the xref:getting-started.adoc[Getting Started Guide] is your entry point.
+
+NOTE: Asegúrese de registrarse en https://lists.gbif.org/mailman/listinfo/ipt/[Lista de correo IPT], que sirve como grupo de apoyo para los usuarios del IPT. Es esencial que el IPT se mantenga actualizado para que sea lo más seguro y robusto posible, por lo que si usted es responsable de administrar un IPT, debe registrarse para recibir notificaciones de nuevas versiones para que pueda actualizar de inmediato.
+
+== Desarrolladores
+
+El desarrollo principal del IPT está dirigido por GBIF, pero la codificación es un esfuerzo de la comunidad y todos son bienvenidos a unirse. Empiece por navegar los https://github.com/gbif/ipt/issues[Issues Abiertos] para encontrar algo en lo que le gustaría empezar a trabajar. Tenga en cuenta que las contribuciones son bienvenidas en forma de https://help.github.com/articles/creating-a-pull-request/[pull request] utilizando una rama o bifurcación del repositorio. Las instrucciones completas dirigidas para desarrolladores se pueden encontrar xref:developer-guide.adoc[aquí].
+
+== Traductores
+
+La interfaz de usuario y el manual de IPT necesitan internacionalización, pero es un esfuerzo de la comunidad y todos son bienvenidos a unirse. Las instrucciones completas dirigidas a los traductores se pueden encontrar xref:translations.adoc[here].
+
+Gracias a un enorme esfuerzo de la comunidad y al aprovechar el poder de la herramienta de traducción https://crowdin.com/project/gbif-ipt[Crowdin], la interfaz de usuario ya se ha traducido a siete idiomas diferentes: inglés, francés, español , chino tradicional, portugués brasileño, japonés y ruso.
+
+== Agradecimientos
+
+Un gran número de voluntarios dedicados contribuyen al éxito de este software. Con su ayuda, el IPT se ha convertido en una herramienta exitosa que se utiliza en todo el mundo.
+
+https://crowdin.com/[Crowdin] amablemente apoya este proyecto de código abierto al darle a GBIF acceso gratuito a su plataforma de gestión de traducciones. Crowdin permite gestionar un gran número de traducciones simultáneas.

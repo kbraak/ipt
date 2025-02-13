@@ -1,0 +1,63 @@
+= Formato de citas de los conjuntos de datos
+
+NOTE: el formato de citas utilizado en el IPT no es el utilizado por GBIF.org. Explore https://www.gbif.org/faq?q=citation para obtener mayor información sobre este tema.
+
+== Introducción
+
+Desde la v.2.2 del IPT, los publicadores de datos pueden elegir permitir al IPT autogenerar un cita para su conjunto de datos. Antes, los publicadores eran quienes tenían que crear su propia cita.
+
+El formato de cita autogenerada incluye el número de versión y el DOI del conjunto de datos. Los lectores humanos pueden utilizar el DOI para vincular la página principal del conjunto de datos y pueden utilizar el número de versión para localizar y descargar la versión exacta. Esto permite hacer un seguimiento de los resultados científicos basados en el uso de un conjunto de datos.
+
+A continuación se describe en detalle el formato de citas del IPT. Es importante tener en cuenta que el formato está basado en el formato de citas preferido por DataCite y es acorde a la https://www.force11.org/datacitation[Declaración joint de los principios de citado de datos]. Para más información sobre el formato de DataCite, puede dirijirse a la Sección 2.2 Citas de su http://schema.datacite.org/meta/kernel-3/doc/DataCite-MetadataKernel_v3.0.pdf[Esquema de metadatos]. Cada parte de la cita se describe en la siguiente tabla, incluyendo después varios ejemplos.
+
+== Formato de la cita
+
+----
+Creadores¹ (AñoPublicación²): Título³. Versión⁴. Publicador⁵. TipoRecurso⁶. Identificador⁷
+----
+
+Explicación de las 7 partes de la cita:
+
+[cols="2"]
+|===
+| Parte de la cita
+| Descripción
+
+| 1. Creadores
+| Uno o más individuos, grupos o instituciones responsables de la creación del conjunto de datos. Todos los contribuyentes del conjunto de datos deberían ser enumerados, ver  https://www.force11.org/datacitation#JDCP2[principio 2 de citas de datos]. Los creadores deben ser conscientes, sin embargo, de que la lista completa puede ser recortada por la Revista durante la maquetación (p. ej., de acuerdo a las http://www.nature.com/sdata/for-authors/submission-guidelines#references[guías de Nature] recortarán a partir del sexto creador). Los creadores deben incluir primero el apellido, seguido de las iniciales de sus nombres. Los creadores son incluidos en función de la importancia de su rol en la creación del conjunto de datos, siendo el creador más importante el que aparezca primero. Los creadores van separados por comas.
+
+| 2. AñoPublicación
+| Año en que la versión del conjunto de datos fue publicada.
+
+| 3. Título
+| Título del conjunto de datos. Solo la primera palabra del título debería ir en mayúsculas y el título debería ser escrito tal como aparece en el trabajo citado, concluyendo con un punto final.
+
+| 4. Versión
+| La versión del conjunto de datos. El IPT asigna un nuevo número de versión cada vez que el conjunto de datos se publica. La versión debería estar escrita así "Versión versión_mayor.versión_menor". El número de versión permite la "identificación, acceso, y verificación de los datos específicos que respaldan una solicitud", ver https://www.force11.org/datacitation#JDCP7[principio 7 de citas de datos].
+
+| 5. Publicador
+| Institución que publica (y posee) el conjunto de datos. Para continuar dando crédito al repositorio que aloja los datos, el nombre del repositorio podría ser incluido en la sección de creadores.
+
+| 6. TipoRecurso
+| Tipo de recurso publicado. Una descripción del tipo de recurso que se forma utilizando la pareja TipoGeneralRecurso/TipoRecurso: TipoGeneralRecurso siempre será igual a "Conjunto de datos", y el TipoRecurso es un único término que concreta el tipo específico de conjunto de datos, p. ej., "Registros biológicos" o "Listado de especies".
+
+| 7. Identificador
+| El Identificador de Objeto Digital (DOI, por sus siglas en inglés) que dirige al conjunto de datos online. Si no existe DOI, en su lugar se debe usar un enlace a la página del conjunto de datos en el IPT. Es altamente preferible utilizar un DOI, ya que el DOI garantiza acceso persistente, sin importar si la URL del IPT cambia. Para las futuras citas, DataCite recomienda que los DOIs se muestren como URLs permanentes y clicables.
+|===
+
+== Citas de ejemplo
+
+.Ejemplo de cita para un conjunto de datos de registros biológicos, con creador institucional y DOI:
+****
+Biodiversity Institute of Ontario (2011) Migratory birds of Ontario. Versión 2.1. Universidad de Guelph. Dataset/Occurrence. https://doi.org/10.5886/qzxxd2pa
+****
+
+.Ejemplo de cita para un conjunto de datos de lista de chequeo, con más de 9 creadores y un DOI:
+****
+Brouillet L, Desmet P, Coursol F, Meades SJ, Favreau M, Anions M, Bélisle P, Gendreau C, Shorthouse D (2010) Database of vascular plants of Canada. Versión 3.1. Université de Montréal Biodiversity Centre. Conjunto de datos/Lista de chequeo. https://doi.org/10.5886/1bft7W5f
+****
+
+.Ejemplo de cita para un conjunto de datos de registro biológico, con 3 creadores y sin DOI:
+****
+Harihar A, Pandav B, Hussein M (2014) Camera trap database of Tigers from Rajaji National Park, Uttarakhand. Versión 1.0. Wildlife Institute of India. Conjunto de datos/Registros biológicos. http://ibif.gov.in:8080/ipt/resource.do?r=camera_trap_rajaji_np
+****

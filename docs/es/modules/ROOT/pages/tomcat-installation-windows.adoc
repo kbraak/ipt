@@ -1,0 +1,58 @@
+= Instalación de Tomcat 8 en Windows
+
+WARNING: Tomcat 8 ya no es compatible. Busque instrucciones de instalación alternativas para instalar Tomcat 9.
+
+Este tutorial explica cómo instalar Apache Tomcat Java Servlet 8 en Windows Pro 8.1. Este documento no está probado para funcionar con otras versiones de Tomcat. Para obtener más información, consulte la documentación específica para la versión de software que requiere instalar.
+
+== Prerrequisitos
+Por favor asegúrese de cumplir las siguientes condiciones (software y versión) antes de continuar.
+
+. La versión de cliente de Windows Pro 8.1. Este tutorial está escrito con base en la versión de 64 bits de Windows Professional 8.1
+. Las últimas actualizaciones de seguridad.
+. Instalación de Java 8 Framework. Este tutorial está escrito con base en la versión jre1.8.0_60 (Java Version 8 Update 60). Consulte http://java.com/en/download/ para instalar JRE. Esta página generalmente detectará su sistema operativo y lo guiará a la versión correcta para descargar. Suponiendo que Java esté instalado en C:\Archivos de programa (x86)\Java\jre8. (Nota del editor: En Windows 8.1, intenté instalar Java en el directorio C:\Archivos de programa y no funcionó. Tuve que instalarlo en la carpeta (x86)).
+. Inicio de sesión como administrador.
+
+== Pasos
+
+=== 1. Descargue Tomcat 8.x
+
+Descargue la versión estable más reciente de Tomcat 8 Binary Distribution Core (32-bit/64-bit servicio Windows Installer) desde https://tomcat.apache.org/download-80.cgi. Esto debería descargar un archivo con el formato apache-tomcat-8.x.x.exe (o apache-tomcat-8.x.x.tar si lo descarga con Safari) en su carpeta de "descargas".
+
+=== 2. Instalación de Tomcat 8.x
+
+Haga doble clic en el ejecutable para iniciar el asistente de instalación. *Llene* la información necesaria para especificar *el puerto del conector*, *las credenciales de inicio de sesión del administrador de Tomcat* sin cambiar los roles. Si olvida proporcionar la información de la credencial, tendrá que editar el archivo `conf/tomcat-users.xml` del directorio de configuración de Tomcat, luego debe reiniciar Tomcat para actualizar los permisos. (Tenga en cuenta que al probar este escenario, la configuración predeterminada del *puerto del conector* sugerida funcionó correctamente).
+
+image::screenshots/Capturetomcat1.JPG["Opciones de configuración de la instalación de Apache Tomcat"]
+
+=== 3. Ejecutar Tomcat
+
+Vaya a C: \Archivos de programa (x86)\Apache Software Foundation\Tomcat 8.0\ bin Haga doble clic en la aplicación *tomcat8*.
+
+Debería ver una ventana de consola que muestra el registro de los comandos de inicio de Tomcat. Cuando vea
+
+----
+INFO: Server startup in xxxx ms
+----
+
+Significa que el Tomcat ha iniciado.
+
+Hacer clic con el botón derecho y elegir "ejecutar como administrador" permite ejecutar la aplicación *tomcat8w*. Aparecerá un panel de configuración del servicio y puede decidir sí desea ejecutar Tomcat por una vez o hacer que se inicie automáticamente cada vez que inicie Windows 8.
+
+También puede iniciar Tomcat (en Windows 8.1) desde el Administrador de tareas > pestaña Servicios.
+
+=== 4. Prueba de Tomcat
+Si Tomcat se está ejecutando correctamente siguiendo el paso anterior, debería poder ver la página de bienvenida de Tomcat en la siguiente URL: http://localhost:8080/
+
+image::screenshots/Capturetomcat2.JPG["Página de bienvenida de Tomcat"]
+
+Con las credenciales de administrador que ingresó durante el asistente de configuración, puede acceder a http://localhost:8080/manager/html donde puede cargar el archivo ipt.war para instalar el IPT.
+
+image::screenshots/Capturetomcat4.JPG["Página de administración de Tomcat"]
+
+=== 5. Apagar Tomcat
+
+Al cerrar la ventana de la terminal se cerrará Tomcat.
+
+O, si abrió Tomcat usando tomcat8w, puede detener Tomcat haciendo clic en el botón de parada.
+
+O, en el Administrador de tareas> pestaña Servicios, detenga Tomcat al hacer "clic derecho" y seleccionando "stop".

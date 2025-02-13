@@ -1,0 +1,257 @@
+= Guía práctica de los Archivos Darwin Core
+
+Versión 2.2
+
+image::figures/cover_art_cicindelinae.png[]
+
+== Control del documento
+
+|===
+| Versión | Descripción                  | Fecha de lanzamiento | Autor(es)
+
+| http://links.gbif.org/gbif_dwc-a_how_to_guide_en_v1[1.0]    | Revisión y adiciones de contenido | Abril 2011     | David Remsen, Markus Döring
+| 2.0     | Transferido a wiki, ediciones importantes | 9 Mayo 2017      | Kyle Braak
+| https://github.com/gbif/ipt/wiki/DwCAHowToGuide[2.1]     | Ediciones menores, actualización de enlaces, etc.  | 8 Febrero 2021 | Matthew Blissett
+| xref:dwca-guide.adoc[2.2]     | Conversión a AsciiDoc  | 25 Mayo 2021 | Matthew Blissett
+|===
+
+== Citación sugerida
+
+// The date uses the last change, ignoring formatting etc.
+> GBIF (2021) Guía rápida de los Archivos Darwin Core, versión 2.2. Copenhagen: Secretaría de GBIF. https://ipt.gbif.org/manual/en/ipt/{page-version}/dwca-guide
+
+_Crédito de la portada: Kim Wismann, Cicindelinae_
+
+== ¿Qué es un Archivo Darwin Core (DwC-A)?
+
+El Archivo Darwin Core (DwC-A) es un estándar de datos informáticos que utiliza los términos de Darwin Core para producir un conjunto de datos único e independiente para compartir niveles de especies (taxonómicos), datos de registros biológicos y datos de eventos de muestreo. Un archivo es un conjunto de archivos de texto, en formato estándar delimitado por comas o tabulaciones, con un archivo descriptor sencillo (denominado *meta.xml*) para informar a otros sobre cómo están organizado los archivos. El formato está definido en la https://dwc.tdwg.org/text/[Guía de textos Darwin Core]. *Es el formato preferido para la publicación de datos en la red de GBIF.*
+
+La idea central de un archivo es que sus archivos de datos estén organizados de manera lógica en forma de estrella, con un archivo central de datos rodeado de un número de archivos de extensión de datos. Los archivo central y de extensión contienen registros de datos, uno por línea. Cada registro de extensión (o ‘fila del fichero de extensión’) apunta a un registro en el fichero central, de esta forma, pueden existir muchos registros de extensión para un mismo registro en el fichero central. A veces esto se denomina como "esquema en forma de estrella".
+
+image::figures/dwc-a_event.png["Los componentes de un Archivo Darwin Core."]
+
+Compartir conjuntos de datos completos como DwC-A permite la transferencia sencilla y eficiente de todo el conjunto de datos. (Sistemas anteriores, como http://digir.sourceforge.net/[DiGIR] y http://tdwg.github.io/tapir/docs/tdwg_tapir_specification_2010-05-05.html[TAPIR], requerían que el sistema de GBIF hiciera miles de solicitudes para cargar todos los datos en un único conjunto de datos, existiendo riesgo de pérdida de datos.)
+
+La elaboración de un DwC-A requiere del uso de identificadores estables para registros centrales pero no para las extensiones. Para cualquier tipo de datos compartido es entonces necesario que haya algún tipo de identificador de registro local. Es una buena práctica mantener, con los datos originales, identificadores que sean estables en el tiempo y que no sean reutilizados cuando se elimine el registro. Si es posible, deben proveerse identificadores globales únicos (GUID, por sus siglas en inglés) en vez de otros identificadores locales. Diríjase a http://links.gbif.org/persistent_identifiers_guide_en_v1.pdf[Guía para principiantes sobre identificadores persistentes] para obtener más información sobre los GUIDs. Este identificador se incluye en el "core ID" en DwC-As y el término Darwin Core específico con el que se corresponde es dependiente del tipo de datos que está siendo publicado. 
+
+=== Componentes del DwC-A
+
+Un DwC-A puede contener un único archivo de datos o múltiples archivos, dependiendo del alcance de los datos publicados. Los tipos específicos de datos que se pueden incluir en un Archivo son los siguientes:
+
+. *Un archivo core de datos obligatorio* consta de un conjunto de http://rs.tdwg.org/dwc/terms/[términos Darwin Core] estándar. El archivo de datos tiene un formato de *texto por campos*, donde los registros de datos se expresan como filas de texto y los elementos (columnas) de datos están separados con un delimitador estándar como una tabulación o una coma (denominado comúnmente como CSV o link:https://en.wikipedia.org/wiki/Comma-separated_values[‘archivos de valores separados por coma]). Opcionalmente, la primera fila del archivo de datos puede contener datos o representar una "fila de encabezado". En general, si se incluye una fila de encabezado, ésta contiene los nombres de los términos Darwin Core representados en las filas posteriores de datos.
+  Actualmente, GBIF acepta los siguientes tres tipos de datos de biodiversidad como base para un archivo core de datos:
++
+--
+. *Datos de registros biológicos*: categoría de información relativa a la evidencia de un registro en la naturaleza, en una colección o en un conjunto de datos (espécimen, observación, etc.). Los archivos básicos de este tipo se utilizan para compartir información sobre una instancia específica de un taxón, como un espécimen o una observación. El ID del core requerido está representado por *dwc:occurrenceID*. La lista definitiva de elementos para Registros Biológicos puede encontrarse en el archivo {latest-dwc-occurrence}[Extensión Occurrence (Core)].
+. *Datos de listas de chequeo*: la categoría de información relativa a los taxa o conceptos de taxa, como las especies. Los archivos centrales de este tipo se utilizan para compartir listados anotados, catálogos taxonómicos y otra información sobre los taxa. El ID del core requerido está representado por *dwc:taxonID*. La lista definitiva de elementos del Core puede encontrarse en el archivo {latest-dwc-taxon}[Extensión Taxon (Core)].
+. *Datos de eventos de muestreo*: la categoría de información perteneciente a un evento de muestreo. Los archivos core de este tipo son utilizados para compartir información sobre invetigaciones biológicas que pueden ser estudios puntuales o programas de monitoreo que normalmente son cuantitativos, calibrados y siguen ciertos protocolos para detectar cambios y tendencias de poblaciones. El ID core requerido está representado por *dwc:eventID*. La lista definitiva de elementos core de Evento se puede encontrar en {latest-dwc-event}[Extensión Event (Core)].
+
+image::figures/core_data_file.png["Un archivo core de datos es un sencillo", tabular, text file]
+--
+
+. *Los archivos de "extensión" opcionales* apoyan el intercambio de clases adicionales de datos que se relacionan con el tipo de datos core (Registro biológico o Taxón). Un registro de extensión apunta a un registro en el archivo central de datos. Las extensiones se pueden aplicar únicamente a Taxones y/o Registros biológicos. Por ejemplo, la extensión de Nombres comunes (ilustrada más abajo) es una extensión para la clase Taxón, mientras que la extensión Imágenes puede utilizarse en ambos clases de conjuntos de datos. Las extensiones pueden ser creadas y añadidas al Repositorio de extensiones de GBIF siguiendo un proceso de consulta y desarrollo con GBIF. La lista definitiva de Extensiones aceptadas se puede encontrar en el http://rs.gbif.org/extensions.html[Repositorio de extensiones de GBIF].
++
+image::figures/extension_data_file.png["Una extensión se vincula con el archivo central mediante el ID en común del taxón"]
+
+. Un descriptor *metafile* describe cómo están organizados los contenidos de su archivo. Describe los contenidos del archivo y asigna cada columna de datos a un término del estándar Darwin Core o Extensión. El metafile es un formato de archivo XML relativamente simple. GBIF proporciona una herramienta online para hacer este archivo, pero el formato es lo suficientemente simple como para que muchos administradores de datos puedan generarlo manualmente. Estas opciones se describen en la sección Opciones de Publicación de este documento.
++
+--
+NOTE: Un metarchivo es *necesario* cuando un archivo incluye cualquier archivo de extensiones o si un único archivo central de datos utiliza nombres no estándar de columnas en la primera fila (encabezado) de datos. Hay una guía de referencia completa para este metarchivo disponible xref:gbif-metadata-profile.adoc[aquí].
+
+image::figures/meta_file.png["El metarchivo describe los nombres de los archivos y los campos de los archivos principales y de extensión"]
+--
+
+. Los conjuntos de datos requieren documentación. Esto se logra en un DwC-A incluyendo un *documento de metadatos del recurso* que proporciona información sobre el conjunto de datos en sí mismo, tal como una descripción (resumen) del conjunto de datos, los agentes responsables de la autoría, publicación y documentación, información bibliográfica y de citas, métidos de colecta y mucho más. Actualmente, GBIF apoya un perfil de metadatos basado en el {eml-location}/index.html[Ecological Metadata Language] pero existen otros estándares de metadatos que pueden ser aceptados. La descripción del Esquema XML del Perfil de metadatos de GBIF se puede encontrar en el http://rs.gbif.org/schema/eml-gbif-profile/[Repositorio del esquema GBIF]
++
+--
+image::figures/metadata_file.png["Un documento de metadatos describe el conjunto de datos completo"]
+
+Todos los archivos de la colección (datos centrales, extensiones, metarchivos y metadatos de recursos) deberían estar comprimidos en un único archivo. Los formatos de compresión aceptados son https://en.wikipedia.org/wiki/ZIP_(file_format)[ZIP] y https://en.wikipedia.org/wiki/Tar_(file_format)[TAR.GZ/TGZ].
+
+image::figures/zipped_archive.png["Los archivos están comprimidos en un único archivo"]
+
+¡Este archivo único y comprimido es el DwC-A!
+--
+
+== Soluciones para la publicación de datos DwC-A
+
+Existen varias opciones diferentes para generar un DwC-A.
+
+Para ayudarle a seleccionar la solución más apropiada para crear su propio archivo, considere las siguientes preguntas:
+
+. ¿Sus datos han sido digitalizados? (En caso afirmativo, se asume que usted puede convertir los datos en formato CSV o Tab).
+. ¿Sus datos están almacenados en una base de datos relacional?
+. ¿Cuántos conjuntos de datos (Archivos DwC) separados planea publicar?
+
+<<Publicar DwC-A usando el IPT>> es lo más adecuado cuando:
+
+* Sus datos ya han sido digitalizados.
+* Sus datos están o no están ya en una base de datos relacional
+* Usted necesita crear/gestionar múltiples archivos.
+* Usted quisiera documentar conjuntos de datos utilizando el Perfil de metadatos de GBIF.
+
+<<Publicar DwC-A usando plantillas de hojas de cálculo de GBIF>> es lo más adecuado cuando:
+
+* Sus datos no han sido digitalizados aún.
+* Usted ya gestiona datos utilizando hojas de cálculo.
+* Usted necesita una solución sencilla para crear/gestionar un número de conjuntos de datos limitados
+* Usted necesita orientación adicional sobre la captura y el formato de datos
+
+<<Publicar DwC-A manualmente>> es lo más apropiado cuando:
+
+* Sus datos ya han sido digitalizados.
+* Sus datos pueden estar en una base de datos relacional.
+* Usted solo necesita crear/gestionar un número pequeños de Archivos y/o tiene las habilidades técnicas para automatizar/codificar el proceso de generación de archivos.
+
+A contiuación se muestra una discusión más detallada de estas tres opciones.
+
+=== Publicar DwC-A usando el IPT
+
+*Supuesto: Sus datos ya están almacenados como un archivo de texto CSV/tab o en uno de los sistemas de gestión de bases de datos relacionales aceptados (MySQL, PostgreSQL, Microsoft SQL Server, Oracle, Sybase). Lo ideal sería que ya esté usando los términos de Darwin Core como nombres de columnas, aunque esto no es necesario.*
+
+El https://www.gbif.org/ipt[IPT (Integrated Publishing Toolkit)] es la herramienta insignia de GBIF para la publicación de DwC-As.
+
+The simplest way to begin using the IPT is to request a free account on a https://www.gbif.org/data-hosting-centres[trusted data hosting centre^] allowing you to manage your own datasets and publish them through GBIF.org without the hassle of setting up and maintaining the IPT on your own server.
+
+Otherwise if want to setup your own instance of the IPT the xref:getting-started.adoc[Getting Started Guide] is your entry point.
+
+El IPT puede ser utilizado para publicar metadatos de recursos, datos de registros biológicos, datos de listados taxonómicos y datos de eventos de muestreo. La guía xref:how-to-publish.adoc[Cómo publicar datos de biodiversidad a través de GBIF.org] proporciona un conjunto de instrucciones sencillas sobre cómo hacerlo.
+
+El IPT genera un DwC-A durante la publicación y apoya el registro automático en la red de GBIF. Para más detalles consulte el xref:manage-resources.adoc#visibility[Manual del usuario del IPT].
+
+=== Publicar DwC-A usando plantillas de hojas de cálculo de GBIF
+
+*Supuesto: Los datos de registros biológicos, datos taxonómicos simples o datos de eventos de muestreo a publicar no se han capturado aún en formato digital O se desea una solución sencilla para la creación de un documento de metadatos para describir un conjunto de datos.*
+
+GBIF proporciona un conjunto de hojas de cálculo de Microsoft Excel pre-configuradas que sirven de modelo para obtener datos de registros biológicos, listas de chequeo y eventos de muestreo:
+
+. xref:checklist-data.adoc#templates[Plantilla de datos de listados taxonómicos]: apropiado para listados de especies básicos
+. xref:occurrence-data.adoc#templates[Plantilla de datos de registros biológicos]: apropiado para datos de registros biológicos (espécimen, observación)
+. xref:sampling-event-data.adoc#templates[Plantilla de datos de eventos de muestreo]: apropiado para datos de eventos de muestreo
+//.  Resource metadata template: suitable for composing a metadata document - pending but imminent
+
+Todas las plantillas proporcionan ayuda e instrucciones en línea en las hojas de trabajo.
+
+Para publicar los datos como un DwC-A, cargue las plantillas al IPT. Utilice el editor de metadatos incorporado. La guía xref:how-to-publish.adoc[Cómo publicar datos de biodiversidad a través de GBIF.org] proporciona un conjunto de instrucciones sencillas sobre cómo hacerlo. Si requiere una cuenta en un IPT, se recomienda que la solicite a un xref:data-hosting-centres.adoc[centro de alojamiento de datos de confianza^] ubicado en su país o comunidad.
+
+=== Publicar DwC-A manualmente
+
+*Supuesto: Los datos están ya en un archivo de texto CSV/Tab o en uno de los sistemas de gestión de bases de datos relacionales aceptados (MySQL, PostgreSQL, Microsoft SQL Server, Oracle, Sybase). El publicador no desea alojar una instancia de IPT pero tiene acceso a un servidor web.*
+
+Los DwC-A se pueden crear sin necesidad de instalar un software específico. Estas instrucciones van dirigidas a los administradores de datos que están familiarizados con el conjunto de datos que se va a publicar y se sienten cómodos trabajando con su sistema de gestión de datos.
+
+A continuación, se muestra un conjunto de instrucciones sobre cómo crear de manera manual un Archivo DwC:
+
+. A menos que los datos estén ya almacenados en un archivo de texto CSV/Tab, el publicador necesitará preparar un archivo de texto o varios desde la fuente. Si los datos están almacenados en una base de datos, genere un archivo de texto delimitado de salida a partir de la base de datos de origen. La mayoría de sistemas de gestión de bases de datos apoyan este proceso; se proporciona un ejemplo en el Anexo de esta guía, más adelante, en la sección “Producción de datos desde una base de datos MySQL a un archivo de texto”. Como el metarchivo ya relaciona las columnas del archivo de texto con los términos Darwin Core, no es necesario utilizar los términos Darwin Core como encabezado de las columnas en el archivo de texto resultante, sin embargo hacerlo puede ayudar a reducir errores. Una recomendación general sería producir un único archivo central de datos y un único archivo por cada extensión si la intención es producir datos unidos a una extensión.
+.  Crear un metarchivo: existen tres formas diferentes de generar el archivo:
+.. Créelo manualmente utilizando un editor XML y usando un metarchivo de muestra como ejemplo. Se puede encontrar una descripción completa del formato del metarchivo en la http://rs.tdwg.org/dwc/terms/guides/text/index.htm[Guía de texto Darwin Core].
+.. {blank}
++
+--
+[.float-right]
+image::figures/dwc-a_assistant.png[]
+
+Créelo utilizando la herramienta web http://tools.gbif.org/dwca-assistant/[Asistente de Archivos Darwin Core]. Simplemente, seleccione los campos de los datos a publicar, proporcione algunos detalles sobre los archivo y guarde el XML resultante. Esto solo es necesario hacerlo una vez a menos que el conjunto de campos publicados cambie en el futuro.
+
+WARNING: esta herramienta ya no es compatible con GBIF. Falta soporte para el Evento core. Los publicadores también necesitan añadir de forma manual el término dwc:taxonID a los taxones centrales y dwc:occurrenceID a los registros biológicos core para asegurar que se han incluido.
+--
+
+. Cree un también de metadatos (eml.xml) que describa la fuente de datos. Puede encontrar instrucciones completas sobre cómo hacerlo en el xref:gbif-metadata-profile.adoc[Guía práctica del perfil de metadatos de GBIF]. La mejor práctica es incluir un archivo de metadatos y la forma más sencilla de hacerlo es mediante el uso del editor de metadatos incorporado del IPT.
+. Asegúrese de que los archivos de datos, el metarchivo (meta.xml) y el archivo de metadatos (eml.xml) están en el mismo directorio o carpeta. Comprima la carpeta utilizando uno de los formatos compatibles. El resultado es un DwC-A.
+
+NOTE: Los metadatos creados mediante el IPT pueden generarse como un documento RTF que podría ser enviado como un manuscrito de ‘Artículo de datos’ a Zookeys, PhytoKeys y BioRisks. Explore las instrucciones dirigida a los autores para el envío de ‘Artículos de datos’ a estas revistas.
+
+== Validación de DwC-A
+
+GBIF proporciona un https://www.gbif.org/tools/data-validator[Validador de Archivos DwC] online que ejecuta las siguientes verficaciones:
+
+* El metarchivo (meta.xml) es un XML válido y se ajusta a las http://rs.tdwg.org/dwc/terms/guides/text/[Guías de texto Darwin Core].
+* El contenido se ajusta a las extensiones conocidas y términos registrados por la red de GBIF. Tenga en cuenta que GBIF ejecuta un registro de producción y de desarrollo que permite el seguimiento de extensiones; el validador utiliza el registro de producción.
+* El también de descripción del recurso (eml.xml) es un XML válido y se ajusta al esquema del Perfil de metadatos de GBIF y al esquema oficial de un EML.
+* Integridad referencial: que los términos ID mapeados en los archivos de extensiones hagan referencia a registros existentes en los registros del archivo central.
+* Todos los ID del archivo central son únicos
+* Que no se hallen valores originales nulos en los datos. Por ejemplo NULL o \N
+* La taxonomía y las localizaciones pasan procesos típicos de interpretación de GBIF (p. ej., las coordenadas se encuentran en el país específico)
+
+Para utilizar el validador:
+
+. Cargue el DwC-A utilizando el formulario proporcionado en la página web del Validador.
+. Validar
+. Revise la respuesta y aborde cualquier error de validación
+. Repita el proceso hasta que el archivo haya sido validado satisfactoriamente.
+. Si se queda bloqueado, póngase en contacto con la Mesa de ayuda de GBIF (helpdesk@gbif.org).
+
+== Registo de DwC-A en GBIF
+
+Se debe incluir una entrada del recurso en el Registro de GBIF permitiéndole ser descubrible y accesible. Cada nuevo registro debe estar asociado con una organización publicadora que haya sido formalmente registrada por un administrador de un Nodo Participante en GBIF. Esto es un simple control de calidad requerido por el Comité de administradores de nodos participantes de GBIF.
+
+Afortunadamente, las API del IPT y de GBIF dan soporte para el registro automático de conjuntos de datos. De lo contrario, si usted está publicando DwC-A de manera manual, inicie el registro enviando un correo electrónico a helpdesk@gbif.org con la siguiente información:
+
+. Título del conjunto de datos
+. Descripción del conjunto de datos (copiada del archivo de metadatos)
+. Nombre de la organización publicadora (debe estar registrada en GBIF, de lo contrario regístrela llenando este https://www.gbif.org/become-a-publisher[formulario online]).
+. Su relación con esta organización
+. URL del conjunto de datos (dirección de acceso público al DwC-A comprimido)
+
+Recibirá un correo electrónico de confirmación y una URL de la entrada del recurso en el Registro.
+
+Los usuarios avanzados pueden solicitar permiso para registrar conjuntos de datos en masa, integrando la API de GBIF en sus sistemas existentes. Se proporciona un https://github.com/gbif/registry/tree/master/registry-examples/src/test/scripts[ejemplo básico] como script shell en Linux (Bash); contacte a la Mesa de ayuda para más información.
+
+== Anexo: prepare sus datos
+
+=== Términos requeridos y recomendados
+
+La guía xref:how-to-publish.adoc[Cómo publicar datos de biodiversidad a través de GBIF.org] proporciona un conjunto de términos requeridos y recomendados para cada tipo de datos:
+
+. Datos de listas de chequeo: xref:checklist-data.adoc#campos-dwc-requeridos[términos requeridos] / xref:checklist-data.adoc#campos-dwc-recomendados[términos recomendados]
+. Datos de registros biológicos: xref:occurrence-data#campos-dwc-requeridos[términos requeridos terms] / xref:occurrence-data#campos-dwc-recomendados[términos recomendados]
+. Datos de eventos de muestreo: xref:sampling-event-data#campos-dwc-requeridos[términos requeridos] / xref:sampling-event-data#campos-dwc-recomendados[términos recomendados]
+. Metadatos de recursos: xref:resource-metadata#campos-obligatorios-de-los-metadatos[términos requeridos terms] / xref:resource-metadata#campos-de-metadatos-recomendados[términos recomendados]
+
+=== Codificación de caracteres
+
+La buena práctica recomendada es codificar archivos (de datos) de texto utilizando UTF-8.
+
+Las siguientes herramientas para Linux, Mac y Windows se pueden utilizar para convertir codificaciones de caracteres de archivos:
+
+* https://en.wikipedia.org/wiki/Iconv
+* http://www.gnu.org/software/libiconv/
+* http://gnuwin32.sourceforge.net/packages/libiconv.htm
+
+P. ej., convertir codificaciones de caracteres de Windows-1252 a UTF-8 usando https://linux.die.net/man/1/iconv[*iconv*]:
+
+[source, shell]
+----
+iconv -f CP1252 -t utf-8 example.txt > exampleUTF8.txt
+----
+
+=== Datos desde una base de datos
+
+Es sencillo producir archivos de texto delimitados desde una base de datos utilizando comandos SQL. Para MySQL, utilice el comando `SELECT INTO outfile`. La codificación del archivo resultante dependerá de las variables del servidor y de las intercalaciones utilizadas y es posible que requieran ser modificadas antes de que acabe la operación. Tenga en cuenta que MySQL exportará valores NULL como `\N` por defecto. Utilice la función IFNULL() como se muestra en el siguiente enlace para evitar esto:
+
+[source, sql]
+----
+SELECT
+  IFNULL(id, ''), IFNULL(scientific_name, ''), IFNULL(count,'')
+  INTO outfile '/tmp/dwc.txt'
+  FIELDS TERMINATED BY ','
+  OPTIONALLY ENCLOSED BY '"'
+  LINES TERMINATED BY '\n'
+  FROM dwc;
+----
+
+Otras recomendaciones para la generación de datos usando queries/funciones de SQL:
+
+* Concatenar o dividir cadenas según sea necesario, p. ej., para construir la cadena del nombre científico completo (cuidado con los autónimos)
+* Aplicar formato a las fechas para ajustarse al https://en.wikipedia.org/wiki/ISO_8601[formato de fecha y hora ISO] (1990-02-03 o 1990-02 si se desconoce el día, 1990 si el mes también se desconoce, 1990-02-03/1990-02-28 para dar un rango).
+* Cree año/mes/día mapeando los tipos de fecha nativos de SQL
+* Utilizar UNION para unir 2 o más tablas, p. ej., taxa aceptados y sinónimos o especímenes y observaciones
+
+=== Ejemplos para el archivo DwC-A
+
+La guía xref:how-to-publish.adoc[Cómo publicar datos de biodiversidad a través de GBIF.org] proporciona un conjunto de ejemplos DwC-A para cada tipo de datos:
+
+. Datos de lista de chequeo: xref:checklist-data.adoc#exelar-datasets[conjunto de datos de ejemplo]
+. Datos de registros biológicos: xref:occurrence-data.adoc#exemplar-datasets[conjunto de datos de ejemplo]
+. Datos de eventos de muestreo: xref:sampling-event-data.adoc#exemplar-datasets[conjunto de datos de ejemplo]
+. Metadatos del recurso: xref:resource-metadata.adoc#exemplar-datasets[conjunto de datos de ejemplo]

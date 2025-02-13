@@ -1,0 +1,96 @@
+= Adiciones previstas y notas para la revisión de la sección Buenas prácticas en la publicación de datos de eventos de muestreo. 
+
+Versión 2.0
+
+Información adicional que también podría ser incluida o que fue previamente incluida en xref:best-practices-sampling-event-data.adoc[].
+
+== ¿Qué son los datos de eventos de muestreo?
+=== ¿Cómo expresar los datos de eventos de muestreo en DwC-A?
+=== Metadatos de eventos de muestreo
+=== Datos de eventos de muestreo
+
+#PORHACER:# Proporcionar recomendaciones sobre cómo solucionar las limitaciones del esquema en estrella de DwC-A como por ejemplo no ser capaz de relacionar las medidas y hechos de ambos eventos y registros en el mismo conjunto de datos. La solución actual en este sentido requiere que los publicadores publiquen los conjuntos de datos por separado. Tenga en cuenta que OBIS está creando un prototipo de una Extensión Extendida de Medidas y Hechos que podría también ayudar a superar esta limitación. El debate sobre esta extensión prototipo tiene lugar aquí en GitHub. Sin embargo, surgieron problemas de que esta incidencia prototipo no aclara explícitamente si la medición o el hecho se relaciona con un registro de presencia o un evento. Una alternativa es añadir resourceID (¿y quizás resourceType?) en vez de añadir eventID (y occurrenceID) como atributo en la extensión de medida o hecho como es explorado por la extensión de OBIS.
+
+=== Recomendaciones sobre el formato de los archivos de datos
+=== Tamaño de muestra
+
+#TODO:# Proporcione recomendaciones sobre cómo representar el área de muestreo eligiendo la forma WKT apropiada o la ubicación del punto de latitud/longitud simple. Si se hace correctamente, también se puede derivar la dirección del muestreo que se llevó a cabo. Por ejemplo, una línea de arrastre oceánica representada con una forma WKT LINESTRING permite determinar la dirección de la red de arrastre basándose en la notación estándar para escribir los puntos de inicio y finalización.
+
+=== Cantidad y abundancia
+=== Cómo identificar de forma única los eventos de muestreo
+
+#TODO:# Guíe mejor a los usuarios sobre cómo completar dwc:eventID y dwc:parentEventID utilizando identificadores únicos globales persistentes:
+
+- dwc:eventID debe ser un identificador único globalmente persistente. Recuerde reutilizar los identificadores estables existentes. No cree un nuevo identificador para el evento cuando ya haya uno aceptado.
+- En ausencia de un GUID, y como última opción, reutilza el fieldNumber original.
+
+=== How to capture hierarchy of events
+
+#PORHACER:# Guiar mejor a los usuarios sobre cómo publicar una jerarquía de eventos (tipo de datos recursivos) con el uso apropiado de dwc:parentEventID
+
+=== How to capture absence data
+
+#PORHACER:# Transferir información de las FAQ de arriba, guiando a los usuarios sobre cómo publicar datos de presencia/ausencia en DwC con el uso apropiado de dwc:occurrenceStatus
+
+=== Cómo incluir material multimedia complementario
+
+#PORHACER:# Proporcionar recomendaciones sobre cómo incluir contenidos multimedia complementarios para una interpretación más sencilla de los datos. Por ejemplo, para datos de vegetación, es útil incluir un enlace a la lámina relevé original escaneada cuando se interpreten los datos.
+
+== Publicar datos de eventos de muestreo
+=== Utilizar GUID como identificadores
+
+#PORHACER:# Aconsejar a los publicadores utilizar los GUIDs, al mismo tiempo que guiar sobre cómo crear GUIDs para campos aplicables tales como dwc:occurrenceID, dwc:eventID, dwc:organismID y dwc:locationID. Por ejemplo, es posible utilizar http://www.geonames.org/ para encontrar (o incluso generar nuevos) identificadores por dwc:locationID, ej.: http://sws.geonames.org/10793757/ es un GUID para un lago en Groenlandia.
+
+=== Completar los elementos obligatorios y recomendados
+
+#PORHACER:# Guiar a los usuarios sobre cómo difuminar la localización de las especies sensibles, como por ejemplo:
+- Eliminar simplemente estas especies del conjunto de datos
+- Publicar las identificaciones de especies únicamente hasta el nivel de Género
+- Publicar las especies sensibles/protegidas en un conjunto de datos separado
+- Publicar puntos no precisos para los datos sensibles en el conjunto de datos principal y publicar los detalles precisos en un conjunto de datos separado de acceso limitado, incluyendo todos los registros en ambos conjuntos de datos
+
+=== Conservar los datos originales
+
+#PORHACER:# Guiar a los usuarios sobre cómo documentar las descripciones originales. Por ejemplo, el ID o código proporcionado para el evento original debe ser documentado en dwc:fieldNumber; el ID o código proporcionado para la observación del registro debe ser documentado en dwc:recordNumber.
+
+=== Publicar datos de proyectos como un único conjunto de datos
+
+#PORHACER:# Proporcionar una recomendación sobre cómo publicar datos producidos por grandes proyectos. La recomendación actual es publicar un único conjunto de datos porque dividirlos en múltiples conjuntos de datos resulta en una mayor duplicación del ingreso de metadatos. Los publicadores que insisten en publicar múltiples conjuntos de datos deberían vincularlos entre sí utilizando Project.ID en EML.
+
+=== Republicar datos de registros biológicos como datos de eventos de muestreo
+
+#PORHACER:# Proporcionar fundamentos y orientación para migrar conjuntos de datos de registros biológicos existentes a un formato de evento de muestreo. Las siguientes preguntas deben ser contestadas:
+- ¿La versión de eventos de muestreo debería ser reemplazada por la versión de registros biológicos o deberían ser mantenidas de manera online ambas al mismo tiempo?
+- Si se reemplaza, ¿se debería asignar un nuevo DOI a la nueva versión de eventos de muestreo?
+- ¿Cuáles son los beneficios de producir la versión de eventos de muestreo?
+
+=== Modelling continuous monitoring of live individuals
+
+#PORHACER:# Proporcionar una recomendación sobre cómo modelar monitoreos continuos de individuos vivos, tales como datos de seguimiento de aves mediante el uso de dwc:organismID para almacenar el ID del individuo monitoreado utilizando un único evento para representar cada individuo monitoreado (con registros biológicos asociados cuando fuesen registrados).
+
+=== Gestión de incidencias relacionadas con el conjunto de datos
+
+#PORHACER:# Proporcionar una recomendación sobre cómo gestionar problemas relacionados con el uso de conjuntos de datos utilizando el sistema de gestión de problemas de GitHub, tal y como hace INBO, por ejemplo.
+
+=== Compartir códigos y programas utilizados para producir o limpiar el conjunto de datos
+
+#PORHACER:# Proporcionar una recomendación sobre cómo compartir códigos y programas personalizados (ej.: por ejemplo para la transformación de tablas de datos cruzadas) utilizando GitHub, para beneficio de todos los publicadores, tal y como hace INBO, por ejemplo. La recomendación debería fomentar que los usuarios incluyan un detallado conjunto de instrucciones sobre cómo utilizar los códigos para hacerlos más útiles.
+
+== Describing sampling-event data in dataset metadata
+
+#PORHACER:# Aconsejar a los publicadores documentar los eventos de muestreo tanto como sea posible, especialmente las metodologías de muestreo, antes de intentar estandarizarlo en DwC.
+
+=== Vincular conjuntos de datos relacionados
+
+#PORHACER:# Asesorar a los publicadores sobre cómo vincular conjuntos de datos relacionados que proceden del mismo contexto de investigación para que puedan ser extraídos más fácilmente por parte de los usuarios. Los publicadores puede que tengan que publicar conjuntos de datos separados para superar las limitaciones del esquema en estrella de DwC. También puede que los publicadores elijan publicar conjuntos de datos separados de registros de presencia derivados de los mismos eventos de muestreo. La recomendación actual es vincularlos utilizando Project.ID.
+
+=== Enumerar investigaciones relacionadas
+
+#PORHACER:# Proporcionar recomendaciones sobre cómo facilitar la interpretación del conjunto de datos incluyendo enlaces a trabajos publicados relacionados tales como artículos de prensa, notas de proyecto, tesis, etc.
+
+== Ejemplos
+=== Muestreo de invertebrados acuáticos
+=== Muestreo de invertebrados de aguas salobres
+=== Muestreo de macrófitos
+
+#PORHACER:# Ejemplo actualizado basado en la versión de la Base de Datos de Vegetación Holandesa (LVD) republicada como conjunto de datos de evento de muestreo. La extensión Relevé sufre cambios significativos respecto a la publicación del original. Para más información sobre LVD y los modelos de datos para datos de eventos de muestreo de vegetación ver: https://gbif.blogspot.com/2016/07/probably-turbovegs-best-kept-secret.html

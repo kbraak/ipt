@@ -1,0 +1,39 @@
+= Agregar un nuevo directorio de ID de usuario
+
+WARNING: Esta página contiene instrucciones de configuración sólo para usuarios avanzados del IPT.
+
+Desde la versión 2.2 de IPT, el sistema incluye cuatro directorios de usuarios entre los que se puede elegir cuando se introduce un ID de usuario para cualquier contacto, creador, proveedor de metadatos, parte asociada o personal del proyecto. Estos directorios son:
+
+* https://orcid.org/ (ORCID)
+* https://www.researcherid.com/rid/ (ResearcherID)
+* https://scholar.google.com/citations?user= (Google Scholar)
+* https://www.linkedin.com/profile/view?id= (LinkedIn)
+
+Después de haber seleccionado un directorio de usuarios, los usuarios del IPT introducen un ID de usuario conjunto. La combinación de ambos se utiliza para formar un enlace a una página de perfil de usuario, por ejemplo:
+
+* https://orcid.org/0000-0002-1825-0097
+* https://www.researcherid.com/rid/A-1009-2008
+* https://scholar.google.com/citations?user=drZVfmcAAAAJ
+* https://www.linkedin.com/profile/view?id=190869005
+
+Sin embargo, la lista de directorios de usuarios puede modificarse lo que resulta útil para las comunidades que dependen de otros directorios.
+
+Los pasos siguientes explican cómo configurar el IPT con otro directorio de usuarios para elegir.
+
+== Instrucciones
+
+Localice el archivo UserDirectories.properties, p. ej., `tomcat7/webapps/ipt/WEB-INF/classes/org/gbif/metadata/eml/licenses.properties`. Abra el archivo en un editor de texto y haga lo siguiente:
+
+. Agregue una nueva propiedad que defina el directorio del usuario con el siguiente formato:
++
+----
+URL=URL
+# Por ejemplo:
+http\://orcid.org/=http://orcid.org/
+----
+
+. Doble verificación
+.. los dos puntos de la clave de la propiedad se anteponen con una barra invertida,
+.. tanto la clave como el valor son iguales, a excepción del carácter que se antepone en la clave
+. Haga una copia de seguridad del archivo UserDirectories.properties, ya que se sobrescribirá la próxima vez que actualice su IPT
+. Reinicie su contenedor de servlet (p. ej., Tomcat) para que la nueva configuración surta efecto
