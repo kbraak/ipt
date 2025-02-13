@@ -1,0 +1,73 @@
+= Occurrence Data
+
+== 介紹
+Resources which present evidence of the occurrence of a species at a particular place and normally on a specified date. These datasets expand on most Checklist Data because they contribute to mapping the historical or current distribution of a species. At the most basic, such datasets may provide only general locality information (even limited to a country identifier). Ideally they also include coordinates and a coordinate precision to support fine scale mapping. In many cases, these datasets may separately record multiple individuals of the same species. Examples of such datasets include databases of specimens in natural history collections, citizen science observations, data from species atlas projects, etc. If sufficient information exists in the source dataset (or applies consistently to all occurrences in the dataset), it is recommended that these datasets are presented as xref:sampling-event-data.adoc[Sampling Event Data]. These datasets include the same basic descriptive information included under xref:resource-metadata.adoc[Resource metadata].
+
+== 如何將您的資料轉換為物種出現紀錄
+
+image::ipt2/flow-od.png[]
+
+最終，您的資料需要使用達爾文核心標準（DwC）的術語名稱作為欄位名稱以轉換為表格結構。
+
+您可以嘗試將資料放入 <<Templates,Excel 模板>> 中，該模板包含所有 <<Required DwC Fields,必填的達爾文核心集欄位>> 和 <<Recommended DwC Fields,建議填寫的達爾文核心集欄位>>。
+
+或者，如果您的資料儲存在 xref:database-connection.adoc[支援的資料庫]中，您可以使用 DwC 欄位名稱撰寫 SQL 表格（視圖）。請務必包含所有 <<Required DwC Fields,必填的達爾文核心集欄位>>，並盡可能多地新增 <<Recommended DwC Fields,建議填寫的達爾文核心集欄位>>。
+
+For extra guidance, you can look at the <<Exemplar datasets,exemplar datasets>>.
+
+You can augment your table with extra DwC columns, but only DwC terms from this {latest-dwc-occurrence}[list].
+
+=== 模板
+
+link:{attachmentsdir}/downloads/occurrence_ipt_template_v2.xlsx[image:ipt2/excel-template2.png[Excel Template]] link:{attachmentsdir}/downloads/occurrence_ipt_template_v2_example_data.xlsx[image:ipt2/excel-template-data2.png[Excel Template (with example data)]]
+
+Populate it and upload it to the IPT. Try to augment it with as many http://rs.tdwg.org/dwc/terms/[DwC terms] as you can.
+
+=== 必填的達爾文核心集欄位
+
+* https://dwc.tdwg.org/terms/#dwc:occurrenceID[occurrenceID]
+* https://dwc.tdwg.org/terms/#dwc:basisOfRecord[basisOfRecord]
+* https://dwc.tdwg.org/terms/#dwc:scientificName[scientificName]
+* https://dwc.tdwg.org/terms/#dwc:eventDate[eventDate]
+
+=== 建議填寫的達爾文核心集欄位
+
+* https://dwc.tdwg.org/terms/#dwc:taxonRank[taxonRank] - to substantiate scientificName
+* [https://dwc.tdwg.org/terms/#dwc:kingdom] - 如果可能，請包括其他更高分類位階。
+* https://dwc.tdwg.org/terms/#dwc:decimalLatitude[decimalLatitude] & https://dwc.tdwg.org/terms/#dwc:decimalLongitude[decimalLongitude] & https://dwc.tdwg.org/terms/#dwc:geodeticDatum[geodeticDatum] - to provide a specific point location
+* https://dwc.tdwg.org/terms/#dwc:countryCode[countryCode]
+* https://dwc.tdwg.org/terms/#dwc:individualCount[individualCount] / https://dwc.tdwg.org/terms/#dwc:organismQuantity[organismQuantity] & https://dwc.tdwg.org/terms/#dwc:organismQuantityType[organismQuantityType] - to record the quantity of a species occurrence
+
+=== 示範資料集
+
+* https://ipt.vertnet.org/archive.do?r=cumv_amph[CUMV Amphibian Collection (Arctos)] (also registered on GBIF here: https://doi.org/10.15468/emivh3)
+
+=== 問答集
+
+==== 問：如何表示某地沒有這個物種（指出物種的缺如狀態）？
+
+*A.* Set https://dwc.tdwg.org/terms/#dwc:occurrenceStatus[occurrenceStatus]=link:{latest-occurrence-status}["absent"]. In addition, https://dwc.tdwg.org/terms/#dwc:individualCount[individualCount] and https://dwc.tdwg.org/terms/#dwc:organismQuantity[organismQuantity] should be equal to 0.
+
+==== 問：如何模糊化敏感物種的出現紀錄？ 
+
+*A.* How you generalize sensitive species data (e.g. restrict the resolution of the data) depends on the species' category of sensitivity. Where there is low risk of perverse outcomes, unrestricted publication of sensitive species data remains appropriate. Note it is the responsibility of the publisher to protect sensitive species occurrence data. For guidance, please refer to this https://www.gbif.org/resource/80512[best-practice guide]. You could refer to this http://science.sciencemag.org/content/356/6340/800[recent essay in Science], which presents a simplified assessment scheme that can be used to help assess the risks from publishing sensitive species data.
+
+When generalizing data you should try not to reduce the value of the data for analysis, and make users aware how and why the original record was modified using the Darwin Core term https://dwc.tdwg.org/terms/#dwc:informationWithheld[informationWithheld].
+
+As indicated in the http://www.gbif.org/resource/80512[best-practice guide], you should also publish a checklist of the sensitive species being generalized. For each species you should explain:
+
+* the rationale for inclusion in the list
+* the geographic coverage of sensitivity
+* 敏感度類別
+* the date to review its sensitivity
+
+This will help alert other data custodians that these species are regarded as potentially sensitive in a certain area and that they should take the sensitivity into account when publishing the results of their analyses, etc.
+
+===== Helpful formulas for generalizing point location
+
+The following formula obscures a latitude/longitude point by a factor of 5000m. Note pointX and pointY must be provided in 'length in meters' and TRUNC truncates the number to an integer by removing the decimal part:
+
+----
+pointX = TRUNC(pointX / 5000) * 5000
+pointY = TRUNC(pointY / 5000) * 5000
+----

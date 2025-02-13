@@ -1,0 +1,412 @@
+= サンプリングイベントデータの公開のベストプラクティス
+
+Version 2.2
+
+== 文書管理
+
+|===
+| Version | Description             | Date of release | Author(s)
+
+| https://links.gbif.org/ipt-sample-data-primer[1.0]   | Release Version         | 2015    | Éamonn Ó Tuama
+| 2.0 | Transferred to wiki, major changes | May 2017   | Kyle Braak
+| https://github.com/gbif/ipt/wiki/BestPracticesSamplingEventData[2.1] | Minor changes, clean up | Aug 2018   | Marie Grosjean
+| xref:best-practices-sampling-event-data.adoc[2.2] | Conversion to Asciidoctor | May 2021 | Matthew Blissett
+|===
+
+== 推奨される引用
+
+// The date uses the last change, ignoring formatting etc.
+> GBIF (2018) Best Practices in Publishing Sampling-event data, version 2.2. Copenhagen: GBIF Secretariat. https://ipt.gbif.org/manual/ja/ipt/{page-version}/best-practices-sampling-event-data
+
+== Introduction
+
+このガイドでは、サンプリングイベント情報を標準的な方法で共有するための手段として、ダーウィンコア・アーカイブ (DwC-A) フォーマットの活用方法について詳しく説明します。また、ダーウィンコア・アーカイブフォーマットの特定のコンポーネントと、コアイベントデータクラスをサポートする拡張機能に焦点を当て、共有データの価値を最大化するためにこれらのコンポーネントを最適に利用する方法について推奨事項を説明します。本書はダーウィンコア・アーカイブフォーマットの詳細な概要を提供するものではなく、xref:darwin-core.adoc[ダーウィンコア・アーカイブ ハウツーガイド]を参照してください。
+
+The DwC-A format and the specific profile described here represent an internationally recognized and ratified data exchange format for sharing sampling-event data. All data exchange standards must strike a balance between the technical scope and capacity on one hand, and social acceptance and uptake on the other. Simple solutions sacrifice coverage and complexity in favour of ease-of-use. Highly complex formats provide more complete solutions for representing any type of data but at the expense of simplicity and require supporting software and expertise. The Darwin Core Archive format represents an intermediate position between the two ends of this spectrum. It focuses on the key elements of sampling-event data and enables an enriched set of data types to be linked to this core structure. The data contained in an archive can be readily understood and used by many ecologists and data managers familiar with basic structured text files. With this international standard, GBIF hopes to facilitate sampling-event data sharing and promote common approaches to cite and recognize the work of the community creating and handling sampling-event data.
+// By providing an international standard that is relatively easy to produce and consume, and that supports many of the key elements that compose a sampling-event data resource, GBIF hopes to provide the creators and managers of sampling-event data with a standardized approach to sharing their data and promote common approaches to the subsequent citation and recognition of their work. The specific degree of coverage depends very much on the individual resource.
+A standard format also increases relevance and utility.
+
+== サンプリングイベントデータとは？
+
+サンプリングイベントデータは、何千もの環境、生態学、および天然資源調査から得られるデータの一種です。これらは単発の調査であったり、モニタリングプログラムであったりします。このようなデータは通常、定量的で、校正されており、個体群の変化や傾向を検出できるように特定のプロトコルに従います。これは、生物多様性データの大部分を占める日和見的な観察・採集データとは対照的である。
+
+=== DwC-Aでサンプリング・イベント・データを表現するには？
+
+ダーウィンコア・アーカイブ (DwC-A) は、ダーウィンコアの用語を利用して、チェックリストデータを自己完結型の単一データセットとして作成する情報学データ規格です。アーカイブ内のファイルの集まりが自己完結型のデータセットを形成し、単一の圧縮（ZipまたはGZIP）ファイルとして提供することができます。データセットは、記述的なメタデータ文書と、1つまたは複数のデータファイルのセットで構成されています。DwC-Aの詳細については、xref:darwin-core.adoc[ダーウィンコア・アーカイブ：ハウツーガイド]を参照してください。
+
+=== サンプリングイベントメタデータ
+
+GBIFネットワークを通じてサンプリングイベント・データを公開するためには、データセットの出所と範囲を文書化することが必要です。データセットの文書化は「リソースメタデータ」と呼ばれ、利用者がデータセットの利用適性を評価できるようにするものです。データセットの編集に使われたサンプリング方法や、その作成と管理に関わった個人と機関について記述することができます。メタデータはダーウィンコア・アーカイブでXML文書として共有される。GBIFは、Ecological Metadata Languageに基づくサンプリングイベントデータセットのためのメタデータプロファイルを提供します。ハウツーガイドでは、この形式を使用してサンプリングイベントデータセットを記述するためのすべてのオプションについて説明しています。xref:gbif-metadata-profile.adoc[GBIFメタデータプロファイル-ハウツーガイド]を参照してください。
+
+=== サンプリングイベントデータ
+
+ダーウィンコア・アーカイブ形式は、サンプリングイベントデータを公開するための構造的な枠組みを提供します。ダーウィンコア・アーカイブは、標準的なカンマまたはタブ区切り形式の1つまたは複数のテキストファイルで構成されています。ファイルは、サンプリングイベント（サンプリングプロトコル、サンプルサイズ、場所など）をリストした1つのコアファイルを、関連するデータタイプ（種のオカレンス、測定、サンプリングイベントに関連する事実など）を記述した多数の「*拡張機能*」で囲んだ星のような方法で論理的に配置されています。コアと拡張レコード間のリンクは、イベント識別子（*eventID*）データ要素を使用して行われます。このようにして、1つのコアイベントレコードに対して多くの拡張レコードを存在させることができます。この「スタースキーマ」は、サンプリングイベントデータセットに共通する多くの種類の注釈をサポートする単純なリレーショナルデータモデルを提供します。
+
+.ダーウィンコア・アーカイブデータファイルの「スタースキーマ」での表示
+image::figures/dwc-a_event.png[]
+
+サンプリングイベントデータをエンコードする別の方法は、コアファイルに種のオカレンスをリストアップし、関連するデータタイプ（種のオカレンスに関連する測定値など）を記述するいくつかの拡張子で囲むことです。プロットまたはサイトが研究の主な焦点である場合、コアファイルにサンプリングイベントをリストすることが望ましいことに注意してください。
+
+現在のDwC-Aスタースキーマには限界があります。例えば、測定値や事実を同じデータセット内のイベントとオカレンスの両方にリンクさせることはできません。このプロトタイプの拡張に関する議論はGitHubで行われていますが、まだ解決策はありません。
+
+https://www.gbif.org/data-quality-requirements-sampling-events[イベントのサンプリングに必要なデータ品質]をご確認ください。ダーウィンコア・アーカイブを手動で生成する場合、一意の識別子を含む*recordID*フィールドを追加する必要がある可能性があることに注意してください（このフィールドは、IPTを使用している場合、自動的に生成されます）。ダーウィンコア・アーカイブの構造に関する詳細は、link:https://dwc.tdwg.org/text/[TDWG ダーウィンコア・テキストガイド]を参照してください。アーカイブはいつでもlink:https://www.gbif.org/tools/data-validator[GBIF data validator]で確認することができます。
+
+=== データファイルのフォーマットに関する推奨事項
+
+理解を容易にするために、このガイドの用語*field*を使用して、ユーザーデータがマップされるサンプリングイベント公開プロファイルのダーウィンコア用語セットを参照する場合があります。たとえば、ダーウィンコアの用語である*scientificName*を参照する場合は、*dwc:scientificName field*の使用を参照します。
+
+* カスタムフィールド区切り文字と引用符の代わりに、TABまたはカンマ区切り値を使用することをお勧めします。
+* 注意して、見積もりと一致させてください。
+* テキストファイルをUTF-8でエンコードしてください。
+* データフィールドのすべての改行を必ず置き換えてください。つまり、`\r` `\n`または`\r\n`を単純なスペースに置き換えるか、`$$`のような2文字を使用して`\r`を置き換え、改行を保持する場合は改行を省略してください。 。 もう1つのオプションは、改行をHTMLの`<br>`タグに置き換えることです。
+* nullを空の文字列としてエンコードします。つまり、2つの区切り文字、`\N`または`\NULL`の間に文字はありませんが、他のテキストシーケンスはありません。
+
+=== サンプルサイズ
+
+次のダーウィンコアフィールドには、サンプリングイベントのサンプルサイズが格納されます。
+
+* *sampleSizeValue* : サンプリングイベントのサンプルのサイズ（期間、長さ、面積、または量）を測定するための数値。
+* *sampleSizeUnit* : サンプリングイベントでのサンプルのサイズ（継続時間、長さ、面積、または体積）の測定単位。
+
+*sampleSizeValue*の値は数値であり、対応するsampleSizeUnitが必要です。sampleSizeUnitの値は、SI単位/派生単位、またはlink:{latest-unit-of-measurement}[測定単位系]に従ってSI内での使用が許可されているその他の非SI単位（分、時間、日、リットルなど）のみを使用するように制限する必要があります。以下の表1に例を示します。
+
+サンプリングエリアは、適切なWKT形状や緯度経度点位置で表現することができます。正しく行えば、サンプリングが行われた方向も導き出すことができます。例えば、WKT形状LINESTRINGを使用して表現された海洋トロールラインは、開始点と終了点を書くための標準的な表記に基づいて、トロールの方向を決定することができます。
+
+.sampleSizeValueとsampleSizeUnitは、3平方メートル、1リットルなどのように一緒に使用する必要があります。
+|===
+| sampleSizeValue | sampleSizeUnit
+
+| 2 | hour
+| 3 | m2
+| 17 | km
+| 1 | litre
+|===
+
+=== 数量と豊富さ
+
+また、以下のダーウィンコアフィールドは、ペアで使用することが必須です。
+
+* *organismQuantity* : 生物の量を表す数値または列挙値。
+* *organismQuantityType* : 生物の量に使用される定量化システムのタイプ。
+
+表2に値の例を示す。organismQuantityの値は数値または列挙型で、例えば 生物量タイプ"individuals" の場合は "27" 、 生物量タイプ"%biomass" の場合は "12.5" 、 生物量タイプ"BraunBlanquetScale" の場合は "r" です。生物量タイプの値（すなわち、測定される実体）は、"Individuals"、"%Biomass"、"%Biovolume"、"%Species"、"%Coverage"、 "BraunBlanquetScale"、"DominScale" といった用語から構成されている小さな統制語彙を使用するとよいでしょう。organismQuantity値と組み合わせた場合の例です。DominScaleでは "+"、BraunBlanquetScaleでは "5"、%Biomassでは "45"です。
+
+.organismQuantityとorganismQuantityTypeは必ず併用します。例えば、14 個体のカウント、あるいは Braun Blanquetスケールのコード値 "r "などです。
+|===
+| organismQuantity | organismQuantityType
+
+| 14 | individuals
+| r | BraunBlanquetScale
+| 0.4 | %Species
+| 31 | %Biomass
+|===
+
+=== サンプリングイベントを一意に特定する方法
+
+各イベントは dwc:eventID と、場合によっては dwc:parentEventID を使って一意に識別されます。識別子の種類と形式は任意ですが、パブリッシャーは永続的なグローバルユニークな識別子を選択することを推奨します。GUID がない場合、パブリッシャーはオリジナルの fieldNumber を再利用することができます。
+
+既存の安定した識別子を再利用し、既に宣言されているイベントに対して新しい識別子を作らないように注意してください。
+
+=== イベントの階層をどのようにとらえるか
+
+サンプリングイベントは、共通の親識別子を介して互いに関連付けることができます（例：ネストしたサンプル）。例えば、Whittaker Plot内のいくつかのサブサンプリングイベントは、それぞれ独自のeventID（例えば、"A1:1"、"A1:2"）を持ち、共通のparentEventID（例えば "A1"）を共有するので、それらを簡単にリンクすることができます（表4および図3参照）。
+
+関係の性質（例：モニタリングシリーズの一部）に関するさらに詳細な情報は、付属のメタデータのプロジェクトセクションに記述することができます。
+
+また、以下のxref:sampling-event-data.adoc#q-how-do-i-publish-a-hierarchy-of-events-recursive-data-type-using-parentEventID[FAQ]を参照することもできます。
+
+=== 不在データの取り込み方法
+
+以下のxref:sampling-event-data.adoc#q-how-do-i-publish-absence-data[FAQ]をご参照ください。
+
+=== 補足マルチメディアの入れ方
+
+データの解釈を容易にするために、補足メディアを含めることができます。例えば、植生データの場合、データを解釈する際に、スキャンしたオリジナルのリレベシートへのリンクを含めると便利です。
+
+関連するファイルは外部サーバーでホストされ、dwc:associatedMediaと dwc:associatedReferencesを通してオカレンスにリンクされていなければなりません。これらのファイルは、フォーマットタイプが指定されている限り、画像、テキスト、またはその両方の組み合わせであってもよいです。JPG、PNGなどの画像はサムネイルとして表示され、PDFはクリック可能なリンクとして表示されます。
+
+== サンプリングイベントデータの公開
+
+=== 識別子にGUIDを使用する
+
+dwc:occurrenceID、dwc:eventID、dwc:organismID、dwc:locationIDなどのフィールドは、一意な識別子を必要とします。
+
+前述の通り、特定のフォーマットは強制されませんが、出版社にはGlobal Unique IDentifiers（GUID）を使用するようアドバイスしています。そのような識別子を提供するオンラインサービスがいくつかあります。例えば、http://www.geonames.org/ を使って dwc:locationID の識別子を見つける（あるいは新しい識別子を生成する）ことができます。例えば、http://sws.geonames.org/10793757/ はグリーンランドの湖の GUID です。
+
+=== 影響を受けやすい生物種の地理情報を保護する
+
+データセットにセンシティブな種が含まれている場合、これらの対処法があります。
+
+* 単にデータセットから該当種を削除する。
+* 属レベルでのみ種同定を公開する。
+* センシティブな種/保護種を別のデータセットで公開する。
+* 難読化された機密データポイントをメインデータセットで公開し、難読化されていない詳細をアクセス制限付きの別データセットで公開する（両方のデータセットに全データレコードを含む）。
+
+=== 逐語的データの保存
+
+逐語的なデータや説明はGBIF.orgのウェブインターフェースでは見ることができませんが、ダウンロードすることでコミュニティに公開されます。逐語的な説明を入力する場合は、必ず元の事象または発生にリンクさせるようにしてください。例えば、元の事象に与えられたIDまたはコードはdwc:fieldNumberに、元の発生観察に与えられたIDまたはコードはdwc:recordNumberに入力されるべきものです。
+
+=== プロジェクトデータを1つのデータセットとして公開する
+
+大規模なサンプリングプロジェクトから作成されたデータは、可能であれば1つのデータセットとして公開する必要があります。どうしても複数のデータセットとして公開しなければならない場合は，メタデータに共通のプロジェクト識別子を用いてリンクさせることを推奨します。
+
+=== オカレンスデータをサンプリングイベント・データとして再公開する
+
+サンプリングイベントは、より良いドキュメントを提供し、科学界と政策立案者の両方に利益をもたらします（詳しくはlink:https://www.gbif.org/sampling-event-data[こちら]）。私たちは、可能な限り、オカレンスデータをサンプリングイベントデータとして再公開することを強く推奨します。
+
+In order to do so, you should create a new sampling-event dataset and send an email to GBIF's Help Desk (helpdesk@gbif.org). In this email, you should provide the UUIDs of both the occurrence dataset and the new dataset. We will then be able to link the first dataset to the newest one before de-indexing it thereby avoiding occurrence duplication and preserving citations.
+
+=== 生体の連続的なモニタリングのモデル化
+
+データセットが鳥の追跡データのような、生きている個体の連続的なモニタリングを含んでいる場合、追跡されている個体のIDを格納するためにdwc:organicIDを使用することができます。また、追跡されている各個体を1つのイベントとして表現する必要があります。
+
+// TODO: Provide a recommendation on how to model continuous monitoring of live individuals, such as bird tracking data by using dwc:organismID to store the ID of the individual being tracked and by using a single event for representing each individual being tracked (with associated occurrences where it was recorded).
+
+== 継続的なデータ品質の改善
+
+=== データセットに関連する問題の管理
+
+可能であれば，GitHubなどの課題管理システムを使って、あるデータセットに関連するすべての課題を追跡することをお勧めします。
+
+=== データセットの生成やクリーニングに用いられたスクリプトやプログラムの共有
+
+データ変換に使用したカスタムスクリプトやプログラムは、GitHubで一般に公開されるのが理想的です。他の公開者は、これらのスクリプトとその使用方法の詳細な説明にアクセスすることで利益を得ることができます。
+
+== データセット・メタデータにサンプリングイベントデータを記述する
+
+公開者は，特にサンプリングの方法論に重点を置いて，可能な限りデータセットを文書化する必要があります。
+
+必須の要件に加えて、メタデータには、調査の範囲、サンプリング方法、品質管理、調査の限界に関する情報を含めるべきです。フィールドワークに関する情報はデータ内容の一部でもよいですが、サンプリングの場所や条件についてもメタデータに記述することができます。
+
+=== 関連するデータセットへのリンク
+
+データセットの中には、同じ研究プロジェクトから生まれたものや、ある文脈で関連するものがあるかもしれません。現在推奨されているのは、プロジェクト識別子を使ってリンクさせることです。
+
+=== 関連する研究をリストアップする
+
+雑誌記事、プロジェクトノートや論文など、関連する出版物へのリンクを書誌引用またはメタデータの外部リンク部分に含めることで、データセットの解釈を容易にすることができます。
+
+== 例
+
+以下は、典型的なサンプリングイベント・データセットの例です。各ケースで、Event core と Occurrence extension の主要なフィールドが提供されています。いくつかの例では、Relevé や measurement-or-fact などの追加拡張も含まれています。
+
+=== 淡水産無脊椎動物調査
+
+*コア（イベント）テーブル*
+
+|===
+| EventID | samplingProtocol | sampleSizeValue | sampleSizeUnit | eventDate | location | decimalLatitude | decimalLongitude
+
+| C_1428 | AQEM | 1.25 | m^2 | 2006-06-21 | Kinzig O3 Rothenbergen | 50.18689 | 9.100369
+| B_1538 | AQEM | 1.25 | m^2 | 2008-11-06 | Kinzig W3 Bulau | 50.1316 | 8.9657
+|===
+
+拡張（オカレンス）テーブル
+
+|===
+| EventID | scientificName | organismQuantity | organismQuantityType | ...
+
+| C_1428 | _Baetis rhodani_ | 14 | individuals |
+| C_1428 | _Ephemera danica_ | 15 | individuals |
+| C_1428 | _Gyraulus albus_ | 2 | individuals |
+| B_1538 | _Serratella ignita_ | 318 | individuals |
+|===
+
+*説明*
+
+_Ephemera danica_：1.25平方メートルから合計14個体採取されました。1平方メートルあたりの個体数は11.2（14/1.25）です。
+
+=== 汽水域の無脊椎動物調査
+
+*コア（イベント）テーブル*
+
+|===
+| EventID | samplingProtocol | sampleSizeValue | sampleSizeUnit | startDayOfYear | endDayOfYear | year | location | decimalLatitude | decimalLongitude | ...
+
+| IA1 | hand operated van Veen grab | 0.04 | m^2 | 147 | 154 | 1995 | Gialova lagoon | 36.9564 | 21.6661 |
+| IA3 | hand operated van Veen grab | 0.04 | m^2 | 147 | 154 | 1995 | Gialova lagoon | 36.9564 | 21.6661 |
+|===
+
+拡張（オカレンス）テーブル
+
+|===
+| EventID | scientificName | organismQuantity | organismQuantityType | ...
+
+| IA1 | _Abra ovata_ | 57 | individuals |
+| IA3 | _Bittium reticulatum_ | 113 | individuals |
+|===
+
+拡張（測定値や事実）テーブル
+
+|===
+| EventID | measurementType | measurementValue | measurementUnit | measurementRemarks | ...
+
+| IA1 | Tmp (sed) | 21.5 | Degree C | temperature at the bottom surface | --
+| IA1 | Rdx (sed)0 | 170 | mv | Eh value at the bottom surface (0cm) | --
+|===
+
+*説明*
+
+*_Abra ovata_*：サンプリングイベントIA1で、0.04平方メートルから合計57個体が得られました。
+
+各イベントには、それに関連する測定値や事実、たとえば、堆積物の温度や酸化還元電位（Eh）などの環境測定値を含めることもできます。
+
+=== 大型植物調査
+
+この例は、サンプリングイベントデータセットとして再公開された以前のバージョンのDutch Vegetation Database（LVD）に基づいていることに注意してください。Relevé拡張機能は、入門書の公開後に大幅な変更が加えられました。LVDと植生サンプリングイベントデータのデータモデルの詳細については、link:https：//gbif.blogspot.com/2016/07/probably-turbovegs-best-kept-secret.htmlを参照してください。
+
+|===
+| EventID | samplingProtocol | sampleSizeValue | sampleSizeUnit | eventDate | location | decimalLatitude | decimalLongitude | ...
+
+| 1001 | Braun Blanquet | 100 | m^2 | 09/08/2012 | Kinzig O3 Rothenbergen | 50.18689 | 9.100369 |
+|===
+
+拡張（オカレンス）テーブル
+
+|===
+| EventID | scientificName | organismQuantity | organismQuantityType | ...
+
+| 1001 | _Acer psuedoplatanus_ | r | BraunBlanquetScale |
+|===
+
+拡張（Relevé）テーブル
+
+|===
+| EventID | syntaxonCode | inclination | coverTotal | treesCover | coverShrubs | highTreeLayerHeight | highHerbLayerMeanHeight | mossesIdentified | ...
+
+| 1001 | 843200 | 40 | 100 | 95 | 50 | 25 | 40 | Y | --
+|===
+
+*説明*
+
+*_Acer psuedoplatanus_*：100平方メートルの調査において、Braun Blanquetスケールで「r」と報告されました。
+
+TurboVegタイプのデータベースによく見られる植生群落タイプ（syntaxon）％カバー値のような追加の植生プロット測定は、Relevé（植生プロット）拡張で取り込まれています。
+
+=== 鱗翅目調査 I
+
+*コア（イベント）テーブル*
+
+|===
+| EventID | samplingProtocol | sampleSizeValue | sampleSizeUnit | startDayOfYear | endDayOfYear | year | location | decimalLatitude | decimalLongitude | ...
+
+| 2320 | Jalas-model light trap with 160W ML matt lamp | 16 | day | 164 | 180 | 1999 | Kungsmarken | 55.72 | 13.28 | ...
+|===
+
+拡張（オカレンス）テーブル
+
+|===
+| EventID | scientificName | organismQuantity | organismQuantityType | ...
+
+| 2320 | _Opisthograptis luteolata_ | 11 | individuals |
+|===
+
+*説明*
+
+*_Opisthograptis luteolata_* : 16日間の観測で11個体が観測されました。1日あたりの個体数は0.68個体（11/16）です。
+
+=== 鱗翅目調査 II
+
+*コア（イベント）テーブル*
+
+|===
+| EventID | samplingProtocol | sampleSizeValue | sampleSizeUnit | eventDate | location | decimalLatitude | decimalLongitude | ...
+
+| 1014-tr023m | Pollard walks | 250 | m^2 | 2012-10-11 | Ramat Hanadiv botanik garden | 32.553191 | 34.947492 |
+| 1012-tr006-s5 | Pollard walks | 250 | m^2 | 2012-05-02 | Carmel Hurshan haarbaim | 32.75789805 | 35.02697333 |
+|===
+
+拡張（オカレンス）テーブル
+
+|===
+| EventID | scientificName | organismQuantity | organismQuantityType | ...
+
+|  1014-tr023m  | _Pieris  rapae_ | 1 | individuals |
+| 1014-tr023-s5  | _Maniola  telmessia_ | 2 | individuals |
+|===
+
+拡張（オカレンス）テーブル
+
+|===
+| EventID | measurementType | measurementValue | measurementUnit | measurementRemarks | ...
+
+| 1014-tr023m | Temp | 20 | Degree C |  |
+| 1014-tr023m | Wind speed | light | | |
+| 1014-tr023m | Cloudiness | 0 | Level 1 of 8 |  |
+| 1014-tr023m | AvgAltitude | 10 | m | Average altitude |
+|===
+
+*説明*
+
+*_ピエール・ラパエ（Pieras rapae ）_*：250平方メートルから1個体採取。いくつかの環境測定（例：気温、風速、曇り）については、測定または事実の拡張に含まれます。
+
+=== サンゴ礁魚類調査
+
+*コア（イベント）テーブル*
+
+|===
+| EventID | samplingProtocol | sampleSizeValue | sampleSizeUnit | eventDate | location | decimalLatitude | decimalLongitude | ...
+
+| 506003329 | Reef Life Survey methods | 500 | m^2 | 2006-09-02 | Cocos Islands | 5.56187 | -87.04693 |
+| 57003326 | Reef Life Survey methods | 500 | m^2 | 2006-12-11 | Panama Bight | 4.008553 | -81.605377 |
+|===
+
+拡張（オカレンス）テーブル
+
+|===
+| EventID | scientificName | organismQuantity | organismQuantityType | ...
+
+| 506003329 | Acanthurus nigricans | 42 | individuals |
+| 506003329 | Acanthurus xanthopterus | 1 | individuals |
+| 506003329 | Aulostomus chinensis | 4 | individuals |
+| 506003329 | Axoclinus cocoensis | 1 | individuals |
+|===
+
+*説明*
+
+*_Aulostomus chinensis_* : 今回のサンプリングでは、500平方メートルから合計4個体が採取されました。
+
+=== ネストしたサンプル
+
+.13のサブプロットからなるWhittakerプロットのこの例のように、いくつかのサブプロットが親イベントIDに関連している場合があります（プロットのレイアウトは図3を参照してください）。
+|===
+| EventID | parentEventID | samplingProtocol | sampleSizeValue | sampleSizeUnit | eventDate | location | decimalLatitude | decimalLongitude | ...
+
+| A1 |  | Modified Whittaker Plot | 1000 | m^2 | 1984-03-18 | Monarch | 55.72 | 13.28 |
+| A1.1 | A1 |  | 100 | m^2 |  |  | | |
+| A1.2 | A1 |  | 10 | m^2 |  |  | | |
+| A1.3 | A1 |  | 10 | m^2 |  |  | | |
+| A1.4 | A1 |  | 1 | m^2 |  |  | | |
+| A1.5 | A1 |  | 1 | m^2 |  |  | | |
+| A1.6 | A1 |  | 1 | m^2 |  |  | | |
+| A1.7 | A1 |  | 1 | m^2 |  |  | | |
+| A1.8 | A1 |  | 1 | m^2 |  |  | | |
+| A1.9 | A1 |  | 1 | m^2 |  |  | | |
+| A1.10 | A1 |  | 1 | m^2 |  |  | | |
+| A1.11 | A1 |  | 1 | m^2 |  |  | | |
+| A1.12 | A1 |  | 1 | m^2 |  |  | | |
+| A1.13 | A1 |  | 1 | m^2 |  |  | | |
+|===
+
+.面積の異なる13のサブプロットからなるWhittakerプロットの模式図。
+image::figures/whittaker_plot.png[]
+
+=== 追加で記載される可能性のある情報、または過去に記載された情報
+
+イベントのコア要素は、主にDwCのイベント、ロケーション、地質コンテキストクラスから抽出されています（表3）。オカレンスの拡張要素は、Occurrence、Taxon、Identification の各クラスから抽出されたものです。一貫性を保つため、発生拡張にはオカレンスコアに含まれるすべての用語が含まれます。したがって、Event、Location、Geological Contextの用語もオカレンス拡張にリストされていますが、実際には重複しています。IPTでは、ユーザーの利便性を考慮して、マッピング時に冗長な用語をデフォルトで非表示にすることに注意してください。
+
+.Event coreとOccurrence extensionにおけるサンプル関連用語の位置づけ。
+[cols="1h,1"]
+|===
+| Event Core
+| eventID, parentEventID, samplingProtocol, sampleSizeValue, sampleSizeUnit, samplingTaxaRange, siteTreatment, siteID, layer
+
+| Occurrence Extension
+| eventID, organismQuantity, organismQuantityType, siteID+, layer+
+|===
+
+「+」記号は、まだ承認されていない、提案された新しい用語を示します。
+
+=== 計画されている追加と改訂に関する注記：
+
+xref:best-practices-sampling-event-planned-additions.adoc[]

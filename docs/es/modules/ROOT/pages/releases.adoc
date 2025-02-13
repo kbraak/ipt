@@ -1,0 +1,377 @@
+= Versiones
+
+[TIP]
+.Última versión estable
+====
+La versión estable actual es la <<3-1-4-february-2025,3.1.4>>.
+
+ifeval::["{language}" != "en"]
+Está leyendo la última versión del manual. Puede leer versiones anteriores del manual utilizando los selectores situados en la parte superior derecha o inferior izquierda de la pantalla. Tenga en cuenta que no todas las versiones del manual están disponibles en TRANSLATOR_PUT_YOUR_LANGUAGE_HERE.
+endif::[]
+====
+
+== *3.1.4* – Febrero del 2025
+
+* https://repository.gbif.org/content/groups/gbif/org/gbif/ipt/3.1.4/ipt-3.1.4.war[Descargar WAR], xref:installation.adoc#installation-from-linux-packages[Paquetes Linux] or xref:installation.adoc#installation-from-docker[uso de Docker]
+* xref:release-notes.adoc[Notas de la versión IPT v3.1.4]
+* xref:index.adoc[Manual del Usuario]
+* Abordadas https://github.com/gbif/ipt/milestone/65?closed=1[6 incidencias].
+* Traducida en 7 idiomas
+
+Esta versión trae mejoras y correcciones de errores relacionados con los metadatos.
+
+Los usuarios existentes deben actualizar a esta versión siguiendo las instrucciones en xref:release-notes.adoc[Notas de la versión]. Los nuevos usuarios deben seguir xref:getting-started.adoc[Guía de introducción].
+
+No se ha estipulado una fecha de lanzamiento para la próxima versión. El progreso en el trabajo realizado sobre las incidencias para el próximo lanzamiento puede consultarse https://github.com/gbif/ipt/milestones [en GitHub].
+
+Los problemas menores y los asuntos de seguridad se abordarán en parches para las diferentes versiones.
+
+== *3.1.3* - Enero 2025
+
+* https://repository.gbif.org/content/groups/gbif/org/gbif/ipt/3.1.3/ipt-3.1.3.war[Descargar WAR], xref:installation.adoc#installation-from-linux-packages[Paquetes Linux] o xref:installation.adoc#installation-from-docker[uso de Docker]
+* xref:release-notes.adoc[Notas de la versión IPT v3.1.3]
+* xref:index.adoc[Manual del Usuario]
+* Abordadas https://github.com/gbif/ipt/milestone/64?closed=1[7 incidencias].
+* Traducida en 7 idiomas
+
+Esta versión menor incluye correcciones de errores para Camtrap DP y algunas pequeñas mejoras.
+
+== *3.1.2* – Diciembre 2024
+
+* https://repository.gbif.org/content/groups/gbif/org/gbif/ipt/3.1.2/ipt-3.1.2.war[Descargar WAR], xref:installation.adoc#installation-from-linux-packages[Paquetes Linux] or xref:installation.adoc#installation-from-docker[uso de Docker]
+* xref:release-notes.adoc[Notas de la versión IPT v3.1.2]
+* xref:index.adoc[Manual del Usuario]
+* Abordadas https://github.com/gbif/ipt/milestone/63?closed=1[20 incidencias].
+* Traducida en 7 idiomas
+
+Esta versión brinda soporte para ColDP. Además, presenta algunas mejoras generales y correcciones de errores en la creación de fuentes y la carga de archivos.
+
+== *3.1.1* – Diciembre 2024
+
+* https://repository.gbif.org/content/groups/gbif/org/gbif/ipt/3.1.1/ipt-3.1.1.war[Descargar WAR], xref:installation.adoc#installation-from-linux-packages[Paquetes Linux] o xref:installation.adoc#installation-from-docker[uso de Docker]
+* xref:release-notes.adoc[Notas de la versión IPT v3.1.1]
+* xref:index.adoc[Manual del Usuario]
+* Abordadas https://github.com/gbif/ipt/milestone/62?closed=1[7 incidencias].
+* Traducida en 7 idiomas
+
+Esta versión menor introduce algunas mejoras generales y aborda incidencias con el mapeo de algunas extensiones.
+
+== *3.1.0* – Octubre 2024
+
+* https://repository.gbif.org/content/groups/gbif/org/gbif/ipt/3.1.0/ipt-3.1.0.war[Descargar WAR], xref:installation.adoc#installation-from-linux-packages[Paquetes Linux] or xref:installation.adoc#installation-from-docker[uso de Docker]
+* xref:release-notes.adoc[Notas de la versión IPT v3.1.0]
+* xref:index.adoc[Manual del Usuario]
+* Abordadas https://github.com/gbif/ipt/milestone/60?closed=1[48 incidencias].
+* Traducida en 7 idiomas
+
+Esta versión introduce soporte para EML 2.2.0.
+
+== *3.0.6* – Junio 2024
+
+* Abordadas https://github.com/gbif/ipt/milestone/58?closed=1[3 incidencias].
+* Traducida en 7 idiomas
+
+Esta versión menor aborda problemas con la descripción de metadatos taxonómicos y las advertencias de la red de registro.
+
+== *3.0.5* – Junio 2024
+
+* Abordadas https://github.com/gbif/ipt/milestone/57?closed=1[5 incidencias].
+* Traducida en 7 idiomas
+
+Esta versión menor aborda incidencias sobre actualización de vocabulario, registro de recursos Camptrap y más.
+
+== *3.0.4* – Mayo 2024
+
+* Abordadas https://github.com/gbif/ipt/milestone/56?closed=1[2 incidencias].
+* Traducida en 7 idiomas
+
+Esta versión menor soluciona problemas con los metadatos.
+
+== *3.0.3* – Abril 2024
+
+* Abordadas https://github.com/gbif/ipt/milestone/55?closed=1[4 incidencias].
+* Traducida en 7 idiomas
+
+Esta versión menor soluciona problemas con los metadatos y la asignación de DOIs.
+
+== *3.0.2* - Abril 2014
+
+* Abordadas https://github.com/gbif/ipt/milestone/54?closed=1[11 incidencias].
+* Traducida en 7 idiomas
+
+Esta versión menor soluciona problemas con los metadatos inferidos, la funcionalidad DOI y la configuración.
+
+== *3.0.1* – Febrero 2024
+
+* Abordadas https://github.com/gbif/ipt/milestone/52?closed=1[12 incidencias].
+* Traducida en 7 idiomas
+
+Esta versión menor soluciona problemas con metadatos inferidos, recursos faltantes y archivos fuente de Excel.
+
+
+== *3.0.0* – Febrero 2024
+
+* Abordadas https://github.com/gbif/ipt/milestone/38?closed=1[141 incidencias].
+* Traducida en 7 idiomas
+
+La versión 3.0.0 es una liberación mayor, incorpora una nueva capacidad que va más allá del formato Darwin Core Archive. El IPT 3 seguirá proporcionando todas las funciones de las versiones anteriores, pero además permitirá al usuario asignar conjuntos de datos a esquemas https://frictionlessdata.io[Frictionless Data] compatibles. El primero de ellos es https://tdwg.github.io/camtrap-dp/[Paquete de datos de cámara trampa (Camtrap DP)].
+
+
+== *2.7.7* Noviembre 2023
+
+* Abordadas https://github.com/gbif/ipt/milestone/50?closed=1[10 incidencias].
+* Traducida en 7 idiomas
+
+Esta versión menor soluciona problemas con la visibilidad de mapas y recursos. También permite la configuración del idioma predeterminado.
+
+== *2.7.6* – Septiembre 2023
+
+* Abordadas https://github.com/gbif/ipt/milestone/49?closed=1[13 incidencias].
+* Traducida en 7 idiomas
+
+Esta versión menor aborda problemas con la inferencia de metadatos y la gestión de vocabulario.
+
+== *2.7.5* – Agosto de 2023
+
+* Abordadas https://github.com/gbif/ipt/milestone/47?closed=1[18 incidencias].
+* Traducida en 7 idiomas
+
+Esta versión menor trae la red predeterminada para la función IPT y correcciones de errores.
+
+
+== *2.7.4* – Julio 2023
+
+* Abordadas https://github.com/gbif/ipt/milestone/46?closed=1[21 incidencias].
+* Traducida en 7 idiomas
+
+Esta versión trae un nuevo cargador de archivos, una nueva configuración de IPT, fuentes de URL comprimidas y más.
+
+
+== *2.7.3* - Marzo 2023
+
+* Abordadas https://github.com/gbif/ipt/milestone/45?closed=1[5 incidencias].
+* Traducida en 7 idiomas
+
+Esta versión menor aporta mejoras en la interfaz de usuario y correcciones menores.
+
+== *2.7.2* - Febrero 2023
+
+* Abordada https://github.com/gbif/ipt/milestone/44?closed=1[1 incidencia].
+* Traducida en 7 idiomas
+
+Esta actualización menor soluciona el error con las traducciones.
+
+== *2.7.1* - Enero 2023
+
+* Abordadas https://github.com/gbif/ipt/milestone/43?closed=1[2 incidencias].
+* Traducida en 7 idiomas
+
+Esta actualización menor incluye correcciones de errores en las tablas de recursos y en la administración de DOI.
+
+== *2.7.0* – Enero 2023
+
+* Abordadas https://github.com/gbif/ipt/milestone/42?closed=1[47 incidencias].
+* Traducida en 7 idiomas
+
+Esta versión con cambios mayores, incluye nuevas características, correccion de incidencias y mejoras. Las más importantes: nuevas tablas de recursos con mejor rendimiento para una gran cantidad de recursos; mejoras de rendimiento para el proceso de registro/publicación; la posibilidad de arrastrar y soltar contenidos en los metadatos y mucho más.
+
+== *2.6.3* – Octubre de 2022
+
+* Abordadas https://github.com/gbif/ipt/milestone/41?closed=1[12 incidencias].
+* Traducida en 7 idiomas
+
+Esta versión incluye correcciones de errores y seguridad.
+
+== *2.6.2* – Octubre de 2022
+
+* Abordadas https://github.com/gbif/ipt/milestone/40?closed=1[7 incidencias].
+* Traducida en 7 idiomas
+
+Esta versión incluye una corrección de errores en la creación de usuarios.
+
+== *2.6.1* – Septiembre 2022
+
+* Abordada https://github.com/gbif/ipt/milestone/39?closed=1[1 incidencia].
+* Traducida en 7 idiomas
+
+Esta versión incluye una corrección de un error asociado a tablas vacias
+
+== *2.6.0* – Septiembre 2022
+
+* Abordadas https://github.com/gbif/ipt/milestone/37?closed=1[42 incidencias].
+* Traducida en 7 idiomas
+
+Esta versión trae muchas nuevas características, correcciones de errores y mejoras. A destacar, la gestión de la interfaz de usuario del administrador (esquema de colores, carga de logos), la inferencia automática de metadatos y mucho más. Para más detalles, visite https://github.com/gbif/ipt/milestone/37?closed=1[GitHub].
+
+== *2.5.8* - Mayo de 2022
+
+* Abordadas https://github.com/gbif/ipt/milestone/35?closed=1[9 incidencias].
+* Traducida en 7 idiomas
+
+Esta versión incluye una corrección de errores para la publicación de recursos con DOI y otras correcciones menores (véase https://github.com/gbif/ipt/milestone/35?closed=1[issues]).
+
+== *2.5.7* – Febrero 2022
+
+* Abordadas https://github.com/gbif/ipt/milestone/34?closed=1[5 incidencias].
+* Traducida en 7 idiomas
+
+Esta versión incluye pequeñas mejoras en la interfaz de usuario, corrige un error con las fuentes de datos de la base de datos y corrige un problema al eliminar los que tenían asignado un DOI dentro del IPT. También corrige el botón "Restablecer contraseña" en la página de administración.
+
+== *2.5.6* – Febrero 2022
+
+* Abordadas https://github.com/gbif/ipt/milestone/33?closed=1[21 incidencias].
+* Traducida en 7 idiomas
+
+Esta versión trae nuevos términos de Darwin Core (stablishmentMeans, degreeOfEstablishment, pathway etc.) También cambia la forma en que se almacenan las contraseñas de los usuarios para mejorar su seguridad. Se anima a todos los usuarios a actualizar a esta versión.
+
+== *2.5.5* – Diciembre 2021
+
+* Abordadas https://github.com/gbif/ipt/milestone/32?closed=1[3 incidencias].
+* Traducida en 7 idiomas
+
+Esta versión contiene actualizaciones adicionales de seguridad de la biblioteca Log4J. También contiene una corrección relacionada con el Darwin Core (los elementos identifiedByID/recordedByID que no se mostraban). Se recomienda a todos los usuarios que actualicen a esta versión, especialmente si utilizan esos elementos del Darwin Core.
+
+== *2.5.4* – Diciembre 2021
+
+* Abordadas https://github.com/gbif/ipt/milestone/31?closed=1[3 incidencias].
+* Traducida en 7 idiomas
+
+Esta versión contiene correcciones a problemas de seguridad críticos con las bibliotecas Struts y https://nvd.nist.gov/vuln/detail/CVE-2021-44228[Log4J]. Se recomienda a todos los usuarios que actualicen a esta versión lo antes posible.
+
+== *2.5.3* – Diciembre 2021
+
+* Abordadas https://github.com/gbif/ipt/milestone/30?closed=1[2 incidencias].
+* Traducida en 7 idiomas
+
+Esta versión contiene una actualización de la traducción al español de la interfaz de usuario y una pequeña corrección de errores para la página de vocabularios en la sección de administración. No hay otros cambios desde la versión 2.5.2 y no es necesario actualizar si no desea hacerlo. Gracias al trabajo de los traductores, se ha completado la traducción de este manual de usuario al español.
+
+== *2.5.2* Noviembre 2021
+
+* Abordadas https://github.com/gbif/ipt/milestone/29?closed=1[26 incidencias].
+* Traducida en 7 idiomas
+
+Esta versión aborda los errores introducidos en las versiones 2.5 anteriores, principalmente en torno a la edición de metadatos y las citaciones. Se incluyen otras mejoras para la instalación y la administración del servidor, así como actualizaciones de la interfaz de usuario y nuevas versiones de las dependencias de las bibliotecas.
+
+== *2.5.1* – Septiembre de 2021
+
+* Abordadas https://github.com/gbif/ipt/milestone/27?closed=1[4 incidencias].
+* Traducida en 7 idiomas
+
+Esta versión soluciona un error introducido en la versión 2.5.0, que impedía al IPT conectarse a fuentes de bases de datos. Los usuarios que conecten el IPT a fuentes de bases de datos tendrán que actualizarse a la versión 2.5.1.
+
+== *2.5.0* – Agosto de 2021
+
+* Abordadas https://github.com/gbif/ipt/milestone/27?closed=1[81 incidencias].
+* Traducida en 7 idiomas
+
+Esta versión aborda 81 incidencias incluyendo el famoso "error de doble inicio de sesión" y trae una interfaz de usuario de aspecto más fresco. El manual de usuario también se ha renovado, permitiendo una traducción completa al español.
+
+== *2.4.2* - Septiembre 2020
+
+* Abordada https://github.com/gbif/ipt/milestone/9?closed=1[1 incidencia].
+* Traducida en 7 idiomas
+
+La versión 2.4.2 corrige una vulnerabilidad de seguridad menor en Apache Struts, que utiliza el IPT. Los usuarios deben planificar la actualización a esta versión siguiendo las instrucciones de las notas de la versión. También se incluye una mejora en el uso de la memoria cuando se leen grandes conjuntos de datos desde un servidor PostgreSQL.
+
+== *2.4.1* - Septiembre 2020
+
+* Abordadas https://github.com/gbif/ipt/milestone/25?closed=1[12 incidencias].
+* Traducida en 7 idiomas
+
+La versión 2.4.1 corrige una vulnerabilidad de seguridad en Apache Struts, que utiliza el IPT. Los usuarios deben planificar la actualización a esta versión siguiendo las instrucciones de las notas de la versión.
+
+== *2.4.0* – Julio 2019
+
+* Abordadas https://github.com/gbif/ipt/milestone/8?closed=1[19 incidencias].
+* Traducida en 7 idiomas
+
+La versión 2.4.0 corrige vulnerabilidades de seguridad en Apache Jackson y Apache Struts, que utiliza el IPT. Los usuarios deben planificar la actualización a esta versión siguiendo las instrucciones de las notas de la versión. También actualiza la integración para DOI personalizados de DataCite y elimina la compatibilidad (no utilizada) para DOI de EZID. El número de versión se actualizó a 2.4.0 para reflejar la eliminación de la compatibilidad con EZID.
+
+== *2.3.6* - Julio 2018
+
+* Abordadas https://github.com/gbif/ipt/milestone/7?closed=1[20 incidencias].
+* Traducida en 7 idiomas
+
+La versión 2.3.6 corrige una vulnerabilidad de seguridad en JQuery, que utiliza el IPT. Los usuarios deben planificar la actualización a esta versión siguiendo las instrucciones de las notas de la versión.
+
+https://github.com/gbif/ipt/issues/1411[Una incidencia] permanece con DOIs personalizados de DataCite. Si es necesario, se lanzará otra versión del IPT en julio o agosto.
+
+== *2.3.5* – Octubre 2017
+
+* Abordadas https://github.com/gbif/ipt/milestone/6[27 incidencias]: 6 Defectos, 7 Mejoras y 15 de Otro tipo
+* Traducida en 7 idiomas
+
+La versión 2.3.4 corrige una https://struts.apache.org/docs/s2-045.html [vulnerabilidad de seguridad] que se descubrió en el marco web Apache Struts, que utiliza el IPT. Esta vulnerabilidad de seguridad afecta a todas las versiones de IPT, incluida la 2.3.3, por lo que todos los usuarios deben planificar la actualización a esta versión inmediatamente siguiendo las instrucciones de las notas de la versión.
+
+== *2.3.4* - Marzo 2017
+
+* Abordadas https://github.com/gbif/ipt/milestone/5[5 incidencias]: 6 Defectos, 1 Mejora y 1 de Otro tipo
+* Traducida en 7 idiomas
+
+La versión 2.3.4 corrige una https://struts.apache.org/docs/s2-045.html [vulnerabilidad de seguridad] que se descubrió en el marco web Apache Struts, que utiliza el IPT. Esta vulnerabilidad de seguridad afecta a todas las versiones de IPT, incluida la 2.3.3, por lo que todos los usuarios deben planificar la actualización a esta versión inmediatamente siguiendo las instrucciones de las notas de la versión.
+
+== *2.3.3* - Diciembre 2016
+
+* Abordadas https://github.com/gbif/ipt/milestone/3[90 incidencias]: 22 defectos, 17 mejoras, 36 no se solucionan, 10 duplicados y 5 de otro tipo
+* Traducida en 7 idiomas
+
+En https://gbif.blogspot.com/2017/01/ipt-v233-your-repository-for.html[esta entrada del blog] se describen las nuevas características añadidas al IPT en la versión 2.3.3. Además, tenga en cuenta por favor, que GBIF lanzó recientemente un nuevo conjunto de modelos de Microsoft Excel para la carga de datos en el IPT. Los nuevos modelos proporcionan una solución más simple para la captura, formateo y subida de los tres tipos de datos de GBIF: xref:sampling-event-data.adoc[datos de eventos de muestro], xref:occurrence-data.adoc[datos de presencias de especies] y xref:checklist-data.adoc[datos de listados de especies]. Se puede encontrar más información sobre estos modelos en https://www.gbif.org/newsroom/news/new-darwin-core-spreadsheet-templates[esta noticia].
+
+== *2.3.2* - Octubre de 2015
+
+* Abordadas https://github.com/gbif/ipt/milestone/2?closed=1[14 incidencias]: 12 Defectuosas, 2 No se solucionan
+* Traducida en 6 idiomas
+
+== *2.3.1* - Septiembre de 2015
+
+* Abordadas https://github.com/gbif/ipt/milestone/1?closed=1[3 incidencias]: 3 Defectuosas
+* Traducida en 6 idiomas
+
+== *2.3* - Septiembre 2015
+
+* Abordadas https://github.com/gbif/ipt/milestone/20?closed=1[38 incidencias]: 15 defectos, 15 mejoras, 4 no se Solucionan y 4 que fueron consideradas como tareas
+* Traducida en 6 idiomas
+
+== *2.2.1* - Abril de 2015
+
+* Abordadas https://github.com/gbif/ipt/milestone/19?closed=1[5 incidencias]: 3 Defectuosas, 1 Mejora, 1 de Otro tipo
+* Traducida en 6 idiomas
+
+== *2.2* - Marzo 2015
+
+* https://gbif.blogspot.com/2015/03/ipt-v22.html[Anuncio del lanzamiento]
+* Abordadas https://github.com/gbif/ipt/milestone/18?closed=1[74 incidencias]: 20 defectos, 26 mejoras, 16 no se solucionan, 6 duplicados, 2 de otro tipo, 1 tarea y 3 que fueron consideradas invalidas
+* Traducida en 6 idiomas
+
+== *2.1* - Abril 2014
+
+* https://gbif.blogspot.com/2014/04/ipt-v21.html[Anuncio del lanzamiento]
+* Abordadas https://github.com/gbif/ipt/milestone/16?closed=1[85 incidencias]: 38 defectos, 11 mejoras, 18 no se Solucionan, 6 duplicados, 1 de otro tipo y 11 que fueron considerados Invalidos
+* Traducida a 6 idiomas (añadida traducción al japonés)
+
+== *2.0.5* - Mayo 2013
+
+* https://gbif.blogspot.com/2013/05/ipt-v205-released-melhor-versao-ate-o.html[Anuncio del lanzamiento]
+* Abordadas https://github.com/gbif/ipt/milestone/14?closed=1[45 incidencias]: 15 defectos, 17 mejoras, 2 parches, 7 no se Solucionan, 3 duplicados y 1 que fue considerada invalida
+* Traducida a 5 idiomas (añadida traducción al portugués)
+
+== *2.0.4* - Octubre 2012
+
+* https://gbif.blogspot.com/2012/10/ipt-v204-released.html[Anuncio del lanzamiento]
+* Abordadas https://github.com/gbif/ipt/milestone/13?closed=1[108 incidencias]: 38 defectos, 35 mejoras, 7 de otro tipo, 5 parches, 18 no se Solucionan, 4 duplicados y 1 que fue considerada como invalida
+* Traducida a 4 idiomas (añadida traducción a chino tradicional)
+
+== *2.0.3* Noviembre 2011
+
+* https://gbif.blogspot.com/2011/11/important-quality-boost-for-gbif-data.html[Anuncio del lanzamiento]
+* Abordadas https://github.com/gbif/ipt/milestone/12?closed=1[85 incidencias]: 43 defectos, 31 mejoras, 3 parches, 7 no se Solucionan y 1 duplicado
+* Traducida a 3 idiomas (añadidas traducciones a francés y español)
+
+== *2.0.2* – Junio de 2011
+
+* https://lists.gbif.org/pipermail/ipt/2011-June/000352.html[Anuncio del lanzamiento]
+
+== *2.0.1* – Febrero de 2011
+
+* Primer lanzamiento del IPT versión 2
+* https://lists.gbif.org/pipermail/ipt/2011-February/000309.html[Anuncio del lanzamiento]

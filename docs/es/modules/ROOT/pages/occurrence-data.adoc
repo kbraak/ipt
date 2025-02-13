@@ -1,0 +1,73 @@
+= Datos de registros biológicos
+
+== Introducción
+Recursos que presentan pruebas de la presencia de una especie en un lugar concreto y, normalmente, en una fecha determinada. Estos conjuntos de datos complementan la mayoría de los datos de las listas de especies porque contribuyen a mapear la distribución histórica o actual de una especie. En el nivel más básico, estos conjuntos de datos pueden proporcionar sólo información general sobre la localidad (incluso limitada a un identificador de país). Lo ideal es que también incluyan coordenadas y la precisión de las coordenadas para apoyar el mapeo a escala fina. En muchos casos, estos conjuntos de datos pueden registrar por separado múltiples individuos de la misma especie. Las bases de datos de especímenes de las colecciones de historia natural, las observaciones de la ciencia ciudadana, los datos de los proyectos de atlas de especies, etc. son ejemplos de estos conjuntos de datos. Si existe suficiente información en el conjunto de datos fuente (o se aplica de forma coherente a todos los registros biológicos del conjunto de datos), se recomienda que estos conjuntos de datos se presenten como xref:sampling-event-data.adoc[datos de eventos de muestreo]. Estos conjuntos de datos incluyen la misma información descriptiva básica incluida en xref:resource-metadata.adoc[metadatos del recurso].
+
+== Cómo transformar sus datos en datos de registros biológicos
+
+image::ipt2/flow-od.png[]
+
+Ultimately your data needs to be transformed into a table structure using Darwin Core (DwC) term names as column names.
+
+Try putting your data into the <<Templates,Excel template>>, which includes all <<Required DwC Fields,required DwC fields>> and <<Recommended DwC Fields,recommended DwC fields>>.
+
+Alternatively if your data is stored in a xref:database-connection.adoc[supported database], you can write an SQL table (view) using DwC column names. Be careful to include all <<Required DwC Fields,required DwC fields>> and add as many <<Recommended DwC Fields,recommended DwC fields>> as possible.
+
+Para obtener una orientación adicional puede consultar los <<Conjuntos de datos de ejemplo, conjuntos de datos de ejemplo>>.
+
+Puede enriquecer su tabla con columnas DwC adicionales, pero sólo con elementos DwC de esta {latest-dwc-occurrence}[lista].
+
+=== Plantillas
+
+link:{attachmentsdir}/downloads/occurrence_ipt_template_v2.xlsx[image:ipt2/excel-template2.png[Plantilla de Excel]] link:{attachmentsdir}/downloads/occurrence_ipt_template_v2_example_data.xlsx[image:ipt2/excel-template-data2.png[Plantilla de Excel (con datos de ejemplo)]]
+
+Llene el formato y súbalo al IPT. Intente ampliarlo con tantos http://rs.tdwg.org/dwc/terms/[términos DwC] como pueda.
+
+=== Campos DwC obligatorios
+
+* https://dwc.tdwg.org/terms/#dwc:occurrenceID[occurrenceID]
+* https://dwc.tdwg.org/terms/#dwc:basisOfRecord[basisOfRecord]
+* https://dwc.tdwg.org/terms/#dwc:scientificName[scientificName]
+* https://dwc.tdwg.org/terms/#dwc:eventDate[eventDate]
+
+=== Campos DwC recomendados
+
+* https://dwc.tdwg.org/terms/#dwc:taxonRank[taxonRank] - para justificar el nombre científico (scientificName)
+* https://dwc.tdwg.org/terms/#dwc:kingdom[kingdom] - y otra taxonomía superior si es posible
+* https://dwc.tdwg.org/terms/#dwc:decimalLatitude[decimalLatitude] & https://dwc.tdwg.org/terms/#dwc:decimalLongitude[decimalLongitude] & https://dwc.tdwg.org/terms/#dwc:geodeticDatum[geodeticDatum] - to provide a specific point location
+* https://dwc.tdwg.org/terms/#dwc:countryCode[countryCode]
+* https://dwc.tdwg.org/terms/#dwc:individualCount[individualCount] / https://dwc.tdwg.org/terms/#dwc:organismQuantity[organismQuantity] & https://dwc.tdwg.org/terms/#dwc:organismQuantityType[organismQuantityType] - para registrar la cantidad de registros biológicos de una especie
+
+=== Conjuntos de datos de ejemplo
+
+* https://ipt.vertnet.org/archive.do?r=cumv_amph[CUMV Amphibian Collection (Arctos)] (también registrado en GBIF aquí: https://doi.org/10.15468/emivh3)
+
+=== Preguntas frecuentes
+
+==== P. ¿Cómo puedo indicar que una especie está ausente?
+
+*A.* Ajuste https://dwc.tdwg.org/terms/#dwc:occurrenceStatus[occurrenceStatus]=link:{latest-occurrence-status}["ausente"]. Además, https://dwc.tdwg.org/terms/#dwc:individualCount[individualCount] y https://dwc.tdwg.org/terms/#dwc:organismQuantity[organismQuantity] deben ser iguales a 0.
+
+==== P. ¿Cómo puedo generalizar datos de registros biológicos de especies sensibles?
+
+*R.* La manera de generalizar los datos de especies sensibles (por ejemplo, restringiendo la resolución de los datos) depende de la categoría de sensibilidad de la especie. Cuando hay un bajo riesgo de resultados negativos, sigue siendo apropiada la publicación sin restricciones de los datos de especies sensibles. Tenga en cuenta que es responsabilidad del editor proteger los datos de registros biológicos de especies sensibles. Para obtener orientación, consulte esta https://www.gbif.org/resource/80512[guía de buenas prácticas]. Puede consultar este http://science.sciencemag.org/content/356/6340/800[ensayo reciente en Science], que presenta un esquema de evaluación simplificado que puede utilizarse para ayudar a evaluar los riesgos de la publicación de datos sobre especies sensibles.
+
+Al generalizar datos, debe intentar no reducir el valor de los datos para el análisis y hacer que los usuarios sepan cómo y por qué se modificó el registro original utilizando el elemento Darwin Core https://dwc.tdwg.org/terms/#dwc:informationWithheld[informationWithheld].
+
+Como se indica en la http://www.gbif.org/resource/80512[guía de buenas prácticas], también debe publicar una listado de las especies sensibles que se están generalizando. Para cada especie deberá explicar:
+
+* la justificación de la inclusión en la lista
+* la cobertura geográfica de la sensibilidad
+* la categoría de sensibilidad
+* la fecha en que se revisará la sensibilidad
+
+Esto ayudará a alertar a otros custodios de datos de que estas especies se consideran potencialmente sensibles en una zona determinada y que deben tener en cuenta la sensibilidad al publicar los resultados de sus análisis, etc.
+
+===== Ecuaciones útiles para generalizar la localización de puntos
+
+La siguiente ecuación difumina un punto de latitud/longitud por un factor de 5000m. Tenga en cuenta que pointX y pointY deben proporcionarse en "longitud en metros" y que TRUNC trunca el número a un entero eliminando la parte decimal:
+
+----
+pointX = TRUNC(pointX / 5000) * 5000
+pointY = TRUNC(pointY / 5000) * 5000
+----

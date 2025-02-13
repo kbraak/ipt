@@ -1,0 +1,66 @@
+= データセットへのライセンス適用
+
+== Introduction
+
+In accordance with the http://www.gbif.org/terms/licences[GBIF licensing policy], a dataset should be made available for use under CC0, CC-BY, or CC-BY-NC. GBIF's recommended best practice is to use the most recent version, which is 4.0 for CC-BY and CC-BY-NC. This is in line with Creative Commons' recommendation that:
+
+[quote]
+link:https://wiki.creativecommons.org/wiki/License_Versions[ライセンスバージョン]ページで説明されている多くの改善点を利用するためには、常に最新バージョンのクリエイティブ・コモンズ・ライセンスを使用する必要があります。特に、4.0は国際的な使用やlink:https://blog.creativecommons.org/2011/08/23/data-governance-our-idea-for-the-moore-foundation/[データの共有]など、様々な文脈での使用に適することを目指しています。
+
+4.0 CCライセンススイートにおける新機能の詳細についてはlink:https://creativecommons.org/version4/[こちら]をご覧ください。これは、IPTのバージョンv2.3.2以降でサポートされているバージョンです。
+
+このページのあとの部分では、適切にライセンスをデータセットに適用する方法、およびデータセットレベルとレコードレベルで一貫性を確保する方法について説明します。
+
+なお、CC0は厳密には権利放棄となります。
+
+== データセットレベル
+
+選択したライセンスは、データセット全体に適用されなければなりません。複数のライセンスが互いに補完し合っている場合でも（例：CC-BYとODC-By）、*データセットレベル*では1つのライセンスしか適用されないはずです。
+
+IPTのデータセットレベルでライセンスを適用するには、基本メタデータのページでドロップダウンからライセンスを選択します。
+
+image::ipt2/v22/LicenseDropdownWide.png[]
+
+データセットの別々の構成要素に異なるライセンスが適用される場合、それぞれの構成要素を独自のメタデータと識別子（例：DOI）を付けて別々に公開することを推奨します。これは、DataCiteのこのようなケースに対する推奨慣行に準拠しています。
+
+== レコードレベル
+
+*レコードレベル*で指定されるすべてのライセンスは、データセットレベルのライセンスに準拠する必要があります。
+
+IPTを使用して*レコードレベル*でライセンスを適用するために、出版社はダーウィンコア用語link:http://rs.tdwg.org/dwc/terms/index.htm#dcterms:license[license]を使用・マッピングする必要があります。ダーウィンコアの勧告に従って、ライセンスのURIを使用してライセンスを入力する必要があります。ダーウィンコア用語link:http://rs.tdwg.org/dwc/terms/index.htm#dcterms:accessRights[accessRights]で矛盾する使用制限を追加しないように注意してください。理論的には、ライセンスはaccessRightsで指定しなくても十分なアクセス権情報を提供するはずです。
+
+ダーウィンコア用語link:http://rs.tdwg.org/dwc/terms/history/#dcterms:rights[rights]は現在では非推奨となっており、もう使用されないことに注意してください。
+
+== 補足情報
+
+=== 手動でライセンスを申請する方法
+
+リソース作成時にEMLメタデータドキュメントからリソースメタデータを自動的に入力することができます。EML文書で提供されるライセンスは、機械可読形式で提供される限り解釈可能です。
+
+EMLで機械可読形式のライセンスを提供するには、`<intellectualRights><para>`内の`<ulink>`要素を使用してライセンスのタイトルとURLの両方を指定します。GBIFメタデータプロファイルに準拠した文書が有効なXMLであるためには、スキーマの最新バージョン（v1.1）を使用する必要があります。
+
+以下は、GBIFがサポートする3つのライセンスの`<intellectualRights>`の例で、機械可読形式でどのように提供するかを示しています。EML文書内の`<intellectualRights>`ブロックを、ご希望のライセンスに対応した下記の`<intellectualRights>`に置き換えるだけで適用できます。
+
+==== パブリックドメイン（CC0 1.0）
+
+----
+<intellectualRights>
+   <para>To the extent possible under law, the publisher has waived all rights to these data and has dedicated them to the <ulink url="http://creativecommons.org/publicdomain/zero/1.0/legalcode"><citetitle>Public Domain (CC0 1.0)</citetitle></ulink>. Users may copy, modify, distribute and use the work, including for commercial purposes, without restriction</para>
+</intellectualRights>
+----
+
+==== クリエイティブ・コモンズ・アーティビューション（CC-BY）4.0
+
+----
+<intellectualRights>
+  <para>This work is licensed under a <ulink url="http://creativecommons.org/licenses/by/4.0/legalcode"><citetitle>Creative Commons Attribution (CC-BY) 4.0 License</citetitle></ulink>.</para>
+</intellectualRights>
+----
+
+==== クリエイティブ・コモンズ 表示 - 非商用（CC-BY-NC）4.0
+
+----
+<intellectualRights>
+  <para>This work is licensed under a <ulink url="http://creativecommons.org/licenses/by-nc/4.0/legalcode"><citetitle>Creative Commons Attribution Non Commercial (CC-BY-NC) 4.0 License</citetitle></ulink>.</para>
+</intellectualRights>
+----

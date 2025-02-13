@@ -1,0 +1,60 @@
+= Mapeo de DataCite a EML
+
+Para entender cómo el IPT produce los metadatos DataCite a partir de las propiedades de recursos de EML e IPT, puede consultar las correspondencias a continuación.
+
+== Mapeos
+
+Leyenda:
+
+* *Propiedad DataCite*: indica el nombre de la propiedad de metadatos de DataCite
+* *Obl.*: Obligación, la propiedad es (M) obligatoria, \(R) recomendada y (O)opcional
+* *Occ*: Ocurrencia/cardinalidad, la propiedad es (1-n) requerida y repetible, (1) requerida pero no repetible, (0-n) opcional y repetible, (0-1) opcional pero no repetible
+* *Propiedad IPT/EML*: Propiedad del recurso IPT, o propiedad EML a la que corresponde la propiedad DataCite
+
+[cols="4"]
+|===
+| elemento DataCite | Obl. | Occ. | elemento IPT/EML
+
+|identifier             |M         |1         |DOI del recurso
+|identifierType         |M         |1         |“DOI” - valor controlado
+|creator                |M         |1-n       |Creador del recurso (además de asociar las partes con el rol originador)
+|creatorName            |M         |1         |Nombre del creador del recurso
+|nameIdentifier         |R         |0-1       |ORCID del creador del recurso
+|nameIdentifierScheme   |M         |1         |ORCID (obligatorio si se utiliza Identificador del nombre)
+|schemeURI              |O         |0-1       |http://www.orcid.org
+|contributor            |R         |0-n       |Contacto del recurso, Proveedor de metadatos, y Partes asociadas con varios roles
+|contributorName        |R         |1         |Nombre del contacto del recurso (obligatorio si se utiliza Colaborador)
+|contributorType        |R         |1         |“Persona de contacto” - valor controlado (obligatorio si se utiliza Colaborador). Otros mapeos de roles a valores controlados: autor→"Otro", proveedor de contenido → “Colector de datos”, custodio de los datos → “Administrador de datos”, distribuidor → “Distribuidor”, editor → “Editor”, proveedor de metadatos → “Curador de datos”, propietario → “Titular de los derechos”, investigador principal → “Lider del proyecto”, procesador → “Productor”, publicador → “Editor”, usuario → “Otro”, programador → “Productor”, curador → “Curador de datos”
+|nameIdentifier         |R         |0-1       |ORCID del contacto del recurso
+|nameIdentifierScheme   |R         |1         |ORCID (obligatorio si se utiliza Identificador del nombre)
+|schemeURI              |R         |0-1       |http://www.orcid.org
+|title                  |M         |1-n       |Título del recurso, y títulos en otros idiomas utilizando el atributo xml:lang
+|titleType              |O         |0-1       |“Título traducido”
+|publisher              |M         |1         |Organización de la publicación del recurso. La elección del publicador debe corresponder a la organización ante la que se registre finalmente el conjunto de datos.
+|publicationYear        |M         |1         |Año de la publicación del recurso
+|subject                |R         |0-n       |Palabras claves del recurso
+|subjectScheme          |R         |0-1       |Tesauro/Vocabulario si no es URI
+|schemeURI              |R         |0-1       |Tesauro/Vocabulario en caso de URI
+|date                   |M         |0-n       |Fecha de publicación de los recursos (también podrían establecerse fechas de cobertura temporal)
+|dateType               |M         |1         |"Creado" para la publicación inicial, y "actualizado" para las publicaciones posteriores (obligatorio si se utiliza la fecha). Mapeos de otros tipos de fechas de cobertura temporal a valores controlados: Fecha única → “Válida”, Intervalo de fechas → “Válido”
+|language               |O         |0-1       |Idioma del recurso (ISO-639-1, p.ej. “en”)
+|resourceType           |R         |0-1       |Tipo de conjunto de datos del recurso/Subtipo del conjunto de datos
+|resourceTypeGeneral    |R         |1         | “Conjunto de datos” - valor controlado (obligatorio si se utiliza Tipo del recurso)
+|alternateIdentifier    |O         |0-n       |URL de la página del conjunto de datos en el Portal de GBIF y URL de la página del recurso público en el IPT
+|alternateIdentifierType|O         |1         |"URL" - valor controlado (obligatorio si se utiliza Identificador alternativo)
+|RelatedIdentifier      |R         |0-n       |DOI de recursos previos
+|relatedIdentifierType  |R         |1         |"DOI" - valor controlado (obligatorio si se utiliza Identificador relacionado)
+|relationType           |R         |1         |"Es la nueva versión de" - valor controlado (obligatorio si se utiliza el Identificador relacionado). Otros Tipos de relación que podrían describirse son: las citas bibliográficas mediante la relación "citación", la conexión con datos externos mediante la relación "es una variante de", la conexión con el archivo eml.xml mediante la relación "Tiene metadatos"
+|relatedMetadataScheme  |O         |0-1       |Perfil de metadatos de GBIF (se utiliza con la relación Tiene metadatos para)
+|schemeURI              |O         |0-1       |http://rs.gbif.org/schema/eml-gbif-profile/1.0.2/eml-gbif-profile.xsd (se utiliza con la relación Tiene metadatos para)
+|schemeType             |O         |0-1       |XSD (se utiliza con la relación Tiene metadatos para)
+|Format                 |O         |0-n       |“DwC-A” - valor de texto libre
+|Size                   |O         |0-n       |número de registros del recurso, o tamaño del DwC-A en MB
+|Version                |O         |0-1       |major\_version.minor\_version (se utiliza junto con Identificador relacionado para indicar actualizaciones de información del recurso)
+|rights                 |O         |0-n       |Derechos de propiedad intelectual del recurso (título completo, por ej. Creative Commons Attribution 3.0)
+|rightsURI              |O         |0-1       |URI de los derechos de propiedad intelectual del recurso (por ej. http://creativecommons.org/lincenses/by/3.0)
+|Description            |R         |0-n       |descripción del recurso, con descripciones en varios idiomas especificados mediante el atributo xml:lang
+|descriptionType        |R         |1         |"Resumen" - valor controlado (obligatorio si se utiliza Descripción). Pueden incluirse descripciones adicionales para los métodos, con Tipo de descripción "Métodos".
+|geoLocationBox         |R         |0-1       |cuadro delimitador del recurso (el primer par es el punto SO, el segundo par es el punto NE, por ej. 41.090 -71.032 42.893 -68.211)
+|geoLocationPlace       |R         |0-1       |descripción geográfica del recurso, texto libre.
+|===

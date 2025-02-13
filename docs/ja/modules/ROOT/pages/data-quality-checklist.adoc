@@ -1,0 +1,268 @@
+= データ品質チェックリスト
+
+このチェックリストは、生物多様性データセットのレビューに利用することができます。特に、オカレンスやサンプリングイベントのデータセットをチェックするのに適していることに注意してください。
+
+このチェックリストは、データが完全であること、つまり5つのWに対する有効な答えが含まれていることを確認するのに役立ちます。
+
+* <<_何が行われたか？,何が行われたか？>>
+* <<_誰がおこなったか？,誰がおこなったか？>>
+* <<_いつ行われたか？,いつ行われたか？>>
+* <<_どこで行われたか？,どこで行われたか？>>
+* <<_なぜ行われたか,なぜ行われたか>>
+
+イベントの例としては、種の観察、物理的な標本の採取、生物的なサンプリングイベントなどがあります。
+
+さらにチェックリストでは、データの再利用を促進するために、<<_データセットのメタデータ,データセットのメタデータ>>にも5つのWに対する回答が含まれていることを確認します。
+
+== 手順
+
+GBIFに登録されているデータセットの場合は、まずそのデータセットの「統計」ページを見てください。ここには、GBIFがそのデータセットを解釈する際に発見した一連の問題が掲載されています。
+
+image::ipt2/InterpretationIssues2.png[]
+
+次に、データセットのメタデータを読み、データについての理解を深めます。
+
+そして、OpenRefineにデータを読み込みます。これにより、ファセット化されたブラウジングで、データの全体像を把握することができるようになります。
+
+5つのWには、それぞれさまざまな答えがあります。それぞれの「チェック」は、1つ以上のダーウィンコアフィールドに関連します。したがって、データセットに存在するダーウィンコアフィールドに基づいて、できるだけ多くのチェックを実行するようにしてください。
+
+失敗したすべてのチェックのリストを作成し、各チェックを 'Check-ID' で参照しながら、データ公開者に報告します。これにより、フィードバックにかかる時間や冗長性が軽減されます。
+
+== 品質チェック
+
+=== 何が行われたか？
+
+==== どのようなイベントだったか？
+
+|===
+| Check-ID | フィールド | 条件
+
+| *what 1* | `occurrenceID`, `basisOfRecord`, `eventID`  | 発生源は `occurrenceID` で、`basisOfRecord` は `HumanObservation` または `MachineObservation` で、その観測が機械によって行われたか、1人または複数の人によって行われたかを示します。この観測がサンプリングイベントから派生したものである場合、サンプリングイベントの `eventID` が記入されていなければなりません。
+| *what 2* | `occurrenceID`, `basisOfRecord`, `catalogNumber`, `collectionCode`, `eventID`  | 標本保存のイベントは `occurrenceID` で一意に識別され、`basisOfRecord` が `PreservedSpecimen`、`FossilSpecimen` または `LivingSpecimen` で、その特定の種類を表しています。理想的には標本はコレクションに寄託されているので、`catalogNumber`と`collectionCode`の両方を割り当てることができます。 もしこの標本がサンプリングイベントから得られたものであれば、そのサンプリングイベントの`eventID`が記入されていなければなりません。
+| *what 3* | `occurrenceID`, `basisOfRecord`, `materialSampleID`, `catalogNumber`, `collectionCode`, `eventID`  | サンプリングイベントの物理的な結果で、`occurrenceID`と`basisOfRecord`が`MaterialSample`に等しいことで一意に識別されます。もしサンプルが標本として保存され（破壊処理され）、コレクションに保管されている場合は、理想的には `catalogNumber` と `collectionCode` の両方が割り当てられます。サンプリングイベントの`eventID`は必ず記入してください。
+| *what 4* | `eventID`, `fieldNumber`, `parentEventID`   | 実際のサンプリングイベントは `eventID` で一意に識別されます。eventID` はGUIDであるべきで、そうでなければ `fieldNumber` を再利用する必要があります。parentEventID` は、そのイベントがサブサンプリングイベントであることを示します。有効であるためには、すべての `parentEventID` が、同じデータセットで定義されたレコードの `eventID` を参照していなければなりません。そうでない場合、`parentEventID` は他の場所で記述されたイベントレコードに解決するグローバルにユニークな識別子（DOI、HTTP、URIなど）でなければなりません。すべてのサブサンプリングイベントは、親イベントと同じデータと場所を共有しているのが理想です。
+|===
+
+==== 種のオカレンスに関するものだった場合 - 何種確認されたか？
+
+|===
+| Check-ID | フィールド | 条件
+
+| *what 5* | `individualCount`, `organismQuantity`, `organismQuantityType`, `occurrenceStatus` | 種の存在量は `individualCount` と `organismQuantity` & `organismQuantityType` のペアを使用して記入する必要があります。相対的な存在量には `organismQuantity` & `organismQuantityType` のペアを使用し、 `organismQuantityType` の値はlink:{latest-quantity-type}[GBIF数量タイプ語彙]から取得します。存在量がゼロ（その種が存在しない）の場合は、link:{latest-occurrence-status}[GBIFオカレンスステータス語彙]に従って `occurrenceStatus` を "absence" に設定して結合しなければなりません。
+|===
+
+==== 種のオカレンスに関するものだった場合 - どの種だったか？
+
+|===
+| Check-ID | フィールド | 条件
+
+| *what 6* | `scientificName`, `taxonRank`, `kingdom`, `phylum`, `class`, `order`, `family`, `genus`, `subgenus` | 完全な学名と、分かっていれば著者名と日付の情報を `scientificName` に入力する必要があります。曖昧さを防ぐために、学名の `taxonRank` はlink:{latest-rank}[GBIF階級語彙] と同じように記入してください。また、曖昧さを防ぐために、できるだけ上位の分類を記入してください。kingdom`, `phylum`, `class`, `order`, `family`, `genus`.
+| *what 7* | `taxonID`, `nameAccordingTo`, `nameAccordingToID` | サブジェクトに割り当てられたTaxonの識別子です。タクソンがよく知られているソースに従って定義されている場合、`nameAccordingTo`にソースの名前を、`nameAccordingToID`にソースに従って割り当てられたタクソンの識別子（`taxonID`と同じ）を記入することが推奨されます。
+|===
+
+==== ケース1：カメラトラップからの生物観察
+
+|===
+| フィールド | 値 | 条件
+
+| `occurrenceID` | "HAMAARAG:T0_L_049:6199" | GUIDまたはグローバルにほとんど一意な識別子である必要があります。整数の識別子は使用できません。
+| `basisOfRecord` | "MachineObservation" | link:{latest-basis-of-record}[ダーウィンコアタイプ語彙]に対応していなければなりません。
+| `individualCount` | 1 | 0以上の整数でなければなりません。
+| `organismQuantity` | 1 | `organismQuantityType`と対になっていなければなりません。
+| `organismQuantityType` | "individuals" | link:{latest-quantity-type}[GBIF数量タイプ語彙]に対応していなければなりません。
+| `occurrenceStatus` | "present" | link:{latest-occurrence-status}[GBIFオカレンスステータス語彙]に対応していなければなりません。
+| `scientificName` | "Canis aureus Linnaeus, 1758" | 完全な学名（既知の場合は著者名と日付の情報も含む）でなければなりません。
+| `taxonRank` | "species" | link:{latest-rank}[GBIF階級語彙]に対応していなければなりません。
+| `kingdom` | "Animalia" | 界の完全な学名でなければなりません。
+| `phylum` | "Chordata" | 門の完全な学名でなければなりません。
+| `class` | "Mammalia" | 綱の完全な学名でなければなりません。
+| `order` | "Carnivora" | 目の完全な学名でなければなりません。
+| `family` | "Canidae" | 科の完全な学名でなければなりません。
+| `genus` | "Canis Linnaeus, 1758" | 属の完全な学名でなければなりません。
+| `taxonID` | http://www.gbif.org/species/5219219 | またはソースに関連する識別子である必要があります。
+| `nameAccordingTo` | "GBIF Backbone Taxonomy, May 2016" | 日付を含む引用である必要があります。
+| `nameAccordingToID` | "http://www.gbif.org/dataset/d7dddbf4-2cf0-4f39-9b2a-bb099caae36c" | GUIDまたはソースに関連する識別子である必要があります。
+|===
+
+=== 誰がおこなったか？
+
+|===
+| Check-ID | フィールド | 条件
+| *who 1* | `recordedBy` | イベントで活動した各人物のフルネーム（例：収集、観察など）を、縦棒を区切りとして `recordedBy` に入力してください。同定を行った人物を記録するための別のフィールドがあることに注意してください（下記参照）。
+| *who 2* | `institutionCode`, `ownerInstitutionCode` | イベントで活動する機関の名前または頭文字を`institutionCode`と`ownerInstitutionCode`に入力することができます。これらは異なる場合があるので、`institutionCode`は検体の物理的な保管を、`ownerInstitutionCode`は検体の法的な所有権を持つことが可能です。
+| *who 3* | `identifiedBy` | 生物の同定に責任がある各個人、グループ、機関のフルネームを縦棒を区切りとして入力する必要があります。
+|===
+
+==== ケース2：異なる2人が標本を収集し、同定している
+
+|===
+| フィールド | 値 | 条件
+
+| `recordedBy` | "Ole Karsholt" | 1人または複数の個人名である必要があります。
+| `institutionCode` | "ZMUC" | 頭文字または機関名である必要があります。
+| `ownerInstitutionCode` | "ZMUC" | 頭文字または機関名である必要があります。
+| `identifiedBy` | "Jan Pedersen" | 1人または複数の個人、グループ、または機関の名前である必要があります。
+|===
+
+=== いつ行われたか？
+
+|===
+| Check-ID | フィールド | 条件
+
+| *when 1* | `eventDate` | `eventDate` には、イベントが発生した日付、日付時間、日付範囲、または日付時間範囲をlink:https://ja.wikipedia.org/wiki/ISO_8601[ISO 8601] フォーマットで入力する必要があります。「2007-03」のように、少なくとも年と月を含んでいれば、部分的に日付を指定することができます。
+| *when 2* | `verbatimEventDate` | 元の値をlink:https://ja.wikipedia.org/wiki/ISO_8601[ISO 8601]に変換する必要がある場合は、`verbatimEventDate` に元の値を記入する必要があります。
+| *when 3* | `eventTime`, `year`, `month`, `day`, `startDayOfYear` | 一見冗長に見えますが、単一の日付/時刻の場合は `year`、`month`、`day`、`eventTime` および `startDayOfYear` を埋めるようにすることを推奨します。もし、開始日が特定の日付であれば、 `startDayOfYear` を記入してください。
+| *when 4* | `eventTime`, `year`, `month`, `day`, `startDayOfYear`, `endDayOfYear` | 一見冗長に見えますが、日付範囲の `eventTime`、`year`、`month`、`day`、`startDayOfYear`、`endDayOfYear` はできるだけ完全に埋めるとよいでしょう。もし、日付の範囲が日単位であれば、 `day` は空白のままです。月にわたる日付範囲がある場合、`month` は空白のままです。日付の範囲が年にまたがる場合、`year` は空白のまます。開始日を指定する場合は、 `startDayOfYear` を記入し、終了日を指定するのであれば、 `endDayOfYear` を記入してください。
+| *when 5* | `eventRemarks` | もし `eventDate` が記入できない場合は、`eventRemarks` に説明を記述する必要があります。
+|===
+
+==== ケース1：単一の日付
+
+|===
+| Field | Value | Constraint
+
+| `eventDate` | 2007-03-20 | link:https://ja.wikipedia.org/wiki/ISO_8601[ISO 8601]フォーマットに従っていなければならない
+| `year` | 2007 | 4桁の西暦でなければならない
+| `month` | 3 | 1~12の数値で指定されなければならない
+| `day` | 20 | 1~31の数値で指定されなければならない
+| `startDayOfYear` | 79 | 1~366の数値で指定されなければならない
+| `verbatimEventDate` | "Mar 20, 07" | 日付のオリジナル表記またはその詳細
+|===
+
+==== ケース2：日付・時間の範囲が数日にわたる
+
+|===
+| フィールド | 値
+
+| `eventDate` | 2007-03-20T00:00:00Z/2007-03-27T06:00:00Z
+| `eventTime` | 00:00:00Z/06:00:00Z
+| `year` | 2007
+| `month` | 3
+| `day` |
+| `startDayOfYear` | 79
+| `endDayOfYear` | 86
+| `verbatimEventDate` | "The third week in March 07, for 6 hours starting at midnight."
+|===
+
+==== ケース3：一日の一部分
+
+|===
+| フィールド | 値
+
+| `eventDate` | 2007-03
+| `year` | 2007
+| `month` | 3
+| `day` |
+| `eventRemarks` | "Exact collection day was never recorded"
+|===
+
+==== ケース4：日付の欠損
+
+|===
+| フィールド | 値
+
+| `eventRemarks` | "Event date was not found in legacy data"
+|===
+
+=== どこで行われたか？
+
+|===
+| Check-ID | フィールド | 条件
+
+| *where 1* | `decimalLatitude`, `decimalLongitude`, `geodeticDatum` | `decimalLatitude` と `decimalLongitude` には地点の位置座標を10進数で入力する必要があります。座標の基となる空間参照系は`geodeticDatum` に入力する必要があり、EPSGコードがわかっていれば "EPSG:4326" などで入力します。そうでない場合は、`geodeticDatum`の名前またはコードがわかっていれば、統制語彙を使用します（例："WGS84"）。もし、これらのどれにも当てはまらない場合は、"unknown"という値を使います。
+| *where 2* |`footprintWKT`, `footprintSRS` | 特定の形状の位置を提供するために、`footprintWKT`にその形状のWKT（Well-Known Text）表現を入力してください。その形状が基づいている対応する空間参照系は、EPSGコード（例："EPSG:4326"）を使用して`footprintSRS`に入力する必要があります。
+| *where 3* |`coordinateUncertaintyInMeters`, `dataGeneralizations` | `coordinateUncertaintyInMeters` はGPSの読み取りの精度をメートル単位で表現する必要があります。低い精度(1000メートル以上)の場合、例えばセンシティブな種を保護するために場所が意図的に一般化されているかどうかを確認するために `dataGeneralizations` をチェックします。
+| *where 4* |`verbatimCoordinates`, `verbatimLatitude`, `verbatimLongitude`, `verbatimCoordinateSystem`, `verbatimSRS` | 元の地点の座標を、度分秒などの別の座標系から変換しなければならなかった場合 `verbatimCoordinates`, 元の点の座標が、「度分秒」のような別の座標系から変換されていた場合、 `verbatimCoordinates`, `verbatimLatitude`, `verbatimLongitude`, `verbatimCoordinateSystem`, `verbatimSRS` には、オリジナル表記の座標が格納されるべきです。
+| *where 5* | `dataGeneralizations` | ポイントの位置が元の形よりも特定されないように処置された場合や、座標`UncertaintyInMeters`が非常に高い場合は、`dataGeneralizations`で説明を提供する必要があります。
+| *where 6* |`informationWitheld` | ポイントの位置が存在するはずなのに入力されていない場合、`informationWitheld`で説明を付す必要があります。
+| *where 7* | `georeferenceRemarks` | もしポイントの位置が存在しないか、または（GPSの読みからではなく）ポイントの位置がグリッドセルの中心から計算されている場合、`georeferenceRemarks`に説明を加える必要があります。
+| *where 8* | `continent`, `waterBody`, `islandGroup`, `island`, `country`, `countryCode`, `stateProvince`, `county`, `municipality`, `locality`, `locationRemarks` | また、場所に関するできるだけ多くの補足情報を加える必要があります。もし `country` と `countryCode` が提供できない場合は、その理由を `locationRemarks` に記入する必要があります。
+|===
+
+==== ケース1：地点の座標が度分秒から10進数に変換された
+
+|===
+| フィールド | 値 | 条件
+
+| `decimalLatitude` | 42.4566 | -90~90でなければなりません。
+| `decimalLongitude` | -76.45442 | -180~180でなければならない。
+| `geodeticDatum` | "EPSG:4326" | 理想的にはlink:http://spatialreference.org/ref/epsg/wgs-84/[EPSGコード] または統制語彙からのもので、そうでない場合は "unknown" となる。
+| `coordinateUncertaintyInMeters` | 500 | ゼロは有効な値ではありません。
+| `verbatimCoordinates` | 42° 27' 23.76", -76° 27' 15.91" | 
+| `verbatimLatitude` | 42° 27' 23.76" |
+| `verbatimLongitude` | -76° 27' 15.91" |
+| `verbatimCoordinateSystem` | "degrees minutes seconds" |
+| `continent` | "North America" | link:http://www.getty.edu/research/tools/vocabularies/tgn/[Getty 地名シソーラス]に従った適切な英語名でなければなりません。
+| `country` | "United States" | link:http://www.getty.edu/research/tools/vocabularies/tgn/[Getty 地名シソーラス]に従った適切な英語名でなければなりません。
+| `countryCode` | "US" | link:https://ja.wikipedia.org/wiki/ISO_3166-1_alpha-2[ISO 3166-1-alpha-2 国名コード]に従う必要があります。
+| `stateProvince` | "New York" |
+| `county` | "Tomkins County" |
+| `locality` | "Ithaca, Forest Home, CU Rifle Range" | その場所の具体的な説明である必要があります。
+|===
+
+==== ケース2：一般化されたポイントの位置
+
+|===
+| フィールド | 値
+
+| `decimalLatitude` | 42.44
+| `decimalLongitude` | -76.33
+| `geodeticDatum` | "EPSG:4326"
+| `coordinateUncertaintyInMeters` | 5000
+| `dataGeneralizations` | "Point location obscured by a factor of 5000m"
+|===
+
+==== ケース3：ポイントの地点は存在するが提供されていない
+
+|===
+| フィールド | 値
+
+| `informationWitheld` | "Point location hidden to protect sensitive species. Available upon request."
+|===
+
+==== ケース4：ポイントの地点が存在しない
+
+|===
+| フィールド | 値
+
+| `dataGeneralizations` | "Point location was not found in legacy data"
+|===
+
+=== なぜ行われたか？
+
+|===
+| Check-ID | フィールド | 条件
+
+| *why 1* | `samplingProtocol`, `sampleSizeValue`, `sampleSizeUnit`, `samplingEffort`, `eventRemarks` | `samplingProtocol` にはイベントを生成するために使用したメソッド名やサンプリングプロトコル名を入力します。長いメソッドの説明よりも、その説明を参照するURLが良いです。サンプリングプロトコルは `sampleSizeValue` と `sampleSizeUnit` のペアを使用して、link:{latest-unit-of-measurement}[測定単位語彙]に定義される `sampleSizeUnit` の値を用いて面積や時間などを定義しなければなりません。samplingEffort` には、サンプリングにかかる時間や労力など、より一般的な情報を入力することができます。面積や期間に関する情報がない場合、`eventRemarks`にその理由を記述しなければなりません。
+|===
+
+==== ケース1：バタフライ・モニタリング・スキームのため
+
+|===
+| フィールド | 値 | 条件
+
+| `samplingProtocol` | "Pollard walks" | メソッドまたはサンプリングプロトコルを参照する短い名前またはURLでなければなりません。
+| `sampleSizeValue` | 250 | `sampleSizeUnit` と対になっていなければなりません。
+| `sampleSizeUnit` | "square_metre" | link:{latest-unit-of-measurement}[測定単位に関する語彙]にマッチする必要があります。
+| `samplingEffort` | "Average of 30 Minutes walk along transect" | 自由形式で記述することができます。
+| `eventRemarks` | "No occurrences of Lepidoptera recorded for entire transect" | 自由形式で記述することができます。
+|===
+
+== データセットのメタデータ
+
+データセットのメタデータは、データの再利用を容易にすると同時に、誤った解釈を防ぐのに十分な情報を含んでいなければなりません。また、公開者はデータ作成に費やした厳密さの証明を提供し、さまざまな貢献者や資金提供者を認識する必要があります。最終的には、これが新たな協力関係や資金源につながるかもしれません。
+
+|===
+| フィールド | 条件 | 例
+
+| `Title` | データセットの内容を説明し、他と区別するための簡潔な名前です。 | _"Reef Life Survey: Global reef fish dataset"_, _"Insects from light trap (1992–2009), rooftop Zoological Museum, Copenhagen"_
+| `Description` | データセットの内容を説明する短い文章（要旨）。 | _"This dataset contains records of bony fishes and elasmobranchs collected by Reef Life Survey (RLS) divers along 50 m transects on shallow rocky and coral reefs, worldwide. Abundance information is available for all records found within quantitative survey limits (50 x 5 m swathes during a single swim either side of the transect line, each distinguished as a Block), and out-of-survey records are identified as presence-only (Method 0)."_
+| `Publishing Organization` | このリソースを公開（制作、リリース、保有）する責任を負う組織です。 | _"Reef Life Survey"_
+| `License` | 3つの機械可読オプション（CC0 1.0、CC-BY 4.0、CC-BY-NC 4.0）のいずれかでなければならず、データセットの適切な利用を定義するための標準的な方法を提供するものです。 | _"This work is licensed under a http://creativecommons.org/licenses/by/4.0/legalcode[Creative Commons Attribution (CC-BY) 4.0 License]."_
+| `Creator(s)` | データセットを作成した人および機関（優先順位付き）。ORCIDやResearcherIDのような人物の識別子を使用することが強く推奨されます。 | _"John Smith, jsmith@gbif.org, http://orcid.org/0000-0002-1825-0097"_
+| `Metadata Provider(s)` | データセットのメタデータを作成した人および機関。ORCIDやResearcherIDのような人物の識別子を使用することが強く推奨されます。 | _"John Smith, jsmith@gbif.org, http://orcid.org/0000-0002-1825-0097"_
+| `Contact(s)` | リソースに関する詳細な情報を得るため、あるいはデータセットに関する問題を解決するために連絡を取るべき人々や機関。ORCIDやResearcherIDのような人物の識別子を使用することが強く推奨されます。 | _"John Smith, jsmith@gbif.org, http://orcid.org/0000-0002-1825-0097"_
+| `Project Identifier` | GUIDまたはグローバルに一意に近いその他の識別子です。_BIDプロジェクトでは必須ですので注意してください。_ | _"BID-AF2015-0134-REG"_
+| `Sampling Methods` | データセットを作成する際に使用したサンプリング方法に関する情報（雑誌論文の方法セクションと同様）です。_サンプリングイベントのデータセットでは必須です。_ | _https://cloud.gbif.org/griis/resource?r=global#methods[こちら]を参照_
+| `Citation` | データセットの引用方法。xref:citation.adoc[IPT引用形式]（DataCiteの推奨する引用形式に基づいており、link:https://force11.org/presentation/joint-declaration-of-data-citation-principles-slides/[データ引用の原則の共同宣言]を満たしている）の使用を強く推奨します。 | _"Edgar G J, Stuart-Smith R D (2014): Reef Life Survey: Global reef fish dataset. v2.0. Reef Life Survey. Dataset/Sampling event. http://doi.org/10.15468/qjgwba"_
+|===

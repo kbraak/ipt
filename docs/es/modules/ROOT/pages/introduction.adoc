@@ -1,0 +1,9 @@
+= ¿Cómo usar este manual?
+
+Este manual tiene tres componentes principales: una introducción con información de contexto, una serie de tutoriales paso a paso, y una completa guía de referencia que incluye la sección "Primeros pasos: instalación y configuración inicial" y otras secciones que describen en detalle los diferentes elementos de la herramienta.
+
+Se recomienda a todos los usuarios que revisen esta sección introductoria y, posteriormente, según el papel que cumplan en la instalación de la IPT, se dirijan a las secciones específicas. El IPT (y este manual) distingue tres tipos de usuarios:
+
+* *Administradores*: encargados de instalar y configurar el IPT. Pueden realizar cambios en todos los aspectos de una instancia del IPT. Los administradores deben consultar las secciones xref:getting-started.adoc["Primeros pasos: instalación y configuración inicial"] y xref:administration.adoc["Menú de administración"] de la guía de referencia.
+* *Editores de recursos*: tienen la posibilidad de crear, editar, eliminar y manejar los recursos (conjuntos de datos y metadatos). Dependiendo de los ajustes, estos usuarios pueden tener o no derechos de registro para publicar recursos a través de la red de GBIF. Los editores de recursos deberán consultar los diferentes xref:how-to-publish.adoc[tutoriales], dependiendo del tipo de datos que deban administrar (xref:resource-metadata.adoc[metadatos], xref:occurrence-data.adoc[registros biológicos],  tipos de datos especiales a través de extensiones, etc.). La sección xref:manage-resources.adoc["Menú gestión de recursos"] también será muy útil para los editores de recursos.
+* *Usuarios básicos*: sólo podrán navegar a través de los recursos publicados en una instalación del IPT. En futuras versiones del IPT, estos usuarios adquirirán derechos adicionales. Para los usuarios básicos, el IPT funcionará como una aplicación web sencilla, por lo que no se incluye una explicación más detallada en este manual.

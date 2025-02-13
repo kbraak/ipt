@@ -1,0 +1,9 @@
+[WARNING]
+.旧バージョン
+====
+あなたが読んでいるのはバージョンlink:{page-version}のマニュアルで、最新ではありません。 xref:{latest-manual-version}@releases.adoc[version {latest-manual-version}] のマニュアルを読むことをお勧めします。 ページの右上または左下のセレクタで、他のバージョンのマニュアルを選択することができます。
+
+ifeval::["{language}" != "en"]
+なお、すべてのマニュアルが日本語で提供されているわけではありません。
+endif::[]
+====

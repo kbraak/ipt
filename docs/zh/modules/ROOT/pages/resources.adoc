@@ -1,0 +1,27 @@
+= 相關資源
+
+== 達爾文核心集檔案文件集
+達爾文核心集檔案（Darwin Core Archive, 縮寫為 DwC-A）的詳細架構可在達爾文核心集網站的 https://dwc.tdwg.org/text/[Text Guide] 中找到。更多關於 DwC-A 在 IPT 中的操作則請見xref:darwin-core.adoc[這裡]。
+
+== GBIF 服務台
+Send email messages to helpdesk@gbif.org to report problems with GBIF services, such as the GBIF Registry. Do not send IPT-specific help question to the Help Desk. Instead send them to the IPT mailing list (see below).
+
+== GBIF 登錄
+Use this online application to find information about organizations, IPT instances, and resources registered with GBIF: https://www.gbif.org/dataset.
+
+== IPT GitHub 專案網站
+https://github.org/gbif/ipt[IPT GitHub 專案網站]存放 IPT 專案所有的開源程式碼、管理內容及文件。
+
+== IPT 開發者文件
+Developers who wish to contribute, or to use the latest revision of the source code for their installation should consult the xref:developer-guide.adoc[Developer Guide] section.
+
+== IPT 問題回報
+The https://github.com/gbif/ipt/issues[issue tracker] is the bug report and feature request management system for the IPT software and documentation.
+
+== IPT 郵件論壇
+All *IPT Administrators* should sign up to the https://lists.gbif.org/mailman/listinfo/ipt/[IPT Mailing List] to be notified of new releases and best practices for maintaining their IPT. Have a question about how to maintain the IPT that you can't find the answer to in the xref:faq.adoc[FAQ] or xref:index.adoc[User Manual]? Then send your question to the list to get it answered!
+
+The https://lists.gbif.org/mailman/listinfo/ipt/[IPT Mailing List] can also be used by *IPT users* to support each other. Have a question about how to use the IPT that you can't find the answer to in the xref:faq.adoc[FAQ] or xref:index.adoc[User Manual]? Then send your question to the list to get it answered!
+
+== IPT 測試版裝置
+GBIF provides a functional installation of the IPT for evaluation and testing purposes. The test installation of the latest release can be found at https://ipt.gbif.org/.

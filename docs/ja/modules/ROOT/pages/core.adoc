@@ -1,0 +1,36 @@
+= 新規コアの追加方法
+
+WARNING: このページでは、IPT上級者向けの設定方法を説明します。
+
+IPTは常に3つのコア（タクソン、オカレンス、イベント）をデフォルトでインストールした状態で出荷されます。IPT 2.1以降、カスタムコアをIPTに追加することができるようになり、新しいデータ標準のプロトタイプを作成するコミュニティにとって有用です。この方法では、コミュニティは自分たちのデータを新しいコアにマッピングする試みを開始し、そのプロパティのセットを繰り返し改良することができます。
+
+以下の3つのステップで説明します。
+
+. 新しいコアを作成し、
+. GBIFに登録して、
+. それを使用するIPTを設定する。
+
+== 手順
+
+. *コアXMLの定義を書く*
++
+コアとなるXMLの定義は、link:http://rs.gbif.org/schema/extension.xsd[GBIF拡張スキーマ]に準拠することが必要です。link:{latest-dwc-occurrence}[ダーウィンコア・オカレンスコア]など、既存のコア定義を単純に適用するのが最も簡単です。コア定義には、レコード識別子となるプロパティ（例：オカレンスコアの場合は http://rs.tdwg.org/dwc/terms/occurrenceID、イベントコアの場合は http://rs.tdwg.org/dwc/terms/eventID）を含める必要があることに注意してください。新しい非コア拡張の作成プロセスは、コア拡張の場合とまったく同じです。（コアまたは非コア拡張内のプロパティのデータ型として）新しい語彙を作成するプロセスは、XMLの定義がlink:http://rs.gbif.org/schema/thesaurus.xsd[GBIFシソーラススキーマ]に準拠する必要がある点のみ異なります。この場合も、link:{latest-basis-of-record}[ダーウィンコアタイプ語彙など、既存の語彙定義を適用するのが最も簡単です。
+
+. *GBIFにコアを登録する*
++
+コアの定義がまだ変更されていない間に、GBIFサンドボックスレジストリに登録されます。コアを登録するには、link:https://github.com/gbif/rs.gbif.org/blob/master/versioning.md#how-to-create-a-new-version-of-an-extension-or-vocabulary-on-rsgbiforg[こちらの手順]で rs.gbif.org リポジトリにプルリクエストを行います。審査に通れば、https://rs.gbif.org/sandbox/core/ にマージされ、link:https://gbrdsdev.gbif.org/registry/extensions.json[サンドボックスレジストリの拡張機能リスト]に含まれます。コア定義が確定すると、つまり、そのプロパティのセットが凍結されると、https://rs.gbif.org/core/ でホストされ、link:https://gbrds.gbif.org/registry/extensions.json[ライブレジストリの拡張機能リスト]に含まれます。コア以外の拡張機能や語彙を登録する場合も、同じプロセスが適用されます。
+
+. *IPTを設定する*
++
+--
+To configure the IPT to use the Material Sample Core for example, add the following 2 lines to `$IPT_DATA_DIR/config/ipt.properties`.
+
+NOTE: 上記のように、コロンがある場合は必ずエスケープしてください*
+
+----
+ipt.core_rowTypes=http\://rs.tdwg.org/dwc/terms/MaterialSample
+ipt.core_idTerms=http\://rs.tdwg.org/dwc/terms/materialSampleID
+----
+
+これは、IPTがrowType http://rs.tdwg.org/dwc/terms/MaterialSample を持つすべての拡張をコアタイプとして認識し、その識別子の項として http://rs.tdwg.org/dwc/terms/materialSampleID を使用するように設定するものである。複数のコアを指定することができ、パイプ文字の `|` で区切ります。ipt.core_idTerms の最初のエントリが core_rowTypes の最初のエントリの ID となり、以下同様です。最後に、ipt.properties ファイルを保存して、Tomcat を再起動し、xref:administration.adoc#install-extension[コアをインストール]します。これでコアはIPTで使用できるようになりました。
+--

@@ -1,0 +1,53 @@
+= Menú Inicio
+
+Esta página permite a los usuarios ver una lista de los recursos públicos, si los hay, y ver los metadatos detallados de cualquier recurso en la lista.
+
+image::ipt2/home/IPTHome.png[]
+
+== Tabla de Recursos Públicos
+Si hay recursos públicos, estos serán mostrados en una tabla que tiene las siguientes columnas:
+
+* **Logo**: el logo del recurso (se puede configurar en la página "Metadatos adicionales" de los metadatos del recurso).
+* **Nombre**: el título del recurso tal como figura en el Título de la entrada de los metadatos del recurso. El nombre aparece como un enlace, que abrirá una "Página visualización de metadatos" (ver más adelante) para el recurso seleccionado.
+* **Organización**: la organización bajo la que se ha registrado el recurso. Si el recurso no está registrado, el valor en la columna de Organización será "Sin organización". Para más información sobre el registro de organizaciones y el registro de un recurso en una organización, consulte el apartado "Organizaciones" de la sección "Menú Administración".
+* **Tipo**: el tipo de recurso como figura en la lista desplegable "Tipo" en la página xref:manage-resources.adoc#metadatos-basicos[Metadatos básicos] de los metadatos del recurso.
+* **Subtipo**: el subtipo del recurso como figura en la lista desplegable "Subtipo" en la página xref:manage-resources.adoc#metadatos-basicos[Metadatos básicos] de los metadatos del recurso.
+* **Registros**: el número de filas de datos en el archivo núcleo de datos del último archivo Darwin Core publicado para el recurso. Para los recursos que tienen datos en uno o más archivos de extensión, el número se vincula a la página "Registros de datos" en la página de inicio del recurso, que muestra un desglose de los recuentos de registros por extensión.
+* **Última modificación**: la fecha de creación del recurso o la fecha de última modificación de los datos o metadatos, la que sea más reciente.
+* **Última publicación**: la fecha en la que el recurso fue publicado por última vez.
+* **Próxima publicación**: la fecha de la próxima publicación del recurso.
+
+== Canal RSS
+El IPT apoya la agremiación a través de RSS para aquellos que desean monitorear cuándo se publican nuevas versiones de recursos y cómo cambian los recursos con el tiempo. De hecho, cada vez que se publique una nueva versión del recurso, se incluirá un resumen de lo que ha cambiado desde la última versión (suponiendo que el editor haya ingresado un resumen de los cambios, de lo contrario, por defecto se mostrará la descripción del recurso). Se puede acceder al canal RSS al hacer clic en el enlace que aparece debajo de la lista de recursos públicos alojados. El puede ser leído en cualquier cliente RSS estándar
+
+== Inventario de recursos registrados
+El IPT provee un sencillo inventario JSON de todos los recursos registrados. Esta característica no se muestra en la interfaz de usuario. Para verla simplemente añada `/inventory/dataset` a la URL básica del IPT, p. ej., https://ipt.gbif.org/inventory/dataset. GBIF utiliza este inventario para monitorear si los recursos se están indexando correctamente, comparando los recuentos de registros objetivo e indexados.
+
+== Página principal del recurso
+La página de inicio del recurso está dirigida a los usuarios externos de un recurso. La página de inicio enumera todos los metadatos de la versión seleccionada de un recurso, proporciona enlaces para descargar los datos/metadatos de la versión y muestra el historial de versiones del recurso.
+
+Para ver la página de inicio del recurso, el usuario puede hacer clic en el enlace del nombre en la lista de recursos de la página de inicio. Otra forma de acceder a la página de inicio del recurso es utilizando su DOI: cuando se asigna un DOI a un recurso a través del IPT, siempre se remite a su página de inicio.
+
+Por favor recuerde que sólo usuarios con el rol de Administrador u otros tipos de roles administrativos pueden editar los metadatos de un recurso. Para conocer más, consulte a la información en la sección "Editar un recurso existente" en el "Menú gestión de recursos".
+
+image::ipt2/home/IPTHomeMetadataOverview.png[]
+
+=== Historial de versiones
+La tabla del historial de versiones muestra todas las versiones de un recurso que han sido publicadas, permitiéndole a los usuarios hacer el seguimiento de los cambios en el recurso a lo largo del tiempo y descargar las versiones previas de datos/metadatos. Tenga en cuenta que el Modo Archivo del IPT debe estar activado para que las versiones anteriores del DWCA sean guardadas (véase la sección xref:administration.adoc#configuracion-de-las-opciones-del-ipt[Configuración de las opciones del IPT]). Solo las versiones con acceso al público pueden ser vistas por usuarios externos, mientras que los editores del recurso podrán ver todas las versiones. A continuación encontrará más información acerca de las columnas de la tabla.
+
+image::ipt2/home/IPTVersionHistoryTable.png[]
+
+A continuación se explican las columnas de la tabla:
+
+* **Versión**: el número de la versión publicada, que utiliza el formato versión_principal.versión_secundaria. Se señala claramente la versión de la página de inicio del recurso que se está viendo en ese momento. Para abrir la página de inicio de una versión específica, haga clic en el número de versión. **Nota**: un cambio de versión mayor en comparación con la última versión publicada indica que se ha producido un cambio científicamente significativo.
+* **Publicado en**: la fecha de publicación de la versión.
+* **Registros**: el número de registros que contiene la versión publicada.
+* **Resumen de cambios**: resumen de los cambios realizados desde la última versión publicada.
+* **Handle del DOI**: el handle del DOI asignado a la versión publicada **Nota**: si el DOI es diferente del DOI de la última versión publicada, indica que se ha realizado un cambio científicamente significativo en el recurso.
+* **Última modificación por**: usuario del IPT que modificó por última vez la versión publicada.
+
+=== Eliminación de una versión
+
+Los administradores de recursos pueden eliminar versiones publicadas antiguas de un conjunto de datos.
+
+En primer lugar, utilice la tabla del historial de versiones para buscar y abrir la versión que desea eliminar y, a continuación, haga clic en *Borrar versión* en la parte superior de la página. La última versión publicada de un recurso no puede eliminarse.

@@ -1,0 +1,77 @@
+= リリースノート
+
+*IPT Versions: pass:[3.0.*]*
+
+== アップグレード方法
+
+WARNING: Be sure to *backup the IPT data directory before performing an upgrade*. As per the https://www.gbif.org/data-hosting-centres#_criteria-for-data-hosting-centres[criteria for data hosting centres], it is highly recommended to run scheduled backups of the IPT data directory in general.
+
+お使いのシステムがこのリリースのインストール要件を満たすことを確認すること。OSおよびその他のインストール済みソフトウェア（Java、Tomcat、Apache HTTPDなど）が、セキュリティパッチを適用した最新の状態であることを確認してください。
+
+アップグレードの方法は、元の xref:installation.adoc#installation-method[インストール方法] によって異なります。
+
+=== Linuxパッケージによるアップグレード
+
+Red Hat、CentOS、Debian、UbuntuなどのLinuxパッケージのユーザーは、システムのパッケージマネージャーを使用してアップグレードすることができます。
+
+[source, shell]
+----
+# Red Hat, CentOS etc:
+yum update ipt
+# Debian, Ubuntu etc:
+apt install ipt
+----
+
+これらのコマンドは、Red Hat・CentOS 上でプレリリースバージョンをテストするために使用することができます。
+
+[source, shell]
+----
+# Ensure the GBIF repository configuration is up-to-date:
+yum-config-manager --add-repo https://packages.gbif.org/gbif.repo
+
+# Install the latest pre-release/testing version:
+yum install --enablerepo=gbif-testing ipt
+
+# Roll back to a previous, stable version:
+yum downgrade ipt-2.7.5
+
+# Show all available versions, testing and stable:
+yum --showduplicates list --enablerepo=gbif-testing ipt
+----
+
+// #TODO:# Debian instructions, once the 2.5.0-RC1 pre-release package is prepared.
+
+=== サーブレットコンテナを利用したアップグレード
+
+TIP: バージョン2.5.0以降にアップグレードする場合、インストール手順の xref:installation.adoc#tomcat[ステップ2] に従って、データディレクトリの場所を設定してください。IPTをアップグレードするたびにデータディレクトリを設定しなおす必要がなくなります。
+
+アップグレードは、4ステップで行うことができます。
+
+. 既存のデータディレクトリと、以前にIPTに適用したカスタムスタイル（画像、スタイルシートなど）をバックアップします。
+. Tomcatをシャットダウンせずに、以前の.warファイルを最新版に置き換えますが、名前は同じにします（例：`ipt.war`）。
++
+NOTE: Tomcatの停止中に.warファイルを置き換える場合、Tomcatの再起動時に更新されたWARファイルが再展開されるように、Tomcatの再起動前に関連する展開ディレクトリを必ず削除してください。
+
+. （Tomcat内にデータディレクトリが設定されていない場合）すぐにWebブラウザでIPTを開き、IPTの初期設定ページで既存のデータディレクトリを再利用してください。
+. アップグレードがうまくいったことを確認するために、ログインして、フッターに新しいバージョン番号が表示されていることを確認します。（_以前のバージョンがまだ表示されている場合は、Tomcatを再起動してください。_）
+. （必要であれば）カスタムスタイルを再適用します。
+
+=== Dockerを使ったアップグレード
+
+xref:installation.adoc#installation-using-docker[Dockerを使用したインストール方法] をご覧ください。一般的に、``latest``タグは現在の安定したリリースを指します。
+
+== アップグレード後の注意事項
+
+アップグレード後、一部のリソースの読み込みに失敗したことを示す警告メッセージが表示されることがあります。これは、長い間再公開されなかった古いリソースに必要なメタデータが欠落している場合に発生します。リソース管理者は、該当するリソースを再公開することでこの問題を解決できます。
+
+さらに、IPT管理者はインストールされているすべてのコアと拡張機能を最新バージョンに更新する必要があります。これにより、公開者は最新バージョンに含まれる新しい用語や語彙を利用することができます。
+
+== 本リリースにおける重要な変更点
+
+新機能の全リストは、xref:releases.adoc[リリース] ページに記載されています。アップグレード後は、特に以下の点にご注意ください。
+
+* IPT 3.0.0はTomcat 8 または 9 が必要です。Tomcat 7 はサポート対象外です。
+
+== 他に方法がない場合
+
+有用な質問で更新されている xref:faq.adoc[FAQ] を見るか、link:https://lists.gbif.org/mailman/listinfo/ipt/[IPTメーリングリスト]に質問してみてください。

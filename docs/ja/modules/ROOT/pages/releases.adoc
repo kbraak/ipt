@@ -1,0 +1,377 @@
+= リリース
+
+[TIP]
+.最新の安定版リリース
+====
+The current, stable release is version <<3-1-4-february-2025,3.1.4>>.
+
+ifeval::["{language}" != "en"]
+You are reading the latest version of the manual. You can read older versions of the manual using the selectors at the top-right or bottom-left of the screen. Note that the not all manual versions are available in TRANSLATOR_PUT_YOUR_LANGUAGE_HERE.
+endif::[]
+====
+
+== *3.1.4* – February 2025
+
+* https://repository.gbif.org/content/groups/gbif/org/gbif/ipt/3.1.4/ipt-3.1.4.war[Download WAR], xref:installation.adoc#installation-from-linux-packages[Linux packages] or xref:installation.adoc#installation-from-docker[use Docker]
+* xref:release-notes.adoc[IPT v3.1.4 Release Notes]
+* xref:index.adoc[ユーザマニュアル]
+* Addressed https://github.com/gbif/ipt/milestone/65?closed=1[6 issues].
+* 7言語に翻訳
+
+This minor release brings improvements and bug fixes related to metadata.
+
+Existing users should upgrade to this version following the instructions in the xref:release-notes.adoc[Release Notes]. New users should follow the xref:getting-started.adoc[Getting Started guide].
+
+次のバージョンのリリース日はまだ決定していません。 次回のリリースに向けた課題への取り組み状況は、link:https://github.com/gbif/ipt/milestones[GitHub]で確認できます。
+
+細かな問題やセキュリティ上の課題については、パッチリリースで対応する予定です。
+
+== *3.1.3* – January 2025
+
+* https://repository.gbif.org/content/groups/gbif/org/gbif/ipt/3.1.3/ipt-3.1.3.war[Download WAR], xref:installation.adoc#installation-from-linux-packages[Linux packages] or xref:installation.adoc#installation-from-docker[use Docker]
+* xref:release-notes.adoc[IPT v3.1.3 Release Notes]
+* xref:index.adoc[ユーザマニュアル]
+* Addressed https://github.com/gbif/ipt/milestone/64?closed=1[7 issues].
+* 7言語に翻訳
+
+This minor release includes bug fixes for Camtrap DP and some small improvements.
+
+== *3.1.2* – December 2024
+
+* https://repository.gbif.org/content/groups/gbif/org/gbif/ipt/3.1.2/ipt-3.1.2.war[Download WAR], xref:installation.adoc#installation-from-linux-packages[Linux packages] or xref:installation.adoc#installation-from-docker[use Docker]
+* xref:release-notes.adoc[IPT v3.1.2 Release Notes]
+* xref:index.adoc[ユーザマニュアル]
+* Addressed https://github.com/gbif/ipt/milestone/63?closed=1[20 issues].
+* 7言語に翻訳
+
+This minor release brings support to ColDP. Also, it introduces some general improvements and bug fixes with source creation and file upload.
+
+== *3.1.1* – December 2024
+
+* https://repository.gbif.org/content/groups/gbif/org/gbif/ipt/3.1.1/ipt-3.1.1.war[Download WAR], xref:installation.adoc#installation-from-linux-packages[Linux packages] or xref:installation.adoc#installation-from-docker[use Docker]
+* xref:release-notes.adoc[IPT v3.1.1 Release Notes]
+* xref:index.adoc[ユーザマニュアル]
+* Addressed https://github.com/gbif/ipt/milestone/62?closed=1[7 issues].
+* 7言語に翻訳
+
+This minor release introduces some general improvements and addresses issues with mappings to some extensions.
+
+== *3.1.0* – October 2024
+
+* https://repository.gbif.org/content/groups/gbif/org/gbif/ipt/3.1.0/ipt-3.1.0.war[Download WAR], xref:installation.adoc#installation-from-linux-packages[Linux packages] or xref:installation.adoc#installation-from-docker[use Docker]
+* xref:release-notes.adoc[IPT v3.1.0 Release Notes]
+* xref:index.adoc[ユーザマニュアル]
+* Addressed https://github.com/gbif/ipt/milestone/60?closed=1[48 issues].
+* 7言語に翻訳
+
+This major release introduces support for EML 2.2.0.
+
+== *3.0.6* – June 2024
+
+* Addressed https://github.com/gbif/ipt/milestone/58?closed=1[3 issues].
+* 7言語に翻訳
+
+This minor release addresses issues with taxonomic metadata description and registry network warnings.
+
+== *3.0.5* – June 2024
+
+* Addressed https://github.com/gbif/ipt/milestone/57?closed=1[5 issues].
+* 7言語に翻訳
+
+This minor release addresses issues with vocabulary update, Camtrap resource registration, and more.
+
+== *3.0.4* – May 2024
+
+* Addressed https://github.com/gbif/ipt/milestone/56?closed=1[2 issues].
+* 7言語に翻訳
+
+This minor release addresses issues with metadata.
+
+== *3.0.3* – April 2024
+
+* Addressed https://github.com/gbif/ipt/milestone/55?closed=1[4 issues].
+* 7言語に翻訳
+
+This minor release addresses issues with metadata and DOI issuing.
+
+== *3.0.2* – April 2024
+
+* Addressed https://github.com/gbif/ipt/milestone/54?closed=1[11 issues].
+* 7言語に翻訳
+
+This minor release addresses issues with inferred metadata, DOI functionality, and setup.
+
+== *3.0.1* – February 2024
+
+* Addressed https://github.com/gbif/ipt/milestone/52?closed=1[12 issues].
+* 7言語に翻訳
+
+This minor release addresses issues with inferred metadata, missing resources, and Excel source files.
+
+
+== *3.0.0* – 2024年2月
+
+* https://github.com/gbif/ipt/milestone/38?closed=1[141 課題]に対処
+* 7言語に翻訳
+
+バージョン3.0.0はDarwin Core Archiveフォーマットを超える新機能を備えたメジャー・バージョンリリースです。IPT3は以前のバージョンのすべての機能を提供しますが、新たにサポートするhttps://frictionlessdata.io[フリクションレスデータ]のスキーマに沿ったデータセットをマッピングすることができます。最初にサポートするのは、https://tdwg.github.io/camtrap-dp/[カメラトラップデータ・パッケージ (Camtrap DP)]です。
+
+
+== *2.7.7* – November 2023
+
+* Addressed https://github.com/gbif/ipt/milestone/50?closed=1[10 issues].
+* 7言語に翻訳
+
+This minor release addresses issues with maps and resources visibility. It also allows configuration of the default language.
+
+== *2.7.6* – September 2023
+
+* Addressed https://github.com/gbif/ipt/milestone/49?closed=1[13 issues].
+* 7言語に翻訳
+
+This minor release addresses issues with metadata inferring and vocabulary management.
+
+== *2.7.5* – August 2023
+
+* Addressed https://github.com/gbif/ipt/milestone/47?closed=1[18 issues].
+* 7言語に翻訳
+
+This minor release brings default network for IPT feature and bug fixes.
+
+
+== *2.7.4* – July 2023
+
+* Addressed https://github.com/gbif/ipt/milestone/46?closed=1[21 issues].
+* 7言語に翻訳
+
+This release brings new file uploader, new IPT setup, compressed URL sources and more.
+
+
+== *2.7.3* – March 2023
+
+* Addressed https://github.com/gbif/ipt/milestone/45?closed=1[5 issues].
+* 7言語に翻訳
+
+This minor release brings UI improvements and minor fixes.
+
+== *2.7.2* – 2023年2月
+
+* https://github.com/gbif/ipt/milestone/44?closed=1[1問題]に対処
+* 7言語に翻訳
+
+このマイナーリリースは翻訳に関するバグを修正したものです。
+
+== *2.7.1* – 2023年1月
+
+* https://github.com/gbif/ipt/milestone/43?closed=1[2問題]に対処
+* 7言語に翻訳
+
+このマイナーリリースでは、リソーステーブルの問題やDOIの管理に関するバグを修正しました。
+
+== *2.7.0* – 2023年1月
+
+* https://github.com/gbif/ipt/milestone/42?closed=1[47問題]に対処
+* 7言語に翻訳
+
+このメジャーリリースでは、多くの新機能、バグ修正、改良が行われています。最も重要なものは、大量のリソースに対してより良いパフォーマンスを発揮する新しいリソーステーブル、登録・公開プロセスのパフォーマンス向上、メタデータコンポーネントのドラッグアンドドロップなどです。
+
+== *2.6.3* – 2022年10月
+
+* https://github.com/gbif/ipt/milestone/41?closed=1[12問題]に対処
+* 7言語に翻訳
+
+このリリースはセキュリティーとバグの修正が含まれています。
+
+== *2.6.2* – 2022年10月
+
+* https://github.com/gbif/ipt/milestone/40?closed=1[7問題]に対処
+* 7言語に翻訳
+
+このリリースには、ユーザー作成に関するバグ修正が含まれています。
+
+== *2.6.1* – 2022年9月
+
+* https://github.com/gbif/ipt/milestone/39?closed=1[1問題]に対処
+* 7言語に翻訳
+
+このリリースは空のリソーステーブルに関するバグ修正が含まれています。
+
+== *2.6.0* – 2022年9月
+
+* https://github.com/gbif/ipt/milestone/37?closed=1[42問題]に対処
+* 7言語に翻訳
+
+このリリースでは、多くの新機能、バグ修正、改良が行われています。例えば、管理画面のUI管理（配色、ロゴのアップロード）、メタデータの自動推論などです。詳しくはlink:https://github.com/gbif/ipt/milestone/37?closed=1[GitHub] をご覧ください。
+
+== *2.5.8* – 2022年5月
+
+* https://github.com/gbif/ipt/milestone/35?closed=1[9問題]に対処
+* 7言語に翻訳
+
+本リリースでは、DOI付きリソースの公開に関するバグ修正とその他の軽微な修正が含まれています（link:https://github.com/gbif/ipt/milestone/35?closed=1[問題]をご覧ください）。
+
+== *2.5.7* – 2022年2月
+
+* https://github.com/gbif/ipt/milestone/34?closed=1[5問題]に対処
+* 7言語に翻訳
+
+このリリースでは、小さなユーザーインターフェイスの改善、データベースデータソースに関するバグの修正、IPT内でDOIが割り当てられているものを削除する際の問題の修正が行われました。また、管理画面の「パスワードのリセット」ボタンが修正されました。
+
+== *2.5.6* – 2022年2月
+
+* https://github.com/gbif/ipt/milestone/33?closed=1[21問題]に対処
+* 7言語に翻訳
+
+このバージョンでは、新しいダーウィンコア用語（establishmentMeans、degreeOfEstablishment、pathwayなど）が追加されました。また、ユーザーパスワードの保存方法を変更し、安全性を向上させました。すべてのユーザーは、このバージョンにアップグレードすることが推奨されます。
+
+== *2.5.5* – 2021年12月
+
+* https://github.com/gbif/ipt/milestone/32?closed=1[3問題]に対処
+* 7言語に翻訳
+
+このバージョンには、Log4Jライブラリのさらなるセキュリティアップデートが含まれています。また、ダーウィンコアに関する修正も含まれています（identifiedByID/recordedByIDの用語が表示されない不具合）。特にこれらのダーウィンコア用語を使用している場合は、すべてのユーザーがこのバージョンにアップグレードすることが推奨されます。
+
+== *2.5.4* – 2021年12月
+
+* https://github.com/gbif/ipt/milestone/31?closed=1[3問題]に対処
+* 7言語に翻訳
+
+このバージョンでは、Strutsとlink:https://nvd.nist.gov/vuln/detail/CVE-2021-44228[Log4J]ライブラリの重大なセキュリティ問題の修正が含まれています。すべてのユーザーは、可能な限り早期にこのバージョンにアップグレードすることが強く推奨されます。
+
+== *2.5.3* – 2021年12月
+
+* https://github.com/gbif/ipt/milestone/30?closed=1[2問題]に対処
+* 7言語に翻訳
+
+このバージョンでは、ユーザーインターフェイスのスペイン語翻訳の更新と、管理セクションの語彙ページの小さなバグ修正が含まれています。その他、バージョン2.5.2からの変更はなく、アップグレードを希望しない場合はアップグレードする必要はありません。翻訳者の方々のご尽力により、このユーザーマニュアルのスペイン語への翻訳が完了しました。
+
+== *2.5.2* – 2021年11月
+
+* https://github.com/gbif/ipt/milestone/29?closed=1[26問題]に対処
+* 7言語に翻訳
+
+このバージョンでは、2.5以前のバージョンで発生した、主にメタデータの編集と引用に関するバグの修正を行いました。その他に、デプロイメントやサーバー管理に関する改善、ユーザーインターフェースの更新、ライブラリの依存関係の新バージョンが含まれています。
+
+== *2.5.1* – 2021年9月
+
+* https://github.com/gbif/ipt/milestone/28?closed=1[4問題]に対処
+* 7言語に翻訳
+
+このバージョンでは、バージョン2.5.0で発生した、IPTがデータベースソースに接続できないバグに対処しています。IPTをデータベースソースに接続するユーザーは、2.5.1へのアップグレードが必要です。
+
+== *2.5.0* – 2021年10月
+
+* https://github.com/gbif/ipt/milestone/27?closed=1[81問題]に対処
+* 7言語に翻訳
+
+このバージョンでは、有名な「二重ログインバグ」を含む81の問題を解決し、より新鮮なユーザーインターフェイスを導入しています。 また、ユーザーマニュアルも刷新され、スペイン語への完全翻訳が可能になりました。
+
+== *2.4.2* – 2020年9月
+
+* https://github.com/gbif/ipt/milestone/9?closed=1[1問題]に対処
+* 7言語に翻訳
+
+Version 2.4.2 fixes a minor security vulnerability in Apache Struts, which the IPT uses. Users should plan to upgrade to this version following the instructions in the release notes. An improvement to memory use when large datasets are read from a PostgreSQL server is also included.
+
+== *2.4.1* – 2020年9月
+
+* https://github.com/gbif/ipt/milestone/25?closed=1[12問題]に対処
+* 7言語に翻訳
+
+Version 2.4.1 fixes a security vulnerability in Apache Struts, which the IPT uses. Users should plan to upgrade to this version following the instructions in the release notes.
+
+== *2.4.0* – 2019年7月
+
+* https://github.com/gbif/ipt/milestone/8?closed=1[19問題]に対処
+* 7言語に翻訳
+
+Version 2.4.0 fixes security vulnerabilities in Apache Jackson and Apache Struts, which the IPT uses. Users should plan to upgrade to this version following the instructions in the release notes. It also updates the integration for custom DOIs from DataCite, and removes (unused) support for DOIs from EZID. The version number has been updated to 2.4.0 to reflect the removal of support for EZID.
+
+== *2.3.6* – 2018年7月
+
+* https://github.com/gbif/ipt/milestone/7?closed=1[20問題]に対処
+* 7言語に翻訳
+
+Version 2.3.6 fixes a security vulnerability in JQuery, which the IPT uses. Users should plan to upgrade to this version following the instructions in the release notes.
+
+DataCiteからのカスタムDOIにlink:https://github.com/gbif/ipt/issues/1411[問題]が残っています。必要があれば、7月か8月にIPTのさらなるリリースが行われる予定です。
+
+== *2.3.5* – 2017年10月
+
+* https://github.com/gbif/ipt/milestone/6[27問題]・6不具合に対処、7件の改善と他15件
+* 7言語に翻訳
+
+Version 2.3.4 fixes a https://struts.apache.org/docs/s2-045.html[security vulnerability] that was discovered in the Apache Struts web framework, which the IPT uses. This security vulnerability affects all IPT versions, including 2.3.3, therefore all users should plan to upgrade to this version immediately following the instructions in the release notes.
+
+== *2.3.4* – 2017年3月
+
+* https://github.com/gbif/ipt/milestone/5[5問題]・3不具合に対処、改良1件、ほか1件
+* 7言語に翻訳
+
+Version 2.3.4 fixes a https://struts.apache.org/docs/s2-045.html[security vulnerability] that was discovered in the Apache Struts web framework, which the IPT uses. This security vulnerability affects all IPT versions, including 2.3.3, therefore all users should plan to upgrade to this version immediately following the instructions in the release notes.
+
+== *2.3.3* – 2016年12月
+
+* https://github.com/gbif/ipt/milestone/3[90問題]・22不具合に対応、17の機能強化、未修正36件、10件の重複、その他5件
+* 7言語に翻訳
+
+バージョン2.3.3でIPTに追加された素晴らしい新機能の説明は、link:https://gbif.blogspot.com/2017/01/ipt-v233-your-repository-for.html[ブログ]で説明されています。さらにGBIFは、IPTにデータをアップロードするための新しいMicrosoft Excelテンプレートのセットを最近リリースしましたので、ご覧ください。新しいテンプレートは、3種類のGBIFデータクラス（xref:sampling-event-data.adoc[サンプリングイベントデータ]、xref:occurrence-data.adoc[オカレンスデータ]、xref:checklist-data.adoc[チェックリストデータ]）の取得、フォーマット、アップロードを簡単にする方法を提供します。これらのテンプレートについての詳細は、link:https://www.gbif.org/newsroom/news/new-darwin-core-spreadsheet-templates[ニュース]を参照してください。
+
+== *2.3.2* – 2015年10月
+
+* https://github.com/gbif/ipt/milestone/2?closed=1[14問題]・12不具合に対処、未修正2件
+* 6言語に翻訳
+
+== *2.3.1* – 2015年9月
+
+* https://github.com/gbif/ipt/milestone/1?closed=1[3問題]・3不具合に対応
+* 6言語に翻訳
+
+== *2.3* – 2015年9月
+
+* https://github.com/gbif/ipt/milestone/20?closed=1[38問題]・15不具合に対処、機能強化15件、修正予定なし4件、タスクとして検討4件
+* 6言語に翻訳
+
+== *2.2.1* – 2015年4月
+
+* https://github.com/gbif/ipt/milestone/19?closed=1[5問題]・3不具合に対処、機能強化1件、ほか1件
+* 6言語に翻訳
+
+== *2.2* – 2015年3月
+
+* https://gbif.blogspot.com/2015/03/ipt-v22.html[リリース案内]
+* https://github.com/gbif/ipt/milestone/18?closed=1[74問題]・20不具合に対処、機能強化26件・その他2件・タスク1件に対応、16件の修正保留、重複6件・無効3件
+* 6言語に翻訳
+
+== *2.1* – 2014年4月
+
+* https://gbif.blogspot.com/2014/04/ipt-v21.html[リリース案内]
+* https://github.com/gbif/ipt/milestone/16?closed=1[85問題]・38不具合に対処、機能強化11件、18件の修正保留、重複6件・無効11件・その他1件
+* 6言語に翻訳（日本語を追加）
+
+== *2.0.5* – 2013年5月
+
+* https://gbif.blogspot.com/2013/05/ipt-v205-released-melhor-versao-ate-o.html[リリース案内]
+* https://github.com/gbif/ipt/milestone/14?closed=1[45問題]・15不具合に対処、機能強化17件、パッチ2件、7件の修正保留、重複3件・無効1件
+* 5言語に翻訳（ポルトガル語を追加）
+
+== *2.0.4* – 2012年10月
+
+* https://gbif.blogspot.com/2012/10/ipt-v204-released.html[リリース案内]
+* https://github.com/gbif/ipt/milestone/13?closed=1[108問題]・38不具合に対処、機能強化35件・パッチ5件・他7件に対応、18件の修正保留、重複4件・無効1件
+* 4言語に翻訳（中国語（繫体字）を追加）
+
+== *2.0.3* – 2011年11月
+
+* https://gbif.blogspot.com/2011/11/important-quality-boost-for-gbif-data.html[リリース案内]
+* Addressed https://github.com/gbif/ipt/milestone/12?closed=1[85問題]・43不具合に対処、31件の機能強化、パッチ3件、保留7件・重複1件
+* 3言語に翻訳（フランス語・スペイン語を追加）
+
+== *2.0.2* – 2011年6月
+
+* https://lists.gbif.org/pipermail/ipt/2011-June/000352.html[リリース案内]
+
+== *2.0.1* – 2011年2月
+
+* IPT バージョン2　初回リリース
+* https://lists.gbif.org/pipermail/ipt/2011-February/000309.html[リリース案内]

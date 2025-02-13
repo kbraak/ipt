@@ -1,0 +1,83 @@
+= DOI 工作流程
+
+[IMPORTANT]
+====
+By default, GBIF assigns a DOI to all registered datasets. These DOIs begin `10.15468` or `https://doi.org/10.15468`.
+
+If a dataset already has a suitable DOI, for example from publication elsewhere, this DOI can be added to the metadata. See xref:manage-resources#citations[Citations], specifically "Bibliographic Citation Identifier".
+
+For almost all publishers, either the GBIF-assigned DOI or an external DOI is sufficient. *This page is about using the IPT to assign DOIs directly, managed by you, the publisher.* This requires the publisher to have an account with DataCite.
+====
+
+== Background and setup
+
+The IPT can be configured to use a DataCite account to manage DOIs for datasets. Publishers have the option of assigning new DOIs to a dataset, or using the IPT to manage the publisher's existing DOI for a dataset.
+
+To enable the IPT to assign DOIs to resources, the IPT administrator must first configure an organization associated to the IPT with a DataCite account, and configure the DataCite account to mint DOIs under the IPT's domain. Then refer to the xref:administration#configure-organizations["Configure Organizations"] section to add the account to the IPT. Until this is done the DOI buttons in the Publication section of the manage resources view are hidden. Once a DataCite account has been activated in the IPT, resource managers can reserve, delete, register, deactivate, and reactivate DOIs for their resources using this account. Each of these DOI operations is explained in detail below.
+
+Best practice is to assign a new DOI to the resource every time it undergoes a scientifically significant change. See the xref:versioning.adoc[] for further recommendations.
+
+== Assigning a DOI to a resource
+
+On the Manage Resources page, under xref:manage-resources#publication[Publication], the table showing the pending version gains additional options to allow managing DOIs. The {doiicon} button allows assigning a new DOI for a resource. Assigning a new DOI also increases the major version of the resource.
+
+.This demonstrates a major version change since the pending version has been reserved a new DOI:
+image::ipt2/manage/IPTManageResourcePublishTable.png[]
+
+.This demonstrates a minor version change since the DOI assigned to the current and pending versions is the same:
+image::ipt2/manage/IPTManageResourcePublishTable2.png[]
+
+Be aware a DOI can be reserved for a private resource, but that DOI cannot be registered until the resource is publicly visible. Once a resource with a DOI is made public, it can no longer be made private.
+
+These fields are shown or have different meaning:
+
+* *Version* - the version number tracking the `major_version.minor_version` of the current/pending version. Each time the resource undergoes scientifically significant changes, the resource manager should ensure the pending version has a new major version, done by reserving it a new DOI. A detailed description of the IPT's versioning policy is explained xref:versioning.adoc[Dataset Versioning Policy]. Click the {viewicon} button to see the current version's homepage. In the pending version item, click the {viewicon} button to see a preview of the pending version's homepage. The homepage preview is private to resource managers only, and enables them to make sure the resource is ready to publish.
+* *DOI* - the DOI of the current/pending version. The DOI of the current version can never be changed. The DOI of the pending version can be reserved or deleted.
+
+When clicking "Publish", the usual dialog is extended to inform about the DOI, depending on whether the pending version is a major version change or minor version change:
+
+image::ipt2/manage/IPTManageResourcePublishMajor.png[]
+
+image::ipt2/manage/IPTManageResourcePublishMinor.png[]
+
+== Managing DOIs of resources
+
+Using the {doiicon} button, you can make changes to DOIs assigned to resources.
+
+* *Reserve*: - a DOI can be reserved for a resource. This operation varies a little depending on whether the resource has already been assigned a DOI or not.
+** *Resource not assigned a DOI*: - a DOI can be reserved for a resource after the mandatory metadata has been entered. To reserve a DOI, press the {doiicon} button in the Published Versions section. To reuse an existing DOI, enter it into the citation identifier field in the resource metadata, and then press the {doiicon} button in the Published Versions section. If a resource is publicly available and reserved a DOI, the next publication will result in a new major version and the DOI will be registered. Otherwise if a resource is private and reserved a DOI, the next publication will result in a new minor version of the resource and the DOI will NOT be registered. Be aware that until a DOI is registered it can still be deleted.
+** *Resource assigned a DOI*: - another DOI can be reserved for a published resource that has already been assigned a DOI. To reserve another DOI, press the {doiicon} button in the Published Versions section. The DOI will be registered the next time the resource is published, and will resolve to the newly published version's homepage. The former DOI will still resolve to the previous version, but will display a warning the new one superseded it. Be aware that until a DOI is registered it can still be deleted.
+* *Delete*: - a DOI that is reserved for the resource can be deleted since it was never publicly resolvable. To delete a DOI, press the {doiicon} button in the Published Versions section.
+* *Register*: - if a resource is publicly available and reserved a DOI, the next publication will result in a new major version and the DOI will be registered.
+* *Deactivate*: - a DOI that has been registered cannot be deleted, and must continue to resolve. The only way to deactivate a DOI is by deleting the resource itself. Deleting the resource will ensure the data can no longer be downloaded, and the DOI will resolve to a page explaining the resource has been retracted. Be aware that it can take up to 24 hours until a DOI update is globally known.
+* *Reactivate*: - a DOI that has been deactivated resolves to a resource that has been deleted. To reactivate the DOI, the resource must be undeleted. Undeleting a resource makes the data available for download again, and the DOI will resolve to the last published version of this resource. Be aware that it can take up to 24 hours until a DOI update is globally known.
+
+== 工作流程
+
+=== Assigning new DOIs to a Dataset
+
+Ideally publishers assign a new DOI to a dataset each time it undergoes a scientifically significant change. This differentiates major versions from each other, and allows them to be uniquely cited.
+
+The first step in assigning a DOI to a dataset, is reserving a DOI. A publisher may reserve a DOI for a dataset after the mandatory metadata has been entered. The advantage of a reserved DOI is that it can be included in a manuscript prior to a dataset's official release.
+
+The DOI will get registered the next time the resource is published, provided the resource is publicly available. This results in a major version change.
+
+Until the reserved DOI gets registered it can still be deleted. A graphical representation of this workflow is below:
+
+image::ipt2/v22/AssignNewDOI.png[]
+
+=== Letting the IPT manage an existing DOI for a Dataset
+
+If a dataset has already been assigned a DOI, publishers have the option of letting the IPT manage the existing DOI for them. This facilitates updating the DOI metadata, since the IPT automatically updates the DOI metadata every time the dataset is (re)published.
+
+_For this to work with existing 'registered' DOIs, you must ensure that the DOI's target URI matches the dataset's homepage URI, and that the dataset is publicly accessible (since an existing DOI must resolve to a publicly accessible page)._
+
+To assign an existing DOI to a dataset, publishers must set the DOI as the citation identifier (in resource metadata). After the mandatory metadata has been entered, the publisher may reserve a DOI. Since the existing DOI has been entered, however, the IPT reuses that instead of minting a new DOI. Of course the IPT's DOI-assigning account must have the rights to manage this DOI, otherwise an error message will appear.
+
+_If the existing DOI was only reserved, it will be deleted if you try to delete it. If the existing DOI was registered, it will not be deleted if you try to delete it._
+
+The DOI will get updated the next time the resource is published, provided the resource is publicly available. This results in a major version change.
+
+A graphical representation of this workflow is below:
+
+image::ipt2/v22/AssignExistingDOI.png[]

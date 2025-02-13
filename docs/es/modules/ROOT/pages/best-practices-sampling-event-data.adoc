@@ -1,0 +1,409 @@
+= Buenas prácticas para la publicación de datos de eventos de muestreo
+
+Versión 2.2
+
+== Control del documento
+
+|===
+| Versión | Descripción             | Fecha de publicación | Autor(es)
+
+| https://links.gbif.org/ipt-sample-data-primer[1.0]   | Versión de lanzamiento         | 2015    | Éamonn Ó Tuama
+| 2.0 | Transferido a wiki, cambios importantes | Mayo 2017   | Kyle Braak
+| https://github.com/gbif/ipt/wiki/BestPracticesSamplingEventData[2.1] | Pequeños cambios, limpieza | Agosto 2018   | Marie Grosjean
+| xref:best-practices-sampling-event-data.adoc[2.2] | Conversión a Asciidoctor | Mayo 2021 | Matthew Blissett
+|===
+
+== Citación sugerida
+
+// The date uses the last change, ignoring formatting etc.
+> GBIF (2018). Buenas prácticas para la publicación de datos de eventos de muestreo. Copenhagen: Secretaría de GBIF https://ipt.gbif.org/manual/en/ipt/{page-version}/best-practices-sampling-event-data
+
+== Introducción
+
+Esta guía proporciona detalles sobre cómo utilizar el formato de Archivo Darwin Core (DwC-A) como medio para compartir información de eventos de muestreo de manera estándar. Se centra en componentes específicos del formato de Archivo Darwin Core y en algunas de las extensiones de apoyo a los principales datos de eventos de muestreo, y ofrece recomendaciones sobre cómo utilizar mejor estos componentes para maximizar el valor de los datos compartidos. Esta guía no proporciona una descripción detallada del formato de Archivo Darwin Core; para ello, consulte la xref:darwin-core.adoc[Guía práctica de Archivos Darwin Core].
+
+El formato DwC-A y el perfil específico aquí descrito representan un formato de intercambio de datos ratificado y reconocido internacionalmente para compartir datos de eventos de muestreo. Todos los estándares de intercambio de datos deben lograr un equilibrio entre el alcance y la capacidad técnica, por un lado, y la aceptación y uso social por el otro. Las soluciones simples sacrifican la cobertura y la complejidad a favor de la facilidad de uso. Los formatos muy complejos proporcionan soluciones más completas para representar cualquier tipo de datos pero a expensas de la simplicidad y requieren software de apoyo y experticia. El formato Darwin Core Archive representa una posición intermedia entre los dos extremos de este espectro. Se centra en los elementos clave de los datos de eventos de muestreo y permite vincular un conjunto enriquecido de tipos de datos a esta estructura central. Los datos contenidos en un archivo pueden ser fácilmente comprendidos y utilizados por muchos ecólogos y administradores de datos familiarizados con archivos básicos de texto estructurado. Con este estándar internacional, GBIF espera facilitar la movilización de datos de eventos de muestreo y promover un enfoque común para citar y reconocer el trabajo de la comunidad que proporciona y maneja los datos de eventos de muestreo.
+// By providing an international standard that is relatively easy to produce and consume, and that supports many of the key elements that compose a sampling-event data resource, GBIF hopes to provide the creators and managers of sampling-event data with a standardized approach to sharing their data and promote common approaches to the subsequent citation and recognition of their work. The specific degree of coverage depends very much on the individual resource.
+Un formato estándar también incrementa la relavancia y utilidad.
+
+== ¿Qué son los datos de eventos de muestreo?
+
+Los datos de eventos de muestreo son un tipo de datos disponible a partir de miles de estudios ambientales, biológicos y de recursos naturales. Éstos pueden ser estudios aislados o programas de monitoreo. Tales datos suelen ser cuantitativos y calibrados, y seguir ciertos protocolos de tal modo que los cambios y tendencias de las poblaciones puedan ser detectados. Esto contrasta con los datos de observación y colecta ocasionales, que a día de hoy forman una proporción significativa de los datos de biodiversidad abiertos y accesibles.
+
+=== ¿Cómo expresar los datos de eventos de muestreo en DwC-A?
+
+Archivo Darwin Core (DwC-A) es un estándar de datos informáticos que hace uso de los términos Darwin Core para producir un conjunto de datos único y autocontenido para los datos de las listados de especies. La recopilación de archivos en un único archivo forma un conjunto de datos autocontenido, que puede proporcionarse como un archivo comprimido (Zip o Gzip). Un conjunto de datos se compone de un documento de metadatos descriptivo y un conjunto de uno o más archivos de datos. Para obtener más información sobre DwC-A consulte xref:darwin-core.adoc[Guía práctica de los Archivos Darwin Core].
+
+=== Metadatos de eventos de muestreo
+
+Para publicar datos de eventos de muestreo a través de GBIF, es necesario documentar la procedencia y el alcance de los conjuntos de datos. Esa documentación de los conjuntos de datos se denomina "metadatos" y permite a los usuarios evaluar la idoneidad de un conjunto de datos para su uso. Puede describir las metodologías de muestreo utilizadas para su colecta, y las personas y organizaciones involucradas en su creación y gestión. Los metadatos se comparten en un Archivo Darwin Core como un documento XML. GBIF proporciona un perfil de metadatos para conjuntos de datos de eventos de muestreo basado en el Lenguaje de Metadatos Biológicos. Una guía práctica describe todas las opciones para describir un conjunto de datos de evento de muestreo utilizando este formato. Consulte xref:gbif-metadata-profile.adoc[].
+
+=== Datos de eventos de muestreo
+
+El formato de Archivos Darwin Core proporciona el marco estructural para publicar datos de eventos de muestreo. Los Archivos Darwin Core constan de una serie de uno o más archivos de texto, en formato estándar delimitado por comas o tabulaciones. Estos archivos de texto están organizados de manera lógica en forma de estrella con un *archivo central*, que contiene los elementos core de los eventos de muestreo (protocolo de muestreo, tamaño de la muestra, localización, etc.) rodeados por una serie de '*extensiones*', que describen tipos de datos relacionados (como registros de especies, medidas o hechos relacionados con los eventos de muestreo, etc.). Las conexiones entre los registros core y los de las extensiones se realizan utilizando un elemento identificador de los datos del evento (*eventID*). De esta manera, pueden existir muchos registros de extensiones para cada registro core del evento. Este "esquema en estrella" proporciona un modelo de datos relacional simple que admite muchos tipos de anotaciones que son comunes a los conjuntos de datos de eventos de muestreo.
+
+.Darwin Core Archive data files in 'star schema'
+image::figures/dwc-a_event.png[]
+
+Una forma alternativa de codificar los datos de los eventos de muestreo es enumerar los registros biológicos de la especie en el archivo core, rodeado de una serie de extensiones que describen los tipos de datos relacionados (como las mediciones relacionadas con los registros biológicos de la especie, etc.). Es preferible enumerar los eventos de muestreo en el archivo core si una parcela o un sitio es el objetivo principal del estudio.
+
+Tenga en cuenta que el actual esquema en estrella de DwC-A tiene limitaciones. Por ejemplo, no permite vincular las mediciones y los hechos tanto a los eventos de muestreo como a los registros biológicos en el mismo conjunto de datos. Los debates sobre este prototipo de extensión se están llevando a cabo en GitHub, pero todavía no hay ninguna solución disponible.
+
+Por favor, compruebe los https://www.gbif.org/data-quality-requirements-sampling-events[requisitos de calidad de datos para los Eventos de muestreo]. Tenga en cuenta que si genera su Archivo Darwin Core de manera manual, usted podría necesitar añadir un campo recordID que contenga identificadores únicos. (Este campo se genera de forma automática si está usando un IPT). Para más información sobre la estructura de un Archivo Darwin Core, por favor vea la https://dwc.tdwg.org/text/[Guía de texto Darwin Core del TDWG]. Siempre puede comprobar su archivo con el https://www.gbif.org/es/tools/data-validator[validador de datos de GBIF].
+
+=== Recomendaciones sobre el formato de los archivos de datos
+
+Para facilitar la comprensión, podemos utilizar los términos *campo* en esta guía para referirnos al conjunto de términos Darwin Core en el perfil de publicación del evento de muestreo al que se mapearan los datos de un usuario. Por ejemplo, nos referiremos al uso del campo *dwc:scientificName* cuando nos refiramos al término Darwin Core, *scientificName*.
+
+* Se recomienda utilizar tabulaciones o valores separados por comas (CSV) en lugar de delimitadores de campo personalizados y comillas.
+* Sea cuidadoso y consistente con el uso de las comillas.
+* Codifique los archivos de texto como UTF-8
+* Make sure you replace all line breaks in a data field, i.e. `\r` `\n` or `\r\n` with either simple spaces or use 2 characters like `$$` to replace `\r` to escape the line break if the intention is to preserve them. Another option is to replace line breaks with the HTML `<br>` tag.
+* Codifique los valores nulos como cadenas vacías, es decir, sin caracteres entre 2 delimitadores o `\N` o` \NULL`, ¡pero ninguna otra secuencia de texto!
+
+=== Tamaño de muestra
+
+Los siguientes campos Darwin Core almacenan el tamaño de muestra de un evento de muestreo:
+
+* *sampleSizeValue*: un valor numérico para una medida del tamaño (duración en tiempo, longitud, área, volumen) de una muestra en un evento de muestreo.
+* *sampleSizeUnit*: la unidad de medida del tamaño (duración en tiempo, longitud, área o volumen) de una muestra en un evento de muestreo.
+
+El valor de sampleSizeValue es un número y debe tener su correspondiente sampleSizeUnit. El valor de sampleSizeUnit debe restringirse únicamente al uso de unidades del Sistema Internacional u otras unidades aceptadas para su uso en el Sistema Internacional (p. ej., minuto, hora, día, litro) de acuerdo al {latest-unit-of-measurement}[Vocabulario de Unidades de medida]. Se proporcionan ejemplos a continuación en la tabla 1.
+
+Puede representar un área de muestreo utilizando una forma WKT apropiada o una ubicación de punto de latitud/longitud. Si se hace correctamente, también se puede derivar el muestreo de la dirección en que se llevó a cabo. Por ejemplo, una línea de arrastre oceánica representada con una forma WKT LINESTRING permite determinar la dirección de la red de arrastre basándose en la notación estándar para escribir los puntos de inicio y finalización.
+
+.sampleSizeValue y SampleSizeUnit deben usarse de manera conjunta, p. ej., 3 metros cuadrados o 1 litro.
+|===
+| sampleSizeValue | sampleSizeUnit
+
+| 2 | horas
+| 3 | m2
+| 17 | km
+| 1 | litro
+|===
+
+=== Cantidad y abundancia
+
+Los siguientes archivos Darwin Core también deben ser usados como un par:
+
+* *organismQuantity*: un valor numérico o de enumeración para la cantidad de organismos.
+* *organismQuantityType*: el tipo de sistema de cuantificación usado para la cantidad de organismos.
+
+La Tabla 2 enumera algunos valores como ejemplo. El valor de organismQuantity es un número o una enumeración, p. ej., “27” para un organismQuantityType “individuos”, “12.5” para un organismQuantityType “%biomasa”, o “r” para un organismQuantityType “BraunBlanquetScale”. El valor de organismQuantityType (p. ej., la entidad que está siendo medida) debe ser extraído de un vocabulario controlado reducido con términos como “Individuos”, “%Biomasa”, “%Biovolumen”, “%Especies”, “%Cobertura”, “BraunBlanquetScale”, “DominScale”. Ejemplos cuando se combinan con los valores de organismQuantity: “+” en DominScale; “5” en BraunBlanquetScale; “45” para %Biomasa.
+
+.organismQuantity y organismQuantityType deben usarse de manera conjunta, p. ej., un conteo de 14 individuos o un valor de código "r" en la escala Braun Blanquet.
+|===
+| organismQuantity | organismQuantityType
+
+| 14 | individuos
+| r | BraunBlanquetScale
+| 0.4 | %Especies
+| 31 | %Biomasa
+|===
+
+=== Cómo identificar de forma única los eventos de muestreo
+
+Cada evento se identifica de manera única utilizando dwc:eventID y ocasionalmente dwc:parentEventID. Aunque el tipo y formato del identificador es arbitrario, recomendamos que los publicadores seleccionen identificadores únicos globales y persistentes (GUID). En ausencia de GUID, los publicadores pueden reutilizar el fieldNumber original. 
+
+Asegúrese de reutilizar identificadores estables existentes y no cree un nuevo identificador para un evento cuando ya hay uno aceptado.
+
+=== How to capture hierarchy of events
+
+Los eventos de muestreo pueden estar relacionados entre sí (p ej., muestras anidadas) mediante un identificador parental común. Por ejemplo, varios sub-eventos de muestreo en una parcela de Whittaker cada uno con sus propios eventID (p. ej.,: "A1:1", "A1:2") compartirían un parentEventID común (p. ej.,: "A1") lo que permite vincularlos entre sí fácilmente (ver Tabla 4 y Figura 3).
+
+En la sección de proyecto de los metadatos adjuntos puede encontrarse más información sobre la naturaleza de la relación (p. ej., parte de una serie de monitoreo).
+
+También puede dirigirse a las siguientes xref:sampling-event-data.adoc#q-how-do-i-publish-a-hierarchy-of-events-recursive-data-type-using-parentEventID[preguntas frecuentes].
+
+=== How to capture absence data
+
+Diríjase a las siguientes xref:sampling-event-data.adoc#q-how-do-i-publish-absence-data[preguntas frecuentes].
+
+=== Cómo incluir material multimedia complementario
+
+Puede elegir incluir medios complementarios para facilitar la interpretación de los datos. Por ejemplo, para datos de vegetación es útil incluir un enlace a la lámina de relevé original escaneada cuando se interpreten los datos.
+
+Los archivos asociados tienen que ser alojados en un servidor externo y enlazados la los registros a través de dwc:associatedMedia y dwc:associatedReferences. Estos archivos pueden ser imágenes, textos o una combinación de ambos siempre que se especifique el tipo de formato. Las imágenes JPG, PNG, etc. serán visibles como miniaturas mientras que los PDFs aparecerán como enlaces pulsables.
+
+== Publicar datos de eventos de muestreo
+
+=== Utilizar GUID como identificadores
+
+Numerosos campos requieren el uso de identificadores únicos: dwc:occurrenceID, dwc:eventID, dwc:organismID y dwc:locationID.
+
+Como se ha mencionado anteriormente, aunque no es obligatorio utilizar un formato concreto, aconsejamos a los publicadores utilizar Identificadores únicos globales (GUID, por sus siglas en inglés). Existen varios servicios online que pueden prorcionar tales identificadores. Por ejemplo, es posible utilizar http://www.geonames.org/ para encontrar (o incluso generar nuevos) identificadores para dwc:locationID, p. ej., http://sws.geonames.org/10793757/ es un GUID para un lago en Groenlandia.
+
+=== Proteger la ubicación de especies sensibles
+
+Si su conjunto de datos contiene especies sensibles, existen varias formas de manejarlo:
+
+* Simplemente eliminar estas especies el conjunto de datos,
+* Publicar las identificaciones de especies únicamente a nivel de Género,
+* Publicar las especies sensibles/protegidas en un conjunto de datos separado,
+* Publicar puntos no precisos para los datos sensibles en el conjunto de datos principal y publicar los detalles precisos en un conjunto de datos separado de acceso limitado; ambos conjuntos de datos incluyen todos los registros de datos.
+
+=== Conservar los datos originales
+
+Aunque los datos y descripciones originales no son visibles en la web de GBIF.org, se ponen al alcance de la comunidad a través de descargas. Cuando introduzca descripciones originales, asegúrese de vincularlas con el evento o registro original. Por ejemplo, el ID o código proporcionado en el evento original debe ser introducido en dwc:fieldNumber, el ID o código proporcionado en la observación del registro original debe ser introducido en dwc:recordNumber.
+
+=== Publicar datos de proyectos como un único conjunto de datos
+
+Los datos producidos por un proyecto de muestreo grande deberían ser publicados, si es posible, como un único conjunto de datos. Si debe publicar múltiples conjuntos de datos, le recomendamos que los vincule utilizando un identificador de proyecto común en los metadatos.
+
+=== Republicar datos de registros biológicos como datos de eventos de muestreo
+
+Los eventos de muestreo proporcionan mejor documentación y mayor beneficio para la comunidad científica y los encargados de formular las políticas (https://www.gbif.org/sampling-event-data[leer más]). Recomendamos encarecidamente la re-publicación de los datos de registros biológicos como datos de eventos de muestro cuando sea posible.
+
+Para hacerlo, debe crear un nuevo conjunto de datos de eventos de muestreo y enviar un correo electrónico a la Mesa de ayuda de GBIF (helpdesk@gbif.org). En este correo electrónico, debe proporcionar los UUID del conjunto de datos de registros biológicos y del nuevo conjunto de datos. Entonces podremos enlazar el primer conjunto de datos con el nuevo antes de desindexarlo, evitando así la duplicación de registros biológicos y preservando las citas.
+
+=== Modelling continuous monitoring of live individuals
+
+Si su conjunto de datos contiene monitoreos continuos de individuos vivos, tales como datos de monitoreo de aves, puede utilizar dwc:organismID para almacenar el ID del individuo que está siendo monitoreado. Además de eso, debe representar cada individuo monitoreado como un evento único.
+
+// TODO: Provide a recommendation on how to model continuous monitoring of live individuals, such as bird tracking data by using dwc:organismID to store the ID of the individual being tracked and by using a single event for representing each individual being tracked (with associated occurrences where it was recorded).
+
+== Mejora continua de la calidad de los datos
+
+=== Gestión de incidencias relacionadas con el conjunto de datos
+
+Si fuera posible, recomendamos hacer seguimiento de todas las incidencias relacionadas con un conjunto de datos utilizando un sistema de gestión de incidencias tales como el proporcionado por GitHub.
+
+=== Compartir códigos y programas utilizados para producir o limpiar el conjunto de datos
+
+Idealmente, los códigos y programas personalizados utilizados para transformar los datos deberían ser compartidos en GitHub. Otros publicadores podrán beneficiarse del acceso a estos códigos junto a instrucciones detalladas sobre cómo utilizarlos.
+
+== Describing sampling-event data in dataset metadata
+
+Los editores deben documentar su conjunto de datos tanto como sea posible, haciendo especial hincapié en las metodologías de muestreo.
+
+Además de https://www.gbif.org/data-quality-requirements-sampling-events[los requisitos obligatorios], los metadatos deberían incluir información sobre la extensión del estudio, los métodos de muestreo, el control de calidad y las limitaciones del estudio. Aunque la información sobre el trabajo de campo puede ser parte del contenido de los datos, se puede describir también en los metadatos la localización y condiciones del muestreo.
+
+=== Vincular conjuntos de datos relacionados
+
+Algunos conjuntos de datos pueden proceder del mismo proyecto de investigación o pueden estar relacionados en ciertos contextos. La recomendación actual es vincularlos utilizando un identificador de proyectos.
+
+=== Enumerar investigaciones relacionadas
+
+Puede facilitar la interpretación de su conjunto de datos incluyendo enlaces a trabajos publicados relacionados tales como artículos científicos, notas de proyectos, tesis, etc., en las citas bibliográficas o en la sección de enlaces externos de los metadatos.
+
+== Ejemplos
+
+A continuación se presentan algunos ejemplos de conjuntos de datos típicos de eventos de muestreo. En cada caso, se proporcionan los campos clave para el evento core y las extensiones de registros. Para algunos ejemplos, las extensiones adicionales tales como Relevé y medidas-o-hechos también se han incluido.
+
+=== Muestreo de invertebrados acuáticos
+
+*Tabla core (de evento)*
+
+|===
+| EventID | samplingProtocol | sampleSizeValue | sampleSizeUnit | eventDate | location | decimalLatitude | decimalLongitude
+|===
+
+*Tabla de extensiones (de registros)*
+
+|===
+| EventID | scientificName | organismQuantity | organismQuantityType | ...
+
+| C_1428 | _Baetis rhodani_ | 14 | individuos |
+| C_1428 | _Ephemera danica_ | 15 | individuos |
+| C_1428 | _Gyraulus albus_ | 2 | individuos |
+| B_1538 | _Serratella ignita_ | 318 | individuos |
+|===
+
+*Explicación*
+
+_Ephemera danica_ : Un total de 14 individuos de 1,25 metros cuadrados fueron obtenidos en este evento de muestreo. El recuento derivado de individuos por metro cuadrado es de 11,2 (14/1,25).
+
+=== Muestreo de invertebrados de aguas salobres
+
+*Tabla core (de evento)*
+
+|===
+| EventID | samplingProtocol | sampleSizeValue | sampleSizeUnit | startDayOfYear | endDayOfYear | year | location | decimalLatitude | decimalLongitude | ...
+
+| IA1 | draga manual van Veen | 0.04 | m^2 | 147 | 154 | 1995 | Gialova lagoon | 36.9564 | 21.6661 |
+| IA3 | draga manual van Veen | 0.04 | m^2 | 147 | 154 | 1995 | Gialova lagoon | 36.9564 | 21.6661 |
+|===
+
+*Tabla de extensiones (de registros)*
+
+|===
+| EventID | scientificName | organismQuantity | organismQuantityType | ...
+
+| IA1 | _Abra ovata_ | 57 | individuos |
+| IA3 | _Bittium reticulatum_ | 113 | individuos |
+|===
+
+*Tabla de extensión (medida-o-hecho)*
+
+|===
+| EventID | measurementType | measurementValue | measurementUnit | measurementRemarks | ...
+
+| IA1 | Tmp (sed) | 21.5 | Degree C | temperatura en la superficie del fondo | --
+| IA1 | Rdx (sed)0 | 170 | mv | valor Eh en la superficie del fondo (0cm) | --
+|===
+
+*Explicación*
+
+*_Abra ovata_* : Un total de 57 individuos de 0.04 metros cuadrados fueron obtenidos en el evento de muestreo IA1.
+
+Cada evento también puede tener mediciones o hechos asociados, p. ej., mediciones ambientales como la temperatura de los sedimentos y el potencial redox (Eh).
+
+=== Muestreo de macrófitos
+
+Tenga en cuenta que este ejemplo está basado en la versión anterior de la Base de datos de vegetación holandesa (LVD), republicada como conjunto de datos de evento de muestreo. La extensión Relevé sufre cambios significativos respecto a la publicación del original. Para más información sobre LVD y los modelos de datos para datos de eventos de muestreo de vegetación ver: https://gbif.blogspot.com/2016/07/probably-turbovegs-best-kept-secret.html
+
+|===
+| EventID | samplingProtocol | sampleSizeValue | sampleSizeUnit | eventDate | location | decimalLatitude | decimalLongitude | ...
+
+| 1001 | Braun Blanquet | 100 | m^2 | 09/08/2012 | Kinzig O3 Rothenbergen | 50.18689 | 9.100369 |
+|===
+
+*Tabla de extensiones (de registros)*
+
+|===
+| EventID | scientificName | organismQuantity | organismQuantityType | ...
+
+| 1001 | _Acer psuedoplatanus_ | r | BraunBlanquetScale |
+|===
+
+*Tabla de extensión (relevé)*
+
+|===
+| EventID | syntaxonCode | inclination | coverTotal | treesCover | coverShrubs | highTreeLayerHeight | highHerbLayerMeanHeight | mossesIdentified | ...
+
+| 1001 | 843200 | 40 | 100 | 95 | 50 | 25 | 40 | Y | --
+|===
+
+*Explicación*
+
+*_Acer psuedoplatanus_* : En los 200 m2 muestreados, la abundancia de especies fue reportada como "r" en la escala de Braun-Blanquet.
+
+Las medidas adicionales de parcelas de vegetación tales como el tipo de comunidad vegetal (syntaxon) % de valores cubiertos que son típicos de conjuntos de datos de tipo TurboVeg son incluidos en una extensión Relevé (parcela-vegetación).
+
+=== Muestreo de Lepidópteros I
+
+*Tabla core (de evento)*
+
+|===
+| EventID | samplingProtocol | sampleSizeValue | sampleSizeUnit | startDayOfYear | endDayOfYear | year | location | decimalLatitude | decimalLongitude | ...
+
+| 2320 | Trampa de luz modelo Jalas con lámpara ML mate de 160W | 16 | día | 164 | 180 | 1999 | Kungsmarken | 55.72 | 13.28 | ...
+|===
+
+*Tabla de extensiones (de registros)*
+
+|===
+| EventID | scientificName | organismQuantity | organismQuantityType | ...
+
+| 2320 | _Opisthograptis luteolata_ | 11 | individuos |
+|===
+
+*Explicación*
+
+*_Opisthograptis luteolata_* : 11 individuos fueron observados en un período de muestreo de 16 días. El número derivado de individuos por días es de 0.68 (11/16).
+
+=== Muestreo de Lepidópteros II
+
+*Tabla core (de evento)*
+
+|===
+| EventID | samplingProtocol | sampleSizeValue | sampleSizeUnit | eventDate | location | decimalLatitude | decimalLongitude | ...
+
+| 1014-tr023m | caminatas de Pollard | 250 | m^2 | 2012-10-11 | Ramat Hanadiv botanik garden | 32.553191 | 34.947492 |
+| 1012-tr006-s5 | caminatas de Pollard | 250 | m^2 | 2012-05-02 | Carmel Hurshan haarbaim | 32.75789805 | 35.02697333 |
+|===
+
+*Tabla de extensiones (de registros)*
+
+|===
+| EventID | scientificName | organismQuantity | organismQuantityType | ...
+
+|  1014-tr023m  | _Pieris  rapae_ | 1 | individuos |
+| 1014-tr023-s5  | _Maniola  telmessia_ | 2 | individuos |
+|===
+
+*Tabla de extensione (medida-o-hecho)*
+
+|===
+| EventID | measurementType | measurementValue | measurementUnit | measurementRemarks | ...
+
+| 1014-tr023m | Temp | 20 | Grados C |  |
+| 1014-tr023m | Velocidad del viento | luz | | |
+| 1014-tr023m | Nubosidad | 0 | nivel 1 de 8 |  |
+| 1014-tr023m | AltitudProm | 10 | m | Altitud promedio |
+|===
+
+*Explicación*
+
+*_Pieras rapae_* : Un total de 1 individuo de 250 m2 fue obtenido en este evento de muestreo. Varias medidas ambientales (p. ej., temperatura, velocidad del viento, nubosidad) son incluidas en una extensión de medida-o-hecho.
+
+=== Muestreo de peces de arrecife de coral
+
+*Tabla core (de evento)*
+
+|===
+| EventID | samplingProtocol | sampleSizeValue | sampleSizeUnit | eventDate | location | decimalLatitude | decimalLongitude | ...
+
+| 506003329 | métodos Reef Life Survey | 500 | m^2 | 2006-09-02 | Cocos Islands | 5.56187 | -87.04693 |
+| 57003326 | métodos Reef Life Survey | 500 | m^2 | 2006-12-11 | Panama Bight | 4.008553 | -81.605377 |
+|===
+
+*Tabla de extensiones (de registros)*
+
+|===
+| EventID | scientificName | organismQuantity | organismQuantityType | ...
+
+| 506003329 | Acanthurus nigricans | 42 | individuos |
+| 506003329 | Acanthurus xanthopterus | 1 | individuos |
+| 506003329 | Aulostomus chinensis | 4 | individuos |
+| 506003329 | Axoclinus cocoensis | 1 | individuos |
+|===
+
+*Explicación*
+
+*_Aulostomus chinensis_* : En este muestreo se obtuvieron un total de 4 individuos en 500 metros cuadrados.
+
+=== Muestras anidadas
+
+.Varias sub-parcelas pueden estar relacionadas con el parentEventID como en este ejemplo de una parcela Whittaker que contiene 13 sub-parcelas (ver Figura 3 para el diseño de parcelas).
+|===
+| EventID | parentEventID | samplingProtocol | sampleSizeValue | sampleSizeUnit | eventDate | location | decimalLatitude | decimalLongitude | ...
+
+| A1 |  | Parcela Whittaker modificada | 1000 | m^2 | 1984-03-18 | Monarch | 55.72 | 13.28 |
+| A1.1 | A1 |  | 100 | m^2 |  |  | | |
+| A1.2 | A1 |  | 10 | m^2 |  |  | | |
+| A1.3 | A1 |  | 10 | m^2 |  |  | | |
+| A1.4 | A1 |  | 1 | m^2 |  |  | | |
+| A1.5 | A1 |  | 1 | m^2 |  |  | | |
+| A1.6 | A1 |  | 1 | m^2 |  |  | | |
+| A1.7 | A1 |  | 1 | m^2 |  |  | | |
+| A1.8 | A1 |  | 1 | m^2 |  |  | | |
+| A1.9 | A1 |  | 1 | m^2 |  |  | | |
+| A1.10 | A1 |  | 1 | m^2 |  |  | | |
+| A1.11 | A1 |  | 1 | m^2 |  |  | | |
+| A1.12 | A1 |  | 1 | m^2 |  |  | | |
+| A1.13 | A1 |  | 1 | m^2 |  |  | | |
+|===
+
+.Un esquema de una parcela Whittaker que contiene 13 sub-parcelas de área variable.
+image::figures/whittaker_plot.png[]
+
+=== Información adicional que también podría ser incluida o fue previamente incluida
+
+Los elementos del evento core son obtenidos principalmente de los eventos DwC de clases, localización y contexto geológico (Tabla 3). Los elementos de la extensión de registros biológicos son obtenidos de registros biológicos , taxón y clases de identificación. Por motivos de consistencia, la extensión de registros biológicos incluye todos los términos encontrados en el core de los registros biológicos.Por ello, los términos evento, localización y contexto geológico también son enumerados en la extensión de registros biológicos, pero son redundantes. Tenga en cuenta que el IPT no muestra términos redundantes por defecto al mapear para conveniencia del usuario.
+
+.Ubicación de los términos relacionados con la muestra en el evento core y en la extensión de registros biológicos.
+[cols="1h,1"]
+|===
+| Event Core
+| eventID, parentEventID, samplingProtocol, sampleSizeValue, sampleSizeUnit, samplingTaxaRange, siteTreatment, siteID, layer
+
+| Occurrence Extension
+| eventID, organismQuantity, organismQuantityType, siteID+, layer+
+|===
+
+El símbolo "+" indica términos nuevos propuestos que no han sido ratificados.
+
+=== Adiciones y notas programadas para la revisión:
+
+xref:best-practices-sampling-event-planned-additions.adoc[]

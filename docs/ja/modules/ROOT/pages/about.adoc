@@ -1,0 +1,13 @@
+= メニューについて
+
+「バージョン情報」ページには通常、現在のIPTインストールに関する基本情報が表示されます。
+
+IPTが登録されていない場合は、以下のページが表示されます。
+
+image::ipt2/about/IPTAbout.png[]
+
+また、IPTが登録されている場合はこのような表示になります。
+
+image::ipt2/about/IPTAboutRegistered.png[]
+
+ページに表示される情報は、 xref:administration.adoc#configure-gbif-registration-options[管理メニュー → GBIF登録オプションの設定]から編集することができます。

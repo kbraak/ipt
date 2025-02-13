@@ -1,0 +1,83 @@
+= Flujos de trabajo DOI
+
+[IMPORTANT]
+====
+Por defecto, GBIF asigna un DOI a todos los conjuntos de datos registrados. Estos DOI comienzan por `10.15468` o `https://doi.org/10.15468`.
+
+Si un conjunto de datos ya tiene un DOI adecuado, por ejemplo de una publicación en otro lugar, este DOI puede añadirse a los metadatos. Véase xref:manage-resources#citations[Citas], específicamente "Identificador de citas bibliográficas".
+
+Para casi todos los publicadores, el DOI asignado por GBIF o un DOI externo es suficiente. *Esta página trata sobre el uso del IPT para asignar DOIs directamente, gestionados por usted, el publicador.* Esto requiere que el publicador tenga una cuenta con DataCite.
+====
+
+== Contexto y configuración
+
+El IPT puede configurarse para utilizar una cuenta DataCite para gestionar los DOI de los conjuntos de datos. Los publicadores tienen la opción de asignar nuevos DOI a un conjunto de datos o utilizar el IPT para gestionar el DOI existente del publicador para un conjunto de datos.
+
+Para que el IPT pueda asignar DOIs a los recursos, el administrador del IPT debe primero configurar una organización asociada al IPT con una cuenta DataCite, y configurar la cuenta DataCite para acuñar DOIs bajo el dominio del IPT. A continuación, consulte la sección xref:administration#configure-organizations["Configurar organizaciones"] para añadir la cuenta al IPT. Hasta que no se haga esto, los botones DOI de la sección Publicación de la vista de administración de recursos estarán ocultos. Una vez activada una cuenta DataCite en el IPT, los administradores de recursos pueden reservar, eliminar, registrar, desactivar y reactivar DOIs para sus recursos utilizando esta cuenta. A continuación se explica detalladamente cada una de estas operaciones de DOI.
+
+La buena práctica consiste en asignar un nuevo DOI al recurso cada vez que experimente un cambio científicamente significativo. Consulte xref:versioning.adoc[] para más recomendaciones.
+
+== Asignar un DOI a un recurso
+
+En la página Gestión de recursos, en xref:manage-resources#publication[Publicación], la tabla que muestra la versión pendiente gana opciones adicionales para permitir la gestión de los DOI. El botón {doiicon} permite asignar un nuevo DOI a un recurso. La asignación de un nuevo DOI también aumenta la versión principal del recurso.
+
+.Muestra un cambio de versión importante ya que a la versión pendiente se le ha reservado un nuevo DOI:
+image::ipt2/manage/IPTManageResourcePublishTable.png[]
+
+.Muestra un cambio de versión menor ya que el DOI asignado a las versiones actuales y pendientes es el mismo:
+image::ipt2/manage/IPTManageResourcePublishTable2.png[]
+
+Tenga en cuenta que se puede reservar un DOI para un recurso privado, pero ese DOI no se puede registrar hasta que el recurso sea visible públicamente. Una vez que un recurso con DOI se hace público, ya no puede hacerse privado.
+
+Estos campos se muestran o tienen un significado diferente:
+
+* *Version* - el número de versión que rastrea la `major_version.minor_version` de la versión actual/pendiente. Cada vez que el recurso sufre cambios científicamente significativos, el administrador del recurso debe asegurarse de que la versión pendiente tenga una nueva versión mayor, lo que se hace reservándole un nuevo DOI. Una descripción detallada de la política de versiones del IPT se explica en xref:versioning.adoc[Política de versiones de conjuntos de datos]. Haga clic en el botón {viewicon} para ver la página principal de la versión actual. En el elemento de versión pendiente, haga clic en el botón {viewicon} para ver una vista previa de la página de inicio de la versión pendiente. La vista previa de la página de inicio es privada sólo para los administradores de recursos, y les permite asegurarse de que el recurso está listo para publicarse.
+* *DOI* - el DOI de la versión actual/pendiente. El DOI de la versión actual no puede modificarse nunca. El DOI de la versión pendiente puede reservarse o borrarse.
+
+Al hacer clic en "Publicar", el diálogo habitual se amplía para informar sobre el DOI, dependiendo de si la versión pendiente es un cambio de versión mayor o menor:
+
+image::ipt2/manage/IPTManageResourcePublishMajor.png[]
+
+image::ipt2/manage/IPTManageResourcePublishMinor.png[]
+
+== Gestión de los DOI de los recursos
+
+Con el botón {doiicon} puede realizar cambios en los DOI asignados a los recursos.
+
+* *Reservar*: un DOI puede ser reservado para un recurso. Esta operación varía un poco dependiendo de si al recurso ya se le ha sido asignado un DOI o no.
+** *Recurso sin DOI asignado*: - se puede reservar un DOI para un recurso después de haber ingresado los metadatos obligatorios. Para reservar un DOI, pulse el botón {doiicon} en la sección Versiones publicadas. Para reutilizar un DOI existente, ingréselo en el campo del identificador de la cita en los metadatos del recurso y, a continuación, pulse el botón {doiicon} en la sección Versiones publicadas. Si un recurso es público y se ha reservado un DOI, la próxima publicación dará lugar a una nueva versión principal y se registrará el DOI. En caso contrario, si un recurso es privado y se ha reservado un DOI, la siguiente publicación dará lugar a una nueva versión menor del recurso y el DOI NO se registrará. Tenga en cuenta que hasta que no se registre un DOI, éste puede ser eliminado.
+** *Recurso al que se le asignó un DOI*: - Se puede reservar otro DOI para un recurso publicado al que ya se le asignó un DOI. Para reservar otro DOI, pulse el botón {doiicon} en la sección Versiones publicadas. El DOI se registrará la próxima vez que se publique el recurso, y se enlazará con la página de inicio de la nueva versión publicada. El DOI anterior seguirá remitiendo a la versión anterior, pero mostrará un aviso de que la nueva versión la ha sustituido. Tenga en cuenta que hasta que no se registre un DOI, éste puede ser eliminado.
+* *Borrar*: - un DOI que está reservado para el recurso puede ser borrado ya que nunca fue de acceso público. Para eliminar un DOI, pulse el botón {doiicon} en la sección Versiones publicadas.
+* *Registrar*: si un recurso está disponible públicamente y se ha reservado un DOI, la siguiente publicación dará lugar a una nueva versión principal y se registrará el DOI.
+* *Desactivar*: un DOI que ha sido registrado no puede ser eliminado y debe seguir direccionando. La única manera de desactivar un DOI es borrando el recurso. Al eliminar el recurso se asegurará que los datos ya no puedan ser descargados y el DOI se dirigirá en una página que explica que el recurso ha sido retirado. Tenga en cuenta que pueden pasar hasta 24 horas hasta que se conozca globalmente la actualización de un DOI.
+* *Reactivar*: un DOI que ha sido desactivado direcciona a un recurso que ha sido eliminado. Para reactivar el DOI, el recurso debe ser anulado. Si se deshace la eliminación de un recurso, los datos vuelven a estar disponibles para su descarga y el DOI direccionará a la última versión publicada de este recurso. Tenga en cuenta que pueden pasar hasta 24 horas hasta que se conozca globalmente una actualización del DOI.
+
+== Flujos de trabajo
+
+=== Asignación de nuevos DOI a un Conjunto de datos
+
+Idealmente, los editores asignan un nuevo DOI a un conjunto de datos cada vez que se somete a un cambio científicamente significativo. Esto diferencia las versiones mayores entre sí y permite que se citen de forma única.
+
+El primer paso para asignar un DOI a un conjunto de datos, es reservar un DOI. Un publicador puede reservar un DOI para un conjunto de datos después de que se hayan ingresado los metadatos obligatorios. La ventaja de un DOI reservado es que se puede incluir en un manuscrito antes de la publicación oficial del conjunto de datos.
+
+El DOI se registrará la próxima vez que se publique el recurso, siempre que el recurso esté disponible públicamente. Esto da como resultado un cambio en la versión principal.
+
+Hasta que el DOI reservado se registre, aún se puede eliminar. A continuación, se muestra una representación gráfica de este flujo de trabajo:
+
+image::ipt2/v22/AssignNewDOI.png[]
+
+=== Dejar que el IPT gestione un DOI existente para un conjunto de datos
+
+Si un conjunto de datos ya tiene un DOI asignado, los editores tienen la opción de dejar que el IPT gestione el DOI existente por ellos. Esto facilita la actualización de los metadatos del DOI, ya que el IPT actualiza automáticamente los metadatos del DOI cada vez que se (re)publica el conjunto de datos.
+
+_Para que esto funcione con los DOIs "registrados" existentes, debe asegurarse de que el URI de destino del DOI coincida con el URI de la página de inicio del conjunto de datos, y que el conjunto de datos sea de acceso público (ya que un DOI existente debe hacer referencia a una página de acceso público)._
+
+Para asignar un DOI existente a un conjunto de datos, los editores deben establecer el DOI como identificador de la cita (en los metadatos del recurso). Una vez introducidos los metadatos obligatorios, el editor puede reservar un DOI. Sin embargo, dado que se ha introducido el DOI existente, el IPT lo reutiliza en lugar de asignar un nuevo DOI. Por supuesto, la cuenta del IPT que asigna el DOI debe tener los derechos para gestionar este DOI, de lo contrario aparecerá un mensaje de error.
+
+_Si el DOI existente sólo estaba reservado, se borrará si intenta eliminarlo. Si el DOI existente estaba registrado, no se borrará si intenta eliminarlo._
+
+El DOI se actualizará la próxima vez que se publique el recurso, siempre que esté disponible públicamente. Esto supone un cambio de versión importante.
+
+A continuación se muestra una representación gráfica de este flujo de trabajo:
+
+image::ipt2/v22/AssignExistingDOI.png[]

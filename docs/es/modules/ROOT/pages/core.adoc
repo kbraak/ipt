@@ -1,0 +1,36 @@
+= Cómo agregar un nuevo core
+
+WARNING: Esta página contiene instrucciones de configuración solo para usuarios avanzados del IPT
+
+El IPT siempre se instala con 3 cores del estándar Darwin Core cargados de forma predeterminada: "taxon", "occurrence" y "event". Desde la versión 2.1 de IPT, existe la posibilidad de agregar cores personalizados, lo que es útil para las comunidades que crean prototipos de nuevos estándares de datos. De esta manera, su comunidad puede comenzar a intentar mapear sus datos al nuevo estándar y refinar iterativamente su conjunto de propiedades.
+
+Los 3 pasos siguientes explican cómo hacerlo
+
+. crear su nuevo core,
+. registrarlo en GBIF, y
+. configurar un IPT para utilizarlo.
+
+== Instrucciones
+
+. *Escribir la definición del core XML*
++
+La definición XML del core debe cumplir con el http://rs.gbif.org/schema/extension.xsd[Esquema de extensión de GBIF]. Es más fácil simplemente adaptar una definición del core existente, como la del {latest-dwc-occurrence}[Core de registros biológicos Darwin Core]. Tenga en cuenta que la definición principal debe contener una propiedad que sirva como identificador de registro (p. ej., http://rs.tdwg.org/dwc/terms/occurrenceID para el core de registro biológico o http://rs.tdwg.org/dwc/terms/eventID para el core de evento. El proceso de creación de una nueva extensión no-core es exactamente el mismo que para una extensión core. El proceso de creación de un nuevo vocabulario (como un tipo de datos para una propiedad dentro del core o no-core) es diferente solo en que la definición XML tiene que cumplir con el http://rs.gbif.org/schema/thesaurus.xsd[Esquema del tesauro de GBIF]. Una vez más, es más fácil adaptar una definición de vocabulario existente, como el {latest-basis-of-record}[Vocabulario de Darwin Core Type].
+
+. *Registrar el core con GBIF*
++
+Si bien la definición del core aún está experimentando cambios, se registra en GBIF Sandbox Registry. Para registrar su core, realice una solicitud de extracción al repositorio rs.gbif.org siguiendo https://github.com/gbif/rs.gbif.org/blob/master/versioning.md#how-to-create-a-new-version-of-an-extension-or-vocabulary-on-rsgbiforg[estas instrucciones]. Si pasa la inspección, se fusionará con https://rs.gbif.org/sandbox/core/ y se incluirá en la https://gbrdsdev.gbif.org/registry/extensions.json[Lista de Sandbox Registry de extensiones]. Cuando se haya finalizado la definición principal, lo que significa que su conjunto de propiedades se ha congelado, se alojará en https://rs.gbif.org/core/ y se incluirá en https://gbrds.gbif.org/registry/extensions.json[Lista de extensiones de Live Registry]. El mismo proceso se aplica al registro de extensiones y vocabularios secundarios.
+
+. *Configurar el IPT*
++
+--
+Para configurar el IPT para usar, por ejemplo, el Core Muestra del Ejemplar, agregue las siguientes 2 líneas a `$IPT_DATA_DIR/config/ipt.properties`.
+
+NOTE: asegúrese de evitar los dos puntos como en el caso anterior*
+
+----
+ipt.core_rowTypes=http\://rs.tdwg.org/dwc/terms/MaterialSample
+ipt.core_idTerms=http\://rs.tdwg.org/dwc/terms/materialSampleID
+----
+
+Esto configura el IPT para reconocer todas las extensiones con rowType http://rs.tdwg.org/dwc/terms/MaterialSample como core principales y para usar http://rs.tdwg.org/dwc/terms/materialSampleID como su término identificador. Se pueden especificar varios núcleos, delimitándolos con el carácter de barra vertical `|` (pipe). La primera entrada de ipt.core_idTerms es el ID de la primera entrada de core_rowTypes y así sucesivamente. Por último, guarde el archivo ipt.properties, reinicie Tomcat y luego xref:administration.adoc#install-extension[instale el core]. El core ahora está disponible para su uso en el IPT.
+--

@@ -1,0 +1,276 @@
+= 問答集
+
+Here you will find answers to the most frequently asked questions about the GBIF IPT. Please check the contents of this page before contacting the GBIF Help Desk.
+
+== Installation
+
+=== What is the best way to move my IPT to another server without losing any data?
+
+There is one important directory that contains all the IPT's configuration and resources: the IPT's data directory. If you ensure this directory is regularly backed-up somewhere safe, you'll never lose any data.
+
+To move the IPT to a different server, just make sure that you copy the entire contents of the IPT's data directory over to the new server. It is important to preserve the same folder/file permissions. Then, xref:installation.adoc[install the IPT on the new server], using this directory as the data directory.
+
+=== My GBIF IPT instance is slow. What can I do to improve performance?
+
+Some default configurations of Apache Tomcat come with very little allocated memory. In order to increase performance, this amount should be increased depending on the amount of physical memory on the server. If the server has at least 4GB of RAM, the available memory should be increased to 2GB. For more information on how to do it, see the https://cwiki.apache.org/confluence/display/TOMCAT/Memory[Tomcat FAQ]
+
+The following is known to run:
+
+----
+export CATALINA_OPTS="-Xmx2048M"
+----
+
+[#file-permissions]
+=== I get the following error: "The data directory '/directory' is not writable. What should I do?
+
+This also applies to similar errors for creating files, like `RollingFileManager … unable to create manager for … debug.log`.
+
+Assuming you are running Tomcat, you need to ensure the user running Tomcat has permissions on the directory. To find out the user running Tomcat on Linux, open a shell and enter the following command:
+
+----
+$ ps waux | grep tomcat
+----
+
+If the user is "tomcatuser", and this user belongs to group "tomcatgroup" then change the ownership of the IPT data directory (and its child folders and files) by entering the following command:
+
+----
+$ chown -R tomcatuser:tomcatgroup directory
+----
+
+To ensure only this user has write permission, enter the following command:
+
+----
+$ chmod -R 755 directory
+----
+
+[IMPORTANT]
+====
+Some Linux systems use sandboxing to provide additional security. Setting the file ownership and permissions is _not sufficient_ on these systems. See the <<sandboxing,following question>>.
+====
+
+Note that if you are running your IPT on a Windows operating system, you will need to check that your folder didn't revert to read-only permissions.
+
+[#sandboxing]
+=== My file permissions are correct, but I still see errors about read/write permissions.
+
+Some Linux systems have additional protections, called security sandboxing. In this case, you usually need to grant additional permissions for Tomcat to access the data directory. For example, on Debian and Ubuntu you need to add a SystemD override:
+
+----
+$ sudo systemctl edit tomcat9.service
+
+# Put this into the file that opens (it will usually be blank), then save it:
+[Service]
+ReadWritePaths=/path/to/data/directory/
+
+$ sudo systemctl restart tomcat9
+----
+
+=== How can I change the IPT's default language?
+
+The IPT's default language is English, but it can be easily changed via the user interface (Administration->IPT Settings->Default Language).
+
+For older IPT versions, it can be changed by manual configuration. To change the default language from English to Portuguese for example, first locate the `struts.properties` file (if the IPT is deployed in Tomcat for example, it would be located in `tomcat/webapps/ipt/WEB-INF/classes`). Then update the `struts.locale` property to:
+
+----
+struts.locale=pt
+----
+
+Restart Tomcat, and the IPT will startup in Portuguese.
+
+Please note the two-letter language code must match the code used by the IPT. The languages currently supported are Portuguese (`pt`), Japanese (`ja`), French (`fr`), Spanish (`es`), Traditional Chinese (`zh`), and Russian (`ru`).
+
+Please note that every time you upgrade to a new version of the IPT, you will have to apply the same change.
+
+=== How can I switch the IPT from test mode to production mode?
+
+Switching the IPT from test mode to production mode cannot be done automatically. This is by design, because each mode connects to a different registry (test mode uses the GBIF UAT Registry while production mode uses the GBIF Live Registry).
+
+Therefore to switch to production mode you need to setup an entirely new IPT instance in production mode.
+
+To save time recreating resources, you can try transferring your 'test' resources to the production IPT. To do this simply "upload an existing IPT resource using its zipped resource configuration folder." There are complete instructions on how to do this xref:manage-resources.adoc#upload-a-zipped-ipt-resource-configuration-folder[here].
+
+=== What outgoing connections does the IPT make?
+
+During setup, and in test mode, the IPT makes secure HTTPS outgoing connections to https://gbrds.gbif-uat.org and https://tools.gbif.org.
+
+If configured in production mode, the IPT makes secure HTTPS outgoing connections to https://gbrds.gbif.org.
+
+In both modes, the IPT makes normal HTTP outgoing connections to http://rs.gbif.org. If you install particular additional vocabularies, the IPT will retrieve them from raw.githubusercontent.com or eol.org.
+
+We recommend configuring your firewall to allow outbound access on ports 80 and 443 to all GBIF servers: `130.225.43.0/24`.
+
+Before version 2.3.4, connections were made using HTTP, rather than HTTPS, to http://gbrds.gbif.org and http://gbrdsdev.gbif.org. HTTP connections use port 80.
+
+=== How can I configure my IPT to assign DOIs to datasets?
+
+Refer to the xref:doi-workflow.adoc[].
+
+== Usage
+
+=== Why do published files contain broken lines?
+The IPT does not support source files that have multi-line fields (fields that include a newline character (`\n`) or carriage return (`\r`)) even if you have specified a field quote (a single character that encloses every field/column in a row) in the source's configuration.
+
+Unless these line breaking characters are removed, the IPT will publish files with broken lines (the columns will appear mixed up).
+
+To solve this, you can remove these line breaking characters from the source file, replace the source file with the new one, and republish the resource. Remember that when uploading a source file, you can tell the IPT to replace the file with a new one as long as they both have the same name. That way the mappings don't have to be redone.
+
+=== Why do published files not include all records?
+Check the publication log for exceptions such as:
+
+----
+java.sql.SQLException: Cannot convert value '0000-00-00 00:00:00' from column 65 to TIMESTAMP
+----
+
+that means you have invalid date value in your data source, which, in this case, is `0000-00-00 00:00:00`.
+
+To solve this, you can update the value with "Null" value, and update the resource. Usually, you can rely on the log message to identify the column of interest, like in the example above, it says "column 65," which is the 65th column in the data source.
+
+The `0000-00-00 00:00:00` value in your SQL table could be resulted when importing, while having defined the column with "Not Null" and default value as `0000-00-00 00:00:00`.
+
+=== What does the error "No space left on device" mean and how do I fix it?
+If you found an exception such as:
+
+----
+Caused by: java.io.IOException: No space left on device
+----
+
+in your publication log file, it means there is no space left in the disk partition that contains your IPT data directory.
+
+To solve this, you can:
+
+* Allocate more space to this partition.
+* Move your IPT data directory to another partition where there is more space available. (Refer to the xref:installation.adoc[installation instructions] to change the location of the data directory).
+* Free up disk space (e.g. deleting temporary files, remove unused applications, etc)
+
+=== How do I change the publishing organization of my resource? The drop down on the Basic Metadata page is disabled.
+
+Ideally, the publishing organization should not be changed after the resource has been either registered with GBIF or assigned a DOI.
+
+That being said, there are two ways to change the publishing organization.
+
+The easiest way is to republish the resource and then reset the desired publishing organization. To simplify the process, you can recreate the dataset from its zipped IPT resource folder. Instructions on how to do that can be found xref:manage-resources.adoc#upload-a-zipped-ipt-resource-configuration-folder[here]. If you migrate the resource from the old publishing organization to the new publishing organization by following xref:manage-resources.adoc#migrate-a-resource[these instructions]: Please pay careful attention to step 5, where you will have to ask the GBIF Help Desk to update the GBIF Registry.
+
+The other way to proceed is to work directly in the IPT directory. Before you start anything, make a backup of your archives. Then, edit the resource.xml file of the dataset that you would like to work on (on your server in your IPT folder):
+
+* In `<organisation>`, replace the current UUID by the UUID of the organization you would like to be the new publishing organization,
+* Restart the IPT (restart Tomcat, restart the IPT service, etc),
+* Check that no error message appears in your IPT when you click publish.
+
+In addition to that, *please contact the GBIF Help Desk and ask that the organization be updated in the GBIF Registry* (this part is very important).
+
+
+=== How do I change the type of an existing resource?
+
+The type of a resource is derived from its core mapping:
+
+* If the core mapping is to the {latest-dwc-occurrence}[Occurrence extension], the type is equal to "occurrence".
+* If the core mapping is to the {latest-dwc-taxon}[Taxon extension], the type is equal to "checklist".
+* If the core mapping is to the {latest-dwc-event}[Event extension], the type is equal to "sampling-event".
+* If the core mapping is not equal to one of the IPT's default cores (Occurrence, Taxon, or Event) the type is equal to "other".
+
+Therefore to change the type of a resource, you need to change its core mapping. To change an occurrence resource to type checklist, for example, simply delete all core mappings to the Occurrence extension, and then recreate new core mappings to the Taxon extension. A new version of the resource should be published in order to finalize the change. If the resource has been registered with GBIF, its type will be automatically updated after it has been re-published.
+
+=== What are some tricks to simplify the authoring and maintenance of metadata?
+Datasets can change over time. Keeping the dataset metadata up to date can be a burden, as inconsistencies can begin to creep in over time. Below is a list of tricks you can use to simplify the authoring of metadata and make it easier to maintain over time:
+
+* use a contact's ORCID instead of supplying their email and other fields which are likely change if the person changes jobs. For more information about how to supply an ORCID see xref:manage-resources.adoc#basic-metadata[here].
+* for datasets that continue to change/grow (versus static datasets) avoid specifying exact counts in textual descriptions, e.g. for record or taxa counts.
+* use the IPT's citation xref:manage-resources.adoc#citations[Auto-generation feature] instead of supplying a manually created data citation.
+* use the IPT's import by xref:manage-resources.adoc#taxonomic-coverage[Taxon list feature] instead of supplying each taxon manually one at a time when entering the taxonomic coverage.
+
+=== How do I change the hosting organization of my IPT?
+
+WARNING: the instructions below assume your IPT has already been registered and involve manual changes requiring technical competence.
+
+First, ensure the desired hosting organization has been added to your IPT. You can do this through the user interface. For help adding a new organization to your IPT, refer to xref:administration.adoc#add-organization[this section] of the user manual.
+
+Next, perform the following 2 manual changes to the registration2.xml file located inside the /config folder of your IPT Data Directory:
+
+. {blank}
++
+[source, xml]
+----
+<registration>
+  <registry>
+    <hostingOrganisation>
+      <key>UUID of desired hosting organization</key>
+----
+
+. {blank}
++
+[source, xml]
+----
+<registration>
+  <registry>
+    <ipt>
+      <organisationKey>UUID of desired hosting organization</key>
+----
+
+Restart Tomcat.
+
+Last, press the "update registration" button on the Edit GBIF Registration page. This will propagate the change to the GBIF Registry. For further information about what this update does, you can refer to xref:administration.adoc#edit-gbif-registration[this section] of the user manual.
+
+=== How do I reset the admin password?
+
+If you have forgotten the admin password, the server administrator will need to reset it.
+
+Using a text editor, open the file `config/users.xml` contained in the IPT data directory. Find the admin user (with `role="Admin"`), and replace the encrypted password with `$2a$12$FxYdvOAlQ4cP8q1qU77fZePpdwrXS5PC3zmSYgdZuWlU6XUUe6FRu`. Restart the IPT. You can then log in as the admin user with the password `Ga_1bxiedrvNHSyK` — of course, this password should then be changed.
+
+=== How do I migrate a dataset from one IPT installation to another?
+This migration process must be done directly on the server following the next steps:
+
+. Shut down the old IPT server; just to check no-one makes any changes.
+. In the old IPT go to `/old-ipt-datadir/resources/[dataset_name]` and copy the whole dataset folder
+. In the new IPT go to `/new-ipt-datadir/resources/` and paste the dataset folder
+. Restart the new IPT server
+. Publish the dataset in the new IPT (updates the endpoint).
+
+== Indexing by GBIF
+
+=== How long does it take GBIF to start (re)indexing my dataset?
+
+The answer depends on how long GBIF's indexing queue is, how big your dataset it and whether GBIF's indexing service is turned on.
+
+Normally it will take between 5-60 minutes for GBIF to start indexing your dataset. It can take several hours to finish indexing large datasets once started (those with several million records) so please be patient. At the bottom of the https://www.gbif.org/health[GBIF health page] the length of the indexing queue is shown, and the full queue can be seen on the https://registry.gbif.org/monitoring/running-crawls[Crawl Monitor].
+
+If you believe GBIF failed to index your dataset successfully, please submit feedback directly via GBIF.org, or send an email to the GBIF Help Desk <helpdesk@gbif.org> to investigate what happened. If you are interested in finding out why GBIF may not have (re)indexed your dataset, please see 2 below.
+
+=== Why hasn't GBIF (re)indexed my dataset yet?
+
+Occasionally, GBIF turns off its indexing service for maintenance (see the links in the previous question). This is the most common reason why datasets aren't indexed as quickly as expected.
+
+If you believe GBIF failed to index your dataset, please submit feedback directly via GBIF.org, or send an email directly to the GBIF Help Desk <helpdesk@gbif.org> to investigate what happened.
+
+=== How often does GBIF reindex my dataset?
+
+GBIF automatically attempts to reindex a registered dataset each time its registration is updated. This happens each time the dataset gets republished via the IPT.
+
+To cater to datasets not published using the IPT, GBIF automatically attempts to reindex all registered datasets every 7 days.
+
+NOTE: GBIF will only reindex a dataset if its last published date has changed since the last time it was indexed.
+
+=== What type of datasets does GBIF index/support?
+
+GBIF supports 4 classes of datasets described xref:how-to-publish.adoc[here]. GBIF currently only indexes species occurrence records, which can be provided as either core records or as extension records. In the case of sampling-event datasets, species occurrences in extension records will be augmented with information coming from its core event record wherever possible.
+
+=== Why is my dataset citation different on GBIF.org?
+
+The IPT supports free-text dataset citations, however, these get overwritten on the GBIF.org dataset page. You can find out why in the https://www.gbif.org/faq?q=citation[GBIF.org FAQ].
+
+=== Why is GBIF unable to access my IPT over HTTPS?
+
+This is usually due to a misconfiguration in the webserver (Apache, IIS, Tomcat etc). Ensure you can access your server through the command line (`curl https://ipt.example.org`), from computers outside your organization's network (e.g. from a personal phone) and run an https://www.ssllabs.com/ssltest/[SSL Server Test].
+
+Any errors like "unable to get local issuer certificate" or "certificate chain incomplete" will usually prevent GBIF's systems from accessing your IPT.
+
+To fix them, see the documentation of your webserver, or ask your IT department for advice. These problems are generally not related to the IPT.
+
+A useful resource for configuring many web servers is the https://ssl-config.mozilla.org[Mozilla SSL Configuration Generator], and a quick test for the most common issue is available at https://whatsmychaincert.com/[What’s My Chain Cert].
+
+== Indexing by others
+
+=== How can I export a list of resources published in my IPT?
+
+Some organizations need to index their own IPT, often to include records of each resource in a public open data system or similar. The IPT supports DCAT (Data Catalog Vocabulary) to allow this. The DCAT export is available at `/dcat`, for example https://ipt.gbif.org/dcat.
+
+An alternative is the https://www.gbif.org/developer/registry#installations[GBIF Registry Installations API], though this will only include datasets published to GBIF.

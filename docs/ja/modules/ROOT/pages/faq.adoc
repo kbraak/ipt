@@ -1,0 +1,276 @@
+= よくある質問
+
+Here you will find answers to the most frequently asked questions about the GBIF IPT. Please check the contents of this page before contacting the GBIF Help Desk.
+
+== インストール
+
+=== データを失わずにIPTを別のサーバーに移行するにはどうしたらよいですか？
+
+IPTの設定とリソースをすべて含む重要なディレクトリが1つあります。IPTのデータディレクトリです。このディレクトリが定期的に安全な場所にバックアップされていることを確認すれば、データを失うことはありません。
+
+IPTを別のサーバーに移動するには、IPTのデータ・ディレクトリの内容をすべて新しいサーバーに確実にコピーするだけで大丈夫です。このとき、同じフォルダ/ファイルパーミッションを保持することが重要です。その後、このディレクトリをデータ・ディレクトリとして使用して、xref:installation.adoc[新しいサーバーにIPTをインストール]します。
+
+=== GBIF IPTインスタンスの動作が遅いです。パフォーマンスを向上させるにはどうしたらよいですか？
+
+Apache Tomcatのデフォルト設定では、割り当てられたメモリが非常に少ないものがあります。パフォーマンスを向上させるためには、サーバ上の物理メモリの量に応じてこの量を増やす必要があります。サーバに少なくとも4GBのRAMがある場合、利用可能なメモリは2GBまで増やす必要があります。その方法の詳細については、link:https://cwiki.apache.org/confluence/display/TOMCAT/Memory[Tomcat FAQ]を参照してください。
+
+以下のような動作が確認されています。
+
+----
+export CATALINA_OPTS="-Xmx2048M"
+----
+
+[#file-permissions]
+=== 「The data directory '/directory' is not writable.」というエラーが発生します。どうすればよいですか？
+
+これは `RollingFileManager … unable to create manager for … debug.log` のようなファイル作成に関する同様のエラーにも当てはまります。
+
+Tomcatが動作していると仮定して、Tomcatを実行しているユーザーがディレクトリに対する権限を持っていることを確認する必要があります。LinuxでTomcatを実行しているユーザを調べるには、シェルを開いて、以下のコマンドを入力します。
+
+----
+$ ps waux | grep tomcat
+----
+
+ユーザが「tomcatuser」で、グループ「tomcatgroup」に所属しているときは、コマンドを以下のように入力して、IPTデータディレクトリ（およびその子フォルダとファイル）の所有権を変更します。
+
+----
+$ chown -R tomcatuser:tomcatgroup directory
+----
+
+このユーザーだけが書き込み権限を持つようにするには、次のコマンドを入力します。
+
+----
+$ chmod -R 755 directory
+----
+
+[IMPORTANT]
+====
+Linuxシステムの中には、さらなるセキュリティを提供するためにサンドボックスを使用しているものがあります。これらのシステムでは、ファイルの所有権とパーミッションを設定するだけでは_十分ではありません_。link:https://ipt.gbif.org/manual/ja/ipt/latest/faq#sandboxing[次の質問]を参照してください。
+====
+
+Windows OSでIPTを実行している場合、フォルダが読み取り専用に戻っていないか確認する必要があります。
+
+[#sandboxing]
+=== ファイルの権限は正しいのですが、まだ読み取り/書き込み権限に関するエラーが表示されます。
+
+Linuxシステムによっては、セキュリティ・サンドボックスと呼ばれるさらなる保護機能を備えています。この場合通常Tomcatがデータ・ディレクトリにアクセスするために追加の権限を与える必要があります。例えば、DebianやUbuntuでは、SystemDのオーバーライドを追加する必要があります。
+
+----
+$ sudo systemctl edit tomcat9.service
+
+# Put this into the file that opens (it will usually be blank), then save it:
+[Service]
+ReadWritePaths=/path/to/data/directory/
+
+$ sudo systemctl restart tomcat9
+----
+
+=== IPTのデフォルト言語を変更するにはどうしたらいいですか？
+
+The IPT's default language is English, but it can be easily changed via the user interface (Administration->IPT Settings->Default Language).
+
+For older IPT versions, it can be changed by manual configuration. To change the default language from English to Portuguese for example, first locate the `struts.properties` file (if the IPT is deployed in Tomcat for example, it would be located in `tomcat/webapps/ipt/WEB-INF/classes`). Then update the `struts.locale` property to:
+
+----
+struts.locale=pt
+----
+
+Tomcatを再起動すると、IPTがポルトガル語で起動します。
+
+2文字の言語コードは、IPTで使用されているコードと一致しなければならないことに注意してください。現在対応している言語はポルトガル語（`pt`）、日本語（`ja`）、フランス語（`fr`）、スペイン語（`es`）、繁体字中国語（`zh`）、ロシア語（`ru`）です。
+
+IPTを新しいバージョンにアップグレードするたびに、再度同様に変更を行う必要がありますのでご注意ください。
+
+=== IPTをテストモードから本番モードに切り替えるにはどうしたらいいですか？
+
+IPTのテストモードから本番モードへの切り替えは、自動的には行うことができません。これは、各モードが異なるレジストリに接続するためで（テストモードはGBIF UAT Registry、本番モードはGBIF Live Registryを使用する）、設計上のものです。
+
+したがって、本番モードに切り替えるには、本番モードでまったく新しいIPTインスタンスをセットアップする必要があります。
+
+リソースを再作成する時間を節約するために、「テスト」リソースを本番用IPTに転送することができます。これを行うには、単に「既存のIPTリソースを、そのzip圧縮されたリソース構成フォルダを使用してアップロードする」だけです。この方法については、xref:manage-resources.adoc#upload-a-zipped-ipt-resource-configuration-folder[こちら]に詳しい説明があります。
+
+=== IPTはどのような発信接続を行うのでしょうか？
+
+セットアップ中およびテストモードでは、IPTはhttps://gbrds.gbif-uat.org、https://tools.gbif.org に安全なHTTPS発信接続を行います。
+
+本番モードで構成されている場合は、IPT は https://gbrds.gbif.org に安全な HTTPS発信接続を行います。
+
+どちらのモードでも、IPT は http://rs.gbif.org に通常の HTTP通信接続を行います。特定の追加語彙をインストールした場合、IPTは raw.githubusercontent.com または eol.org から語彙を取得することになります。
+
+すべてのGBIFサーバー `130.225.43.0/24` に対して、ポート80および443のアウトバウンドアクセスを許可するよう、ファイアウォールを設定することをお勧めします。
+
+バージョン2.3.4以前は、http://gbrds.gbif.orgやhttp://gbrdsdev.gbif.org、HTTPSではなく、HTTPで接続を行っていました。HTTP接続はポート80を使用します。
+
+=== データセットにDOIを割り当てるには、IPTをどのように設定すればよいですか？
+
+Refer to the xref:doi-workflow.adoc[].
+
+== 使用方法
+
+=== 公開されたファイルに改行があるのはなぜですか？
+IPTでは、ソースの設定でフィールドクォート（行内のすべてのフィールド/列を囲む1文字）を指定していても、複数行のフィールド（改行文字（`\n`）や復帰文字（`\r`）を含むフィールド）を持つソースファイルには対応していません。
+
+これらの改行文字を削除しない限り、IPTは改行された（列が混在して見える）ファイルを公開することになります。
+
+これを解決するには、ソースファイルからこれらの改行文字を削除し、ソースファイルを新しいものに置き換えてから、リソースを再公開すれば問題ありません。ソースファイルをアップロードする際、両者が同じ名前であれば、IPTにファイルを新しく置き換えられることを忘れないでください。そうすれば、マッピングをやり直す必要はありません。
+
+=== なぜ、公開されたファイルにはすべての記録が含まれていないのですか？
+次のような例外がないか、公開ログを確認してください。
+
+----
+java.sql.SQLException: Cannot convert value '0000-00-00 00:00:00' from column 65 to TIMESTAMP
+----
+
+これはデータソースに無効な日付値があることを意味します。この場合は`0000-00-00 00:00:00`です。
+
+この問題を解消するには、値を「Null」値で更新し、リソースを更新すればよいです。通常、ログメッセージを頼りに対象のカラムを特定することができます。上記の例では、「カラム65」と書かれていますが、これはデータソースの65番目のカラムを表しています。
+
+SQLテーブルの列を「Not Null」、デフォルト値を`0000-00-00 00:00:00`と定義しているにもかかわらず、インポート時に`0000-00-00 00:00:00`という値になってしまうことがあります。
+
+=== 「デバイスに空き容量がない」というエラーの意味と修正方法を教えてください。
+次のような例外が見つかった場合：
+
+----
+Caused by: java.io.IOException: No space left on device
+----
+
+このパブリケーションログファイルは、IPTデータディレクトリを含むディスクパーティションに空きスペースが残っていないことを意味します。
+
+これを解決するためには、このような対策をとることができます。
+
+* このパーティションにさらに空き容量を確保する。
+* IPT データ・ディレクトリを、より多くの空き容量がある別のパーティションに移動します。(データ・ディレクトリの場所を変更するには、インストール手順を参照してください）。
+* ディスクの空き容量を確保する。（一時ファイルの削除、使用していないアプリケーションの削除など）
+
+=== リソースの公開構成を変更するにはどうすればよいですか？Basic Metadataページのドロップダウンが無効になっています。
+
+理想的には、リソースがGBIFに登録されるか、DOIが割り当てられた後に、公開組織を変更しないことです。
+
+とはいっても、公開機関を変更する方法は2つあります。
+
+The easiest way is to republish the resource and then reset the desired publishing organization. To simplify the process, you can recreate the dataset from its zipped IPT resource folder. Instructions on how to do that can be found xref:manage-resources.adoc#upload-a-zipped-ipt-resource-configuration-folder[here]. If you migrate the resource from the old publishing organization to the new publishing organization by following xref:manage-resources.adoc#migrate-a-resource[these instructions]: Please pay careful attention to step 5, where you will have to ask the GBIF Help Desk to update the GBIF Registry.
+
+もう一つの方法は、IPTディレクトリで直接作業する方法です。何かを始める前に、アーカイブのバックアップをとってください。次に、（IPTフォルダのサーバー上で）作業したいデータセットのresource.xmlファイルを編集します。
+
+* `<organisation>`で、現在のUUIDを、新しい発行組織にしたい組織のUUIDに置き換えます。
+* IPTを再起動（Tomcatを再起動、IPTサービスを再起動など）します。
+* 公開をクリックしても、IPTにエラーメッセージが表示されないことを確認します。
+
+In addition to that, *please contact the GBIF Help Desk and ask that the organization be updated in the GBIF Registry* (this part is very important).
+
+
+=== 既存のリソースの種類を変更するにはどうすればよいですか？
+
+リソースのタイプは、そのコアマッピングから導き出されます。
+
+* コアマッピングがlink:{latest-dwc-occurrence}[オカレンス拡張]の場合、タイプは「オカレンス」と同じです。
+* コアマッピングがlink:{latest-dwc-taxon}[タクソン拡張]である場合，タイプは「チェックリスト」と同じです。
+* コアマッピングがlink:{latest-dwc-event}[イベント拡張]の場合、タイプは「サンプリングイベント」と同じになります。
+* コアマッピングがIPTのデフォルトコア（オカレンス、タクソン、イベント）のいずれとも等しくない場合、タイプは「その他」となります。
+
+したがって、リソースのタイプを変更するには、そのコアマッピングを変更する必要があります。例えば、オカレンスリソースをチェックリストに変更するには、オカレンス拡張に対するコアマッピングをすべて削除し、タクソン拡張に対する新しいコアマッピングを再作成するだけです。変更を確定するには、リソースの新バージョンを公開する必要があります。リソースがGBIFに登録されている場合、再公開後、そのタイプは自動的に更新されます。
+
+=== メタデータの作成・保守を簡略化するための工夫はありますか？
+データセットは時間の経過とともに変化することがあります。データセットのメタデータを常に最新の状態に保つことは、時間の経過とともに不整合が生じ始めるため、負担となる場合があります。以下は、メタデータの作成を簡素化し、時間の経過に伴うメンテナンスを容易にするために活用できる工夫の例です。
+
+* 連絡先のORCIDを使用して、メールアドレスや他のフィールドを入力する代わりに、その人が転職した場合に変更される可能性のあるフィールドを入力する。ORCIDを提供する方法についての詳細は、xref:manage-resources.adoc#basic-metadata[こちら]をご覧ください。
+* 変化・成長し続けるデータセット（静的データセット）について、レコード数や分類群数など、文字による説明で正確な数を指定するのを避ける。
+* 手動で作成した引用を用いる代わりに、IPTのxref:manage-resources.adoc#citations[引用自動生成機能]を使用する。
+* 分類範囲を入力する際に、各分類群を一つずつ手入力せずに、IPTの分類群リストによるインポート機能を使用する。
+
+=== IPTのホスト機関を変更するにはどうすればよいですか？
+
+WARNING: 以下の説明は、IPTがすでに登録されており、技術的な能力を必要とする手動変更が伴うことを前提としています。
+
+まず、目的のホスティング機関がIPTに追加されていることを確認します。これは、ユーザーインターフェイスから行うことができます。IPT に新しい機関を追加するヘルプについては、ユーザーマニュアルのxref:administration.adoc#add-organization[このセクション]を参照してください。
+
+次に、IPTデータディレクトリの /config フォルダにある registration2.xml ファイルを、以下の 2 つの方法で手動で変更します。
+
+. {blank}
++
+[source, xml]
+----
+<registration>
+  <registry>
+    <hostingOrganisation>
+      <key>UUID of desired hosting organization</key>
+----
+
+. {blank}
++
+[source, xml]
+----
+<registration>
+  <registry>
+    <ipt>
+      <organisationKey>UUID of desired hosting organization</key>
+----
+
+Tomcatを再起動します。
+
+最後に、GBIF登録編集ページの「登録更新」ボタンを押してください。これにより、GBIFレジストリに変更が反映されます。このアップデートの内容については、ユーザーマニュアルのxref:administration.adoc#edit-gbif-registration[こちら]を参照してください。
+
+=== 管理者パスワードをリセットする方法を教えてください。
+
+管理者パスワードを忘れた場合は、サーバー管理者がパスワードを再設定する必要があります。
+
+Using a text editor, open the file `config/users.xml` contained in the IPT data directory. Find the admin user (with `role="Admin"`), and replace the encrypted password with `$2a$12$FxYdvOAlQ4cP8q1qU77fZePpdwrXS5PC3zmSYgdZuWlU6XUUe6FRu`. Restart the IPT. You can then log in as the admin user with the password `Ga_1bxiedrvNHSyK` — of course, this password should then be changed.
+
+=== あるIPTインストールから別のIPTインストールにデータセットを移行するにはどうすればよいですか？
+この移行作業は、次のステップに従って、サーバー上で直接行う必要があります。
+
+. 古いIPTサーバーをシャットダウンします。誰も変更しないことを確認するためです。
+. 古いIPTの `/old-ipt-datadir/resources/[dataset_name]` に行き、データセットフォルダ全体をコピーします。
+. 新しいIPTで `/new-ipt-datadir/resources/` に移動し、データセットフォルダを貼り付けます。
+. 新しいIPTサーバーを再起動します。
+. 新しいIPTでデータセットを公開します（エンドポイントを更新します）。
+
+== GBIFによるインデックス作成
+
+=== GBIFがデータセットの（再）インデックス作成を開始するまでには、どのくらいの時間がかかりますか？
+
+それは、GBIFのインデックス作成キューの長さ、データセットの大きさ、GBIFのインデックス作成サービスがオンになっているかどうかによって異なります。
+
+通常、GBIFがデータセットのインデックス作成を開始するまでに5～60分かかります。大規模なデータセット（数百万レコード）のインデックス作成を開始すると、終了までに数時間かかることがありますので、しばらくお待ちください。link:https://www.gbif.org/health[GBIFヘルスページ]の下部にはインデックス作成キューの長さが表示され、link:https://registry.gbif.org/monitoring/running-crawls[クロールモニター]でキューの全体を確認することができます。
+
+If you believe GBIF failed to index your dataset successfully, please submit feedback directly via GBIF.org, or send an email to the GBIF Help Desk <helpdesk@gbif.org> to investigate what happened. If you are interested in finding out why GBIF may not have (re)indexed your dataset, please see 2 below.
+
+=== なぜGBIFは私のデータセットをまだ（再）インデックス化していないのですか？
+
+GBIFは、メンテナンスのためインデックス作成サービスを停止することがあります（前問のリンク参照）。データセットのインデックス作成が予想より遅れる原因の多くはこれによるものです。
+
+If you believe GBIF failed to index your dataset, please submit feedback directly via GBIF.org, or send an email directly to the GBIF Help Desk <helpdesk@gbif.org> to investigate what happened.
+
+=== GBIFはどのくらいの頻度でインデックスを更新しているのですか？
+
+GBIFは、登録されたデータセットが更新されるたびに、自動的にインデックスを付け直そうとします。これは、データセットがIPT経由で再公開されるたびに行われます。
+
+またIPTで公開されていないデータセットに対応するため、GBIFは登録されたすべてのデータセットに対して、7日おきに自動的にインデックスを更新するよう試みます。
+
+NOTE: GBIFは、データセットの最終公開日が前回のインデックス作成時と異なる場合のみ、再インデックス作成を行います。
+
+=== GBIFはどのようなデータセットに対応していますか？
+
+GBIFは4種類のデータセットに対応しています。GBIFは現在、種のオカレンス記録のみをインデックス化しており、これらはコアレコードまたは拡張レコードとして提供することができます。サンプリングイベント・データセットの場合、拡張レコードの種のオカレンスは、可能な限りそのコアイベント・レコードから得られる情報で補強されます。
+
+=== GBIF.orgで、私のデータセットの引用が異なるのはなぜですか？
+
+IPTはフリーテキストでのデータセット引用をサポートしていますが、GBIF.orgのデータセットページで上書きされてしまいます。その理由は、link:https://www.gbif.org/faq?q=citation[GBIF.org FAQ]に記載されています。
+
+=== GBIF が HTTPS で自分ののIPTにアクセスできないのはなぜですか？
+
+これは通常、ウェブサーバ（Apache、IIS、Tomcatなど）の設定ミスが原因です。コマンドライン（`curl https://ipt.example.org`）を使って、組織のネットワーク外のコンピュータ（個人の電話など）からサーバーにアクセスできることを確認し、link:https://www.ssllabs.com/ssltest/[SSLサーバーテスト]を実行します。
+
+「unable to get local issuer certificate」や「certificate chain incomplete」などのエラーが発生すると、通常GBIFのシステムがIPTにアクセスできなくなります。
+
+これらのエラーを修正するには、Webサーバーのドキュメントを参照するか、IT部門にアドバイスを求めます。これらの問題は、一般にIPTとは関係ありません。
+
+A useful resource for configuring many web servers is the https://ssl-config.mozilla.org[Mozilla SSL Configuration Generator], and a quick test for the most common issue is available at https://whatsmychaincert.com/[What’s My Chain Cert].
+
+== 他の手段でのインデックス作成
+
+=== 自分のIPTで公開されているリソースのリストをエクスポートするにはどうすればよいですか？
+
+機関によっては、自分自身のIPTにインデックスを付ける必要があり、多くの場合、公開オープンデータ・システムなどに各リソースの記録を含める必要があります。IPTは、これを可能にするためにデータ・カタログ語彙（DCAT）をサポートしています。DCATのエクスポートは、`/dcat`（例：https://ipt.gbif.org/dcat）で可能です。
+
+別の方法として、link:https://www.gbif.org/developer/registry#installations[GBIF Registry Installations API]がありますが、これはGBIFに公開されたデータセットしか含まれません。

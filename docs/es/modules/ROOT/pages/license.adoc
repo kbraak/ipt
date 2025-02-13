@@ -1,0 +1,50 @@
+= Agregar una nueva licencia
+
+[WARNING]
+--
+Esta página contiene instrucciones de configuración sólo para usuarios avanzados del IPT. Los conjuntos de datos publicados con una licencia diferente a las incluidas por GBIF no pueden ser publicados o registrados en GBIF.
+
+En su lugar, se recomienda publicar un conjunto de datos sólo de metadatos.
+--
+
+A partir de IPT v2.2, el IPT ofrece 3 licencias legibles por máquina entre las que se puede elegir al aplicar una licencia a su recurso:
+
+* Dominio público (CC0 1.0 técnicamente una renuncia)
+* Atribución Creative Commons (CC-BY 4.0)
+* Atribución no comercial Creative Commons (CC-BY-NC 4.0)
+
+Cada licencia tiene asociada una declaración de derechos por defecto que se muestra a los usuarios. Por ejemplo, si el publicador elige aplicar CC-BY a su recurso, esta declaración de derechos que se muestra a los usuarios es:
+
+[quote]
+Este trabajo es licenciado bajo una https://creativecommons.org/licenses/by/4.0/legalcode[licencia de Atribución Creative Commons (CC-BY) 4.0].
+
+Sin embargo, el listado de licencias y sus declaraciones de derechos pueden modificarse, lo que resulta útil para las comunidades que necesitan aplicar diferentes licencias a sus recursos o que quieren incluir instrucciones de uso adicionales.
+
+Los pasos siguientes explican cómo configurar el IPT con otra licencia para elegir.
+
+== Instrucciones
+
+Localice el archivo licenses.properties, p. ej., `/tomcat7/webapps/ipt/WEB-INF/classes/org/gbif/metadata/eml/licenses.properties`. Abra el archivo en un editor de texto y haga lo siguiente:
+
+. Agregue una nueva propiedad definiendo el nombre de la licencia usando el siguiente formato:
++
+----
+license.name.<prefix>=Nombre
+# Por ejemplo:
+license.name.odcby=Licencia de atribución Open Data Commons (ODC-By) 1.0
+----
+
+. Agregue una nueva propiedad que defina la declaración de derechos de licencia con el siguiente formato:
++
+----
+license.text.<prefix>=Texto
+# Por ejemplo:
+license.text.odcby=Este trabajo es licenciado bajo una <a href="http://www.opendatacommons.org/licenses/by/1.0">Licencia de Atribución Open Data Commons (ODC-By) 1.0</a>.
+----
+
+. Doble verificación
+.. el _prefijo_ de ambas llaves coincide,
+.. se incluye en el texto un ancla HTML que define el nombre y la URL de la licencia, ya que esto hace que la licencia sea legible por un ordenador,
+.. el nombre utilizado en el ancla HTML es el mismo que el utilizado en el nombre de la propiedad anterior.
+. Haga una copia de respaldo del archivo licenses.properties, ya que será sobrescrito la próxima vez que actualice su IPT
+. Reinicie su contenedor de servlet (p. ej., Tomcat) para que la nueva configuración surta efecto

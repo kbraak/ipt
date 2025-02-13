@@ -1,0 +1,45 @@
+= 版權宣告
+
+== 引用文獻
+
+// If English
+ifeval::["{language}" == "en"]
+This user manual adapts and builds upon the previous IPT User Manuals (Réveillon 2009, Wieczorek & Braak 2016). The recommended citation for this user manual is as follows:
+endif::[]
+// Else
+ifeval::["{language}" != "en"]
+The link:../../../en/[English user manual] adapts and builds upon the previous IPT User Manuals (Réveillon 2009, Wieczorek & Braak 2016). The recommended citation for the English user manual is as follows:
+// Endif
+endif::[]
+
+// English user manual citation
+[quote]
+Wieczorek J, Blissett M, Braak K & Podolskiy M ({localyear}) The GBIF Integrated Publishing Toolkit User Manual, version {page-component-version}. Copenhagen: GBIF Secretariat. https://ipt.gbif.org/manual/en/ipt/{page-component-version}/
+
+// If not English
+ifeval::["{language}" != "en"]
+This TRANSLATORS_PUT_YOUR_LANGUAGE_HERE translation of the user manual is contributed by TRANSLATORS_CREDIT_YOURSELVES. The recommended citation for this translation into YOUR_LANGUAGE_HERE is as follows:
+
+// Translated user manual citation
+[quote]
+Wieczorek J, Blissett M, Braak K & Podolskiy M ({localyear}) The GBIF Integrated Publishing Toolkit User Manual, version {page-component-version}. (TRANSLATORS_CREDIT_YOURSELVES, Trans.) Copenhagen: GBIF Secretariat. https://ipt.gbif.org/manual/{language}/ipt/{page-component-version}/
+// Endif
+endif::[]
+
+== 版權
+
+The GBIF Integrated Publishing Toolkit and this user manual are Copyright © 2016–{localyear} by the Global Biodiversity Information Facility Secretariat.
+
+== 授權條款
+
+The GBIF Integrated Publishing Toolkit is open source software released under the Apache License Version 2.0. You may obtain a copy of this License at http://www.apache.org/licenses/LICENSE-2.0. Unless required by applicable law or agreed to in writing, software distributed under this License is distributed on an "as is" basis, without warranties of conditions of any kind, either express or implied. See the License for the specific language governing rights and limitations under the License.
+
+This user manual is released under the Creative Commons Attribution 4.0 International Licence. You may obtain a copy of this licence at https://creativecommons.org/licenses/by/4.0/.
+
+== 參考文獻
+
+// GitHub and Google Code versions
+Wieczorek J & Braak K (2016) The GBIF Integrated Publishing Toolkit User Manual, version 2.3.6. Copenhagen: GBIF Secretariat. https://github.com/gbif/ipt/wiki/IPTUserManualv23.wiki
+
+// https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/gbif-providertoolkit/GBIF_IPT_User_Manual_1.0.pdf
+Réveillon A (2009) The GBIF Integrated Publishing Toolkit User Manual, version 1.0. Copenhagen: GBIF Secretariat. https://links.gbif.org/ipt_manual_1.0

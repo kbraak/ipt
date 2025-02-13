@@ -1,0 +1,112 @@
+= Guía para desarrolladores
+
+== Contribuciones
+
+El desarrollo principal del IPT está dirigido por GBIF, pero la codificación es un esfuerzo de la comunidad y todos son bienvenidos a unirse. Los desarrolladores de Java o HTML/jQuery son bienvenidos a contribuir con parches de código. Los parches se pueden enviar creando una https://help.github.com/articles/creating-a-pull-request/[pull request] usando una rama o bifurcación del https://github.com/gbif/ipt [Repositorio Git del IPT]. 
+
+== Marcos de trabajo en el código fuente
+
+El IPT utiliza los siguientes marcos de trabajo:
+
+* https://struts.apache.org/[Struts2]
+* https://github.com/google/guice[Google Guice]
+* Plantillas https://freemarker.sourceforge.net/docs/[Freemarker]
+* https://jquery.com/[jQuery] para JavaScript y AJAX
+
+== Prerrequisitos
+
+El IPT usa Maven para administrar las dependencias y el proceso de construcción. Consulte http://maven.apache.org/install.html[Instrucciones de instalación propias de Maven] para obtener ayuda.
+
+== Ejecutando la aplicación en Jetty
+
+[source, shell]
+----
+$ cd ipt
+$ mvn -DskipTests
+----
+
+Este comando inicia el IPT a través del complemento Jetty en el puerto 8080. Debería poder ver el IPT en ejecución abriendo http://localhost:8080 en su navegador web.
+
+== Git
+No registres los archivos que no utilices.
+
+¡El código en la rama maestra siempre debe compilarse y permitir el inicio de Jetty usando Maven!
+
+=== Guice
+
+`IptModule` contiene conexiones, pero las interfaces se anotan directamente con `@ImplementedBy (ConfigManagerImpl.class)`
+
+=== Configuración
+
+Dentro de WEB-INF de un IPT en ejecución hay un solo archivo `datadir.location`. Apunta al directorio de datos utilizado actualmente donde se almacenan toda la configuración y los datos. Si se elimina este archivo, el interceptor de instalación le pedirá al usuario que asigne un directorio de datos nuevo (potencialmente existente).
+
+El archivo oculto ".gbifreg" indica si el directorio de datos está vinculado al registro de producción o de prueba. Una vez configurado, esto no se puede cambiar desde la interfaz de usuario.
+
+`AppConfig.java` contiene toda la configuración de IPT, en particular la` baseURL` (a la que se hace referencia en la interfaz de usuario y la documentación como la "URL pública") de la aplicación.
+
+=== Struts2
+
+`BaseAction.java` proporciona el` AppConfig`, implementa el reconocimiento de sesión y da acceso al usuario actual, implementa un `TextProvider` más simple que es más rápido que el Struts 2 nativo.
+
+`SetupAndCancelInterceptor.java` comprueba si el directorio de datos está configurado y existe un usuario administrador, de lo contrario, redirige a la página de configuración correspondiente.
+
+Para cada paquete (`root`,` portal`, `manage`,` admin`) existe su propia pila de intercepción.
+
+El nombre del resultado de "entrada" se utiliza para mostrar el formulario. Por lo tanto, podemos usar el interceptor de validación estándar que usa el resultado de entrada cuando los datos no se validan.
+
+El nombre del resultado "exitoso" se llama cuando el envío del formulario se realizó correctamente. En muchos casos, esto debería ser simplemente una redirección a otra acción, a menudo la lista correspondiente.
+
+La acción implementa los método preparable, solicitud de cuenta y ejecución.
+
+* ejecutar: `FormAction` determina si se usa un` POST` o `GET` y llama a guardar (`POST`), eliminar (`POST + delete=true`) o nada (`GET`).
+
+Si es necesario establecer cualquier otro valor de acción, puede cambiarlo con `prepare ()`, pero recuerde llamar a `super.execute ()`.
+
+* prepare: el parámetro `id` del objeto solicitud, este se almacena en la acción.
+
+`POSTAction.java` simplifica el trabajo con formularios. Para modificar los datos de la instancia, utilice siempre `POST`, nunca` GET`. La mayoría de las acciones completas para modificar entidades deberían anular los siguientes métodos:
+
+* `prepare ()`: carga los valores existentes basados en el parámetro "id" y el objeto de solicitud.
+* `save ()`: persiste los datos DESPUÉS de que el interceptor de parámetros hizo su trabajo.
+* `delete ()`: este método se llama cuando se recibe un `POST` con un parámetro` delete = anything_but_null`.
+
+Si el `id` dado no existe, puede establecer la propiedad `notFound` en "true" en cualquiera de los métodos anteriores. La acción devolverá un nombre de resultado 404.
+
+Para realizar la validación, implemente el método `validate ()` de una acción (en lugar de usar definiciones de validación XML). Consulte `SetupAction.java` como ejemplo. La validación requiere un nombre de resultado de "input" que muestre el formulario cuando el formulario no era válido. Usando el tema simple, también necesitamos declarar dónde mostrar los comentarios de validación: http://struts.apache.org/docs/fielderror.html
+
+=== Diseño HTML
+
+Los enlaces deben utilizarse siempre con `+++${baseURL}/my/ipt/link.do+++` ¡por lo que rogamos se abstenga de utilizar etiquetas de Struts o JSP URL!
+
+Los formularios utilizan las macros `forms.ftl` en lugar de las etiquetas Struts 2, como los menús desplegables de internacionalización` @ select`.
+
+Los botones usan los botones adecuados o `input @ type = submit` (formularios) para agregar, eliminar, editar y crear acciones.
+
+Guías de las buenas practicas generales
+
+* http://htmldog.com/articles/formlayout/
+* https://www.sherpaglobal.com/top-10-html-form-layout-best-practices/
+
+=== JavaScript
+
+Utilice solo jQuery (https://jquery.com/) para el código personalizado.
+
+Utilice el complemento jConfirmation (https://github.com/hdytsgt/jConfirmAction) cuando solicite confirmación, p. ej., elimina.
+
+Utilice el complemento jQuery dataTables (https://www.datatables.net/) para mejorar las tablas HTML con paginación, búsqueda, etc.
+
+=== CSS
+
+https://960.gs/[960 grid system] se utiliza para diseños de página.
+
+Mantenga el número de clases de CSS al mínimo y considere usar CSS específico de la página en `<head> <style>` en esa página.
+
+=== Administradores
+
+Arquitectura de 2 niveles solo con interfaces + implementación.
+
+=== Internacionalización
+
+Las plantillas, las acciones y también los mensajes de servicio importantes deben localizarse utilizando un solo `ResourceBundle`.
+
+Los vocabularios traducidos se pueden usar para completar los menús desplegables seleccionados fácilmente llamando a `getI18nVocab (…)`.

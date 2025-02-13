@@ -1,0 +1,113 @@
+= 開発者向けガイドライン
+
+== 協力
+
+IPTの中心の開発はGBIFが指揮しますが、コーディングはコミュニティの活動であり、誰でも参加することができます。JavaやHTML/jQueryの開発者は、コードのパッチを提供することを歓迎します。パッチは、link:https://github.com/gbif/ipt[IPT Gitリポジトリ]のブランチまたはフォークを使用してlink:https://help.github.com/articles/creating-a-pull-request/[プルリクエスト]を作成することで提出することができます。
+
+== ソースコードフレームワーク
+
+IPTでは、以下のようなコアフレームワークを使用しています。
+
+* https://struts.apache.org/[Struts2]
+* https://github.com/google/guice[Google Guice]
+* https://freemarker.sourceforge.net/docs/[Freemarker]：テンプレートの作成
+* https://jquery.com/[jQuery]：JavaScript・AJAX用
+
+== Prerequisites
+
+IPTでは、依存関係やビルドプロセスを管理するためにMavenを使用しています。Mavenのインストール方法については、link:http://maven.apache.org/install.html[Mavenのインストールガイド]を参照してください。
+
+== Jettyでアプリケーションを実行する
+
+[source, shell]
+----
+$ cd ipt
+$ mvn -DskipTests
+----
+
+このコマンドは、ポート8080でJettyプラグインを経由してIPTを起動します。Webブラウザで http://localhost:8080 を開くと、IPTが動作していることが確認できるはずです。
+
+== Git
+未使用のファイルにはチェックを入れないでください。
+
+masterブランチのコードは常にコンパイルされ、Mavenを使ってJettyを起動できるようにする必要があります！
+
+=== Guice
+
+`IptModule`は配線を含むが、インターフェースは`@ImplementedBy(ConfigManagerImpl.class)`で直接アノテートされます。
+
+=== 設定
+
+実行中のIPTのWEB-INFの中には、`datadir.location`というファイルが1つあります。これは、すべての構成とデータが保存される、現在使用されているデータディレクトリを指しています。このファイルが削除されると、セットアップインターセプターは新しい（既存の）データディレクトリを割り当てるようにユーザに要求します。
+
+隠しファイル`.gbifreg`は、データディレクトリがプロダクションレジストリまたはテストレジストリにリンクされているかどうかを示します。一度設定すると、UIから変更することはできません！
+
+`AppConfig.java`には、IPT全体の設定、特にアプリケーションの`baseURL`（UIやドキュメントでは「Public URL」と呼ばれます）が含まれています。
+
+=== Struts2
+
+`BaseAction.java`は`AppConfig`を提供し、セッションを意識した実装を行い、現在のユーザーにアクセスできるようにし、Struts 2のネイティブのものよりもシンプルで高速な`TextProvider`を実装しています。
+
+`SetupAndCancelInterceptor.java`は、データディレクトリが設定されているか、管理責任者（Admin）ユーザが存在するかをチェックし、不備があればそれぞれの設定ページにリダイレクトします。
+
+各パッケージ（`root`、`portal`、`manage`、`admin`）には、独自のインターセプタスタックが存在します。
+
+「input」のリザルト名は、フォームを表示するために使用されます。したがって、データが検証されないときに入力結果を使用する標準的なバリデーションインターセプターを使用することができます。
+
+"success"のリザルト名は、フォームの送信に成功したときに呼び出されます。多くの場合、これは単に別のアクション（対応するリストなど）へのリダイレクトとなるはずです。
+
+アクションは、prepareable、request aware、executeメソッドを実装しています。
+
+* execute：`FormAction`は`POST`か`GET`かを判断し、保存（`POST`）、削除（`POST +
+  delete=true`）、何もしない（`GET`）のいずれかを呼び出します。
+
+他のアクションの値を設定する必要がある場合は、`prepare()`をオーバーライドすることができます。ただし、`super.execute()`を呼び出すことを忘れないでください。
+
+* prepare：リクエストオブジェクトの`id`パラメータがアクションに格納されます。
+
+`POSTAction.java`は、フォームの操作を簡略化します。インスタンスデータの変更には常に`POST`を使用し、`GET` は使用しないでください。エンティティを変更するための完全なアクションのほとんどは、以下のメソッドをオーバーライドする必要があります。
+
+* `prepare()`："id "パラメータとリクエスト・オブジェクトに基づいて、既存の値をロードする。
+* `save()`：パラメータインターセプターが仕事をした後、データを保持します。
+* `delete()`：`delete=anything_but_null`パラメータを持つ`POST`を受信したときに呼び出されるメソッドです。
+
+指定された`id`が存在しない場合、上記のいずれかのメソッドで`notFound`プロパティをtrueに設定することができます。そうすると、このアクションは404のリザルト名を返します。
+
+検証を行うには、（XMLの検証定義を使用するのではなく）アクションの`validate()`メソッドを実装します。例として、`SetupAction.java`を参照してください。バリデーションには、フォームが有効でなかったときに表示される`input`リザルト名が必要です。シンプルなテーマを使って、バリデーションのフィードバックをレンダリングする場所も宣言する必要があります：http://struts.apache.org/docs/fielderror.html
+
+=== HTMLデザイン
+
+リンクは常に`+++${baseURL}/my/ipt/link.do+++`を使うので、StrutsやJSPのURLタグは使わないで下さい！
+
+フォームでは、国際化の`@select`ドロップダウンなど、Struts 2のタグの代わりに`forms.ftl`マクロを使用するようにしました。
+
+ボタンは、追加、削除、編集、作成の各アクションに適切なボタンまたは`input@type=submit`（フォーム）を使用します。
+
+一般的なベストプラクティスガイド
+
+* http://htmldog.com/articles/formlayout/
+* https://www.sherpaglobal.com/top-10-html-form-layout-best-practices/
+
+=== JavaScript
+
+カスタムコードにはjQuery（https://jquery.com/）のみを使用します。
+
+削除などの確認を求める場合は、jConfirmationプラグイン（https://github.com/hdytsgt/jConfirmAction）を使用します。
+
+jQuery dataTables（https://www.datatables.net/）プラグインを使用すると、ページネーションや検索など、HTMLのテーブルを拡張することができます。
+
+=== CSS
+
+link:https://960.gs/[960 grid system]がページレイアウトに使用されています。
+
+CSSクラスの数は最小限にとどめ、そのページの`<head><style>`でページ固有のCSSを使用することを考慮してください。
+
+=== Managers
+
+インターフェース + 実装の2層アーキテクチャのみ。
+
+=== 国際化
+
+テンプレート、アクション、そして重要なサービスメッセージは、単一の `ResourceBundle` を使ってローカライズする必要があります。
+
+翻訳された語彙は、`getI18nVocab(…)`を呼び出すことで、選択ドロップダウンに簡単に入力できるようになります。

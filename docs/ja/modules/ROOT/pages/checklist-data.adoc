@@ -1,0 +1,51 @@
+= チェックリストデータ
+
+あるカテゴリー（例えば分類学的、地理的、形質ベース、レッドリスト、作物の野生親戚）に属する種のリストで、オプションとして各種に関連する上位分類または追加形質からなるリソースです。このようなデータセットの例としては、世界的または地域的な分類学的チェックリスト、世界的または国レベルのレッドリスト、未桁化コレクションに含まれる種のカタログ、公園のチェックリストなどがある。もし十分な情報が元データセットにあれば（あるいはチェックリストのすべての種に一貫して適用されていれば）、これらのデータセットはオカレンスデータとして提示することが推奨される。これらのデータセットには、リソースメタデータに含まれるものと同じ基本的な記述情報が含まれます。
+
+== チェックリストデータに変換する方法
+
+image::ipt2/flow-cd.png[]
+
+最終的には、ダーウィンコア（DwC）の用語名を列名として使用したテーブル構造にデータを変換する必要があります。
+
+すべての<<必須DwCフィールド,必須DwCフィールド>>と<<推奨DwCフィールド,推奨DwCフィールド>>を含む<<テンプレート,Excelテンプレート>>にデータを入れてみてください。
+
+または、データがxref:database-connection.adoc[対応データベース]に保存されている場合は、DwCの列名を使ってSQLテーブル（ビュー）を書くことができます。<<必須DwCフィールド,必須DwCフィールド>>をすべて含み、<<推奨DwCフィールド,推奨DwCフィールド>>をできるだけ多く追加するように注意してください。
+
+さらに詳しいガイダンスとして、ガイドlink:https://ipt.gbif.org/manual/ja/ipt/latest/best-practices-checklists[種のチェックリストを発行する際のベストプラクティス]を参照し、模範となるデータセットを見てください。
+
+=== テンプレート
+
+link:{attachmentsdir}/downloads/checklist_ipt_template_v1.xlsx[image:ipt2/excel-template2.png[Excelテンプレート]] link:{attachmentsdir}/downloads/checklist_ipt_template_v1_example_data.xlsx[image:ipt2/excel-template-data2.png[Excelテンプレート（サンプルデータ付き）]]
+
+それを入力し、IPTにアップロードします。できるだけ多くのDwC用語で補強するようにしてください。コア・テーブルに追加のDwCカラムを追加することはできますが、このlink:{latest-dwc-taxon}[リスト]にあるDwC用語のみを追加してください。
+
+=== DwCの必須項目
+
+* https://dwc.tdwg.org/terms/#dwc:taxonID[taxonID]
+* https://dwc.tdwg.org/terms/#dwc:scientificName[scientificName]
+* https://dwc.tdwg.org/terms/#dwc:taxonRank[taxonRank]
+
+=== DwCの推奨フィールド
+
+* https://dwc.tdwg.org/terms/#dwc:kingdom[kingdom] - and other higher taxonomy if possible
+* https://dwc.tdwg.org/terms/#dwc:parentNameUsageID[parentNameUsageID] - 分類が公開されることを意図しているとき
+* https://dwc.tdwg.org/terms/#dwc:acceptedNameUsageID[acceptedNameUsageID] - 分類が公開されることを意図しているとき
+
+=== サンプルデータセット
+
+* https://doi.org/10.5886/zw3aqw[Database of Vascular Plants of Canada (VASCAN)]
+
+=== よくある質問
+
+==== Q. *分類群レコードに普通名を追加するにはどうしたらよいですか？*
+
+*A.* 普通名のテーブルを作成してください。このテーブルには、taxonIDカラムが含まれている必要があります。そうすれば、各行は（コア）タクソンレコードにリンクすることができます。一般名テーブルには追加のカラムを追加できますが、このlink:{latest-vernacularname}[リスト]にある用語名のみを使用します。このテーブルをIPTにアップロードし、link:{latest-vernacularname}[Vernacular Name拡張]に対応させることができます。
+
+==== Q. *IUCNが定義する種の脅威の状態を追加するにはどうすればよいですか？*
+
+*A.* 分類群の地理的分布のテーブルを作成してください。ここにはtaxonIDの列が含まれていなければなりません。そうすれば、各行が（コア）分類群レコードにリンクすることができます。地理的分布表には脅威の状態などの列を追加することができますが、このlink:{latest-species-distribution}[リスト]にある用語名のみを使用します。この表をIPTにアップロードして、link:{latest-species-distribution}[Species Distribution拡張]に対応させることができます。
+
+==== Q. *チェックリストの名称でGBIF基幹分類法を更新できますか?*
+
+*A.* はい、できます。これを行うには、チェックリストを公開し、GBIFがサポートするライセンス（CC0、CC-BY、CC-BY-NC）の下でオンラインで一般に利用できるようにし、GBIFに登録する必要があります。その後GBIFは、その名前がバックボーンとどのように重複しているかを見るなどして、それが適切なバックボーンソースであるかどうかを手動で確認することができます。チェックリストは、少なくともlink:https://dwc.tdwg.org/terms/#dwc:kingdom[界]やlink:https://dwc.tdwg.org/terms/#dwc:family[科]などの最小限の分類を提供し、名称の使用上の問題が少ないという意味でデータの質が高く、名称のlink:https://dwc.tdwg.org/terms/#dwc:scientificNameAuthorship[scientificNameAuthorship]を含み、link:https://dwc.tdwg.org/terms/#dwc:namePublishedIn[namePublishedIn]を供給すること等が理想的です。
